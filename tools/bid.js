@@ -48,7 +48,7 @@ async function init(Private_Key_) {
             if (false || (Date.now() / 1000 < Number(startTime_[0]) + timeWait + overTime)) {
                 var encoded = ''
                 if (index_.length > 1) {
-                    encoded = contract.methods.buyBatch(seller_, index_, startTime_, priceList, true).encodeABI();
+                    encoded = contract.methods.buyBatch(seller_, index_, startTime_, priceList, true, amountBid.toString()).encodeABI();
                     gasLimit = 1000000
                 }
                 else if (index_.length == 1) {
