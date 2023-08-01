@@ -5,17 +5,17 @@ const Web3 = require('web3');
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
 const abiBUSD = [{ "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
 const contract = new web3.eth.Contract(abiBUSD, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
-const dataCommon = fs.readFileSync('./dataMomo/CheapestPriceMoboxCommon.csv', 'utf8');
+const dataCommon = fs.readFileSync('./data/CheapestPriceMoboxCommon.csv', 'utf8');
 const commonID = dataCommon.split('\n')
-const dataUncommon = fs.readFileSync('./dataMomo/CheapestPriceMoboxUncommon.csv', 'utf8');
+const dataUncommon = fs.readFileSync('./data/CheapestPriceMoboxUncommon.csv', 'utf8');
 const uncommonID = dataUncommon.split('\n')
-const dataUnique = fs.readFileSync('./dataMomo/CheapestPriceMoboxUnique.csv', 'utf8');
+const dataUnique = fs.readFileSync('./data/CheapestPriceMoboxUnique.csv', 'utf8');
 const uniqueID = dataUnique.split('\n')
-const dataRare = fs.readFileSync('./dataMomo/CheapestPriceMoboxRare.csv', 'utf8');
+const dataRare = fs.readFileSync('./data/CheapestPriceMoboxRare.csv', 'utf8');
 const rareID = dataRare.split('\n')
-const dataEpic = fs.readFileSync('./dataMomo/CheapestPriceMoboxEpic.csv', 'utf8');
+const dataEpic = fs.readFileSync('./data/CheapestPriceMoboxEpic.csv', 'utf8');
 const epicID = dataEpic.split('\n')
-const dataLegend = fs.readFileSync('./dataMomo/CheapestPriceMoboxLegendary.csv', 'utf8');
+const dataLegend = fs.readFileSync('./data/CheapestPriceMoboxLegendary.csv', 'utf8');
 const LegendID = dataLegend.split('\n')
 
 idMomo = []
@@ -295,7 +295,8 @@ myAcc = [
     ['0x4444eA3CeBBD866c19F7769aA260E02B5D561111', '_4_1_2'],
     ['0x55555D4de8df0c455C2Ff368253388FE669a8888', '_5_8_1'],
     ['0x666685e40D852fa173136Ef77A16142431Cc7777', '_6_7_1'],
-    ['0x77775a358050DE851b06603864FbD380637C7777', '_7_7_1']
+    ['0x77775a358050DE851b06603864FbD380637C7777', '_7_7_1'],
+    ['0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34', '_3_4_1']
 ]
 
 var listed = ''
