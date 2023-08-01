@@ -14,7 +14,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"
 const apiTele = configJson.api.telegram
 const chatId = configJson.chatId.mobox
 const abi = JSON.parse(fs.readFileSync('./config/abiMobox.json'));
-const consractAddress = '0xA4088673b85701630FaE66230EA17036D711b227'
+const consractAddress = '0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34'
 const contract = new web3.eth.Contract(abi, consractAddress);
 // console.log(acc)
 async function init(Private_Key_) {
