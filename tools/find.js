@@ -376,7 +376,7 @@ const gasPriceMin = 3.001
 const gasPriceMax = 50
 const rateFeePerProfit = 0.150
 const myAcc = [['0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000', '_1_0_1'], ['0x444430ba89a0741902253756d009213ba1151111', '_4_1_1'], ['0x4444eA3CeBBD866c19F7769aA260E02B5D561111', '_4_1_2'], ['0x55555D4de8df0c455C2Ff368253388FE669a8888', '_5_8_1'], ['0x666685e40D852fa173136Ef77A16142431Cc7777', '_6_7_1'], ['0x77775a358050DE851b06603864FbD380637C7777', '_7_7_1']]
-var accCheck = '0xA4088673b85701630FaE66230EA17036D711b227'
+var accCheck = '0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34'
 const apiTele = configJson.api.telegram
 const chatId = configJson.chatId.mobox
 
