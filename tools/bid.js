@@ -40,7 +40,6 @@ async function init(Private_Key_) {
         //     // console.log('Err gasPrice:', gasPriceScan)
         //     gasPriceScan = Number((20 * 10 ** 9).toFixed())
         // }
-        console.log(amountList)
         let amountBid = 0
         for (let index = 0; index < amountList.length; index++) {
             amountBid += Number(amountList[index])
