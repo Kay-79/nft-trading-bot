@@ -1,0 +1,14 @@
+{
+    "minPrice": {
+        "minCommon": 2.8,
+        "minUncommon": 1.5,
+        "minUnique": 1.2,
+        "minRare": 14
+    },
+    "api": {
+        "telegram": "bot5936079405:AAEbv0jsHFK9FiZvBsAoV-8xoI36IBcFPUw"
+    },
+    "chatId": {
+        "mobox": "mbjknq79mb"
+    }
+}
