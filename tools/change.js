@@ -2,7 +2,7 @@ const axios = require('axios');
 const fs = require('fs');
 const Web3 = require('web3');
 const price = require('./config.json');
-const abi = require('./abiMobox.json');
+const abi = require('./config/abiMobox.json');
 const { exit } = require('process');
 function sleep(ms) {
     return new Promise((resolve) => {

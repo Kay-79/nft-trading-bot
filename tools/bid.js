@@ -53,7 +53,7 @@ async function init(Private_Key_) {
                 }
                 else if (index_.length == 1) {
                     encoded = contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI();
-                    gasLimit = 900000
+                    gasLimit = 1000000
                 }
                 var tx = {
                     from: acc.address,
