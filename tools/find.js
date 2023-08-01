@@ -369,7 +369,7 @@ var minCommon, minUncommon, minUnique, minRare, minEpic, minLegend
 var idMomo = []
 var nameMomo = []
 var priceMomo = []
-const pricePerHash = 0.05
+const pricePerHash = 0
 var budgetCache = 0
 const minBudget = 30
 const gasPriceMin = 3.001
