@@ -242,14 +242,18 @@ async function main(address, nameFile_, rate_) {
             });
         }
         let space = ''
+        let flagBalance = balance + ' BNB'
         if (Number(flagCountMomo) < 10) { space = '0' }
-        let logData = (nameFile_ + '\t' + space + flagCountMomo.toString() + ' vs ' + space + (idMomo.length).toString() + '\t' + budget + ' BUSD\t' + balance + ' BNB')
-        if (balance / rate_ < minBNB / 2) {
-            logData = (nameFile_ + '\t' + space + flagCountMomo.toString() + ' vs ' + space + (idMomo.length).toString() + '\t' + budget + ' BUSD\t' + 'SwapNOW ' + (balance / rate_).toFixed(3))
+        if (!Number(balance)) {
+            flagBalance = 'isContract'
+        }
+        else if (balance / rate_ < minBNB / 2) {
+            flagBalance = 'SwapNOW ' + (balance / rate_).toFixed(3)
         }
         else if (balance / rate_ < minBNB) {
-            logData = (nameFile_ + '\t' + space + flagCountMomo.toString() + ' vs ' + space + (idMomo.length).toString() + '\t' + budget + ' BUSD\t' + 'SwapLATER ' + (balance / rate_).toFixed(3))
+            flagBalance = 'SwapLATER ' + (balance / rate_).toFixed(3)
         }
+        let logData = (nameFile_ + '\t' + space + flagCountMomo.toString() + ' vs ' + space + (idMomo.length).toString() + '\t' + budget + ' BUSD\t' + flagBalance)
         scanIndex(logData)
         if (nameFile_ == lastAcc) {
             for (let index = momoListed; index < amountAccount * 128; index++) {
@@ -296,7 +300,8 @@ myAcc = [
     ['0x55555D4de8df0c455C2Ff368253388FE669a8888', '_5_8_1'],
     ['0x666685e40D852fa173136Ef77A16142431Cc7777', '_6_7_1'],
     ['0x77775a358050DE851b06603864FbD380637C7777', '_7_7_1'],
-    ['0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34', '_3_4_1']
+    ['0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34', '_3_0_0'],
+    ['0xb69a82d8b5e0c11f82987aa89c585a04c0308461', '_b_6_9']
 ]
 
 var listed = ''

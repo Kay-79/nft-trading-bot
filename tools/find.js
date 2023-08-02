@@ -264,6 +264,7 @@ async function setup(runAcc) {//setup const
     addressIdCache = Array(30)
     linkSave = './waitBid.txt'
     gasUsed = [230000, 344000, 460000, 575000, 690000, 800000]//Const avg gasUsed
+    gasUsed = [230000, 230000 * 2, 230000 * 3, 230000 * 4, 230000 * 5, 230000 * 2]//Const avg gasUsed
     await getMinPrice()//setup change
 }
 
