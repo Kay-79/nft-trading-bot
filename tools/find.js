@@ -348,7 +348,6 @@ async function getMinPrice() {
         price.push(Number(((priceRaw[index] * 0.95 - profit[index] - 0.06).toFixed(3))))
     }
     minCommon = price[0]
-    minCommon = 10
     minUncommon = price[1]
     minUnique = price[2]
     minRare = price[3]

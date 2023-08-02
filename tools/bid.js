@@ -155,7 +155,7 @@ async function init2(nameFile_) {
         await sleep(100)
     }
 }
-const overTime = 100000
+const overTime = 10
 const runAcc = fs.readFileSync('./data/runAcc.txt', 'utf8');
 console.log(runAcc)
 const timeWait = 117.2 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
