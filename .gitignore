@@ -2,3 +2,4 @@ myAccount*.txt
 listed.csv
 node_modules
 logs.json
+/tools/test.js

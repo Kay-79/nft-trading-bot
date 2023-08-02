@@ -75,6 +75,7 @@ async function init(Private_Key_) {
                             data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()
                         }
                     )
+                    await sleep(delayCallNonce * 1000)
                 }
                 let checkSuccess = 'Success'
                 try {
@@ -158,5 +159,7 @@ async function init2(nameFile_) {
 const overTime = 10
 const runAcc = fs.readFileSync('./data/runAcc.txt', 'utf8');
 console.log(runAcc)
-const timeWait = 117.2 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+const delayCallNonce = 0.5//second
+const timeWait = 117.2 - delayCallNonce //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+
 init2(runAcc)

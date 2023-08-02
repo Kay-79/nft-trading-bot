@@ -14,22 +14,16 @@ const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.def
 minCM = price.minPrice.minCommon
 minUCM = price.minPrice.minUncommon
 minUNQ = price.minPrice.minUnique
-Private_Key = []
-Account_Key = []
-File_Key = ['_1_0_1', '_4_1_1', '_4_1_2', '_5_8_1', '_6_7_1', '_7_7_1']
-nonceAcc = File_Key.map(x => 0)
-for (let indexFiles = 0; indexFiles < File_Key.length; indexFiles++) {
-    try {
-        const passData = fs.readFileSync('myAccount' + File_Key[indexFiles] + '.txt', 'utf8');
-        myAccount = passData.split('\n')
-    } catch (err) {
-        console.error(err);
-    }
-    Private_Key.push(myAccount[1])
-    // Account_Key.push(web3.eth.accounts.privateKeyToAccount(Private_Key[indexFiles]).address)
-    Account_Key.push(web3.utils.toChecksumAddress(web3.eth.accounts.privateKeyToAccount(Private_Key[indexFiles]).address))
+Private_Key = ''
+Account_Key = ''
+File_Key = '_1_0_1'
+try {
+    const passData = fs.readFileSync('myAccount_1_0_1.txt', 'utf8');
+    myAccount = passData.split('\n')
+    Private_Key = myAccount[1]
+} catch (err) {
+    console.error(err);
 }
-const contractAddress = ('0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2')
 const contract = new web3.eth.Contract(abi, contractAddress);
 idMomo = []
 indexMomo = []
@@ -250,7 +244,8 @@ myAccounts = [
     ['0x55555D4de8df0c455C2Ff368253388FE669a8888'],
     ['0x666685e40D852fa173136Ef77A16142431Cc7777'],
     ['0x77775a358050DE851b06603864FbD380637C7777'],
-    ['0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34']
+    ['0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34'],
+    ['0xb69a82d8b5e0c11f82987aa89c585a04c0308461']
 ]
 signArray = []
 idCache = []
