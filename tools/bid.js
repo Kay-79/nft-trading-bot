@@ -8,14 +8,14 @@ function sleep(ms) {
 }
 const Web3 = require('web3');
 const { exit } = require('process');
-// const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.public.blastapi.io"));
+// const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 // const web3sc = new Web3(new Web3.providers.WebsocketProvider('wss://solemn-wild-aura.bsc.discover.quiknode.pro/9fbdf28f69f47aa85c76222be804b4224c2dbd22/'));
 const apiTele = configJson.api.telegram
 const chatId = configJson.chatId.mobox
 const abi = JSON.parse(fs.readFileSync('./config/abiMobox.json'));
-const consractAddress = configJson.accBuy
-const contract = new web3.eth.Contract(abi, consractAddress);
+const contractAddress = configJson.accBuy
+const contract = new web3.eth.Contract(abi, contractAddress);
 // console.log(acc)
 async function init(Private_Key_) {
     inputdata = 'Nonce'
@@ -46,32 +46,62 @@ async function init(Private_Key_) {
         }
         if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + timeWait)) {
             if (false || (Date.now() / 1000 < Number(startTime_[0]) + timeWait + overTime)) {
-                var encoded = ''
+                var tx = []
                 if (index_.length > 1) {
-                    encoded = contract.methods.buyBatch(seller_, index_, startTime_, priceList, true, amountBid.toString()).encodeABI();
-                    gasLimit = 1000000
+                    let nonce_ = await web3.eth.getTransactionCount(acc.address);
+                    for (let index = 0; index < index_.length; index++) {
+                        tx.push(
+                            {
+                                from: acc.address,
+                                gas: 1000000,
+                                gasPrice: gasPriceScan,
+                                nonce: nonce_,
+                                to: contractAddress,
+                                value: 0,
+                                data: contract.methods.bid(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), '1').encodeABI()
+                            }
+                        )
+                        nonce_ += 1
+                    }
                 }
                 else if (index_.length == 1) {
-                    encoded = contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI();
-                    gasLimit = 1000000
-                }
-                var tx = {
-                    from: acc.address,
-                    gas: gasLimit,
-                    gasPrice: gasPriceScan,
-                    to: consractAddress,
-                    value: 0,
-                    data: encoded
+                    tx.push(
+                        {
+                            from: acc.address,
+                            gas: 1000000,
+                            gasPrice: gasPriceScan,
+                            to: contractAddress,
+                            value: 0,
+                            data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()
+                        }
+                    )
                 }
                 let checkSuccess = 'Success'
                 try {
                     console.log('Paying!!')
-                    let signed = await web3.eth.accounts.signTransaction(tx, Private_Key_)
-                    let biding = await web3.eth.sendSignedTransaction(signed.rawTransaction)
-                    console.log('Successful bid! At block:', biding.blockNumber)
+                    let signed = []
+                    let biding = []
+                    for (let index = 0; index < tx.length; index++) {
+                        signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_))
+                    }
+                    for (let index = 0; index < tx.length; index++) {
+                        if (tx.length == 1) {
+                            biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction)
+                            console.log('Successful bid! At block:', biding[index].blockNumber)
+                        }
+                        else {
+                            if (index == tx.length - 1) {
+                                biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction)
+                                console.log('Successful bid! At block:', biding[index].blockNumber)
+                            }
+                            else {
+                                biding[index] = web3.eth.sendSignedTransaction(signed[index].rawTransaction)
+                            }
+                        }
+                    }
                 } catch (error) {
                     console.error('Error during bid Auction!');
-                    // console.error(error);
+                    console.error(error);
                     checkSuccess = 'Fail'
                 }
                 await sleep(1000)
@@ -125,7 +155,7 @@ async function init2(nameFile_) {
         await sleep(100)
     }
 }
-const overTime = 10
+const overTime = 100000
 const runAcc = fs.readFileSync('./data/runAcc.txt', 'utf8');
 console.log(runAcc)
 const timeWait = 117.2 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2

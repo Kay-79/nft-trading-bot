@@ -190,7 +190,7 @@ async function divideCanBuy() {
                 }
             }
             else if (Number(uptimes_[indexCanBuy[index]]) == uptimesCache) {
-                if (amountDivide > 0) {//5 for bidBatch, 0 for bid 
+                if (amountDivide > 5) {//5 for bidBatch, 0 for bid 
                     await saveWaitBuy(seller_, price_, index_, time_, tokenId_, amount_)
                     resetVar()
                 }
@@ -348,6 +348,7 @@ async function getMinPrice() {
         price.push(Number(((priceRaw[index] * 0.95 - profit[index] - 0.06).toFixed(3))))
     }
     minCommon = price[0]
+    minCommon = 10
     minUncommon = price[1]
     minUnique = price[2]
     minRare = price[3]
@@ -372,11 +373,11 @@ var priceMomo = []
 const pricePerHash = 0
 var budgetCache = -1
 const minBudget = 30
-const gasPriceMin = 3.001
+const gasPriceMin = 3.1
 const gasPriceMax = 50
 const rateFeePerProfit = 0.150
 var accCheck = configJson.accBuy
 const apiTele = configJson.api.telegram
 const chatId = configJson.chatId.mobox
-// now is save only bid, not batch
+// now is save batch, config in bid.js
 runBot(20, '_7_7_1')
