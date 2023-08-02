@@ -87,22 +87,39 @@ async function init(Private_Key_) {
                     }
                     for (let index = 0; index < tx.length; index++) {
                         if (tx.length == 1) {
-                            biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction)
+                            try {
+                                checkSuccess = 'Success'
+                                biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction)
+                            } catch (error) {
+                                console.log('Bid fail')
+                                checkSuccess = 'Fail'
+                            }
                             console.log('Successful bid! At block:', biding[index].blockNumber)
                         }
                         else {
                             if (index == tx.length - 1) {
-                                biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction)
+                                try {
+                                    checkSuccess = 'Success'
+                                    biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction)
+                                } catch (error) {
+                                    console.log('Bid fail')
+                                    checkSuccess = 'Fail'
+                                }
                                 console.log('Successful bid! At block:', biding[index].blockNumber)
                             }
                             else {
-                                biding[index] = web3.eth.sendSignedTransaction(signed[index].rawTransaction)
+                                try {
+                                    checkSuccess = 'Success'
+                                    biding[index] = web3.eth.sendSignedTransaction(signed[index].rawTransaction)
+                                } catch (error) {
+                                    console.log('Bid fail')
+                                    checkSuccess = 'Fail'
+                                }
                             }
                         }
                     }
                 } catch (error) {
-                    console.error('Error during bid Auction!');
-                    console.error(error);
+                    console.log('Error during bid Auction!');
                     checkSuccess = 'Fail'
                 }
                 await sleep(1000)
