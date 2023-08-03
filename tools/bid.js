@@ -26,32 +26,28 @@ async function init(Private_Key_) {
     try {
         const inputdata = fs.readFileSync('waitBid.txt', 'utf8');
         dataBid = inputdata.split('\n')
-        // console.log(dataBid)
         if (inputdata.length > 40) {
             Bid = true
         }
     } catch (err) { }
     if (Bid == true) {
-        const seller_ = dataBid[0].split(',')
-        const index_ = dataBid[2].split(',')
         const startTime_ = dataBid[3].split(',')
-        const priceList = dataBid[1].split(',')
-        const amountList = dataBid[5].split(',')
-        const idList = dataBid[4].split(',')
-        const gasPriceScan = Number((Number(dataBid[6].split(',')) * 10 ** 9).toFixed())
-        // if (gasPriceScan > 25 * 10 ** 9) {
-        //     // console.log('Err gasPrice:', gasPriceScan)
-        //     gasPriceScan = Number((20 * 10 ** 9).toFixed())
-        // }
-        let amountBid = 0
-        for (let index = 0; index < amountList.length; index++) {
-            amountBid += Number(amountList[index])
-        }
-        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + timeWait)) {
+        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + (timeWait - 3))) {//3 is time to get nonce
+            const seller_ = dataBid[0].split(',')
+            const index_ = dataBid[2].split(',')
+            const priceList = dataBid[1].split(',')
+            const amountList = dataBid[5].split(',')
+            const idList = dataBid[4].split(',')
+            const gasPriceScan = Number((Number(dataBid[6].split(',')) * 10 ** 9).toFixed())
+            let amountBid = 0
+            for (let index = 0; index < amountList.length; index++) {
+                amountBid += Number(amountList[index])
+            }
             if (false || (Date.now() / 1000 < Number(startTime_[0]) + timeWait + overTime)) {
                 var tx = []
+                let nonce_ = await web3.eth.getTransactionCount(acc.address);
+                await sleep(Math.abs(Date.now() / 1000 - Number(startTime_[0]) + timeWait))
                 if (index_.length > 1) {
-                    let nonce_ = await web3.eth.getTransactionCount(acc.address);
                     for (let index = 0; index < index_.length; index++) {
                         tx.push(
                             {
@@ -78,7 +74,6 @@ async function init(Private_Key_) {
                             data: contract.methods.bid1(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()
                         }
                     )
-                    await sleep(delayCallNonce * 1000)
                 }
                 let checkSuccess = 'Success'
                 try {
@@ -177,10 +172,9 @@ async function init2(nameFile_) {
         await sleep(100)
     }
 }
-const overTime = 10
+const overTime = 15
 const runAcc = fs.readFileSync('./data/runAcc.txt', 'utf8');
 console.log(runAcc)
-const delayCallNonce = 0.8//second
-const timeWait = 117.2 - delayCallNonce //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+const timeWait = 117.2//timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 
 init2(runAcc)
