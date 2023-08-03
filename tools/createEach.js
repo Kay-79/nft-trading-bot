@@ -19,8 +19,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key)
     console.log(acc.address)
-    const abi = require('./abiMobox.json');
-    const consractAddress = ('0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2')
+    const abi = JSON.parse(fs.readFileSync('./config/abiMobox.json'));
     const contract = new web3.eth.Contract(abi, consractAddress);
     // console.log(contract)
     emptyVar = []
@@ -90,9 +89,9 @@ indexs = [
     0,
 ]
 ids =
-    [["11011", "11027", "11036", "11041", "11044", "11044"]]
+    [["11046", "13026"]]
 prices =
-    [["3.099", "3.499", "3.809", "3.099", "3.769", "3.769"]]
+    [["3.6", "4.699"]]
 
 console.log(indexs.length, ids.length, prices.length)
 for (let ii = 0; ii < prices.length; ii++) {
@@ -100,5 +99,5 @@ for (let ii = 0; ii < prices.length; ii++) {
         prices[ii][jj] = ((Math.round((Number(prices[ii][jj])) * 10 ** 5)).toString() + '0000000000000')
     }
 }
-
+const consractAddress = ('0x90576D978C8cDB0928F963f5E7080B8BcCaA94B0')
 createBatch(3.001, 1000000, '', '_1_0_1')
