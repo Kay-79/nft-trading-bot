@@ -238,7 +238,7 @@ const minChange = 0.001
 timeWait = 1 * 60 * 60 * 1 //wait latest change price
 delayChange = 30 * 10 ** 3 //delay to update api
 myAccounts = []
-var myAcc = configJson.myAcc
+const myAcc = configJson.myAcc
 for (let index = 0; index < myAcc.length; index++) {
     myAccounts.push(myAcc[index][0])
 }

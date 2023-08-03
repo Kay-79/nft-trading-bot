@@ -297,8 +297,7 @@ async function checkListedAll(rate_) {
     console.log(sumMomo + ' Momos: ' + sumMomoCM + ' Common, ' + sumMomoUCM + ' Uncommon, ' + sumMomoUNQ + ' Unique, ' + sumMomoR + ' Rare, ' + sumMomoE + ' Epic, ' + sumMomoL + ' Legend (' + (sumBuy).toFixed() + ',', (sumSell * 0.95).toFixed() + ')', 'Profit: ' + countProfit + ' - Loss: ' + countLoss + ' - Tie: ' + countTie, datetime)
 }
 
-var myAcc = configJson.myAcc
-
+const myAcc = configJson.myAcc
 var listed = ''
 var momoListed = 0, sumMomo = 0, countLoss = 0, countProfit = 0, countTie = 0, sumMomoCM = 0, sumMomoUCM = 0, sumMomoUNQ = 0, sumMomoR = 0, sumMomoE = 0, sumMomoL = 0, amountAccount = 0, sumSell = 0, sumBuy = 0, sumUSD = 0, sumBNB = 0
 const minBNB = 0.01

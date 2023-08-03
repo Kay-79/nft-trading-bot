@@ -277,7 +277,7 @@ timeWait = 1 * 60 * 60 * 1 //wait latest change price
 idMomoBought = []
 priceSell = []
 myAccounts = []
-var myAcc = configJson.myAcc
+const myAcc = configJson.myAcc
 for (let index = 0; index < myAcc.length; index++) {
     myAccounts.push(myAcc[index][0])
 }
