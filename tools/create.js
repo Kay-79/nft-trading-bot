@@ -292,10 +292,10 @@ myAcc = [
     ['0x55555D4de8df0c455C2Ff368253388FE669a8888', '_5_8_1'],
     ['0x666685e40D852fa173136Ef77A16142431Cc7777', '_6_7_1'],
     ['0x77775a358050DE851b06603864FbD380637C7777', '_7_7_1'],
-    ['0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34', '_3_4_1']
-
+    ['0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34', '_3_4_1'],
+    ['0xb69A82d8B5e0C11f82987AA89c585A04C0308461', '_b_6_9']
 ]
-value = 2 // without rare and epic
+value = 4 // without rare and epic
 valueBid = 999
 indexs = []
 priceList = []
@@ -303,4 +303,4 @@ ids = []
 const minChange = 0.001
 var accSell = ''
 
-createBatch(3.001, 1000000, '', '_3_4_1')
+createBatch(3.001, 1000000, '', '_b_6_9')
