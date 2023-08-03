@@ -1,6 +1,7 @@
 const axios = require('axios');
 const fs = require('fs');
 const Web3 = require('web3');
+const configJson = JSON.parse(fs.readFileSync('./config/config.json'));
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
 const abiBUSD = [{ "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
@@ -296,18 +297,7 @@ async function checkListedAll(rate_) {
     console.log(sumMomo + ' Momos: ' + sumMomoCM + ' Common, ' + sumMomoUCM + ' Uncommon, ' + sumMomoUNQ + ' Unique, ' + sumMomoR + ' Rare, ' + sumMomoE + ' Epic, ' + sumMomoL + ' Legend (' + (sumBuy).toFixed() + ',', (sumSell * 0.95).toFixed() + ')', 'Profit: ' + countProfit + ' - Loss: ' + countLoss + ' - Tie: ' + countTie, datetime)
 }
 
-myAcc = [
-    ['0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000', '_1_0_1'],
-    ['0x444430ba89a0741902253756d009213ba1151111', '_4_1_1'],
-    ['0x4444eA3CeBBD866c19F7769aA260E02B5D561111', '_4_1_2'],
-    ['0x55555D4de8df0c455C2Ff368253388FE669a8888', '_5_8_1'],
-    ['0x666685e40D852fa173136Ef77A16142431Cc7777', '_6_7_1'],
-    ['0x77775a358050DE851b06603864FbD380637C7777', '_7_7_1'],
-    ['0x3000EdD433B4AFDbc6f94Ac2d29c170d73bb8f34', '_3_0_0'],
-    ['0xb69A82d8B5e0C11f82987AA89c585A04C0308461', '_b_6_9'],
-    ['0x90576D978C8cDB0928F963f5E7080B8BcCaA94B0', '_9_0_5'],
-    ['0xFEA667353AB89E8B52Fb1eD18CA515e85296D596', '_F_E_A']
-]
+var myAcc = configJson.myAcc
 
 var listed = ''
 var momoListed = 0, sumMomo = 0, countLoss = 0, countProfit = 0, countTie = 0, sumMomoCM = 0, sumMomoUCM = 0, sumMomoUNQ = 0, sumMomoR = 0, sumMomoE = 0, sumMomoL = 0, amountAccount = 0, sumSell = 0, sumBuy = 0, sumUSD = 0, sumBNB = 0
