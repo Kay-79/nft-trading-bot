@@ -6,7 +6,7 @@ function sleep(ms) {
         setTimeout(resolve, ms);
     });
 }
-async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_,) {
+async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
     try {
         const inputdata = fs.readFileSync('myAccount_1_0_1.txt', 'utf8');
         myAccount = inputdata.split('\n')
@@ -19,7 +19,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_,) {
     const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key)
     console.log(acc.address)
-    const abi = require('./abiMobox.json');
+    const abi = JSON.parse(fs.readFileSync('./config/abiMobox.json'));
     const contract = new web3.eth.Contract(abi, consractAddress);
     // console.log(contract)
     emptyVar = []
@@ -54,7 +54,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_,) {
     }
 }
 
-async function createBatch(gasPrice_, gasLimit_, hexData_,) {
+async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     let count = 0
     while (true) {
         if (indexs.length != ids.length || indexs.length != prices.length) {
@@ -62,14 +62,14 @@ async function createBatch(gasPrice_, gasLimit_, hexData_,) {
             break
         }
         if (hexData_.length > 0) {
-            await sendTxt(gasPrice_, gasLimit_, '', '', '', hexData_,)
+            await sendTxt(gasPrice_, gasLimit_, '', '', '', hexData_, nameFile_)
             break
         }
         for (let index = 0; index < indexs.length; index++) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE"
                 console.log(indexs[index], ids[index], prices[index])
-                await sendTxt(gasPrice_, gasLimit_, indexs[index], ids[index], prices[index], '',)
+                await sendTxt(gasPrice_, gasLimit_, indexs[index], ids[index], prices[index], '', nameFile_)
                 if (boolSell == "TRUE") {
                     indexs[index] = undefined
                     count += 1
@@ -91,7 +91,7 @@ indexs = [
 ids =
     [["11046", "13026"]]
 prices =
-    [["3.6", "4.7"]]
+    [["3.6", "4.699"]]
 
 console.log(indexs.length, ids.length, prices.length)
 for (let ii = 0; ii < prices.length; ii++) {
@@ -100,4 +100,4 @@ for (let ii = 0; ii < prices.length; ii++) {
     }
 }
 const consractAddress = ('0x90576D978C8cDB0928F963f5E7080B8BcCaA94B0')
-createBatch(3.001, 1000000, '')
+createBatch(3.001, 1000000, '', '_1_0_1')
