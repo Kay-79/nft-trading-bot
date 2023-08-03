@@ -8,6 +8,9 @@ function sleep(ms) {
 }
 const Web3 = require('web3');
 const { exit } = require('process');
+process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Promise Rejection:', err);
+});
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 // const web3sc = new Web3(new Web3.providers.WebsocketProvider('wss://solemn-wild-aura.bsc.discover.quiknode.pro/9fbdf28f69f47aa85c76222be804b4224c2dbd22/'));
