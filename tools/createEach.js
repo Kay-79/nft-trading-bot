@@ -6,7 +6,7 @@ function sleep(ms) {
         setTimeout(resolve, ms);
     });
 }
-async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
+async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_,) {
     try {
         const inputdata = fs.readFileSync('myAccount_1_0_1.txt', 'utf8');
         myAccount = inputdata.split('\n')
@@ -20,7 +20,6 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key)
     console.log(acc.address)
     const abi = require('./abiMobox.json');
-    const consractAddress = ('0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2')
     const contract = new web3.eth.Contract(abi, consractAddress);
     // console.log(contract)
     emptyVar = []
@@ -55,7 +54,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     }
 }
 
-async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
+async function createBatch(gasPrice_, gasLimit_, hexData_,) {
     let count = 0
     while (true) {
         if (indexs.length != ids.length || indexs.length != prices.length) {
@@ -63,14 +62,14 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
             break
         }
         if (hexData_.length > 0) {
-            await sendTxt(gasPrice_, gasLimit_, '', '', '', hexData_, nameFile_)
+            await sendTxt(gasPrice_, gasLimit_, '', '', '', hexData_,)
             break
         }
         for (let index = 0; index < indexs.length; index++) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE"
                 console.log(indexs[index], ids[index], prices[index])
-                await sendTxt(gasPrice_, gasLimit_, indexs[index], ids[index], prices[index], '', nameFile_)
+                await sendTxt(gasPrice_, gasLimit_, indexs[index], ids[index], prices[index], '',)
                 if (boolSell == "TRUE") {
                     indexs[index] = undefined
                     count += 1
@@ -90,9 +89,9 @@ indexs = [
     0,
 ]
 ids =
-    [["11011", "11027", "11036", "11041", "11044", "11044"]]
+    [["11046", "13026"]]
 prices =
-    [["3.099", "3.499", "3.809", "3.099", "3.769", "3.769"]]
+    [["3.6", "4.7"]]
 
 console.log(indexs.length, ids.length, prices.length)
 for (let ii = 0; ii < prices.length; ii++) {
@@ -100,5 +99,5 @@ for (let ii = 0; ii < prices.length; ii++) {
         prices[ii][jj] = ((Math.round((Number(prices[ii][jj])) * 10 ** 5)).toString() + '0000000000000')
     }
 }
-
-createBatch(3.001, 1000000, '', '_1_0_1')
+const consractAddress = ('0x90576D978C8cDB0928F963f5E7080B8BcCaA94B0')
+createBatch(3.001, 1000000, '')
