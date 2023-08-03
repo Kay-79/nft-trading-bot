@@ -58,7 +58,7 @@ async function init(Private_Key_) {
                                 nonce: nonce_,
                                 to: contractAddress,
                                 value: 0,
-                                data: contract.methods.bid(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), '1').encodeABI()
+                                data: contract.methods.bid1(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), '1').encodeABI()
                             }
                         )
                         nonce_ += 1
@@ -72,7 +72,7 @@ async function init(Private_Key_) {
                             gasPrice: gasPriceScan,
                             to: contractAddress,
                             value: 0,
-                            data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()
+                            data: contract.methods.bid1(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()
                         }
                     )
                     await sleep(delayCallNonce * 1000)
@@ -114,6 +114,7 @@ async function init(Private_Key_) {
                                 } catch (error) {
                                     console.log('Bid fail')
                                     checkSuccess = 'Fail'
+                                    next(error)
                                 }
                             }
                         }
@@ -176,7 +177,7 @@ async function init2(nameFile_) {
 const overTime = 10
 const runAcc = fs.readFileSync('./data/runAcc.txt', 'utf8');
 console.log(runAcc)
-const delayCallNonce = 0.5//second
+const delayCallNonce = 0.8//second
 const timeWait = 117.2 - delayCallNonce //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 
 init2(runAcc)
