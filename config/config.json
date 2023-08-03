@@ -1,10 +1,4 @@
 {
-    "minPrice": {
-        "minCommon": 2.8,
-        "minUncommon": 1.5,
-        "minUnique": 1.2,
-        "minRare": 14
-    },
     "api": {
         "telegram": "bot5936079405:AAEbv0jsHFK9FiZvBsAoV-8xoI36IBcFPUw"
     },
@@ -53,5 +47,11 @@
             "_F_E_A"
         ]
     ],
+    "minPrice": {
+        "minCommon": 3.3,
+        "minUncommon": 1.6,
+        "minUnique": 1.1,
+        "minRare": 14
+    },
     "accBuy": "0xFEA667353AB89E8B52Fb1eD18CA515e85296D596"
 }

@@ -67,6 +67,10 @@ contract bidSubmarineOnlyNormal {
         owner = address(newOwner_);
     }
 
+    function reset() public onlyChanger {
+        timeCache = 0;
+    }
+
     function changeAmountUnList(uint256 newAmount) public onlyOwner {
         amountUnList = newAmount;
     }
@@ -90,7 +94,7 @@ contract bidSubmarineOnlyNormal {
         uint256 index_,
         uint256 startTime_,
         uint256 price_,
-        uint256 amount_
+        uint256 amount_ //must have to count momo
     ) external payable onlyOwner {
         if (startTime_ != timeCache) {
             timeCache = startTime_;
