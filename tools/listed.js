@@ -245,7 +245,8 @@ async function main(address, nameFile_, rate_) {
         let space = ''
         let flagBalance = balance + ' BNB'
         if (Number(flagCountMomo) < 10) { space = '0' }
-        if (!Number(balance)) {
+        let isContract = await web3.eth.getStorageAt(address)
+        if (Number(isContract)) {
             let abiAmount = [{ "inputs": [], "name": "amountUnList", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
             let contractAcc = new web3.eth.Contract(abiAmount, address);
             let amountUnList = await contractAcc.methods.amountUnList().call();
@@ -258,7 +259,9 @@ async function main(address, nameFile_, rate_) {
             flagBalance = 'SwapLATER ' + (balance / rate_).toFixed(3)
         }
         let logData = (nameFile_ + '\t' + space + flagCountMomo.toString() + ' vs ' + space + (idMomo.length).toString() + '\t' + budget + ' BUSD\t' + flagBalance)
+        // if (balance * 1 != 0 && budget * 1 != 0 && flagCountMomo * 1 != 0) { 
         scanIndex(logData)
+        // }
         if (nameFile_ == lastAcc) {
             for (let index = momoListed; index < amountAccount * 128; index++) {
                 listed = listed + '' + '\t' + '' + '\t' + '' + '\t' + '' + '\t' + '' + '\t' + '' + '\t\t' + '\n'
