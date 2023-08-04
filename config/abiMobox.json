@@ -1,7 +1,7 @@
 [
 	{
 		"inputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "constructor"
 	},
 	{
@@ -28,13 +28,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "approveMP",
-		"outputs": [],
-		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -79,44 +72,6 @@
 			}
 		],
 		"name": "bid1",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address[]",
-				"name": "auctors_",
-				"type": "address[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "indexs_",
-				"type": "uint256[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "startTimes_",
-				"type": "uint256[]"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "prices_",
-				"type": "uint256[]"
-			},
-			{
-				"internalType": "bool",
-				"name": "ignoreSold_",
-				"type": "bool"
-			},
-			{
-				"internalType": "uint256",
-				"name": "amount_",
-				"type": "uint256"
-			}
-		],
-		"name": "buyBatch",
 		"outputs": [],
 		"stateMutability": "payable",
 		"type": "function"
@@ -236,6 +191,19 @@
 	},
 	{
 		"inputs": [],
+		"name": "macOs",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "owner",
 		"outputs": [
 			{
@@ -245,6 +213,13 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "reset",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -258,6 +233,19 @@
 		"name": "setChanger",
 		"outputs": [],
 		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "timeCache",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
