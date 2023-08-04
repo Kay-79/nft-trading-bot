@@ -160,10 +160,9 @@ async function init(Private_Key_) {
         }
     }
 }
-async function init2(nameFile_) {
-    console.log(nameFile_)
+async function init2() {
     try {
-        const passData = fs.readFileSync('myAccount' + nameFile_ + '.txt', 'utf8');
+        const passData = fs.readFileSync('myAccount_7_7_1.txt', 'utf8');
         myAccount = passData.split('\n')
     } catch (err) {
         console.error(err);
@@ -177,8 +176,6 @@ async function init2(nameFile_) {
     }
 }
 const overTime = 15
-const runAcc = fs.readFileSync('./data/runAcc.txt', 'utf8');
-console.log(runAcc)
 const timeWait = 117.2//timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 const timeGetNonce = 4
-init2(runAcc)
+init2()
