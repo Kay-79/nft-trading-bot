@@ -32,9 +32,9 @@ async function init(Private_Key_) {
     } catch (err) { }
     if (Bid == true) {
         const startTime_ = dataBid[3].split(',')
-        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + (timeWait - 3))) {//3 is time to get nonce
+        const index_ = dataBid[2].split(',')
+        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + (timeWait - timeGetNonce))) {
             const seller_ = dataBid[0].split(',')
-            const index_ = dataBid[2].split(',')
             const priceList = dataBid[1].split(',')
             const amountList = dataBid[5].split(',')
             const idList = dataBid[4].split(',')
@@ -139,6 +139,10 @@ async function init(Private_Key_) {
             else {
                 console.log('Over time (' + overTime.toString() + ' seconds)!!')
             }
+            try {// avoid missing auction
+                const inputdata = fs.readFileSync('waitBid.txt', 'utf8');
+                dataBid = inputdata.split('\n')
+            } catch (err) { }
             dataBid.splice(0, 7)
             for (let iii = 1; iii < dataBid.length; iii++) {
                 dataBid[iii] = '\n' + dataBid[iii]
@@ -176,5 +180,5 @@ const overTime = 15
 const runAcc = fs.readFileSync('./data/runAcc.txt', 'utf8');
 console.log(runAcc)
 const timeWait = 117.2//timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
-
+const timeGetNonce = 4
 init2(runAcc)
