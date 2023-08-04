@@ -1,12 +1,12 @@
 const axios = require('axios');
 const fs = require('fs');
 const Web3 = require('web3');
-const price = require('./config.json');
+const configJson = JSON.parse(fs.readFileSync('./config/config.json'));
 const abi = JSON.parse(fs.readFileSync('./config/abiMobox.json'));
 const { exit } = require('process');
-// process.on('unhandledRejection', (err) => {
-//     console.error('Unhandled Promise Rejection:', err);
-// });
+process.on('unhandledRejection', (err) => {
+    console.error('Unhandled Promise Rejection:', err);
+});
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -14,12 +14,11 @@ function sleep(ms) {
 }
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.public.blastapi.io"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.defibit.io"));
-minCM = price.minPrice.minCommon
-minUCM = price.minPrice.minUncommon
-minUNQ = price.minPrice.minUnique
+minCM = configJson.minPrice.minCommon
+minUCM = configJson.minPrice.minUncommon
+minUNQ = configJson.minPrice.minUnique
 Private_Key = ''
-Account_Key = ''
-File_Key = '_1_0_1'
+File_Key = ['_1_0_1']
 try {
     const passData = fs.readFileSync('myAccount_1_0_1.txt', 'utf8');
     myAccount = passData.split('\n')
@@ -126,12 +125,14 @@ async function checkChangePrice(indexId) {
 async function changePrice(index_, priceChange_, Private_Key_, address_) {
     encoded = ''
     tx = ''
-    for (let index = 0; index < Account_Key.length; index++) {
-        if (address_ == Account_Key[index]) {
+    for (let index = 0; index < myAccounts.length; index++) {
+        if (address_ == myAccounts[index]) {
+            contract = new web3.eth.Contract(abi, address_);
             encoded = contract.methods.changePrice(index_, priceChange_, priceChange_, 2).encodeABI();
-            await web3.eth.getTransactionCount(address_).then((nonce) => {
+            await web3.eth.getTransactionCount('0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000').then((nonce) => {
+                console.log(nonceAcc, nonce)
                 tx = {
-                    nonce: nonce + nonceAcc[index],
+                    nonce: nonce + nonceAcc[0],
                     from: '0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000',
                     gas: 57865,
                     gasPrice: gasPriceScan,
@@ -140,7 +141,7 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                     data: encoded
                 }
             })
-            nonceAcc[index] += 1
+            nonceAcc[0] += 1
             break
         }
     }
@@ -159,18 +160,18 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                     } else { web3.eth.sendSignedTransaction(signArray[index].rawTransaction).catch(err => { console.error(err) }) }
                     // console.log(signChange.blockNumber)
                 } catch (error) {
-                    nonceAcc = File_Key.map(x => 0)
+                    nonceAcc = [0]
                     signArray = []
                     idCache = []
                     console.log('Error during change price!!')
                 }
             }
-            nonceAcc = File_Key.map(x => 0)
+            nonceAcc = [0]
             signArray = []
             idCache = []
             await sleep(delayChange)
         }
-    } catch (error) { console.log('Encode Fail') }
+    } catch (error) { console.log('Encode Fail', error) }
 }
 async function main(address_, boolMin, Private_Key_) {
     idMomo = []
@@ -227,12 +228,11 @@ async function main(address_, boolMin, Private_Key_) {
 async function loopCheck(times) {
     for (let index = 0; index < times; index++) {
         console.log('Loop:', index.toString() + '/' + times.toString())
-        for (let indexAccs = 0; indexAccs < Account_Key.length; indexAccs++) {
-            console.log("Account:", Account_Key[indexAccs])
-            let isContract = await web3.eth.getStorageAt(Account_Key[indexAccs])
+        for (let indexAccs = 0; indexAccs < myAccounts.length; indexAccs++) {
+            console.log("Account:", myAccounts[indexAccs])
+            let isContract = await web3.eth.getStorageAt(myAccounts[indexAccs])
             if (!Number(isContract)) { continue }
-            contract = new web3.eth.Contract(abi, Account_Key[indexAccs]);
-            await main(Account_Key[indexAccs], true, Private_Key[indexAccs])
+            await main(myAccounts[indexAccs], true, Private_Key)
             await sleep(10000)
         }
         if (times > 1) { await sleep(100000) }
@@ -249,7 +249,8 @@ for (let index = 0; index < myAcc.length; index++) {
 }
 signArray = []
 idCache = []
-amountChange = 5//bundles change
+nonceAcc = [0]
+amountChange = 4//bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed())
 const sellOff = true // if true - sale per minPrice, if false - sale if not loss
 loopCheck(5000)
