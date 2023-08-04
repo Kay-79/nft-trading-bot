@@ -2,8 +2,11 @@ const axios = require('axios');
 const fs = require('fs');
 const Web3 = require('web3');
 const price = require('./config.json');
-const abi = require('./config/abiMobox.json');
+const abi = JSON.parse(fs.readFileSync('./config/abiMobox.json'));
 const { exit } = require('process');
+// process.on('unhandledRejection', (err) => {
+//     console.error('Unhandled Promise Rejection:', err);
+// });
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -24,7 +27,6 @@ try {
 } catch (err) {
     console.error(err);
 }
-const contract = new web3.eth.Contract(abi, contractAddress);
 idMomo = []
 indexMomo = []
 priceSell = []
@@ -130,10 +132,10 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
             await web3.eth.getTransactionCount(address_).then((nonce) => {
                 tx = {
                     nonce: nonce + nonceAcc[index],
-                    from: address_,
+                    from: '0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000',
                     gas: 57865,
                     gasPrice: gasPriceScan,
-                    to: contractAddress,
+                    to: address_,
                     value: 0,
                     data: encoded
                 }
@@ -227,6 +229,9 @@ async function loopCheck(times) {
         console.log('Loop:', index.toString() + '/' + times.toString())
         for (let indexAccs = 0; indexAccs < Account_Key.length; indexAccs++) {
             console.log("Account:", Account_Key[indexAccs])
+            let isContract = await web3.eth.getStorageAt(Account_Key[indexAccs])
+            if (!Number(isContract)) { continue }
+            contract = new web3.eth.Contract(abi, Account_Key[indexAccs]);
             await main(Account_Key[indexAccs], true, Private_Key[indexAccs])
             await sleep(10000)
         }
@@ -244,7 +249,7 @@ for (let index = 0; index < myAcc.length; index++) {
 }
 signArray = []
 idCache = []
-amountChange = 1//bundles change
+amountChange = 5//bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed())
 const sellOff = true // if true - sale per minPrice, if false - sale if not loss
 loopCheck(5000)
