@@ -1,4 +1,15 @@
-const axios = require('axios');
+var axioss = require('axios');
+const axios = axioss.create({
+    proxy: {
+        protocol: 'http',
+        host: 'proxy.scrapingbee.com',
+        port: 8886,
+        auth: {
+            username: 'PHXCZZTF4JWDCQKMH5T50CO0JTZI3QUD5H4D8SNMQ5CLL7MGIONKOTDACZ9AE506DW3WVSAHT0XO9S2X',
+            password: 'render_js=False&premium_proxy=True'
+        }
+    },
+});
 const fs = require('fs');
 const Web3 = require('web3');
 const configJson = JSON.parse(fs.readFileSync('./config/config.json'));
