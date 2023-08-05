@@ -1,25 +1,10 @@
-const options = {
-    // ... other options ...
-    agent: new http.Agent({ 
-      proxy: {
-        host: proxyHost,
-        port: proxyPort,
-        auth: 'username:password', // Replace with your actual username and password
-      }
-    })
-  };
-  const https = require('https');
-
-  const options = {
-    hostname: 'api.ipify.org',
-    port: 443, // Use 443 for HTTPS
-    path: '/',
-    method: 'GET',
-    agent: new https.Agent({ 
-      // ... proxy configuration ...
-    })
-  };
-  
-  const request = https.request(options, (response) => {
-    // ... handle the response ...
+fetch('https://nftapi.mobox.io/auction/search/BNB?page=1&limit=30&category=&vType=&sort=-time&pType=')
+  .then(response => response.json())
+  .then(data => {
+    // Xử lý dữ liệu ở đây
+    console.log(data);
+  })
+  .catch(error => {
+    // Xử lý lỗi ở đây
+    console.error('Error fetching data:', error);
   });
