@@ -1,4 +1,15 @@
-const axios = require('axios');
+var axioss = require('axios');
+const axios = axioss.create({
+    proxy: {
+        auth: {
+            username: '89VZ5G0LAOOMEX9NU91A0MZFRY05Z956XZUZZYLFLFGRCUQ327HV141KXH5DG2QKJ77K6ZBDL3KXJ00Y',
+            password: 'render_js=False&premium_proxy=True'
+        },
+        protocol: 'http',
+        host: 'proxy.scrapingbee.com',
+        port: 8886
+    }
+});
 const fs = require('fs');
 const { exit } = require('process');
 const Web3 = require('web3');
@@ -218,6 +229,8 @@ async function divideCanBuy() {
 }
 
 async function runBot(amountMomo, runAcc) {
+    bnbPrice = await axios.get('https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]').catch(e => { console.log("Err1") })
+    bnbPrice = bnbPrice.data.data.bnb.price
     if (rateFeePerProfit > 0.5) {
         console.warn('Rate fee too high')
         exit()
@@ -236,14 +249,14 @@ async function runBot(amountMomo, runAcc) {
         flagCheck += 1
         await getMpListed(amountMomo)
         if (auctors_.length == 0) {
-            await sleep(10000)
+            await sleep(delayGetMp)
             continue
         }
         await sleep(1000)
         await checkCanBuy()
         await divideCanBuy()
-        await sleep(10000)
-        if (flagCheck >= 106) {//1 loop around 11.37 seconds // 106 ~ 20 minutes
+        await sleep(delayGetMp)
+        if (flagCheck >= 53) {//1 loop around 11.37 seconds // 106 ~ 20 minutes
             flagCheck = 0
             await getMinPrice()
         }
@@ -295,7 +308,7 @@ async function getMinPrice() {
             priceMomo.push(dataMomo[index + 2])
         }
     }
-    for (let index0 = 0; index0 < 5; index0++) {
+    for (let index0 = 0; index0 < 3; index0++) {
         let limitMomo = 17
         if (index0 >= 4) {
             limitMomo = 5
@@ -358,8 +371,6 @@ async function getMinPrice() {
     minEpic = 0
     minLegend = 0
     console.log(minCommon, minUncommon, minUnique, minRare, minEpic, minLegend)
-    bnbPrice = await axios.get('https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]').catch(e => { console.log("Err1") })
-    bnbPrice = bnbPrice.data.data.bnb.price
     fee = gasUsed.map(valuee => valuee * gasPriceMin * bnbPrice * 10 ** -9)//min fee to buy
 }
 
@@ -379,5 +390,6 @@ const rateFeePerProfit = 0.150
 var accCheck = configJson.accBuy
 const apiTele = configJson.api.telegram
 const chatId = configJson.chatId.mobox
+const delayGetMp = 20000
 // now is save batch, config in bid.js
 runBot(20, '_7_7_1')

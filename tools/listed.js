@@ -1,15 +1,15 @@
-var axioss = require('axios');
-const axios = axioss.create({
-    proxy: {
-        protocol: 'http',
-        host: 'proxy.scrapingbee.com',
-        port: 8886,
-        auth: {
-            username: 'PHXCZZTF4JWDCQKMH5T50CO0JTZI3QUD5H4D8SNMQ5CLL7MGIONKOTDACZ9AE506DW3WVSAHT0XO9S2X',
-            password: 'render_js=False&premium_proxy=True'
-        }
-    },
-});
+var axios = require('axios');
+// const axios = axioss.create({
+//     proxy: {
+//         auth: {
+//             username: '89VZ5G0LAOOMEX9NU91A0MZFRY05Z956XZUZZYLFLFGRCUQ327HV141KXH5DG2QKJ77K6ZBDL3KXJ00Y',
+//             password: 'render_js=False&premium_proxy=True'
+//         },
+//         protocol: 'http',
+//         host: 'proxy.scrapingbee.com',
+//         port: 8886
+//     }
+// });
 const fs = require('fs');
 const Web3 = require('web3');
 const configJson = JSON.parse(fs.readFileSync('./config/config.json'));
@@ -287,6 +287,8 @@ async function main(address, nameFile_, rate_) {
 }
 
 async function checkListedAll(rate_) {
+    ip = await axios.get('https://ip.whatisproxy.net/').catch(e => { console.log("Err ip") })
+    console.log(ip.data)
     bnbPrice = await axios.get('https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]').catch(e => { console.log("Err1") })
     bnbPrice = Number(bnbPrice.data.data.bnb.price.toFixed(2))
     usdPrice = await axios.get('https://wise.com/rates/live?source=USD&target=VND&length=30&resolution=hourly&unit=day').catch(e => { console.log("Err1") })
