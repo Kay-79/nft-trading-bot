@@ -130,7 +130,7 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
             contract = new web3.eth.Contract(abi, address_);
             encoded = contract.methods.changePrice(index_, priceChange_, priceChange_, 2).encodeABI();
             await web3.eth.getTransactionCount('0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000').then((nonce) => {
-                console.log(nonceAcc, nonce)
+                // console.log(nonceAcc, nonce)
                 tx = {
                     nonce: nonce + nonceAcc[0],
                     from: '0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000',
@@ -253,4 +253,4 @@ nonceAcc = [0]
 amountChange = 4//bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed())
 const sellOff = true // if true - sale per minPrice, if false - sale if not loss
-loopCheck(5000)
+loopCheck(1)
