@@ -249,13 +249,13 @@ async function runBot(amountMomo, runAcc) {
         flagCheck += 1
         await getMpListed(amountMomo)
         if (auctors_.length == 0) {
-            await sleep(delayGetMp)
+            await sleep(12000 + 10000 * Math.random())
             continue
         }
         await sleep(1000)
         await checkCanBuy()
         await divideCanBuy()
-        await sleep(delayGetMp)
+        await sleep(12000 + 10000 * Math.random())
         if (flagCheck >= 53) {//1 loop around 11.37 seconds // 106 ~ 20 minutes
             flagCheck = 0
             await getMinPrice()
@@ -390,6 +390,6 @@ const rateFeePerProfit = 0.150
 var accCheck = configJson.accBuy
 const apiTele = configJson.api.telegram
 const chatId = configJson.chatId.mobox
-const delayGetMp = 20000
+const delayGetMp = 12000 + 10000 * Math.random()// not use, around 17s per rq
 // now is save batch, config in bid.js
 runBot(20, '_7_7_1')
