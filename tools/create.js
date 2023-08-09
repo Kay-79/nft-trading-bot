@@ -281,7 +281,7 @@ const myAcc = configJson.myAcc
 for (let index = 0; index < myAcc.length; index++) {
     myAccounts.push(myAcc[index][0])
 }
-value = 2 // without rare and epic
+value = 1 // without rare and epic
 valueBid = 999
 indexs = []
 priceList = []

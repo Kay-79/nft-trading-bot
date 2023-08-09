@@ -99,5 +99,5 @@ for (let ii = 0; ii < prices.length; ii++) {
         prices[ii][jj] = ((Math.round((Number(prices[ii][jj])) * 10 ** 5)).toString() + '0000000000000')
     }
 }
-const consractAddress = ('0x90576D978C8cDB0928F963f5E7080B8BcCaA94B0')
+const consractAddress = ('0xFEA667353AB89E8B52Fb1eD18CA515e85296D596')
 createBatch(3.001, 1000000, '', '_1_0_1')
