@@ -240,8 +240,8 @@ async function loopCheck(times) {
 }
 // 0  
 const minChange = 0.001
-timeWait = 1 * 60 * 60 * 1 //wait latest change price
-delayChange = 30 * 10 ** 3 //delay to update api
+timeWait = 5 * 60 * 60 * 1 //wait latest change price
+delayChange = 90 * 10 ** 3 //delay to update api
 myAccounts = []
 const myAcc = configJson.myAcc
 for (let index = 0; index < myAcc.length; index++) {
