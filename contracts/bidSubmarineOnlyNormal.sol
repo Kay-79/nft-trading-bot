@@ -11,19 +11,13 @@ contract bidSubmarineOnlyNormal {
     uint256 public balance;
     uint256 public amountUnList;
     uint256 public timeCache;
-    bool public approveBUSD;
 
     constructor() payable {
         addressBUSD = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
         macOs = 0x55555D4de8df0c455C2Ff368253388FE669a8888;
-        // addressBUSD = 0x78867BbEeF44f2326bF8DDd1941a4439382EF2A7;
         addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
         owner = 0x77775a358050DE851b06603864FbD380637C7777;
-        // owner = 0x5B38Da6a701c568545dCfcB03FcB875f56beddC4;
-        // owner = 0x1111c16591c4ECe1c313f46A63330D8BCf461111;
         changer = 0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000;
-        require(approveBUSD == false, "Approved");
-        approveBUSD = true;
         (bool success, ) = addressBUSD.call{gas: gasleft(), value: msg.value}(
             abi.encodeWithSignature(
                 "approve(address,uint256)",
@@ -107,7 +101,10 @@ contract bidSubmarineOnlyNormal {
             timeCache = startTime_;
         } else {
             amountUnList += amount_;
-            (bool success, ) = addressMP.call{gas: gasleft(), value: msg.value}(
+            (bool success, bytes memory returnData) = addressMP.call{
+                gas: gasleft(),
+                value: msg.value
+            }(
                 abi.encodeWithSignature(
                     "bid(address,uint256,uint256,uint256)",
                     auctor_,
@@ -117,7 +114,7 @@ contract bidSubmarineOnlyNormal {
                 )
             );
             if (!success) {
-                revert("invalid status");
+                revert(string(returnData));
             }
         }
     }
