@@ -250,7 +250,7 @@ for (let index = 0; index < myAcc.length; index++) {
 signArray = []
 idCache = []
 nonceAcc = [0]
-amountChange = 4//bundles change
+amountChange = 1//bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed())
 const sellOff = true // if true - sale per minPrice, if false - sale if not loss
 loopCheck(1000)
