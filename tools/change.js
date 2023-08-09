@@ -184,11 +184,11 @@ async function main(address_, boolMin, Private_Key_) {
     flagCountMomo = 0
     await sleep(1000)
     await checkListed(address_)
-    for (let index1 = 1; index1 < 51; index1++) {
-        await checkPriceBuy(address_, index1)
-        if (flagCountMomo == idMomo.length) { break }
-        await sleep(1000)
-    }
+    // for (let index1 = 1; index1 < 51; index1++) {
+    //     await checkPriceBuy(address_, index1)
+    //     if (flagCountMomo == idMomo.length) { break }
+    //     await sleep(1000)
+    // }
     if (boolMin) {
         await sleep(5000)
         for (let indexMomo_ = idMomo.length - 1; indexMomo_ >= 0; indexMomo_--) {
@@ -199,7 +199,7 @@ async function main(address_, boolMin, Private_Key_) {
             }
             if (idCache.includes(idMomo[indexMomo_])) { continue }
             await checkChangePrice(indexMomo_)
-            await sleep(2000)
+            await sleep(2500 + 5000 * Math.random())
             if (boolChange[indexMomo_] == 'TRUE') {
                 // console.log('Wait!')
                 idCache.push(idMomo[indexMomo_])
@@ -233,9 +233,9 @@ async function loopCheck(times) {
             let isContract = await web3.eth.getStorageAt(myAccounts[indexAccs])
             if (!Number(isContract)) { continue }
             await main(myAccounts[indexAccs], true, Private_Key)
-            await sleep(10000)
+            await sleep(150000 + 300000 * Math.random())//5mins per check
         }
-        if (times > 1) { await sleep(100000) }
+        if (times > 1) { await sleep(4 * 3600000) }
     }
 }
 // 0  
@@ -253,4 +253,4 @@ nonceAcc = [0]
 amountChange = 4//bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed())
 const sellOff = true // if true - sale per minPrice, if false - sale if not loss
-loopCheck(1)
+loopCheck(1000)
