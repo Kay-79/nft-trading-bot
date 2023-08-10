@@ -83,7 +83,7 @@ async function init(Private_Key_) {
                         nonce: nonce_,
                         to: contractAddress,
                         value: 0,
-                        data: contract.methods.bid(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), amountBid.toString()).encodeABI()// amount = 1
+                        data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()// amount = 1 or > 1
                     }
                     nonce_ += 1;
                     tx.push(
@@ -94,7 +94,7 @@ async function init(Private_Key_) {
                             nonce_,
                             to: contractAddress,
                             value: 0,
-                            data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()// amount > 1
+                            data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()// amount = 1 or > 1
                         }
                     )
                 }
