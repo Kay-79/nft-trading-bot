@@ -46,7 +46,6 @@ async function init(Private_Key_) {
             }
             if (false || (Date.now() / 1000 < Number(startTime_[0]) + timeWait + overTime)) {
                 var tx = []
-                var fakeTx = {}
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
                 await sleep(Math.abs(Date.now() / 1000 - Number(startTime_[0]) + timeWait));
                 if (index_.length > 1) {
@@ -91,7 +90,7 @@ async function init(Private_Key_) {
                             from: acc.address,
                             gas: 1000000,
                             gasPrice: gasPriceScan,
-                            nonce_,
+                            nonce: nonce_,
                             to: contractAddress,
                             value: 0,
                             data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()// amount = 1 or > 1
