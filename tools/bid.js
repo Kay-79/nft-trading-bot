@@ -33,21 +33,33 @@ async function init(Private_Key_) {
     if (Bid == true) {
         const startTime_ = dataBid[3].split(',')
         const index_ = dataBid[2].split(',')
-        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + (timeWait - timeGetNonce))) { 
+        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + (timeWait - timeGetNonce))) {
             const seller_ = dataBid[0].split(',')
             const priceList = dataBid[1].split(',')
             const amountList = dataBid[5].split(',')
             const idList = dataBid[4].split(',')
             const gasPriceScan = Number((Number(dataBid[6].split(',')) * 10 ** 9).toFixed())
+            const gasPriceScanFake = Number((Number(dataBid[6].split(',')) * 10 ** 9 * 2).toFixed())
             let amountBid = 0
             for (let index = 0; index < amountList.length; index++) {
-                amountBid += Number(amountList[index])
+                amountBid += Number(amountList[index]);
             }
             if (false || (Date.now() / 1000 < Number(startTime_[0]) + timeWait + overTime)) {
                 var tx = []
+                var fakeTx = {}
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
-                await sleep(Math.abs(Date.now() / 1000 - Number(startTime_[0]) + timeWait))
+                await sleep(Math.abs(Date.now() / 1000 - Number(startTime_[0]) + timeWait));
                 if (index_.length > 1) {
+                    fakeTx = {
+                        from: acc.address,
+                        gas: 1000000,
+                        gasPrice: gasPriceScanFake,
+                        nonce: nonce_,
+                        to: contractAddress,
+                        value: 0,
+                        data: contract.methods.bid(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), '1').encodeABI()// amount = 1
+                    }
+                    nonce_ += 1;
                     for (let index = 0; index < index_.length; index++) {
                         tx.push(
                             {
@@ -57,21 +69,32 @@ async function init(Private_Key_) {
                                 nonce: nonce_,
                                 to: contractAddress,
                                 value: 0,
-                                data: contract.methods.bid1(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), '1').encodeABI()
+                                data: contract.methods.bid(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), '1').encodeABI()// amount = 1
                             }
                         )
                         nonce_ += 1
                     }
                 }
                 else if (index_.length == 1) {
+                    fakeTx = {
+                        from: acc.address,
+                        gas: 1000000,
+                        gasPrice: gasPriceScanFake,
+                        nonce: nonce_,
+                        to: contractAddress,
+                        value: 0,
+                        data: contract.methods.bid(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), amountBid.toString()).encodeABI()// amount = 1
+                    }
+                    nonce_ += 1;
                     tx.push(
                         {
                             from: acc.address,
                             gas: 1000000,
                             gasPrice: gasPriceScan,
+                            nonce_,
                             to: contractAddress,
                             value: 0,
-                            data: contract.methods.bid1(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()
+                            data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()// amount > 1
                         }
                     )
                 }
@@ -80,6 +103,7 @@ async function init(Private_Key_) {
                     console.log('Paying!!')
                     let signed = []
                     let biding = []
+                    signed.push(await web3.eth.accounts.signTransaction(fakeTx, Private_Key_))
                     for (let index = 0; index < tx.length; index++) {
                         signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_))
                     }
