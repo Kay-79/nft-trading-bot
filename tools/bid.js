@@ -57,7 +57,7 @@ async function init(Private_Key_) {
                         nonce: nonce_,
                         to: contractAddress,
                         value: 0,
-                        data: contract.methods.bid(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), '1').encodeABI()// amount = 1
+                        data: contract.methods.bid(seller_[0].toString(), index_[0].toString(), startTime_[0].toString(), priceList[0].toString(), '1').encodeABI()// amount = 1
                     }
                     nonce_ += 1;
                     for (let index = 0; index < index_.length; index++) {
