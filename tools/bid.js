@@ -107,8 +107,8 @@ async function init(Private_Key_) {
                     for (let index = 0; index < tx.length; index++) {
                         signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_))
                     }
-                    for (let index = 0; index < tx.length; index++) {
-                        if (tx.length == 1) {
+                    for (let index = 0; index < signed.length; index++) {
+                        if (signed.length == 1) {
                             try {
                                 checkSuccess = 'Success'
                                 biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction)
@@ -119,7 +119,7 @@ async function init(Private_Key_) {
                             console.log('Successful bid! At block:', biding[index].blockNumber)
                         }
                         else {
-                            if (index == tx.length - 1) {
+                            if (index == signed.length - 1) {
                                 try {
                                     checkSuccess = 'Success'
                                     biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction)
