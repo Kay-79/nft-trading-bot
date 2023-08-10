@@ -33,7 +33,7 @@ async function init(Private_Key_) {
     if (Bid == true) {
         const startTime_ = dataBid[3].split(',')
         const index_ = dataBid[2].split(',')
-        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + (timeWait - timeGetNonce))) {
+        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + (timeWait - timeGetNonce))) { 
             const seller_ = dataBid[0].split(',')
             const priceList = dataBid[1].split(',')
             const amountList = dataBid[5].split(',')
@@ -176,6 +176,6 @@ async function init2() {
     }
 }
 const overTime = 15
-const timeWait = 118.2//timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+const timeWait = 118.1//timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 const timeGetNonce = 4
 init2()
