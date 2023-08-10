@@ -62,10 +62,6 @@ contract bidSubmarineOnlyNormal {
         owner = address(newOwner_);
     }
 
-    function reset() public onlyChanger {
-        timeCache = 0;
-    }
-
     function changeAmountUnList(uint256 newAmount) public onlyOwner {
         amountUnList = newAmount;
     }
