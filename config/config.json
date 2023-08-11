@@ -41,13 +41,17 @@
         [
             "0xD1EF82c3fd737ED9E4ea43334b84A8Ce91F5D23B",
             "_D_1_E"
+        ],
+        [
+            "0xA6486b339BBdc9293B580a097C681c38C4f2702d",
+            "_A_6_4"
         ]
     ],
     "minPrice": {
-        "minCommon": 3.3,
-        "minUncommon": 1.6,
-        "minUnique": 1.1,
+        "minCommon": 3.6,
+        "minUncommon": 1.7,
+        "minUnique": 1.15,
         "minRare": 14
     },
-    "accBuy": "0xD1EF82c3fd737ED9E4ea43334b84A8Ce91F5D23B"
+    "accBuy": "0xA6486b339BBdc9293B580a097C681c38C4f2702d"
 }
