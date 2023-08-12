@@ -281,7 +281,7 @@ const myAcc = configJson.myAcc
 for (let index = 0; index < myAcc.length; index++) {
     myAccounts.push(myAcc[index][0])
 }
-value = 100 // without rare and epic
+value = 1000 // without rare and epic
 valueBid = 999
 indexs = []
 priceList = []
@@ -289,4 +289,4 @@ ids = []
 const minChange = 0.001
 var accSell = ''
 
-createBatch(3.001, 1000000, '', '_F_E_A')
+createBatch(3.001, 1000000, '', '_D_1_E')
