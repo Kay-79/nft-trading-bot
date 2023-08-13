@@ -93,9 +93,9 @@ contract bidSubmarineOnlyNormal {
         uint256 price_,
         uint256 amount_ //must have to count momo
     ) external payable onlyOwner {
-        if (startTime_ != timeCache) {
-            timeCache = startTime_;
-        } else {
+        // if (startTime_ != timeCache) {
+        //     timeCache = startTime_;
+        // } else {
             amountUnList += amount_;
             (bool success, bytes memory returnData) = addressMP.call{
                 gas: gasleft(),
@@ -112,7 +112,7 @@ contract bidSubmarineOnlyNormal {
             if (!success) {
                 revert(string(returnData));
             }
-        }
+        // }
     }
 
     function changePrice(

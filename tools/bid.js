@@ -49,16 +49,18 @@ async function init(Private_Key_) {
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
                 await sleep(Math.abs(Date.now() / 1000 - Number(startTime_[0]) + timeWait));
                 if (index_.length > 1) {
-                    tx.push({
-                        from: acc.address,
-                        gas: 1000000,
-                        gasPrice: gasPriceScanFake,
-                        nonce: nonce_,
-                        to: contractAddress,
-                        value: 0,
-                        data: contract.methods.bid(seller_[0].toString(), index_[0].toString(), startTime_[0].toString(), priceList[0].toString(), '1').encodeABI()// amount = 1
-                    })
-                    nonce_ += 1;
+                    if (fakeBid == true) {
+                        tx.push({
+                            from: acc.address,
+                            gas: 1000000,
+                            gasPrice: gasPriceScanFake,
+                            nonce: nonce_,
+                            to: contractAddress,
+                            value: 0,
+                            data: contract.methods.bid(seller_[0].toString(), index_[0].toString(), startTime_[0].toString(), priceList[0].toString(), '1').encodeABI()// amount = 1
+                        })
+                        nonce_ += 1;
+                    }
                     for (let index = 0; index < index_.length; index++) {
                         tx.push(
                             {
@@ -75,16 +77,18 @@ async function init(Private_Key_) {
                     }
                 }
                 else if (index_.length == 1) {
-                    tx.push({
-                        from: acc.address,
-                        gas: 1000000,
-                        gasPrice: gasPriceScanFake,
-                        nonce: nonce_,
-                        to: contractAddress,
-                        value: 0,
-                        data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()// amount = 1 or > 1
-                    })
-                    nonce_ += 1;
+                    if (fakeBid == true) {
+                        tx.push({
+                            from: acc.address,
+                            gas: 1000000,
+                            gasPrice: gasPriceScanFake,
+                            nonce: nonce_,
+                            to: contractAddress,
+                            value: 0,
+                            data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()// amount = 1 or > 1
+                        })
+                        nonce_ += 1;
+                    }
                     tx.push(
                         {
                             from: acc.address,
@@ -200,4 +204,5 @@ async function init2() {
 const overTime = 15
 const timeWait = 118.1 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 const timeGetNonce = 4
+const fakeBid = false
 init2()
