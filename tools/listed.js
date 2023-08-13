@@ -305,6 +305,12 @@ async function checkListedAll(rate_) {
     sumSaleVnd = (sumBNB * bnbPrice + sumUSD + sumSell * 0.95) * usdPrice * rate_
     console.log('Estimate Fund:\t', sumBuyVnd.toFixed(), '--', sumSaleVnd.toFixed(), 'đ')
     console.log('Estimate Fund:\t', (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed(), 'đ')
+    var logsBalance = fs.readFileSync('logsBalance.csv', 'utf8');
+    fs.writeFile('logsBalance' + '.csv', logsBalance + '\n' + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed(), err => {
+        if (err) {
+            console.error(err);
+        }
+    });
     var currentdate = new Date();
     var datetime = "Last Sync: "
         + currentdate.getHours() + ":"
