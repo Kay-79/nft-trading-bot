@@ -37,7 +37,7 @@ async function withdrawTo(address_) {
                 var tx = {
                     gas: 100000,
                     gasPrice: 3.001 * 10 ** 9,
-                    to: address_,
+                    to: myAcc[index][0],
                     value: 0,
                     data: encoded
                 }
