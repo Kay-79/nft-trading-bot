@@ -26,7 +26,7 @@ async function withdrawTo(address_) {
     }
     for (let index = 0; index < myAcc.length; index++) {
         let isContract = await web3.eth.getStorageAt(myAcc[index][0])
-        if (!Number(isContract) || myAcc[index][0] == address_) { continue }
+        if (!Number(isContract) || myAcc[index][0] == address_ || myAcc[index][1] == '_F_E_A') { continue }
         let balanceSC = await contractBUSD.methods.balanceOf(myAcc[index][0]).call()
         console.log(myAcc[index][0])
         console.log(balanceSC / 10 ** 18)
@@ -35,10 +35,9 @@ async function withdrawTo(address_) {
                 const contractAddress = new web3.eth.Contract(abi, myAcc[index][0]);
                 let encoded = await contractAddress.methods.transferERC20('0xe9e7cea3dedca5984780bafc599bd69add087d56', address_, balanceSC).encodeABI();
                 var tx = {
-                    from: '0x55555D4de8df0c455C2Ff368253388FE669a8888',
                     gas: 100000,
                     gasPrice: 3.001 * 10 ** 9,
-                    to: contractAddress,
+                    to: address_,
                     value: 0,
                     data: encoded
                 }
@@ -46,10 +45,10 @@ async function withdrawTo(address_) {
                 await web3.eth.sendSignedTransaction(signed.rawTransaction)
                 console.log('Tranfer ' + (balanceSC / 10 ** 18).toFixed(2).toString() + 'BUSD from ' + myAcc[index][0] + ' to ' + address_);
             } catch (error) {
-                console.log("Encode Fail")
+                console.log("Encode Fail", error)
             }
         }
     }
 }
 
-withdrawTo('0x77775a358050DE851b06603864FbD380637C7777')
+withdrawTo('0x7457aCc0f158734CFF4d9375efC90bc3082bB256')
