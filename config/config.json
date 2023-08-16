@@ -41,6 +41,10 @@
         [
             "0x7457aCc0f158734CFF4d9375efC90bc3082bB256",
             "_7_4_5"
+        ],
+        [
+            "0xa2b607197c1A1f5FF114915c407FDDAbe3EF67E1",
+            "_a_2_b"
         ]
     ],
     "minPrice": {
@@ -49,5 +53,5 @@
         "minUnique": 1.15,
         "minRare": 14
     },
-    "accBuy": "0x7457aCc0f158734CFF4d9375efC90bc3082bB256"
+    "accBuy": "0xa2b607197c1A1f5FF114915c407FDDAbe3EF67E1"
 }
