@@ -47,7 +47,7 @@ async function init(Private_Key_) {
             if (false || (Date.now() / 1000 < Number(startTime_[0]) + timeWait + overTime)) {
                 var tx = []
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
-                await sleep(Math.abs(Date.now() / 1000 - Number(startTime_[0]) + timeWait));
+                await sleep(Math.abs((Number(startTime_[0]) + timeWait) - Date.now() / 1000));
                 if (index_.length > 1) {
                     if (fakeBid == true) {
                         tx.push({
@@ -202,7 +202,7 @@ async function init2() {
     }
 }
 const overTime = 15
-const timeWait = 116.2 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
-const timeGetNonce = 5
+const timeWait = 117.2 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+const timeGetNonce = 4
 const fakeBid = false
 init2()
