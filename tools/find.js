@@ -177,6 +177,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                 index__.splice(index, 1)
                 time__.splice(index, 1)
                 amount__.splice(index, 1)
+                profitCanBuy.splice(index, 1)
             }
         }
         let gasPriceNew = []
