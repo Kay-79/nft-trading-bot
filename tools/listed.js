@@ -295,20 +295,41 @@ async function checkListedAll(rate_) {
     console.log('Estimate Fund:\t', sumBuyVnd.toFixed(), '--', sumSaleVnd.toFixed(), 'đ')
     console.log('Estimate Fund:\t', (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed(), 'đ')
     var currentdate = new Date();
+    const nowSync = currentdate.getDate() + "/" + (Number(currentdate.getMonth()) + 1).toString() + '/' + currentdate.getFullYear()
     var datetime = "Last Sync: "
         + currentdate.getHours() + ":"
         + currentdate.getMinutes() + ":"
         + currentdate.getSeconds();
     console.log(sumMomo + ' Momos: ' + sumMomoCM + ' Common, ' + sumMomoUCM + ' Uncommon, ' + sumMomoUNQ + ' Unique, ' + sumMomoR + ' Rare, ' + sumMomoE + ' Epic, ' + sumMomoL + ' Legend (' + (sumBuy).toFixed() + ',', (sumSell * 0.95).toFixed() + ')', 'Profit: ' + countProfit + ' - Loss: ' + countLoss + ' - Tie: ' + countTie, datetime)
     var logsBalance = fs.readFileSync('logsBalance.csv', 'utf8');
-    var deviceLogs = logsBalance.split('\n')
-    if (Math.abs(Number(deviceLogs[deviceLogs.length - 1]) - Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale)) > 1000) {
-        console.log('>1k')
-        fs.writeFile('logsBalance' + '.csv', logsBalance + '\n' + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() + "\t" + currentdate.getDate() + "/" + (Number(currentdate.getMonth()) + 1).toString(), err => {
+    var logsBalanceCheck = logsBalance.split('\n')
+    logsBalanceCheck = logsBalanceCheck[logsBalanceCheck.length - 1].split('\t')
+    const lastBalance = logsBalanceCheck[0]
+    const lastSync = logsBalanceCheck[1]
+    if (lastSync != nowSync) {
+        console.log("New save")
+        fs.writeFile('logsBalance' + '.csv', logsBalance + '\n' + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() + "\t" + nowSync, err => {
             if (err) {
                 console.error(err);
             }
         });
+    }
+    else {
+        if (Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) - Number(lastBalance) > 0) {// only save max
+            console.log('Save max')
+            logsBalanceCheck = logsBalance.split('\n')
+            logsBalance = ''
+            for (let index = 0; index < logsBalanceCheck.length - 1; index++) {
+                var logEach = logsBalanceCheck[index].split('\t')
+                logsBalance += logEach[0] + '\t' + logEach[1] + '\n'
+            }
+            fs.writeFile('logsBalance' + '.csv', logsBalance + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() + "\t" + nowSync, err => {
+                if (err) {
+                    console.error(err);
+                }
+            });
+        }
+        else { console.log("Don't save min") }
     }
 }
 
