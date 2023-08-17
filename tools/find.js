@@ -155,28 +155,59 @@ async function checkCanBuy() {
 }
 
 async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount__) {
-    if (totalProfit - fee[totalAuctions - 1] > 0) {
-        try {// add save second file
-            let gasPriceNew = 0
-            gasPriceNew = Number(((rateFeePerProfit * (totalProfit - fee[totalAuctions - 1])) / (gasUsed[totalAuctions - 1] * bnbPrice * 10 ** -9) + gasPriceMin).toFixed(3))
-            if (gasPriceNew > gasPriceMax) {
-                gasPriceNew = gasPriceMax
+    if (totalAuctions < 2) {
+        if (totalProfit - fee[totalAuctions - 1] > 0) {
+            try {// add save second file
+                let gasPriceNew = 0
+                gasPriceNew = Number(((rateFeePerProfit * (totalProfit - fee[totalAuctions - 1])) / (gasUsed[totalAuctions - 1] * bnbPrice * 10 ** -9) + gasPriceMin).toFixed(3))
+                if (gasPriceNew > gasPriceMax) {
+                    gasPriceNew = gasPriceMax
+                }
+                console.log('Estimate profit:', ((totalProfit - fee[totalAuctions - 1]) * 0.9).toFixed(2))
+                console.log(tokenId__, amountDivide)
+                var inputdata = fs.readFileSync(linkSave, 'utf8');
+                var content = inputdata + seller__ + '\n' + price__ + '\n' + index__ + '\n' + time__ + '\n' + time__ + '\n' + amount__ + '\n' + gasPriceNew + '\n'
+                fs.writeFile(linkSave, content, err => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            } catch (err) {
+                console.error(err);
             }
-            console.log('Estimate profit:', ((totalProfit - fee[totalAuctions - 1]) * 0.9).toFixed(2))
+            await sleep(1000)
+        }
+        else { console.log('Profit < 0', totalProfit - fee[totalAuctions - 1]) }
+    }
+    else {
+        for (let index = 0; index < seller__.length; index++) {
+            if (profitCanBuy[index] - fee[0] < 0) {
+                console.log("Remove momo don't have profit")
+                seller__.splice(index, 1)
+                price__.splice(index, 1)
+                index__.splice(index, 1)
+                time__.splice(index, 1)
+                amount__.splice(index, 1)
+            }
+        }
+        let gasPriceNew = []
+        for (let index = 0; index < seller__.length; index++) {
+            gasPriceNew[index] = Number(((rateFeePerProfit * (profitCanBuy[index] - fee[0])) / (gasUsed[0] * bnbPrice * 10 ** -9) + gasPriceMin).toFixed(3))
+            if (gasPriceNew[index] > gasPriceMax) {
+                gasPriceNew[index] = gasPriceMax
+            }
+        }
+        try {
             console.log(tokenId__, amountDivide)
             var inputdata = fs.readFileSync(linkSave, 'utf8');
-            var content = inputdata + seller__ + '\n' + price__ + '\n' + index__ + '\n' + time__ + '\n' + tokenId__ + '\n' + amount__ + '\n' + gasPriceNew + '\n'
+            var content = inputdata + seller__ + '\n' + price__ + '\n' + index__ + '\n' + time__ + '\n' + time__ + '\n' + amount__ + '\n' + gasPriceNew + '\n'
             fs.writeFile(linkSave, content, err => {
                 if (err) {
                     console.error(err);
                 }
             });
-        } catch (err) {
-            console.error(err);
-        }
-        await sleep(1000)
+        } catch (error) { }
     }
-    else { console.log('Profit < 0', totalProfit - fee[totalAuctions - 1]) }
 }
 function resetVar() {
     amountDivide = 0
