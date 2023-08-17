@@ -41,7 +41,7 @@ async function scanPrice() {
             for (let index1 = 0; index1 < amountMomoScaned; index1++) {
                 price_scan.push((Number(dataMin[index1].nowPrice) / 10 ** 9).toFixed(2))
                 time_scan.push(Number(dataMin[index1].uptime))
-                if (Date.now() / 1000 - time_scan[index1] > 15 * 60) {
+                if (Date.now() / 1000 - time_scan[index1] > 30 * 60) {//15 * 60 is 15 mins
                     if (price_scan[index1] < Number(priceMomo[index])) {
                         console.log(index1 + 1, 'Change ' + priceMomo[index] + ' to', price_scan[index1])
                         priceMomo[index] = price_scan[index1]

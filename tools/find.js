@@ -97,7 +97,7 @@ function checkIdPrice(idCheck_, amountCheck_, lvCheck_, lvHashCheck_) { //check 
     }
     for (let index = 0; index < idMomo.length; index++) {
         if (Number(idCheck_) > 40000) { break }
-        if (Number(idCheck_) == Number(idMomo[index])) { if (priceCheck < Number(priceMomo[index]) * 0.95 - profitName && Number(priceMomo[index]) < 1000) { priceCheck = Number(priceMomo[index]) * 0.95 - profitName } }
+        if (Number(idCheck_) == Number(idMomo[index])) { if (priceCheck < Number(priceMomo[index]) * 0.95 - profitName && Number(priceMomo[index]) < maxMomoPrice) { priceCheck = Number(priceMomo[index]) * 0.95 - profitName } }
     }
     if (pricePerHash * lvHashCheck_ > priceCheck && pricePerHash * lvHashCheck_ < budget) {
         priceCheck = pricePerHash * lvHashCheck_
@@ -412,4 +412,5 @@ const apiTele = configJson.api.telegram
 const chatId = configJson.chatId.mobox
 const delayGetMp = 12000 + 10000 * Math.random()// not use, around 17s per rq
 // now is save batch, config in bid.js
+const maxMomoPrice = 15
 runBot(20, '_7_7_1')
