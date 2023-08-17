@@ -62,7 +62,7 @@ async function checkChangePrice(indexId) {
     else {
         priceSell[indexId] = (Number(data3[0].nowPrice) / 10 ** 9 - minChange).toFixed(3)
         for (let index_q = 0; index_q < data3.length; index_q++) {
-            if (Number(data3[index_q].uptime) > timeWait) {
+            if (Number(Date.now() / 1000).toFixed() - Number(data3[index_q].uptime) > timeWait) {
                 if (myAccounts.includes(data3[index_q].auctor)) {
                     priceSell[indexId] = (Number(data3[index_q].nowPrice) / 10 ** 9).toFixed(3)
                 }
@@ -78,23 +78,28 @@ async function checkChangePrice(indexId) {
                 if (Number(priceSell[indexId]) < minCM) {
                     priceSell[indexId] = (minCM - minChange).toFixed(3)
                 }
+                if (!data3.length) { priceSell[indexId] = 15 }
                 break;
             case '2':
                 if (Number(priceSell[indexId]) < minUCM) {
                     priceSell[indexId] = (minUCM - minChange).toFixed(3)
                 }
+                if (!data3.length) { priceSell[indexId] = 15 }
                 break;
             case '3':
                 if (Number(priceSell[indexId]) < minUNQ) {
                     priceSell[indexId] = (minUNQ - minChange).toFixed(3)
                 }
+                if (!data3.length) { priceSell[indexId] = 15 }
                 break;
             default:
                 priceSell[indexId] = (minR - minChange).toFixed(3)
+                if (!data3.length) { priceSell[indexId] = 15 }
                 break;
         }
     }
 }
+
 async function getPriceToSell(address, boolMin) {
     for (let index1 = 1; index1 < 51; index1++) {
         await checkAmountBuy(address, index1)
