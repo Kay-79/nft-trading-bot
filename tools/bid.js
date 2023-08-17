@@ -38,7 +38,12 @@ async function init(Private_Key_) {
             const priceList = dataBid[1].split(',')
             const amountList = dataBid[5].split(',')
             const idList = dataBid[4].split(',')
-            const gasPriceScan = Number((Number(dataBid[6].split(',')) * 10 ** 9).toFixed())
+            const gasPriceScanRaw = dataBid[6].split(',')
+            // const gasPriceScan = Number((Number(dataBid[6].split(',')) * 10 ** 9).toFixed())
+            var gasPriceScan = []
+            for (let index = 0; index < gasPriceScanRaw.length; index++) {
+                gasPriceScan[index] = Number((Number(gasPriceScanRaw[index]) * 10 ** 9).toFixed())
+            }
             const gasPriceScanFake = Number((Number(dataBid[6].split(',')) * 10 ** 9 * 2).toFixed())
             let amountBid = 0
             for (let index = 0; index < amountList.length; index++) {
@@ -66,7 +71,7 @@ async function init(Private_Key_) {
                             {
                                 from: acc.address,
                                 gas: 1000000,
-                                gasPrice: gasPriceScan,
+                                gasPrice: gasPriceScan[index],
                                 nonce: nonce_,
                                 to: contractAddress,
                                 value: 0,
@@ -93,7 +98,7 @@ async function init(Private_Key_) {
                         {
                             from: acc.address,
                             gas: 1000000,
-                            gasPrice: gasPriceScan,
+                            gasPrice: gasPriceScan[index_],
                             nonce: nonce_,
                             to: contractAddress,
                             value: 0,
@@ -156,7 +161,7 @@ async function init(Private_Key_) {
                     for (let q = 0; q < priceList.length; q++) {
                         price_send.push(' ' + ((Number(priceList[q]) - 10 ** 14) / 10 ** 18).toFixed(2))
                     }
-                    priceList1 = checkSuccess + ' ' + (Number(gasPriceScan) / 10 ** 9).toFixed(2) + '\nPrices   : ' + price_send.toString().replace(' ', '') + '\nAmount: ' + amountList + '\nID List   : ' + idList
+                    priceList1 = checkSuccess + ' ' + (Number(gasPriceScan[0]) / 10 ** 9).toFixed(2) + '\nPrices   : ' + price_send.toString().replace(' ', '') + '\nAmount: ' + amountList + '\nID List   : ' + idList
                 } catch (error) { }
                 try {
                     request('https://api.telegram.org/' + apiTele + '/sendMessage?chat_id=@' + chatId + '&text=' + priceList1, function (error, response, body) { });
