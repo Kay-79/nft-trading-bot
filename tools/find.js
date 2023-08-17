@@ -1,15 +1,4 @@
 var axios = require('axios');
-// const axios = axioss.create({
-//     proxy: {
-//         auth: {
-//             username: '89VZ5G0LAOOMEX9NU91A0MZFRY05Z956XZUZZYLFLFGRCUQ327HV141KXH5DG2QKJ77K6ZBDL3KXJ00Y',
-//             password: 'render_js=False&premium_proxy=True'
-//         },
-//         protocol: 'http',
-//         host: 'proxy.scrapingbee.com',
-//         port: 8886
-//     }
-// });
 const fs = require('fs');
 const { exit } = require('process');
 const Web3 = require('web3');
@@ -108,7 +97,7 @@ function checkIdPrice(idCheck_, amountCheck_, lvCheck_, lvHashCheck_) { //check 
     }
     for (let index = 0; index < idMomo.length; index++) {
         if (Number(idCheck_) > 40000) { break }
-        if (Number(idCheck_) == Number(idMomo[index])) { if (priceCheck < Number(priceMomo[index]) * 0.95 - profitName) { priceCheck = Number(priceMomo[index]) * 0.95 - profitName } }
+        if (Number(idCheck_) == Number(idMomo[index])) { if (priceCheck < Number(priceMomo[index]) * 0.95 - profitName && Number(priceMomo[index]) < 1000) { priceCheck = Number(priceMomo[index]) * 0.95 - profitName } }
     }
     if (pricePerHash * lvHashCheck_ > priceCheck && pricePerHash * lvHashCheck_ < budget) {
         priceCheck = pricePerHash * lvHashCheck_
@@ -407,7 +396,7 @@ async function getMinPrice() {
 
 var priceRaw = [0, 0, 0, 0, 0, 1000]//lowest price in MP
 const profit = [0.1, 0.1, 0.1, 4, 8, 100]//profit per mom
-const profitName = 20
+const profitName = 5
 var minCommon, minUncommon, minUnique, minRare, minEpic, minLegend
 var idMomo = []
 var nameMomo = []
