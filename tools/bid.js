@@ -98,7 +98,7 @@ async function init(Private_Key_) {
                         {
                             from: acc.address,
                             gas: 1000000,
-                            gasPrice: gasPriceScan[index_],
+                            gasPrice: gasPriceScan[0],
                             nonce: nonce_,
                             to: contractAddress,
                             value: 0,
@@ -207,7 +207,7 @@ async function init2() {
     }
 }
 const overTime = 15
-const timeWait = 111.5 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+const timeWait = 111.3 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 const timeGetNonce = 4
 const fakeBid = false
 init2()
