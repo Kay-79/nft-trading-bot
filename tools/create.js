@@ -48,6 +48,10 @@ async function checkAmountBuy(address, page) {
 async function checkChangePrice(indexId) {
     let response3 = await axios.get('https://nftapi.mobox.io/auction/search/BNB?page=1&limit=10&category=&vType=&sort=price&pType=' + idMomoBought[indexId]).catch(e => { console.log("Err2") })
     const data3 = response3.data.list;
+    if (!data3.length) {
+        priceSell[indexId] = 15
+        return false
+    }
     // console.log(data3)
     console.log(idMomoBought[indexId].toString() + '-' + (indexId + 1).toString() + '/' + idMomoBought.length.toString())
     if (myAccounts.includes(data3[0].auctor)) {
