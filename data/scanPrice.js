@@ -24,7 +24,7 @@ async function scanPrice() {
             let dataMin = await axios.get('https://nftapi.mobox.io/auction/search/BNB?page=1&limit=10&category=&vType=&sort=price&pType=' + idMomo[index]).catch(e => { console.log("Err get min price!!") })
             countTen += 1
             if (!dataMin) {
-                index0 -= 1
+                index -= 1
                 await sleep(Number((Math.random() * 100000).toFixed()))
                 continue
             }
