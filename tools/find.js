@@ -177,6 +177,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                 index__.splice(index, 1)
                 time__.splice(index, 1)
                 amount__.splice(index, 1)
+                tokenId__.splice(index, 1)
                 profitCanBuy.splice(index, 1)
             }
         }
@@ -188,7 +189,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
             }
         }
         try {
-            console.log(tokenId__, amountDivide)
+            console.log(tokenId__, tokenId__.length)
             var inputdata = fs.readFileSync(linkSave, 'utf8');
             var content = inputdata + seller__ + '\n' + price__ + '\n' + index__ + '\n' + time__ + '\n' + time__ + '\n' + amount__ + '\n' + gasPriceNew + '\n'
             fs.writeFile(linkSave, content, err => {
