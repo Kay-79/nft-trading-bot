@@ -278,7 +278,7 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     }
 }
 
-timeWait = 1 * 60 * 60 * 1 //wait latest change price
+timeWait = 5 * 60 * 60 * 1 //wait latest change price
 idMomoBought = []
 priceSell = []
 myAccounts = []
