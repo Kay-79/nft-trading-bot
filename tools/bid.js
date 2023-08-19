@@ -53,7 +53,8 @@ async function init(Private_Key_) {
                 var tx = []
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
                 if (Number(startTime_[0]) + timeWait - Date.now() / 1000 > 0) {
-                    await sleep(Math.abs((Number(startTime_[0]) + timeWait) - Date.now() / 1000));
+                    console.log('sleep', Number(startTime_[0]) + timeWait - Date.now() / 1000)
+                    await sleep(Math.abs(Number(startTime_[0]) + timeWait - Date.now() / 1000));
                 }
                 if (index_.length > 1) {
                     if (fakeBid == true) {
