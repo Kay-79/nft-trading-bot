@@ -6,18 +6,8 @@ const configJson = JSON.parse(fs.readFileSync('./config/config.json'));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
 const abiBUSD = [{ "inputs": [{ "internalType": "address", "name": "account", "type": "address" }], "name": "balanceOf", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
 const contract = new web3.eth.Contract(abiBUSD, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
-const dataCommon = fs.readFileSync('./data/CheapestPriceMoboxCommon.csv', 'utf8');
-const commonID = dataCommon.split('\n')
-const dataUncommon = fs.readFileSync('./data/CheapestPriceMoboxUncommon.csv', 'utf8');
-const uncommonID = dataUncommon.split('\n')
-const dataUnique = fs.readFileSync('./data/CheapestPriceMoboxUnique.csv', 'utf8');
-const uniqueID = dataUnique.split('\n')
-const dataRare = fs.readFileSync('./data/CheapestPriceMoboxRare.csv', 'utf8');
-const rareID = dataRare.split('\n')
-const dataEpic = fs.readFileSync('./data/CheapestPriceMoboxEpic.csv', 'utf8');
-const epicID = dataEpic.split('\n')
-const dataLegend = fs.readFileSync('./data/CheapestPriceMoboxLegendary.csv', 'utf8');
-const LegendID = dataLegend.split('\n')
+const dataMomo = fs.readFileSync('./data/dataMomo.txt', 'utf8');
+const momoID = dataMomo.split('\n')
 
 idMomo = []
 indexMomo = []
@@ -55,74 +45,24 @@ async function checkListed(address) {
     }
     for (let ii = 0; ii < idMomo.length; ii++) {
         flagID = false
-        if (Number(idMomo[ii]) < 20000) {
-            for (let oo = 0; oo < commonID.length; oo++) {
-                if (Number(commonID[oo]) == Number(idMomo[ii])) {
-                    nameMomo.push(commonID[oo + 1])
+        if (Number(idMomo[ii]) < 40000) {
+            for (let oo = 0; oo < momoID.length; oo++) {
+                if (Number(momoID[oo]) == Number(idMomo[ii])) {
+                    nameMomo.push(momoID[oo + 1].slice(0, momoID[oo + 1].length - 1))
                     sumMomoCM += 1
                     flagID = true
                     break
                 }
             }
         }
-        if (Number(idMomo[ii]) < 30000 && Number(idMomo[ii]) > 20000) {
-            for (let oo = 0; oo < uncommonID.length; oo++) {
-                if (Number(uncommonID[oo]) == Number(idMomo[ii])) {
-                    nameMomo.push(uncommonID[oo + 1])
-                    sumMomoUCM += 1
-                    flagID = true
-                    break
-                }
-            }
-        }
-        if (Number(idMomo[ii]) < 40000 && Number(idMomo[ii]) > 30000) {
-            for (let oo = 0; oo < uniqueID.length; oo++) {
-                if (Number(uniqueID[oo]) == Number(idMomo[ii])) {
-                    nameMomo.push(uniqueID[oo + 1])
-                    sumMomoUNQ += 1
-                    flagID = true
-                    break
-                }
-            }
-        }
-        if (Number(idMomo[ii]) < 50000 && Number(idMomo[ii]) > 40000) {
-            for (let oo = 0; oo < rareID.length; oo++) {
-                if (Number(rareID[oo]) == Number(idMomo[ii])) {
-                    nameMomo.push(rareID[oo + 1])
-                    sumMomoR += 1
-                    flagID = true
-                    break
-                }
-            }
-        }
-        if (Number(idMomo[ii]) < 60000 && Number(idMomo[ii]) > 50000) {
-            for (let oo = 0; oo < epicID.length; oo++) {
-                if (Number(epicID[oo]) == Number(idMomo[ii])) {
-                    nameMomo.push(epicID[oo + 1])
-                    sumMomoE += 1
-                    flagID = true
-                    break
-                }
-            }
-        }
-        if (Number(idMomo[ii]) > 60000) {
-            for (let oo = 0; oo < epicID.length; oo++) {
-                if (Number(LegendID[oo]) == Number(idMomo[ii])) {
-                    nameMomo.push(LegendID[oo + 1])
-                    sumMomoL += 1
-                    flagID = true
-                    break
-                }
-            }
-        }
         if (flagID == false) {
-            nameMomo.push('  ##########')
+            nameMomo.push('##########')
         }
     }
     if (nameMomo.length == idMomo.length && idMomo.length == indexMomo.length && indexMomo.length == priceSell.length) {
         dataExcel = ''
         for (let ii = 0; ii < indexMomo.length; ii++) {
-            dataExcel = dataExcel + nameMomo[ii].slice(2, nameMomo[ii].length - 1) + '\t' + idMomo[ii] + '\t' + indexMomo[ii] + '\t' + priceSell[ii] + '\t \t' + priceBuy[ii] + '\t1' + '\n'
+            dataExcel = dataExcel + nameMomo[ii] + '\t' + idMomo[ii] + '\t' + indexMomo[ii] + '\t' + priceSell[ii] + '\t \t' + priceBuy[ii] + '\t1' + '\n'
         }
         sumMomo += idMomo.length
     }
@@ -228,7 +168,7 @@ async function main(address, nameFile_, rate_) {
             else {
                 countTie += 1
             }
-            dataExcel = dataExcel + nameMomo[ii].slice(2, nameMomo[ii].length - 1) + '\t' + idMomo[ii] + '\t' + indexMomo[ii] + '\t' + priceSell[ii] + '\t' + timeChange[ii] + '\t' + priceBuy[ii] + '\t' + nameFile_ + '\t5.4\t' + profit + '\n'
+            dataExcel = dataExcel + nameMomo[ii] + '\t' + idMomo[ii] + '\t' + indexMomo[ii] + '\t' + priceSell[ii] + '\t' + timeChange[ii] + '\t' + priceBuy[ii] + '\t' + nameFile_ + '\t5.4\t' + profit + '\n'
         }
         // console.log(dataExcel)
         listed = listed + dataExcel

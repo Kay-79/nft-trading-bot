@@ -69,7 +69,7 @@ Red dotty bird
 3.48
 11024
 Brownie birdster
-4.57
+4.56
 11025
 Blue ring birdie
 3.39
@@ -105,7 +105,7 @@ Chicka
 3.38
 11036
 Sunshine
-4.00
+3.98
 11037
 Peckles
 3.38
@@ -158,7 +158,7 @@ No Name
 No Name
 3.40
 11054
-No Name
+Shadow Wingy 
 5.99
 11055
 No Name
@@ -168,7 +168,7 @@ Oinkie
 3.98
 12002
 Alas Alligator
-4.47
+4.45
 12003
 Ango the calf
 5.50
@@ -180,10 +180,10 @@ Feli foxy
 4.99
 12006
 Pigsly
-3.74
+3.72
 12007
 Cup Panda Poh
-4.98
+4.50
 12008
 Frankie
 3.38
@@ -228,7 +228,7 @@ Platty bill
 3.58
 12022
 Antsie Pants
-3.58
+3.38
 12023
 Sandy Sloth
 3.58
@@ -243,7 +243,7 @@ Gee Gee Giraffe
 3.38
 12027
 Nutsy Squirrelster
-5.07
+5.05
 12028
 Squeaky
 3.38
@@ -285,7 +285,7 @@ Muddy
 4.07
 12041
 Beaky
-4.58
+4.56
 12042
 Wolfie
 3.90
@@ -294,7 +294,7 @@ Ringie
 3.46
 12044
 Mini-Nana
-4.56
+4.48
 12045
 Yayasie
 3.46
@@ -318,16 +318,16 @@ No Name
 4.99
 12052
 No Name
-4.00
+3.99
 12053
 No Name
-4.99
+4.96
 12054
 No Name
 4.00
 12055
 No Name
-6.49
+6.45
 13001
 Blub
 3.38
@@ -396,7 +396,7 @@ Octo
 3.46
 13023
 Jojo Jelly
-3.48
+3.45
 13024
 lil battish fisher
 3.46
@@ -423,7 +423,7 @@ Chompie
 4.23
 13032
 Pink Pebbles
-4.25
+4.20
 13033
 Purple Poppy
 3.48
@@ -444,7 +444,7 @@ Snappy
 3.46
 13039
 Willy
-4.50
+4.44
 13040
 Minnie Finn
 3.57
@@ -479,19 +479,19 @@ Finnsta
 Guppy Fishroe
 3.38
 13051
-No Name
-3.80
+Cobalt Bouncekin
+3.60
 13052
 No Name
-5.99
+3.99
 13053
 No Name
-7.83
+3.99
 13054
 No Name
-4.00
+3.50
 13055
-No Name
+Poppy Trunkling
 3.97
 14001
 Demmie
@@ -531,7 +531,7 @@ Sprout
 5.00
 14013
 Geegee
-4.06
+4.00
 14014
 Leefatine
 3.48
@@ -573,7 +573,7 @@ Sunray Dragon
 6.30
 14027
 Puffy Dragor
-4.95
+4.00
 14028
 Greenie Meanie
 3.48
@@ -588,7 +588,7 @@ Roary
 3.48
 14032
 Pokie
-4.39
+4.00
 14033
 Zomber
 4.90
@@ -621,7 +621,7 @@ Draggie
 3.40
 14043
 Sky
-4.42
+4.36
 14044
 Roarie
 3.48
@@ -654,7 +654,7 @@ No Name
 3.99
 14054
 No Name
-3.70
+3.49
 14055
 No Name
 4.00
@@ -717,7 +717,7 @@ Yah-Yah Purplebeaker
 3.50
 21020
 Nini White-birdie
-1.90
+1.88
 21021
 Bird face
 1.72
@@ -747,10 +747,10 @@ Tangelo pecko
 1.76
 21030
 Gingie tweet
-2.90
+2.89
 21031
 Skye
-1.70
+1.60
 21032
 Screech
 2.60
@@ -795,7 +795,7 @@ Bluebub
 3.78
 21046
 Silkwingy
-1.68
+1.60
 21047
 Blazebeaky
 1.72
@@ -804,7 +804,7 @@ Frostwingy
 1.98
 21049
 Shadebeako
-2.19
+1.80
 21050
 Flameshrieky
 1.68
@@ -816,9 +816,9 @@ No Name
 5.00
 21053
 No Name
-5.89
+5.00
 21054
-No Name
+Shadow Wingy 
 3.40
 21055
 No Name
@@ -828,7 +828,7 @@ Oinkie
 1.97
 22002
 Alas Alligator
-2.85
+2.83
 22003
 Ango the calf
 2.27
@@ -840,7 +840,7 @@ Feli foxy
 2.50
 22006
 Pigsly
-2.33
+2.32
 22007
 Cup Panda Poh
 5.00
@@ -876,7 +876,7 @@ Daisy
 1.68
 22018
 Carry the bunny
-1.74
+1.73
 22019
 Huggsly the Koala
 3.10
@@ -885,16 +885,16 @@ Meowlin
 1.68
 22021
 Platty bill
-3.59
+3.00
 22022
 Antsie Pants
-1.78
+1.76
 22023
 Sandy Sloth
 4.00
 22024
 Chee Chee Cheater
-2.50
+2.48
 22025
 Scaly Pango
 2.03
@@ -915,7 +915,7 @@ Prickly H.Hog
 1.68
 22031
 Growlz
-2.63
+2.50
 22032
 Chubz
 1.80
@@ -927,10 +927,10 @@ Rockie Ro
 1.68
 22035
 Stripez
-1.68
+1.60
 22036
 Bobby Binancowitz
-1.70
+1.60
 22037
 Reppy
 2.33
@@ -939,10 +939,10 @@ Tyrexy
 1.70
 22039
 Acro
-2.20
+2.18
 22040
 Muddy
-3.97
+2.98
 22041
 Beaky
 1.75
@@ -966,7 +966,7 @@ Fluffy
 1.68
 22048
 Cameli
-2.53
+2.49
 22049
 Fiery Foxxy
 1.68
@@ -981,7 +981,7 @@ No Name
 4.00
 22053
 No Name
-3.00
+2.50
 22054
 No Name
 2.00
@@ -996,13 +996,13 @@ Chompy
 2.10
 23003
 Sting
-1.90
+1.88
 23004
 Reefling
 3.00
 23005
 Sealee
-1.89
+1.87
 23006
 Poppy fisher
 2.00
@@ -1041,7 +1041,7 @@ Flop
 1.68
 23018
 Lil Red
-1.93
+1.91
 23019
 Prissette
 2.08
@@ -1080,13 +1080,13 @@ Bob Reggs
 1.70
 23031
 Chompie
-1.89
+1.88
 23032
 Pink Pebbles
 1.68
 23033
 Purple Poppy
-1.70
+1.60
 23034
 Tooter
 2.50
@@ -1098,13 +1098,13 @@ little pinkie Fisher
 1.68
 23037
 Stingy
-3.56
+2.52
 23038
 Snappy
-3.58
+3.57
 23039
 Willy
-1.75
+1.60
 23040
 Minnie Finn
 1.70
@@ -1139,26 +1139,26 @@ Finnsta
 Guppy Fishroe
 1.70
 23051
-No Name
+Cobalt Bouncekin
 4.00
 23052
 No Name
 3.99
 23053
 No Name
-6.89
+5.00
 23054
 No Name
 6.50
 23055
-No Name
-4.00
+Poppy Trunkling
+3.50
 24001
 Demmie
 1.68
 24002
 Frankie Stein
-1.97
+1.94
 24003
 Stubby
 3.38
@@ -1182,7 +1182,7 @@ Peep
 1.87
 24010
 Rompy
-1.70
+1.69
 24011
 Jacko Junior
 1.68
@@ -1200,7 +1200,7 @@ Crump
 1.98
 24016
 Kiki
-2.58
+2.55
 24017
 Merly
 1.68
@@ -1218,7 +1218,7 @@ Green sprouts
 1.72
 24022
 Minnie Meow
-2.28
+2.26
 24023
 Dribbles
 1.70
@@ -1248,7 +1248,7 @@ Roary
 1.98
 24032
 Pokie
-2.45
+1.61
 24033
 Zomber
 3.58
@@ -1266,7 +1266,7 @@ Pucker
 1.77
 24038
 Cackty
-2.16
+2.01
 24039
 Poppet
 1.70
@@ -1299,25 +1299,25 @@ Pinkabelle
 1.68
 24049
 Violetfangy
-1.98
+1.60
 24050
 GrizzlyGoo
 1.92
 24051
 No Name
-5.00
+4.50
 24052
 No Name
-9.40
+5.00
 24053
 No Name
-5.00
+4.00
 24054
 No Name
-8.00
+6.00
 24055
 No Name
-7.00
+5.00
 31001
 Tweets
 2.00
@@ -1464,7 +1464,7 @@ Frostwingy
 4.98
 31049
 Shadebeako
-5.12
+4.97
 31050
 Flameshrieky
 7.61
@@ -1478,11 +1478,11 @@ No Name
 No Name
 8.00
 31054
-No Name
+Shadow Wingy 
 9.00
 31055
 No Name
-14.99
+12.00
 32001
 Oinkie
 2.20
@@ -1491,7 +1491,7 @@ Alas Alligator
 1.70
 32003
 Ango the calf
-1.84
+1.83
 32004
 Pippo
 2.90
@@ -1521,7 +1521,7 @@ Raccoon Rocky
 1.50
 32013
 Cub Pooky
-1.60
+1.57
 32014
 Rhinny
 2.10
@@ -1545,22 +1545,22 @@ Meowlin
 1.75
 32021
 Platty bill
-1.92
+1.80
 32022
 Antsie Pants
-1.93
+1.91
 32023
 Sandy Sloth
 1.37
 32024
 Chee Chee Cheater
-1.73
+1.71
 32025
 Scaly Pango
 1.37
 32026
 Gee Gee Giraffe
-1.79
+1.77
 32027
 Nutsy Squirrelster
 1.98
@@ -1581,10 +1581,10 @@ Chubz
 1.25
 32033
 Jesty
-1.68
+1.60
 32034
 Rockie Ro
-1.90
+1.89
 32035
 Stripez
 1.90
@@ -1599,7 +1599,7 @@ Tyrexy
 2.18
 32039
 Acro
-2.47
+1.25
 32040
 Muddy
 1.90
@@ -1608,7 +1608,7 @@ Beaky
 2.28
 32042
 Wolfie
-1.69
+1.66
 32043
 Ringie
 1.97
@@ -1620,7 +1620,7 @@ Yayasie
 2.00
 32046
 Pebbles Paw
-5.97
+4.80
 32047
 Fluffy
 4.99
@@ -1641,16 +1641,16 @@ No Name
 5.60
 32053
 No Name
-14.00
+13.99
 32054
 No Name
-10.89
+8.50
 32055
 No Name
 14.80
 33001
 Blub
-2.25
+2.23
 33002
 Chompy
 1.90
@@ -1671,16 +1671,16 @@ Barny sea
 1.28
 33008
 Finley jnr fish
-1.93
+1.92
 33009
 Bubba Phish
 1.45
 33010
 Aqua Marine
-1.69
+1.66
 33011
 Jabber
-2.00
+1.25
 33012
 Bree
 2.25
@@ -1689,7 +1689,7 @@ Puff
 1.76
 33014
 Sunny
-1.27
+1.25
 33015
 Pop
 1.28
@@ -1698,7 +1698,7 @@ Spike
 1.99
 33017
 Flop
-1.90
+1.89
 33018
 Lil Red
 2.10
@@ -1713,7 +1713,7 @@ Metally Mo Fish
 3.50
 33022
 Octo
-2.42
+2.40
 33023
 Jojo Jelly
 1.63
@@ -1722,7 +1722,7 @@ lil battish fisher
 1.60
 33025
 Toot fishie
-2.38
+2.36
 33026
 Reddy finner
 2.00
@@ -1749,7 +1749,7 @@ Purple Poppy
 1.87
 33034
 Tooter
-1.96
+1.95
 33035
 Fire Spot
 1.30
@@ -1773,7 +1773,7 @@ Turquoise
 3.88
 33042
 Billy Brown Fin
-1.29
+1.28
 33043
 Poppie
 1.90
@@ -1791,7 +1791,7 @@ Redfinno
 7.98
 33048
 Pink Finny
-5.98
+4.80
 33049
 Finnsta
 7.75
@@ -1799,11 +1799,11 @@ Finnsta
 Guppy Fishroe
 5.57
 33051
-No Name
+Cobalt Bouncekin
 5.00
 33052
 No Name
-14.90
+9.00
 33053
 No Name
 12.80
@@ -1811,7 +1811,7 @@ No Name
 No Name
 7.00
 33055
-No Name
+Poppy Trunkling
 12.00
 34001
 Demmie
@@ -1821,7 +1821,7 @@ Frankie Stein
 1.98
 34003
 Stubby
-1.99
+1.98
 34004
 Pokey
 1.90
@@ -1833,7 +1833,7 @@ Bao
 1.30
 34007
 Buttons
-2.48
+2.47
 34008
 Gazey
 1.27
@@ -1842,7 +1842,7 @@ Peep
 1.57
 34010
 Rompy
-2.50
+2.00
 34011
 Jacko Junior
 1.25
@@ -1872,7 +1872,7 @@ Mini fangs
 1.26
 34020
 Mini loon
-1.28
+1.27
 34021
 Green sprouts
 1.30
@@ -1887,7 +1887,7 @@ Purpie Popper
 1.28
 34025
 Platto
-1.96
+1.95
 34026
 Sunray Dragon
 1.28
@@ -1902,7 +1902,7 @@ Pinkie
 1.89
 34030
 Choppy
-1.79
+1.70
 34031
 Roary
 2.00
@@ -1941,7 +1941,7 @@ Draggie
 1.95
 34043
 Sky
-1.28
+1.27
 34044
 Roarie
 2.27
@@ -1950,7 +1950,7 @@ Glowie
 2.71
 34046
 Coino
-2.98
+2.97
 34047
 Jackie
 7.96
@@ -1959,13 +1959,13 @@ Pinkabelle
 5.09
 34049
 Violetfangy
-5.11
+4.86
 34050
 GrizzlyGoo
 5.00
 34051
 No Name
-13.00
+12.99
 34052
 No Name
 7.50
@@ -1974,7 +1974,7 @@ No Name
 5.99
 34054
 No Name
-7.80
+6.00
 34055
 No Name
 14.00
@@ -2459,7 +2459,7 @@ Hipsta Finnsta
 Gangsta Guppy Fishroe
 99999
 43051
-No Name
+Cobalt Bouncekin
 99999
 43052
 No Name
@@ -2471,7 +2471,7 @@ No Name
 No Name
 99999
 43055
-No Name
+Poppy Trunkling
 99999
 44001
 Demon Dave
