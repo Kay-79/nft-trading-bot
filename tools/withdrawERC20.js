@@ -30,7 +30,7 @@ async function withdrawTo(address_) {
         let balanceSC = await contractBUSD.methods.balanceOf(myAcc[index][0]).call()
         console.log(myAcc[index][0])
         console.log(balanceSC / 10 ** 18)
-        if (balanceSC > 0) {
+        if (balanceSC / 10 ** 18 > 10) {
             try {
                 const contractAddress = new web3.eth.Contract(abi, myAcc[index][0]);
                 let encoded = await contractAddress.methods.transferERC20('0xe9e7cea3dedca5984780bafc599bd69add087d56', address_, balanceSC).encodeABI();

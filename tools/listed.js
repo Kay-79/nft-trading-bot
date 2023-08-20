@@ -49,7 +49,9 @@ async function checkListed(address) {
             for (let oo = 0; oo < momoID.length; oo++) {
                 if (Number(momoID[oo]) == Number(idMomo[ii])) {
                     nameMomo.push(momoID[oo + 1].slice(0, momoID[oo + 1].length - 1))
-                    sumMomoCM += 1
+                    if (Number(momoID[oo])>30000){sumMomoUNQ += 1}
+                    else if (Number(momoID[oo])>20000){sumMomoUCM += 1}
+                    else if (Number(momoID[oo])>10000){sumMomoCM += 1}
                     flagID = true
                     break
                 }

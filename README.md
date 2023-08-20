@@ -10,4 +10,6 @@
     _A_6_4
 + Contract normal bid 
     _7_4_5	
-    _a_2_b	
+    _a_2_b
+    _1_3_3
+    _6_9_2
