@@ -169,7 +169,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
         else { console.log('Profit < 0', totalProfit - fee[totalAuctions - 1]) }
     }
     else {
-        for (let index = 0; index < seller__.length; index++) {
+        for (let index = seller__.length - 1; index >= 0; index--) {// bug here -> fixed -> testing
             if (profitCanBuy[index] - fee[0] < 0) {
                 console.log("Remove momo don't have profit")
                 seller__.splice(index, 1)

@@ -164,7 +164,7 @@ async function init(Private_Key_) {
                     for (let q = 0; q < priceList.length; q++) {
                         price_send.push(' ' + ((Number(priceList[q]) - 10 ** 14) / 10 ** 18).toFixed(2))
                     }
-                    priceList1 = checkSuccess + ' ' + (Number(gasPriceScan[0]) / 10 ** 9).toFixed(2) + '\nPrices   : ' + price_send.toString().replace(' ', '') + '\nAmount: ' + amountList + '\nID List   : ' + idList
+                    priceList1 = checkSuccess + ' ' + gasPriceScanRaw + '\nPrices   : ' + price_send.toString().replace(' ', '') + '\nAmount: ' + amountList + '\nID List   : ' + idList
                 } catch (error) { }
                 try {
                     request('https://api.telegram.org/' + apiTele + '/sendMessage?chat_id=@' + chatId + '&text=' + priceList1, function (error, response, body) { });
