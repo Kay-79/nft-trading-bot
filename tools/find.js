@@ -155,7 +155,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                 console.log('Estimate profit:', ((totalProfit - fee[totalAuctions - 1]) * 0.9).toFixed(2))
                 console.log(tokenId__, amountDivide)
                 var inputdata = fs.readFileSync(linkSave, 'utf8');
-                var content = inputdata + seller__ + '\n' + price__ + '\n' + index__ + '\n' + time__ + '\n' + time__ + '\n' + amount__ + '\n' + gasPriceNew + '\n'
+                var content = inputdata + seller__ + '\n' + price__ + '\n' + index__ + '\n' + time__ + '\n' + tokenId__ + '\n' + amount__ + '\n' + gasPriceNew + '\n'
                 fs.writeFile(linkSave, content, err => {
                     if (err) {
                         console.error(err);
@@ -191,7 +191,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
         try {
             console.log(tokenId__, tokenId__.length)
             var inputdata = fs.readFileSync(linkSave, 'utf8');
-            var content = inputdata + seller__ + '\n' + price__ + '\n' + index__ + '\n' + time__ + '\n' + time__ + '\n' + amount__ + '\n' + gasPriceNew + '\n'
+            var content = inputdata + seller__ + '\n' + price__ + '\n' + index__ + '\n' + time__ + '\n' + tokenId__ + '\n' + amount__ + '\n' + gasPriceNew + '\n'
             fs.writeFile(linkSave, content, err => {
                 if (err) {
                     console.error(err);
