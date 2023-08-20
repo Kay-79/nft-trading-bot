@@ -20,8 +20,8 @@ async function withdrawTo(address_) {
     for (let index = 0; index < myAcc.length; index++) {
         if (myAcc[index][0] == address_) { checkMyAcc = true }
     }
-    if (checkMyAcc == false) {
-        console.log('!= myAcc')
+    if (!checkMyAcc) {
+        console.log("Owner address is not you!")
         exit()
     }
     for (let index = 0; index < myAcc.length; index++) {
@@ -51,4 +51,4 @@ async function withdrawTo(address_) {
     }
 }
 
-withdrawTo('0xa2b607197c1A1f5FF114915c407FDDAbe3EF67E1')
+withdrawTo('0x7457aCc0f158734CFF4d9375efC90bc3082bB256')
