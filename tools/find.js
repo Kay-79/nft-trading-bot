@@ -398,7 +398,7 @@ async function getMinPrice() {
 
 var priceRaw = [0, 0, 0, 0, 0, 1000]//lowest price in MP
 const profit = [0.15, 0.15, 0.15, 4, 8, 100]//profit per mom
-const profitName = 10
+const profitName = 3
 var minCommon, minUncommon, minUnique, minRare, minEpic, minLegend
 var idMomo = []
 var nameMomo = []
