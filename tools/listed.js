@@ -269,7 +269,7 @@ async function checkListedAll(rate_) {
         });
     }
     else {
-        if (Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) - Number(lastBalance) > 0) {// only save max
+        if (Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) - Number(lastBalance) > 1) {// only save max
             console.log('Save max', Number(lastBalance).toFixed(), 'to', (Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed()))
             logsBalanceCheck = logsBalance.split('\n')
             logsBalance = ''

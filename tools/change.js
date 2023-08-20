@@ -254,4 +254,4 @@ amountChange = 1//bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed())
 const sellOff = false // if true - sale per minPrice, if false - sale if not loss
 const canLoss = -1
-loopCheck(1000)
+loopCheck(5000)
