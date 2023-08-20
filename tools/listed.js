@@ -223,7 +223,19 @@ async function checkListedAll(rate_) {
     usdPrice = await axios.get('https://wise.com/rates/live?source=USD&target=VND&length=30&resolution=hourly&unit=day').catch(e => { console.log("Err1") })
     usdPrice = Number(usdPrice.data.value.toFixed())
     for (let index = 0; index < myAcc.length; index++) {
-        await main(myAcc[index][0], myAcc[index][1], rate_)
+        let isContract = await web3.eth.getStorageAt(myAcc[index][0])
+        if (Number(isContract)) { await main(myAcc[index][0], myAcc[index][1], rate_) }
+        else {
+            if (myAcc[index][1] == "_1_0_1") {
+                console.log("Changer: " + (Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18).toFixed(4), "BNB")
+            }
+            if (myAcc[index][1] == "_5_8_1") {
+                console.log("Banker : " + (Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18).toFixed(4), "BNB")
+            }
+            if (myAcc[index][1] == "_7_7_1") {
+                console.log("Buyer  : " + (Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18).toFixed(4), "BNB")
+            }
+        }
     }
     console.log("BNB Price:", bnbPrice)
     console.log("USD Price:", usdPrice)
