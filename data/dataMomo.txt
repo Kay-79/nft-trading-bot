@@ -15,7 +15,7 @@ Snowie flyer
 4.38
 11006
 Bluey featherington
-5.58
+5.50
 11007
 Rave darkbird
 3.25
@@ -24,7 +24,7 @@ Lei Lei Hawaiian-blue
 3.38
 11009
 Mini Victory bluebird
-3.86
+3.85
 11010
 Roosty Dood
 3.58
@@ -51,10 +51,10 @@ Iggy pingi
 3.90
 11018
 Hoot
-5.44
+5.43
 11019
 Yah-Yah Purplebeaker
-3.40
+3.39
 11020
 Nini White-birdie
 3.37
@@ -117,7 +117,7 @@ Browy
 3.48
 11040
 Quacko
-3.26
+3.25
 11041
 Beakington
 3.48
@@ -147,7 +147,7 @@ Shadebeako
 3.48
 11050
 Flameshrieky
-3.69
+3.60
 11051
 No Name
 3.25
@@ -174,7 +174,7 @@ Ango the calf
 5.40
 12004
 Pippo
-3.48
+3.47
 12005
 Feli foxy
 3.27
@@ -294,7 +294,7 @@ Ringie
 3.46
 12044
 Mini-Nana
-4.26
+4.25
 12045
 Yayasie
 3.46
@@ -306,16 +306,16 @@ Fluffy
 3.26
 12048
 Cameli
-3.27
+3.25
 12049
 Fiery Foxxy
 3.46
 12050
 Fuzzyface
-3.46
+3.30
 12051
 No Name
-4.99
+4.98
 12052
 No Name
 3.25
@@ -372,7 +372,7 @@ Sunny
 3.46
 13015
 Pop
-3.38
+3.25
 13016
 Spike
 3.27
@@ -414,7 +414,7 @@ Reddie fin
 3.45
 13029
 Puck Finley
-3.58
+3.57
 13030
 Bob Reggs
 3.64
@@ -459,7 +459,7 @@ Poppie
 3.30
 13044
 Patchie
-6.45
+6.44
 13045
 OJ Fishie
 3.38
@@ -642,7 +642,7 @@ Violetfangy
 3.96
 14050
 GrizzlyGoo
-8.00
+7.99
 14051
 No Name
 4.00
@@ -693,7 +693,7 @@ Quack
 2.99
 21012
 Toco Little Bill
-3.00
+2.99
 21013
 Squawk
 1.70
@@ -813,7 +813,7 @@ No Name
 3.00
 21052
 No Name
-3.47
+3.46
 21053
 No Name
 3.78
@@ -909,7 +909,7 @@ Squeaky
 2.20
 22029
 Puppster
-3.76
+3.70
 22030
 Prickly H.Hog
 1.68
@@ -1002,7 +1002,7 @@ Reefling
 3.00
 23005
 Sealee
-1.83
+1.82
 23006
 Poppy fisher
 2.00
@@ -1467,7 +1467,7 @@ Shadebeako
 3.99
 31050
 Flameshrieky
-7.60
+5.99
 31051
 No Name
 7.00
@@ -1482,7 +1482,7 @@ Shadow Wingy
 9.00
 31055
 No Name
-5.00
+4.99
 32001
 Oinkie
 2.20
@@ -1560,7 +1560,7 @@ Scaly Pango
 1.37
 32026
 Gee Gee Giraffe
-1.73
+1.72
 32027
 Nutsy Squirrelster
 1.98
@@ -1626,7 +1626,7 @@ Fluffy
 4.99
 32048
 Cameli
-4.29
+3.99
 32049
 Fiery Foxxy
 4.98
@@ -1692,7 +1692,7 @@ Sunny
 1.25
 33015
 Pop
-1.28
+1.25
 33016
 Spike
 1.99
@@ -1770,7 +1770,7 @@ Minnie Finn
 1.85
 33041
 Turquoise
-3.65
+3.64
 33042
 Billy Brown Fin
 1.28
@@ -1791,13 +1791,13 @@ Redfinno
 7.98
 33048
 Pink Finny
-4.80
+4.79
 33049
 Finnsta
-7.50
+7.49
 33050
 Guppy Fishroe
-4.49
+3.99
 33051
 Cobalt Bouncekin
 5.00
@@ -1806,7 +1806,7 @@ No Name
 6.00
 33053
 No Name
-10.00
+9.99
 33054
 No Name
 7.00
@@ -1836,7 +1836,7 @@ Buttons
 2.47
 34008
 Gazey
-1.27
+1.25
 34009
 Peep
 1.57
@@ -1950,7 +1950,7 @@ Glowie
 2.40
 34046
 Coino
-2.94
+2.93
 34047
 Jackie
 7.96
@@ -1968,7 +1968,7 @@ No Name
 7.00
 34052
 No Name
-5.00
+4.99
 34053
 No Name
 4.75

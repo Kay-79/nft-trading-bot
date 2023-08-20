@@ -84,13 +84,13 @@ function checkIdPrice(idCheck_, amountCheck_, lvCheck_, lvHashCheck_) { //check 
             priceCheck = minUnique * Number(amountCheck_)
             break;
         case '4':
-            priceCheck = minRare * Number(amountCheck_)
+            priceCheck = minRare
             break;
         case '5':
-            priceCheck = minEpic * Number(amountCheck_)
+            priceCheck = minEpic
             break;
         case '6':
-            priceCheck = minLegend * Number(amountCheck_)
+            priceCheck = minLegend
             break;
         default:
             break;
