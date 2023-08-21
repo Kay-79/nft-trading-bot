@@ -48,9 +48,9 @@
         ]
     ],
     "minPrice": {
-        "minCommon": 3.0,
-        "minUncommon": 1.55,
-        "minUnique": 1.19,
+        "minCommon": 2.9,
+        "minUncommon": 1.4,
+        "minUnique": 1.1,
         "minRare": 14
     },
     "accBuy": "0x692dED001587147c897eAF69221c436467393F5f"
