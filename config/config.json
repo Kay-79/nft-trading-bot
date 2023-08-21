@@ -49,7 +49,7 @@
     ],
     "minPrice": {
         "minCommon": 3.0,
-        "minUncommon": 1.59,
+        "minUncommon": 1.55,
         "minUnique": 1.19,
         "minRare": 14
     },

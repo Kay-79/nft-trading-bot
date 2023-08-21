@@ -49,9 +49,9 @@ async function checkListed(address) {
             for (let oo = 0; oo < momoID.length; oo++) {
                 if (Number(momoID[oo]) == Number(idMomo[ii])) {
                     nameMomo.push(momoID[oo + 1].slice(0, momoID[oo + 1].length - 1))
-                    if (Number(momoID[oo])>30000){sumMomoUNQ += 1}
-                    else if (Number(momoID[oo])>20000){sumMomoUCM += 1}
-                    else if (Number(momoID[oo])>10000){sumMomoCM += 1}
+                    if (Number(momoID[oo]) > 30000) { sumMomoUNQ += 1 }
+                    else if (Number(momoID[oo]) > 20000) { sumMomoUCM += 1 }
+                    else if (Number(momoID[oo]) > 10000) { sumMomoCM += 1 }
                     flagID = true
                     break
                 }
@@ -142,10 +142,6 @@ async function main(address, nameFile_, rate_) {
     sumUSD += Number(budget)
     budget = (budget * rate_).toFixed(3)
     await checkListed(address)
-    let balance = await web3.eth.getBalance(address)
-    balance = (balance / 10 ** 18).toFixed(4)
-    sumBNB += Number(balance)
-    balance = (balance * rate_).toFixed(5)
     for (let index1 = 1; index1 < 51; index1++) {
         await checkPriceBuy(address, index1)
         if (flagCountMomo == idMomo.length) {
@@ -185,7 +181,6 @@ async function main(address, nameFile_, rate_) {
             });
         }
         let space = ''
-        let flagBalance = balance + ' BNB'
         if (Number(flagCountMomo) < 10) { space = '0' }
         let isContract = await web3.eth.getStorageAt(address)
         if (Number(isContract)) {
@@ -193,12 +188,6 @@ async function main(address, nameFile_, rate_) {
             let contractAcc = new web3.eth.Contract(abiAmount, address);
             let amountUnList = await contractAcc.methods.amountUnList().call();
             flagBalance = 'isContract ' + amountUnList
-        }
-        else if (balance / rate_ < minBNB / 2) {
-            flagBalance = 'SwapNOW ' + (balance / rate_).toFixed(3)
-        }
-        else if (balance / rate_ < minBNB) {
-            flagBalance = 'SwapLATER ' + (balance / rate_).toFixed(3)
         }
         let logData = (nameFile_ + '\t' + space + flagCountMomo.toString() + ' vs ' + space + (idMomo.length).toString() + '\t' + budget + ' BUSD\t' + flagBalance)
         // if (balance * 1 != 0 && budget * 1 != 0 && flagCountMomo * 1 != 0) { 
@@ -228,14 +217,16 @@ async function checkListedAll(rate_) {
         let isContract = await web3.eth.getStorageAt(myAcc[index][0])
         if (Number(isContract)) { await main(myAcc[index][0], myAcc[index][1], rate_) }
         else {
+            let balance = Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18
+            sumBNB += balance
             if (myAcc[index][1] == "_1_0_1") {
-                console.log("Changer: " + (Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18).toFixed(4), "BNB")
+                console.log("Changer: " + balance.toFixed(4), "BNB")
             }
             if (myAcc[index][1] == "_5_8_1") {
-                console.log("Banker : " + (Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18).toFixed(4), "BNB")
+                console.log("Banker : " + balance.toFixed(4), "BNB")
             }
             if (myAcc[index][1] == "_7_7_1") {
-                console.log("Buyer  : " + (Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18).toFixed(4), "BNB")
+                console.log("Buyer  : " + balance.toFixed(4), "BNB")
             }
         }
     }
