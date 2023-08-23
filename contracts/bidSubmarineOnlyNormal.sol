@@ -16,7 +16,7 @@ contract bidSubmarineOnlyNormal {
         addressBUSD = 0xe9e7CEA3DedcA5984780Bafc599bD69ADd087D56;
         macOs = 0x55555D4de8df0c455C2Ff368253388FE669a8888;
         addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
-        owner = 0x77775a358050DE851b06603864FbD380637C7777;
+        owner = 0x55555D4de8df0c455C2Ff368253388FE669a8888;
         changer = 0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000;
         (bool success, ) = addressBUSD.call{gas: gasleft(), value: msg.value}(
             abi.encodeWithSignature(
