@@ -218,15 +218,17 @@ async function checkListedAll(rate_) {
         if (Number(isContract)) { await main(myAcc[index][0], myAcc[index][1], rate_) }
         else {
             let balance = Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18
+            let budget = Number(await contract.methods.balanceOf(myAcc[index][0]).call())/10**18
             sumBNB += balance
+            sumUSD += budget
             if (myAcc[index][1] == "_1_0_1") {
-                console.log("Changer: " + balance.toFixed(4), "BNB")
+                console.log("Changer: " + balance.toFixed(4), "BNB\t"+ budget.toFixed(4), "BUSD")
             }
             if (myAcc[index][1] == "_5_8_1") {
-                console.log("Banker : " + balance.toFixed(4), "BNB")
+                console.log("Banker : " + balance.toFixed(4), "BNB\t"+ budget.toFixed(4), "BUSD")
             }
             if (myAcc[index][1] == "_7_7_1") {
-                console.log("Buyer  : " + balance.toFixed(4), "BNB")
+                console.log("Buyer  : " + balance.toFixed(4), "BNB\t"+ budget.toFixed(4), "BUSD")
             }
         }
     }
