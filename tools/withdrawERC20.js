@@ -6,6 +6,11 @@ const abi = [{ "constant": true, "inputs": [{ "internalType": "address", "name":
 const contractBUSD = new web3.eth.Contract(abi, '0xe9e7cea3dedca5984780bafc599bd69add087d56');
 const configJson = JSON.parse(fs.readFileSync('./config/config.json'));
 const myAcc = configJson.myAcc
+function sleep(ms) {
+    return new Promise((resolve) => {
+        setTimeout(resolve, ms);
+    });
+}
 try {
     const passData = fs.readFileSync('myAccount_5_8_1.txt', 'utf8');
     myAccount = passData.split('\n')
@@ -32,8 +37,9 @@ async function withdrawTo(address_) {
         console.log(myAcc[index][0])
         console.log(balanceSC / 10 ** 18)
         if (balanceSC / 10 ** 18 > 10) {
-            if (cacheWithdraw > maxWithdraw) {
+            if (cacheWithdraw + balanceSC / 10 ** 18 > maxWithdraw) {
                 balanceSC = Number((Number((maxWithdraw - cacheWithdraw).toFixed(2)) * 10 ** 18).toFixed(0))
+                await sleep(100)
             }
             cacheWithdraw += balanceSC / 10 ** 18
             try {
@@ -62,4 +68,4 @@ async function withdrawTo(address_) {
 
 const maxWithdraw = 50
 
-withdrawTo('0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000')
+withdrawTo('0x1334Fa6f3d21C99483b749FBdF713da4ea8fBd24')
