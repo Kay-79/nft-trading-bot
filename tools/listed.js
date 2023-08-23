@@ -268,10 +268,11 @@ async function checkListedAll(rate_) {
                 var logEach = logsBalanceCheck[index].split('\t')
                 logsBalance += logEach[0] + '\t' + logEach[1] + '\n'
             }
+            logsBalance = logsBalance + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() + "\t" + nowSync
             for (let index = 0; index < 200; index++) {
                 logsBalance += '\n'
             }
-            fs.writeFile('logsBalance' + '.csv', logsBalance + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() + "\t" + nowSync, err => {
+            fs.writeFile('logsBalance' + '.csv', logsBalance, err => {
                 if (err) {
                     console.error(err);
                 }
