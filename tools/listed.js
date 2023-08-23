@@ -287,7 +287,6 @@ async function checkListedAll(rate_) {
 const myAcc = configJson.myAcc
 var listed = ''
 var momoListed = 0, sumMomo = 0, countLoss = 0, countProfit = 0, countTie = 0, sumMomoCM = 0, sumMomoUCM = 0, sumMomoUNQ = 0, sumMomoR = 0, sumMomoE = 0, sumMomoL = 0, amountAccount = 0, sumSell = 0, sumBuy = 0, sumUSD = 0, sumBNB = 0
-const minBNB = 0.01
 const lastAcc = myAcc[myAcc.length - 1][1]
 const save = false
 const rateSale = 0.42
