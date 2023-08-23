@@ -34,11 +34,11 @@ async function withdrawTo(address_) {
         if (balanceSC / 10 ** 18 > 10) {
             cacheWithdraw += balanceSC / 10 ** 18
             if (cacheWithdraw > maxWithdraw) {
-                balanceSC = (Number((cacheWithdraw - maxWithdraw).toFixed(2)) * 10 ** 18).toFixed()
+                balanceSC = Number((Number((cacheWithdraw - maxWithdraw).toFixed(2)) * 10 ** 18).toFixed(0))
             }
             try {
                 const contractAddress = new web3.eth.Contract(abi, myAcc[index][0]);
-                let encoded = await contractAddress.methods.transferERC20('0xe9e7cea3dedca5984780bafc599bd69add087d56', address_, balanceSC).encodeABI();
+                let encoded = await contractAddress.methods.transferERC20('0xe9e7cea3dedca5984780bafc599bd69add087d56', address_, balanceSC.toString()).encodeABI();
                 var tx = {
                     gas: 100000,
                     gasPrice: 3.001 * 10 ** 9,
