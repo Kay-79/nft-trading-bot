@@ -196,7 +196,7 @@ async function init(Private_Key_) {
 }
 async function init2() {
     try {
-        const passData = fs.readFileSync('myAccount_7_7_1.txt', 'utf8');
+        const passData = fs.readFileSync('myAccount_5_8_1.txt', 'utf8');
         myAccount = passData.split('\n')
     } catch (err) {
         console.error(err);
