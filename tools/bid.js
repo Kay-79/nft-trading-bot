@@ -177,6 +177,9 @@ async function init(Private_Key_) {
                 const inputdata = fs.readFileSync('waitBid.txt', 'utf8');
                 dataBid = inputdata.split('\n')
             } catch (err) { }
+            for (let index = dataBid.length - 1; index >= 0; index--) {// bug here -> fixed -> testing
+                if (dataBid[index] == '') { dataBid.splice(index, 1) }
+            }
             dataBid.splice(0, 7)
             for (let iii = 1; iii < dataBid.length; iii++) {
                 dataBid[iii] = '\n' + dataBid[iii]
@@ -209,8 +212,8 @@ async function init2() {
         await sleep(100)
     }
 }
-const overTime = 30
-const timeWait = 100.5 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+const overTime = 60
+const timeWait = 98.5 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 const timeGetNonce = 4
 const fakeBid = false
 init2()
