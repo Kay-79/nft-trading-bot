@@ -181,14 +181,15 @@ async function init(Private_Key_) {
                 if (dataBid[index] == '') { dataBid.splice(index, 1) }
             }
             dataBid.splice(0, 7)
-            for (let iii = 1; iii < dataBid.length; iii++) {
-                dataBid[iii] = '\n' + dataBid[iii]
-            }
-            dataBid[dataBid.length-1] = dataBid[dataBid.length-1] + '\n'
+            // for (let iii = 1; iii < dataBid.length; iii++) {
+            //     dataBid[iii] = '\n' + dataBid[iii]
+            // }
+            // dataBid[dataBid.length - 1] = dataBid[dataBid.length - 1] + '\n'
             content = ''
             for (let iii = 0; iii < dataBid.length; iii++) {
-                content = content + dataBid[iii].toString()
+                content = content + '\n' + dataBid[iii].toString()
             }
+            content += '\n'// instead of comment ahead
             fs.writeFile('waitBid.txt', content, err => {
                 if (err) {
                     console.error(err);
