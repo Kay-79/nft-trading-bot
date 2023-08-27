@@ -179,10 +179,10 @@ async function init(Private_Key_) {
             try {// avoid missing auction
                 const inputdata = fs.readFileSync('waitBid.txt', 'utf8');
                 dataBid = inputdata.split('\n')
+                for (let index = dataBid.length - 1; index >= 0; index--) {// bug here -> fixed -> testing
+                    if (dataBid[index] == '\r' || dataBid[index] == '') { dataBid.splice(index, 1) }
+                }
             } catch (err) { }
-            for (let index = dataBid.length - 1; index >= 0; index--) {// bug here -> fixed -> testing
-                if (dataBid[index] == '\r' || dataBid[index] == '') { dataBid.splice(index, 1) }
-            }
             dataBid.splice(0, 7)
             // for (let iii = 1; iii < dataBid.length; iii++) {
             //     dataBid[iii] = '\n' + dataBid[iii]
@@ -191,13 +191,13 @@ async function init(Private_Key_) {
             content = ''
             for (let iii = 0; iii < dataBid.length; iii++) {
                 if (iii == 0) {
-                    content = content + dataBid[iii].toString()
+                    content += dataBid[iii].toString()
                 }
                 else {
-                    content = content + '\n' + dataBid[iii].toString()
+                    content += '\n' + dataBid[iii].toString()
                 }
             }
-            content += '\n'// instead of comment ahead
+            if (dataBid.length) { content += '\n' }// instead of comment ahead
             fs.writeFile('waitBid.txt', content, err => {
                 if (err) {
                     console.error(err);
