@@ -182,8 +182,9 @@ async function init(Private_Key_) {
             }
             dataBid.splice(0, 7)
             for (let iii = 1; iii < dataBid.length; iii++) {
-                dataBid[iii] = '\n' + dataBid[iii]
+                dataBid[iii] = '\n' + dataBid[iii] + '\n'
             }
+            dataBid[dataBid.length-1] = dataBid[dataBid.length-1] + '\n'
             content = ''
             for (let iii = 0; iii < dataBid.length; iii++) {
                 content = content + dataBid[iii].toString()
