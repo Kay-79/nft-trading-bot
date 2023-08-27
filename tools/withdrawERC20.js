@@ -66,6 +66,6 @@ async function withdrawTo(address_) {
     }
 }
 
-const maxWithdraw = 50
+const maxWithdraw = 999
 
-withdrawTo('0x1334Fa6f3d21C99483b749FBdF713da4ea8fBd24')
+withdrawTo('0xa2b607197c1A1f5FF114915c407FDDAbe3EF67E1')
