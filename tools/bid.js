@@ -187,7 +187,12 @@ async function init(Private_Key_) {
             // dataBid[dataBid.length - 1] = dataBid[dataBid.length - 1] + '\n'
             content = ''
             for (let iii = 0; iii < dataBid.length; iii++) {
-                content = content + '\n' + dataBid[iii].toString()
+                if (iii == 0) {
+                    content = content + dataBid[iii].toString()
+                }
+                else {
+                    content = content + '\n' + dataBid[iii].toString()
+                }
             }
             content += '\n'// instead of comment ahead
             fs.writeFile('waitBid.txt', content, err => {
