@@ -250,22 +250,14 @@ async function divideCanBuy() {
     }
 }
 
-async function runBot(amountMomo, runAcc) {
+async function runBot(amountMomo) {
     bnbPrice = await axios.get('https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]').catch(e => { console.log("Err1") })
     bnbPrice = bnbPrice.data.data.bnb.price
     if (rateFeePerProfit > 0.5) {
         console.warn('Rate fee too high')
         exit()
     }
-    fs.writeFile('./data/runAcc.txt', runAcc, err => {
-        if (err) {
-            console.error(err);
-        }
-    });
-    // for (let index = 0; index < myAcc.length; index++) {
-    //     if (myAcc[index][1] == runAcc) { accCheck = myAcc[index][0] }
-    // }
-    await setup(runAcc)
+    await setup()
     let flagCheck = 0
     while (true) {
         flagCheck += 1
@@ -285,7 +277,7 @@ async function runBot(amountMomo, runAcc) {
     }
 }
 
-async function setup(runAcc) {//setup const
+async function setup() {//setup const
     amountDivide = 0
     seller_ = []
     price_ = []
@@ -415,4 +407,4 @@ const chatId = configJson.chatId.mobox
 const delayGetMp = 12000 + 10000 * Math.random()// not use, around 17s per rq
 // now is save batch, config in bid.js
 const maxMomoPrice = 15
-runBot(20, '_7_7_1')
+runBot(20)

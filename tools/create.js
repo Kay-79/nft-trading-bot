@@ -1,6 +1,8 @@
 const axios = require('axios');
 const fs = require('fs');
 const { exit } = require('process');
+const Web3 = require('web3');
+const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
 const configJson = JSON.parse(fs.readFileSync('./config/config.json'));
 function sleep(ms) {
     return new Promise((resolve) => {
@@ -251,6 +253,15 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         console.log('Empty accSell')
         exit()
     }
+    let abiAmount = [{ "inputs": [], "name": "amountUnList", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
+    let contractAcc = new web3.eth.Contract(abiAmount, accSell);
+    let amountUnList = await contractAcc.methods.amountUnList().call();
+    if (amountUnList != value) {
+        console.log("amountUnList != value")
+        console.log("amountUnList", amountUnList)
+        console.log("value", value)
+        exit()
+    }
     await checkIndex(accSell)
     await getPriceToSell(accSell, true) //_1_0_1
     let count = 0
@@ -292,7 +303,7 @@ const myAcc = configJson.myAcc
 for (let index = 0; index < myAcc.length; index++) {
     myAccounts.push(myAcc[index][0])
 }
-value = 49 // without rare and epic
+value = 1 // without rare and epic
 valueBid = 999
 indexs = []
 priceList = []
