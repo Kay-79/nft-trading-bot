@@ -36,6 +36,7 @@ flagID = false
 flagCountMomo = 0
 amountBid = 0
 async function checkAmountBuy(address, page) {
+    await sleep(2500 + 5000 * Math.random())
     let response2 = await axios.get('https://nftapi.mobox.io/auction/logs_new/' + address + '?&page=' + page + '&limit=50').catch(e => { console.log("Err1") })
     const data2 = response2.data;
     for (let i = 0; i < data2.list.length; i++) {
@@ -46,6 +47,7 @@ async function checkAmountBuy(address, page) {
     }
 }
 async function checkChangePrice(indexId) {
+    await sleep(2500 + 5000 * Math.random())
     let response3 = await axios.get('https://nftapi.mobox.io/auction/search/BNB?page=1&limit=10&category=&vType=&sort=price&pType=' + idMomoBought[indexId]).catch(e => { console.log("Err2") })
     const data3 = response3.data.list;
     if (!data3.length) {
@@ -290,7 +292,7 @@ const myAcc = configJson.myAcc
 for (let index = 0; index < myAcc.length; index++) {
     myAccounts.push(myAcc[index][0])
 }
-value = 999 // without rare and epic
+value = 49 // without rare and epic
 valueBid = 999
 indexs = []
 priceList = []
@@ -298,4 +300,4 @@ ids = []
 const minChange = 0.001
 var accSell = ''
 
-createBatch(3.001, 1000000, '', '_7_4_5')
+createBatch(3.001, 1000000, '', '_a_2_b')
