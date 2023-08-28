@@ -26,11 +26,11 @@ async function init(Private_Key_) {
     try {
         const inputdata = fs.readFileSync('waitBid.txt', 'utf8');
         dataBid = inputdata.split('\n')
-        for (let index = dataBid.length - 1; index >= 0; index--) {// bug here -> fixed -> testing
-            if (dataBid[index] == '\r' || dataBid[index] == '') { dataBid.splice(index, 1) }
-        }
         if (inputdata.length > 40) {
             Bid = true
+            for (let index = dataBid.length - 1; index >= 0; index--) {// bug here -> fixed -> testing
+                if (dataBid[index] == '\r' || dataBid[index] == '') { dataBid.splice(index, 1) }
+            }
         }
     } catch (err) { }
     if (Bid == true) {
