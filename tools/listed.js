@@ -187,7 +187,7 @@ async function main(address, nameFile_, rate_) {
             let abiAmount = [{ "inputs": [], "name": "amountUnList", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
             let contractAcc = new web3.eth.Contract(abiAmount, address);
             let amountUnList = await contractAcc.methods.amountUnList().call();
-            flagBalance = 'amountUnList: ' + amountUnList
+            flagBalance = 'amountUnList: ' + amountUnList + '\t\t\t'
         }
         let logData = (nameFile_ + '\t' + space + flagCountMomo.toString() + ' vs ' + space + (idMomo.length).toString() + '\t' + budget + ' BUSD\t' + flagBalance)
         // if (balance * 1 != 0 && budget * 1 != 0 && flagCountMomo * 1 != 0) { 
@@ -207,8 +207,8 @@ async function main(address, nameFile_, rate_) {
 }
 
 async function checkListedAll(rate_) {
-    ip = await axios.get('https://ip.whatisproxy.net/').catch(e => { console.log("Err ip") })
-    console.log(ip.data)
+    // ip = await axios.get('https://ip.whatisproxy.net/').catch(e => { console.log("Err ip") })
+    // console.log(ip.data)
     bnbPrice = await axios.get('https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]').catch(e => { console.log("Err1") })
     bnbPrice = Number(bnbPrice.data.data.bnb.price.toFixed(2))
     usdPrice = await axios.get('https://wise.com/rates/live?source=USD&target=VND&length=30&resolution=hourly&unit=day').catch(e => { console.log("Err1") })
@@ -283,12 +283,20 @@ async function checkListedAll(rate_) {
         else { console.log("Don't save min") }
     }
 }
+const checkRightAccBuy = (arrayMyAcc, accRunRight) => {
+    for (let index = 0; index < arrayMyAcc.length; index++) {
+        if (accRunRight == arrayMyAcc[index][0]) { return true }
+    }
+    return false
+}
 
 const myAcc = configJson.myAcc
+const accRun = configJson.accBuy
 var listed = ''
 var momoListed = 0, sumMomo = 0, countLoss = 0, countProfit = 0, countTie = 0, sumMomoCM = 0, sumMomoUCM = 0, sumMomoUNQ = 0, sumMomoR = 0, sumMomoE = 0, sumMomoL = 0, amountAccount = 0, sumSell = 0, sumBuy = 0, sumUSD = 0, sumBNB = 0
 const lastAcc = myAcc[myAcc.length - 1][1]
 const save = false
 const rateSale = 0.42
 
+if (!checkRightAccBuy(myAcc, accRun)) { console.error("Acc buy is wrongs!!") }
 checkListedAll(0.1)
