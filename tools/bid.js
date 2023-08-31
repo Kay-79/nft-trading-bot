@@ -223,7 +223,7 @@ async function init2() {
     }
 }
 const overTime = 60
-const timeWait = 94.4 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+const timeWait = 93.4 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 const timeGetNonce = 4.5
 const fakeBid = false
 init2()
