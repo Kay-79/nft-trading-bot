@@ -36,7 +36,7 @@ async function init(Private_Key_) {
     if (Bid == true) {
         const startTime_ = dataBid[3].split(',')
         const index_ = dataBid[2].split(',')
-        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + (timeWait - timeGetNonce))) {
+        if (index_[0] != '' && (Date.now() / 1000 > Number(startTime_[0]) + timeWait)) {
             const seller_ = dataBid[0].split(',')
             const priceList = dataBid[1].split(',')
             const amountList = dataBid[5].split(',')
@@ -55,10 +55,10 @@ async function init(Private_Key_) {
             if (false || (Date.now() / 1000 < Number(startTime_[0]) + timeWait + overTime)) {
                 var tx = []
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
-                if (Number(startTime_[0]) + timeWait - Date.now() / 1000 > 0) {
-                    console.log('sleep', Number(startTime_[0]) + timeWait - Date.now() / 1000)
-                    await sleep(Math.abs(Number(startTime_[0]) + timeWait - Date.now() / 1000) * 1000);
-                }
+                // if (Number(startTime_[0]) + timeWait - Date.now() / 1000 > 0) {
+                //     console.log('sleep', Number(startTime_[0]) + timeWait - Date.now() / 1000)
+                //     await sleep(Math.abs(Number(startTime_[0]) + timeWait - Date.now() / 1000) * 1000);
+                // }
                 if (index_.length > 1) {
                     if (fakeBid == true) {
                         tx.push({
@@ -114,12 +114,18 @@ async function init(Private_Key_) {
                 }
                 let checkSuccess = 'Success'
                 try {
-                    console.log('Paying!!')
                     let signed = []
                     let biding = []
                     for (let index = 0; index < tx.length; index++) {
                         signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_))
                     }
+                    // if (Number(startTime_[0]) + timeWait - Date.now() / 1000 > 0) {
+                    //     console.log('sleep', Number(startTime_[0]) + timeWait - Date.now() / 1000)
+                    //     await sleep(Math.abs(Number(startTime_[0]) + timeWait - Date.now() / 1000) * 1000);
+                    // }
+                    console.log('Sleep:'+ (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3))
+                    await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000)
+                    console.log('Paying!!')
                     for (let index = 0; index < tx.length; index++) {
                         if (tx.length == 1) {
                             try {
@@ -223,7 +229,7 @@ async function init2() {
     }
 }
 const overTime = 60
-const timeWait = 93.4 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
-const timeGetNonce = 4.5
+const timeWait = 100 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+const timeSendTx = 117
 const fakeBid = false
 init2()
