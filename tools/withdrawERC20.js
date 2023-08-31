@@ -36,7 +36,7 @@ async function withdrawTo(address_) {
         let balanceSC = await contractBUSD.methods.balanceOf(myAcc[index][0]).call()
         console.log(myAcc[index][0])
         console.log(balanceSC / 10 ** 18)
-        if (balanceSC / 10 ** 18 > 10) {
+        if (balanceSC / 10 ** 18 >= minWithdraw) {
             if (cacheWithdraw + balanceSC / 10 ** 18 > maxWithdraw) {
                 balanceSC = Number((Number((maxWithdraw - cacheWithdraw).toFixed(2)) * 10 ** 18).toFixed(0))
                 await sleep(100)
@@ -66,6 +66,7 @@ async function withdrawTo(address_) {
     }
 }
 
+const minWithdraw = 10
 const maxWithdraw = 999
 
 withdrawTo('0x1334Fa6f3d21C99483b749FBdF713da4ea8fBd24')
