@@ -119,10 +119,6 @@ async function init(Private_Key_) {
                     for (let index = 0; index < tx.length; index++) {
                         signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_))
                     }
-                    // if (Number(startTime_[0]) + timeWait - Date.now() / 1000 > 0) {
-                    //     console.log('sleep', Number(startTime_[0]) + timeWait - Date.now() / 1000)
-                    //     await sleep(Math.abs(Number(startTime_[0]) + timeWait - Date.now() / 1000) * 1000);
-                    // }
                     if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
                         console.log('Sleep:' + (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3))
                         await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000)
@@ -231,7 +227,7 @@ async function init2() {
     }
 }
 const overTime = 60
-const timeWait = 100 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
-const timeSendTx = 111
+const timeWait = 90 //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
+const timeSendTx = 97
 const fakeBid = false
 init2()
