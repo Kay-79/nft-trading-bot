@@ -123,8 +123,10 @@ async function init(Private_Key_) {
                     //     console.log('sleep', Number(startTime_[0]) + timeWait - Date.now() / 1000)
                     //     await sleep(Math.abs(Number(startTime_[0]) + timeWait - Date.now() / 1000) * 1000);
                     // }
-                    console.log('Sleep:'+ (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3))
-                    await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000)
+                    if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
+                        console.log('Sleep:' + (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3))
+                        await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000)
+                    }
                     console.log('Paying!!')
                     for (let index = 0; index < tx.length; index++) {
                         if (tx.length == 1) {
