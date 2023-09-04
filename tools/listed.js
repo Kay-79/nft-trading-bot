@@ -214,6 +214,7 @@ async function checkListedAll(rate_) {
     usdPrice = await axios.get('https://wise.com/rates/live?source=USD&target=VND&length=30&resolution=hourly&unit=day').catch(e => { console.log("Err1") })
     usdPrice = Number(usdPrice.data.value.toFixed())
     for (let index = 0; index < myAcc.length; index++) {
+        if (myAcc[index][2] == false) { continue }
         let isContract = await web3.eth.getStorageAt(myAcc[index][0])
         if (Number(isContract)) { await main(myAcc[index][0], myAcc[index][1], rate_) }
         else {
