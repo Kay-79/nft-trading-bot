@@ -187,7 +187,7 @@ async function main(address, nameFile_, rate_) {
             let abiAmount = [{ "inputs": [], "name": "amountUnList", "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }], "stateMutability": "view", "type": "function" }]
             let contractAcc = new web3.eth.Contract(abiAmount, address);
             let amountUnList = await contractAcc.methods.amountUnList().call();
-            flagBalance = 'amountUnList: ' + amountUnList + '\t\t\t'
+            flagBalance = 'amountUnList: ' + amountUnList + '\t\t'
         }
         let logData = (nameFile_ + '\t' + space + flagCountMomo.toString() + ' vs ' + space + (idMomo.length).toString() + '\t' + budget + ' BUSD\t' + flagBalance)
         // if (balance * 1 != 0 && budget * 1 != 0 && flagCountMomo * 1 != 0) { 
