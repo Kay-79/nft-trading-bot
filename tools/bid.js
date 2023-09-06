@@ -115,6 +115,7 @@ async function init(Private_Key_) {
                                 data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI()// amount = 1 or > 1
                             }
                         )
+                        nonce_ += 1
                     }
                 }
                 let checkSuccess = 'Success'
