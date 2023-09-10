@@ -3,5 +3,5 @@ listed.csv
 logsBalance.csv
 node_modules
 logs.json
-tools/test.js
+tools/test*
 data/dataMomo.txt
