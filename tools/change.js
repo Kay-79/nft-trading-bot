@@ -152,17 +152,6 @@ async function checkChangePrice(indexId) {
       break;
     }
   }
-  ///
-  // if (myAccounts.includes(data3.list[0].auctor) == false) {
-  //     if (((Number(data3.list[0].nowPrice) / 10 ** 9) * 0.95 - priceBuy[indexId] > 0 || sellOff) && Number(Date.now() / 1000).toFixed() - Number(data3.list[0].uptime) > timeWait) {
-  //         priceCache = priceSell[indexId] // add to compare price
-  //         priceSell[indexId] = (Number(data3.list[0].nowPrice) / 10 ** 9).toFixed(3)
-  //         if (priceCache > priceSell[indexId]) {
-  //             boolChange[indexId] = 'TRUE'
-  //             console.log(idMomo[indexId], priceCache, 'to', priceSell[indexId])
-  //         }
-  //     }
-  // }
 }
 async function changePrice(index_, priceChange_, Private_Key_, address_) {
   encoded = "";
@@ -341,13 +330,13 @@ async function loopCheck(times) {
       await sleep(150000 + 300000 * Math.random()); //5mins per check
     }
     if (times > 1) {
-      await sleep(4 * 3600000);
+      await sleep(24 * 3600000); // last change per loop
     }
   }
 }
 // 0
 const minChange = 0.001;
-timeWait = 24 * 60 * 60 * 1; //wait latest change price
+timeWait = 24 * 60 * 60 * 1; //wait latest change price of momo
 delayChange = 90 * 10 ** 3; //delay to update api
 myAccounts = [];
 const myAcc = configJson.myAcc;
