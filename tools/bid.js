@@ -64,18 +64,6 @@ async function setup(Private_Key_) {
                 //     await sleep(Math.abs(Number(startTime_[0]) + timeWait - Date.now() / 1000) * 1000);
                 // }
                 if (index_.length > 1) {
-                    if (fakeBid == true) {
-                        tx.push({
-                            from: acc.address,
-                            gas: 1000000,
-                            gasPrice: gasPriceScanFake,
-                            nonce: nonce_,
-                            to: contractAddress,
-                            value: 0,
-                            data: contract.methods.bid(seller_[0].toString(), index_[0].toString(), startTime_[0].toString(), priceList[0].toString(), "1").encodeABI(), // amount = 1
-                        });
-                        nonce_ += 1;
-                    }
                     for (let index = 0; index < index_.length; index++) {
                         tx.push({
                             from: acc.address,
@@ -89,18 +77,6 @@ async function setup(Private_Key_) {
                         nonce_ += 1;
                     }
                 } else if (index_.length == 1) {
-                    if (fakeBid == true) {
-                        tx.push({
-                            from: acc.address,
-                            gas: 1000000,
-                            gasPrice: gasPriceScanFake,
-                            nonce: nonce_,
-                            to: contractAddress,
-                            value: 0,
-                            data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI(), // amount = 1 or > 1
-                        });
-                        nonce_ += 1;
-                    }
                     tx.push({
                         from: acc.address,
                         gas: 1000000,
@@ -127,7 +103,7 @@ async function setup(Private_Key_) {
                             await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
                         }
                     } else {
-                        isAvailableAuctions = await checkAvailable();
+                        isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
                     }
                     console.log("Paying!!");
                     for (let index = 0; index < tx.length; index++) {
@@ -242,15 +218,20 @@ async function bid() {
 }
 // index + time
 const checkAvailable = async (addressCheck, indexCheck, timeCheck) => {
-    // let responseListed = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-time&page=1&limit=128").catch((e) => {
-    //     return true;
-    // });
-    return true;
+    let responseListed = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + addressCheck + "?sort=-time&page=1&limit=10").catch((e) => {
+        return true;
+    });
+    let dataAvailable = responseListed.data.list;
+    for (let index = 0; index < dataAvailable.length; index++) {
+        if (Number(indexCheck) + Number(timeCheck) == dataAvailable[index].index + dataAvailable[index].uptime) {
+            return true;
+        }
+    }
+    return false;
 };
 
 const overTime = 60;
 const timeGetAvaliableAuction = 5;
 const timeWait = 85; //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 const timeSendTx = 94;
-const fakeBid = false;
 bid();
