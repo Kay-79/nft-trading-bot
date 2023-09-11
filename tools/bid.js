@@ -20,7 +20,6 @@ const chatId = configJson.chatId.mobox;
 const abi = JSON.parse(fs.readFileSync("./config/abiMobox.json"));
 const contractAddress = configJson.accBuy;
 const contract = new web3.eth.Contract(abi, contractAddress);
-// console.log(acc)
 async function setup(Private_Key_) {
     inputdata = "Nonce";
     Bid = false;
@@ -30,7 +29,6 @@ async function setup(Private_Key_) {
         if (inputdata.length > 40) {
             Bid = true;
             for (let index = dataBid.length - 1; index >= 0; index--) {
-                // bug here -> fixed -> testing
                 if (dataBid[index] == "\r" || dataBid[index] == "") {
                     dataBid.splice(index, 1);
                 }
@@ -46,7 +44,6 @@ async function setup(Private_Key_) {
             const amountList = dataBid[5].split(",");
             const idList = dataBid[4].split(",");
             const gasPriceScanRaw = dataBid[6].split(",");
-            // const gasPriceScan = Number((Number(dataBid[6].split(',')) * 10 ** 9).toFixed())
             var gasPriceScan = [];
             for (let index = 0; index < gasPriceScanRaw.length; index++) {
                 gasPriceScan[index] = Number((Number(gasPriceScanRaw[index]) * 10 ** 9).toFixed());
@@ -59,10 +56,6 @@ async function setup(Private_Key_) {
             if (false || Date.now() / 1000 < Number(startTime_[0]) + timeWait + overTime) {
                 var tx = [];
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
-                // if (Number(startTime_[0]) + timeWait - Date.now() / 1000 > 0) {
-                //     console.log('sleep', Number(startTime_[0]) + timeWait - Date.now() / 1000)
-                //     await sleep(Math.abs(Number(startTime_[0]) + timeWait - Date.now() / 1000) * 1000);
-                // }
                 if (index_.length > 1) {
                     for (let index = 0; index < index_.length; index++) {
                         tx.push({
@@ -166,21 +159,15 @@ async function setup(Private_Key_) {
                 console.log("Over time (" + overTime.toString() + " seconds)!!");
             }
             try {
-                // avoid missing auction
                 const inputdata = fs.readFileSync("waitBid.txt", "utf8");
                 dataBid = inputdata.split("\n");
                 for (let index = dataBid.length - 1; index >= 0; index--) {
-                    // bug here -> fixed -> testing
                     if (dataBid[index] == "\r" || dataBid[index] == "") {
                         dataBid.splice(index, 1);
                     }
                 }
             } catch (err) {}
             dataBid.splice(0, 7);
-            // for (let iii = 1; iii < dataBid.length; iii++) {
-            //     dataBid[iii] = '\n' + dataBid[iii]
-            // }
-            // dataBid[dataBid.length - 1] = dataBid[dataBid.length - 1] + '\n'
             content = "";
             for (let iii = 0; iii < dataBid.length; iii++) {
                 if (iii == 0) {
@@ -191,7 +178,7 @@ async function setup(Private_Key_) {
             }
             if (dataBid.length) {
                 content += "\n";
-            } // instead of comment ahead
+            }
             fs.writeFile("waitBid.txt", content, (err) => {
                 if (err) {
                     console.error(err);
@@ -216,7 +203,6 @@ async function bid() {
         await sleep(100);
     }
 }
-// index + time
 const checkAvailable = async (addressCheck, indexCheck, timeCheck) => {
     let responseListed = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + addressCheck + "?sort=-time&page=1&limit=10").catch((e) => {
         return true;
