@@ -1,4 +1,5 @@
 const request = require("request");
+const axios = require("axios");
 const fs = require("fs");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
 function sleep(ms) {
@@ -155,6 +156,7 @@ async function setup(Private_Key_) {
           });
         }
         let checkSuccess = "Success";
+        let isAvailableAuctions = true;
         try {
           let signed = [];
           let biding = [];
@@ -163,7 +165,6 @@ async function setup(Private_Key_) {
               await web3.eth.accounts.signTransaction(tx[index], Private_Key_)
             );
           }
-          let isAvailableAuctions = true;
           if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
             console.log(
               "Sleep:" +
@@ -180,10 +181,19 @@ async function setup(Private_Key_) {
                 Date.now() / 1000
             );
             isAvailableAuctions = await checkAvailable();
-            await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
+            if (isAvailableAuctions) {
+              await sleep(
+                Number(startTime_[0]) + timeSendTx - Date.now() / 1000
+              );
+            }
+          } else {
+            isAvailableAuctions = await checkAvailable();
           }
           console.log("Paying!!");
           for (let index = 0; index < tx.length; index++) {
+            if (!isAvailableAuctions) {
+              break;
+            }
             if (tx.length == 1) {
               try {
                 checkSuccess = "Success";
@@ -252,6 +262,9 @@ async function setup(Private_Key_) {
             amountList +
             "\nID List   : " +
             idList;
+          if (!isAvailableAuctions) {
+            priceList1 = "Auction be canceled";
+          }
         } catch (error) {}
         try {
           request(
@@ -318,12 +331,12 @@ async function bid() {
     await sleep(100);
   }
 }
-
+// index + time
 const checkAvailable = async () => {
-  return false
+  return false;
 };
 
-const overTime = 60;
+const overTime = 600000;
 const timeGetAvaliableAuction = 5;
 const timeWait = 85; //timeWait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2
 const timeSendTx = 94;
