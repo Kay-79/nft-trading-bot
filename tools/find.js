@@ -400,6 +400,10 @@ async function getMinPrice() {
     }
     price = [];
     for (let index = 0; index < profit.length; index++) {
+        if (profit[index] < 0) {
+            console.warn("Wrong profit");
+            exit();
+        }
         price.push(Number((priceRaw[index] * 0.95 - profit[index] - 0.06).toFixed(3)));
     }
     minCommon = price[0];
