@@ -91,7 +91,7 @@ async function setup(Private_Key_) {
                     if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
                         console.log("Sleep:" + (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3));
                         await sleep(Number(startTime_[0]) + timeSendTx - timeGetAvaliableAuction - Date.now() / 1000);
-                        isAvailableAuctions = await checkAvailable();
+                        isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
                         if (isAvailableAuctions) {
                             await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
                         }
