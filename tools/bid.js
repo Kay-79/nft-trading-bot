@@ -218,5 +218,5 @@ const checkAvailable = async (addressCheck, indexCheck, timeCheck) => {
 
 const overTime = 60;
 const timeGetAvaliableAuction = 5;
-const timeSendTx = 92.0; //time wait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2bid();
-bid()
+const timeSendTx = 92.5; //time wait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2bid();
+bid();
