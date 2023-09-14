@@ -150,6 +150,7 @@ async function setup(Private_Key_) {
                     priceList1 = checkSuccess + " " + gasPriceScanRaw + "\nPrices   : " + price_send.toString().replace(" ", "") + "\nAmount: " + amountList + "\nID List   : " + idList;
                     if (!isAvailableAuctions) {
                         priceList1 = "Auction be canceled";
+                        console.log("Auction be canceled");
                     }
                 } catch (error) {}
                 try {
