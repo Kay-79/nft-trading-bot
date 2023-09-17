@@ -352,12 +352,12 @@ const myAcc = configJson.myAcc;
 for (let index = 0; index < myAcc.length; index++) {
     myAccounts.push(myAcc[index][0]);
 }
-value = 16; // without rare and epic
 valueBid = 999;
 indexs = [];
 priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
+value = 8; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_1_3_3");
+createBatch(3.001, 1000000, "", "_b_E_8");
