@@ -21,7 +21,7 @@ async function sendTxt(addressSC, gasPrice_, gasLimit_, index_, prices_) {
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     const abi = JSON.parse(fs.readFileSync("./config/abiMobox.json"));
-    const contract = new web3.eth.Contract(abi, consractAddress);
+    const contract = new web3.eth.Contract(abi, addressSC);
     // console.log(contract)
     emptyVar = [];
     // console.log(ids,prices)
@@ -53,8 +53,8 @@ async function sendTxt(addressSC, gasPrice_, gasLimit_, index_, prices_) {
     }
 }
 
-const consractAddress = "0xa2b607197c1A1f5FF114915c407FDDAbe3EF67E1";
-sendTxt(3.001, 1000000, "68", "12900000000000000000");
+// const consractAddress = "0xa2b607197c1A1f5FF114915c407FDDAbe3EF67E1";
+// sendTxt(3.001, 1000000, "68", "12900000000000000000");
 
 const getIndexs = async (address) => {
     let indexs = [];
