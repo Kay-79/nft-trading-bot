@@ -330,7 +330,7 @@ async function loopCheck(times) {
       await sleep(150000 + 300000 * Math.random()); //5mins per check
     }
     if (times > 1) {
-      await sleep(24 * 3600000); // last change per loop
+      await sleep(6 * 3600000); // last change per loop
     }
   }
 }
@@ -348,6 +348,6 @@ idCache = [];
 nonceAcc = [0];
 amountChange = 1; //bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed());
-const sellOff = false; // if true - sale per minPrice, if false - sale if not loss
+const sellOff = true; // if true - sale per minPrice, if false - sale if not loss
 const canLoss = -1;
 loopCheck(5000);
