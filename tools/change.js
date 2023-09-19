@@ -102,7 +102,7 @@ function checkPriceBuy(address_, page) {
 async function checkChangePrice(indexId) {
   try {
     let response3 = await axios.get(
-      "https://nftapi.mobox.io/auction/search/BNB?page=1&limit=5&category=&vType=&sort=price&pType=" +
+      "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=5&category=&vType=&sort=price&pType=" +
         idMomo[indexId]
     );
     data3 = response3.data;

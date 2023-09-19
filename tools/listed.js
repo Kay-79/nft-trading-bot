@@ -348,7 +348,7 @@ var momoListed = 0,
     sumUSD = 0,
     sumBNB = 0;
 const lastAcc = myAcc[myAcc.length - 1][1];
-const save = false;
+const save = true;
 const rateSale = 0.42;
 
 if (!checkRightAccBuy(myAcc, accRun)) {

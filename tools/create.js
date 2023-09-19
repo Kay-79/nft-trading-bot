@@ -56,15 +56,15 @@ async function checkAmountBuy(address, page) {
             }
             amountBid += 1;
         }
-    }
+    }   
 }
 async function checkChangePrice(indexId) {
     await sleep(2500 + 5000 * Math.random());
-    let response3 = await axios.get("https://nftapi.mobox.io/auction/search/BNB?page=1&limit=10&category=&vType=&sort=price&pType=" + idMomoBought[indexId]).catch((e) => {
+    let response3 = await axios.get("https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=10&category=&vType=&sort=price&pType=" + idMomoBought[indexId]).catch((e) => {
         console.log("Err2");
     });
     const data3 = response3.data.list;
-    if (!data3.length) {
+    if (!data3.length || !data3) {
         priceSell[indexId] = 15;
         return false;
     }
@@ -358,6 +358,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 33; // without rare and epic
+value = 1; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_b_E_8");
+createBatch(3.001, 1000000, "", "_7_4_5");
