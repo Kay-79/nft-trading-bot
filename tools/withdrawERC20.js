@@ -24,7 +24,7 @@ const abi = [
         type: "function",
     },
 ];
-const contractBUSD = new web3.eth.Contract(abi, "0xe9e7cea3dedca5984780bafc599bd69add087d56");
+const contractBUSD = new web3.eth.Contract(abi, "0x55d398326f99059ff775485246999027b3197955");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
 const myAcc = configJson.myAcc;
 function sleep(ms) {
@@ -69,7 +69,7 @@ async function withdrawTo(address_) {
             cacheWithdraw += balanceSC / 10 ** 18;
             try {
                 const contractAddress = new web3.eth.Contract(abi, myAcc[index][0]);
-                let encoded = await contractAddress.methods.transferERC20("0xe9e7cea3dedca5984780bafc599bd69add087d56", address_, balanceSC.toString()).encodeABI();
+                let encoded = await contractAddress.methods.transferERC20("0x55d398326f99059ff775485246999027b3197955", address_, balanceSC.toString()).encodeABI();
                 var tx = {
                     gas: 100000,
                     gasPrice: 3.001 * 10 ** 9,
@@ -94,4 +94,4 @@ async function withdrawTo(address_) {
 const minWithdraw = 10;
 const maxWithdraw = 999;
 
-withdrawTo("0x1334Fa6f3d21C99483b749FBdF713da4ea8fBd24");
+withdrawTo("0x55555D4de8df0c455C2Ff368253388FE669a8888");
