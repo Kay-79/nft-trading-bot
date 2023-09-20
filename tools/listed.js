@@ -13,7 +13,7 @@ const abiBUSD = [
         type: "function",
     },
 ];
-const contract = new web3.eth.Contract(abiBUSD, "0xe9e7cea3dedca5984780bafc599bd69add087d56");
+const contract = new web3.eth.Contract(abiBUSD, "0x55d398326f99059ff775485246999027b3197955");
 const dataMomo = fs.readFileSync("./data/dataMomo.txt", "utf8");
 const momoID = dataMomo.split("\n");
 
