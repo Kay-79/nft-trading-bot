@@ -214,7 +214,7 @@ async function main(address, nameFile_, rate_) {
             let amountUnList = await contractAcc.methods.amountUnList().call();
             flagBalance = "amountUnList: " + amountUnList + "\t\t";
         }
-        let logData = nameFile_ + "\t" + space + flagCountMomo.toString() + " vs " + space + idMomo.length.toString() + "\t" + budget + " BUSD\t" + flagBalance;
+        let logData = nameFile_ + "\t" + space + flagCountMomo.toString() + " vs " + space + idMomo.length.toString() + "\t" + budget + " USDT\t" + flagBalance;
         // if (balance * 1 != 0 && budget * 1 != 0 && flagCountMomo * 1 != 0) {
         scanIndex(logData);
         // }
@@ -255,19 +255,19 @@ async function checkListedAll(rate_) {
             sumBNB += balance;
             sumUSD += budget;
             if (myAcc[index][1] == "_1_0_1") {
-                console.log("Changer: " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "BUSD");
+                console.log("Changer: " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
             }
             if (myAcc[index][1] == "_5_8_1") {
-                console.log("Banker : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "BUSD");
+                console.log("Banker : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
             }
             if (myAcc[index][1] == "_7_7_1") {
-                console.log("Buyer  : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "BUSD");
+                console.log("Buyer  : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
             }
         }
     }
     console.log("BNB Price:", bnbPrice);
     console.log("USD Price:", usdPrice);
-    console.log("Total BUSD:\t\t", (sumUSD * rate_).toFixed(2));
+    console.log("Total USDT:\t\t", (sumUSD * rate_).toFixed(2));
     console.log("Total BNB:\t\t", (sumBNB * rate_).toFixed(4));
     console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed(), "đ");
     sumBuyVnd = (sumBNB * bnbPrice + sumUSD + sumBuy) * usdPrice * rate_;
