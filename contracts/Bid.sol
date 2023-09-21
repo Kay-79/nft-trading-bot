@@ -1,14 +1,10 @@
 // SPDX-License-Identifier: None
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-contract Bid is OwnableUpgradeable {
-    function initialize() public initializer {
-        __Ownable_init();
-    }
-
+contract Bid is Ownable {
     address private addressMP = 0xE5EE9E72202F019c0B20cb521f3bdf1C9e6d3BdE;
     // address private addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
     uint256 public amountUnList;
