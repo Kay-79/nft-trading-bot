@@ -5,8 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract Bid is Ownable {
-    address private addressMP = 0xE5EE9E72202F019c0B20cb521f3bdf1C9e6d3BdE;
-    // address private addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
+    address private addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
     uint256 public amountUnList;
     address public changer = 0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000;
 
@@ -28,6 +27,10 @@ contract Bid is Ownable {
         addressMP = address(newMP_);
     }
 
+    function changeAmountUnList(uint256 newAmount) public onlyOwner {
+        amountUnList = newAmount;
+    }
+
     function withdraw(
         uint256 amount,
         address payable destAddr
@@ -43,10 +46,6 @@ contract Bid is Ownable {
         uint256 erc20balance = token.balanceOf(address(this));
         require(amount <= erc20balance, "Balance is low");
         token.transfer(to, amount);
-    }
-
-    function changeAmountUnList(uint256 newAmount) public onlyOwner {
-        amountUnList = newAmount;
     }
 
     function approve(
@@ -72,9 +71,6 @@ contract Bid is Ownable {
         uint256 price_,
         uint256 amount_ //must have to count momo
     ) external payable onlyOwner {
-        // if (startTime_ != timeCache) {
-        //     timeCache = startTime_;
-        // } else {
         amountUnList += amount_;
         (bool success, bytes memory returnData) = addressMP.call{
             gas: gasleft(),
@@ -91,7 +87,6 @@ contract Bid is Ownable {
         if (!success) {
             revert(string(returnData));
         }
-        // }
     }
 
     function changePrice(
