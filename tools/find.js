@@ -13,8 +13,9 @@ const abiBUSD = [
         type: "function",
     },
 ];
-const contract = new web3.eth.Contract(abiBUSD, "0xe9e7cea3dedca5984780bafc599bd69add087d56");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
+const addressToken = configJson.addressToken;
+const contract = new web3.eth.Contract(abiBUSD, addressToken);
 
 function sleep(ms) {
     return new Promise((resolve) => {
