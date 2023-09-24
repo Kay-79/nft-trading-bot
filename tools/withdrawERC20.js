@@ -56,7 +56,7 @@ async function withdrawTo(address_) {
     for (let index = 0; index < myAcc.length; index++) {
         let isContract = await web3.eth.getStorageAt(myAcc[index][0]);
         if (!Number(isContract) || myAcc[index][0] == address_) {
-            continue;
+            continue;// dont send token from address to contract
         }
         let balanceSC = await contractBUSD.methods.balanceOf(myAcc[index][0]).call();
         console.log(myAcc[index][0]);
@@ -91,7 +91,7 @@ async function withdrawTo(address_) {
     }
 }
 
-const minWithdraw = 10;
+const minWithdraw = 0;
 const maxWithdraw = 999;
 
-withdrawTo("0x55555D4de8df0c455C2Ff368253388FE669a8888");
+withdrawTo("0x73A4AbD430C821B49423dB5279fb56ee72073292");
