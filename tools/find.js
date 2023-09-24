@@ -36,7 +36,7 @@ async function getMpListed(amountMomo) {
     ids_ = [];
     amounts_ = [];
     try {
-        let mpListed = await axios.get("https://nftapi.mobox.io/auction/search/BNB?page=1&limit=" + amountMomo + "&category=&vType=&sort=-time&pType=");
+        let mpListed = await axios.get("https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=" + amountMomo + "&category=&vType=&sort=-time&pType=");
         mpListed = mpListed.data.list;
         for (let ii = mpListed.length - 1; ii >= 0; ii--) {
             auctors_.push(mpListed[ii].auctor);
@@ -355,7 +355,7 @@ async function getMinPrice() {
         if (index0 >= 4) {
             limitMomo = 5;
         }
-        let dataMin = await axios.get("https://nftapi.mobox.io/auction/search/BNB?page=1&limit=" + limitMomo + "&category=&vType=" + (index0 + 1).toString() + "&sort=price&pType=").catch((e) => {
+        let dataMin = await axios.get("https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=" + limitMomo + "&category=&vType=" + (index0 + 1).toString() + "&sort=price&pType=").catch((e) => {
             console.log("Err get min price!!");
         });
         if (!dataMin) {
