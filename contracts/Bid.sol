@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract Bid is Ownable {
-    address private addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
+    address public addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
     uint256 public amountUnList;
     address public changer = 0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000;
 
