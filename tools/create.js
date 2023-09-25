@@ -56,7 +56,7 @@ async function checkAmountBuy(address, page) {
             }
             amountBid += 1;
         }
-    }   
+    }
 }
 async function checkChangePrice(indexId) {
     await sleep(2500 + 5000 * Math.random());
@@ -358,6 +358,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 1; // without rare and epic
+value = 67; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_7_4_5");
+createBatch(3.001, 1000000, "", "_7_3_A");
