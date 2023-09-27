@@ -157,7 +157,7 @@ async function main(address, nameFile_, rate_) {
     let budget = await contract.methods.balanceOf(address).call();
     budget = (budget / 10 ** 18).toFixed(2);
     sumUSD += Number(budget);
-    budget = (budget * rate_).toFixed(3);
+    budget = (budget * rate_).toFixed(2);
     await checkListed(address);
     for (let index1 = 1; index1 < 51; index1++) {
         await checkPriceBuy(address, index1);
