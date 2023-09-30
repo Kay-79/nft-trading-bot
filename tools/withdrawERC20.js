@@ -83,7 +83,7 @@ async function withdrawTo(address_) {
             } catch (error) {
                 console.log("Encode Fail", error);
             }
-            if (cacheWithdraw > maxWithdraw) {
+            if (cacheWithdraw >= maxWithdraw) {
                 console.log("Done withdraw max", maxWithdraw);
                 exit();
             }
