@@ -269,11 +269,11 @@ async function checkListedAll(rate_) {
     console.log("USD Price:", usdPrice);
     console.log("Total USDT:\t\t", (sumUSD * rate_).toFixed(2));
     console.log("Total BNB:\t\t", (sumBNB * rate_).toFixed(4));
-    console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed(), "đ");
+    console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed());
     sumBuyVnd = (sumBNB * bnbPrice + sumUSD + sumBuy) * usdPrice * rate_;
     sumSaleVnd = (sumBNB * bnbPrice + sumUSD + sumSell * 0.95) * usdPrice * rate_;
-    console.log("Estimate Fund:\t", sumBuyVnd.toFixed(), "--", sumSaleVnd.toFixed(), "đ");
-    console.log("Estimate Fund:\t", (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed(), "đ");
+    console.log("Estimate Fund:\t", sumBuyVnd.toFixed(), "--", sumSaleVnd.toFixed());
+    console.log("Estimate Fund:\t", (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
     var currentdate = new Date();
     const nowSync = currentdate.getDate() + "/" + (Number(currentdate.getMonth()) + 1).toString() + "/" + currentdate.getFullYear();
     var datetime = "Last Sync: " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
