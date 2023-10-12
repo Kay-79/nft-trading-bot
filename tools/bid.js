@@ -8,6 +8,7 @@ function sleep(ms) {
     });
 }
 const Web3 = require("web3");
+require("dotenv").config();
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
@@ -15,8 +16,8 @@ process.on("unhandledRejection", (err) => {
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 // const web3sc = new Web3(new Web3.providers.WebsocketProvider('wss://solemn-wild-aura.bsc.discover.quiknode.pro/9fbdf28f69f47aa85c76222be804b4224c2dbd22/'));
-const apiTele = configJson.api.telegram;
-const chatId = configJson.chatId.mobox;
+const apiTele = process.env.api_telegram;
+const chatId = process.env.chatId_mobox;
 const abi = JSON.parse(fs.readFileSync("./config/abiMobox.json"));
 const contractAddress = configJson.accBuy;
 const contract = new web3.eth.Contract(abi, contractAddress);
@@ -220,5 +221,5 @@ const checkAvailable = async (addressCheck, indexCheck, timeCheck) => {
 const overTime = 60;
 const timeGetAvaliableAuction = 5;
 // const timeSendTx = 73.6 - 20; //time wait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2bid();
-const timeBid = configJson.chatId.timeBid;
+const timeSendTx = configJson.timeBid;
 bid();
