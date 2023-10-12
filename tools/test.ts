@@ -1,10 +1,2 @@
-fetch('https://nftapi.mobox.io/auction/search/BNB?page=1&limit=30&category=&vType=&sort=-time&pType=')
-  .then(response => response.json())
-  .then(data => {
-    // Xử lý dữ liệu ở đây
-    console.log(data);
-  })
-  .catch(error => {
-    // Xử lý lỗi ở đây
-    console.error('Error fetching data:', error);
-  });
+chatId_mobox="mbjknq79mb"
+api_telegram="bot5936079405:AAEbv0jsHFK9FiZvBsAoV-8xoI36IBcFPUw"
