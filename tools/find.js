@@ -1,3 +1,4 @@
+require("dotenv").config();
 var axios = require("axios");
 const fs = require("fs");
 const { exit } = require("process");
@@ -434,8 +435,8 @@ const gasPriceMin = 3.1;
 const gasPriceMax = 50;
 const rateFeePerProfit = 0.1;
 var accCheck = configJson.accBuy;
-const apiTele = configJson.api.telegram;
-const chatId = configJson.chatId.mobox;
+const apiTele = process.env.api_telegram;
+const chatId = process.env.chatId_mobox;
 const delayGetMp = 12000 + 10000 * Math.random(); // not use, around 17s per rq
 // now is save batch, config in bid.js
 const maxMomoPrice = 15;

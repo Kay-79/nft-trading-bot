@@ -1,4 +1,3 @@
-require("dotenv").config();
 var axios = require("axios");
 const fs = require("fs");
 const Web3 = require("web3");

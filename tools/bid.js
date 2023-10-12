@@ -1,3 +1,5 @@
+
+require("dotenv").config();
 const request = require("request");
 const axios = require("axios");
 const fs = require("fs");
@@ -8,7 +10,6 @@ function sleep(ms) {
     });
 }
 const Web3 = require("web3");
-require("dotenv").config();
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
