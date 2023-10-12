@@ -212,6 +212,7 @@ async function main(address, nameFile_, rate_) {
             ];
             let contractAcc = new web3.eth.Contract(abiAmount, address);
             let amountUnList = await contractAcc.methods.amountUnList().call();
+            momoUnlist += Number(amountUnList);
             flagBalance = "amountUnList: " + amountUnList + "\t\t";
         }
         let logData = nameFile_ + "\t" + space + flagCountMomo.toString() + " vs " + space + idMomo.length.toString() + "\t" + budget + " USDT\t" + flagBalance;
@@ -270,8 +271,8 @@ async function checkListedAll(rate_) {
     console.log("Total USDT:\t\t", (sumUSD * rate_).toFixed(2));
     console.log("Total BNB:\t\t", (sumBNB * rate_).toFixed(4));
     console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed());
-    sumBuyVnd = (sumBNB * bnbPrice + sumUSD + sumBuy) * usdPrice * rate_;
-    sumSaleVnd = (sumBNB * bnbPrice + sumUSD + sumSell * 0.95) * usdPrice * rate_;
+    sumBuyVnd = (sumBNB * bnbPrice + sumUSD + sumBuy + momoUnlist * configJson.minPrice.minUncommon) * usdPrice * rate_;
+    sumSaleVnd = (sumBNB * bnbPrice + sumUSD + sumSell * 0.95 + momoUnlist * configJson.minPrice.minUncommon) * usdPrice * rate_;
     console.log("Estimate Fund:\t", sumBuyVnd.toFixed(), "--", sumSaleVnd.toFixed());
     console.log("Estimate Fund:\t", (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
     var currentdate = new Date();
@@ -332,6 +333,7 @@ const myAcc = configJson.myAcc;
 const accRun = configJson.accBuy;
 var listed = "";
 var momoListed = 0,
+    momoUnlist = 0,
     sumMomo = 0,
     countLoss = 0,
     countProfit = 0,
