@@ -93,7 +93,7 @@ async function checkChangePrice(indexId) {
     for (let indexid_ = 0; indexid_ < data3.list.length; indexid_++) {
         if (myAccounts.includes(data3.list[indexid_].auctor) == false && indexListCache.includes(Number(indexMomo[indexId])) == false) {
             //fix same momo
-            if (((Number(data3.list[indexid_].nowPrice) / 10 ** 9) * 0.95 - priceBuy[indexId] > canLoss || sellOff) && Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) > timeWait * (indexid_ + 1)) {
+            if (((Number(data3.list[indexid_].nowPrice) / 10 ** 9) * 0.95 - priceBuy[indexId] > canLost || sellOff) && Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) > timeWait * (indexid_ + 1)) {
                 // time wait x2 for second momo
                 priceCache = priceSell[indexId]; // add to compare price
                 priceSell[indexId] = (Number(data3.list[indexid_].nowPrice) / 10 ** 9).toFixed(3);
@@ -248,8 +248,8 @@ async function loopCheck(times) {
 }
 // 0
 const minChange = 0.001;
-timeWait = 5 * 60 * 60 * 1; //wait latest change price of momo
-delayChange = 90 * 10 ** 3; //delay to update api
+timeWait = 10 * 60 * 60 * 1; //wait latest change price of momo (hour)
+delayChange = 90 * 10 ** 3; //delay to update api (sec)
 myAccounts = [];
 const myAcc = configJson.myAcc;
 for (let index = 0; index < myAcc.length; index++) {
@@ -263,5 +263,5 @@ nonceAcc = [0];
 amountChange = 1; //bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed());
 const sellOff = true; // if true - sale per minPrice, if false - sale if not loss
-const canLoss = -1;
+const canLost = -1;
 loopCheck(5000);
