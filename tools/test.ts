@@ -1,2 +1,0 @@
-chatId_mobox="mbjknq79mb"
-api_telegram="bot5936079405:AAEbv0jsHFK9FiZvBsAoV-8xoI36IBcFPUw"
