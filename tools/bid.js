@@ -109,7 +109,8 @@ async function setup(Private_Key_) {
                                 checkSuccess = "Success";
                                 biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
                             } catch (error) {
-                                console.log("Bid fail");
+                                console.log("Bid fail", error);
+                                console.log("Bid fail", biding[index].status);
                                 checkSuccess = "Fail";
                             }
                             console.log("Successful bid! At block:", biding[index].blockNumber);
@@ -222,8 +223,4 @@ const overTime = 60;
 const timeGetAvaliableAuction = 5;
 // const timeSendTx = 73.6 - 20; //time wait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2bid();
 const timeSendTx = configJson.timeBid;
-console.log(timeSendTx, typeof timeSendTx);
-console.log(apiTele);
-console.log(chatId);
-
 bid();
