@@ -1,4 +1,3 @@
-
 require("dotenv").config();
 const request = require("request");
 const axios = require("axios");
@@ -223,4 +222,8 @@ const overTime = 60;
 const timeGetAvaliableAuction = 5;
 // const timeSendTx = 73.6 - 20; //time wait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2bid();
 const timeSendTx = configJson.timeBid;
+console.log(timeSendTx, typeof timeSendTx);
+console.log(apiTele);
+console.log(chatId);
+
 bid();
