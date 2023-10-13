@@ -7,3 +7,4 @@ tools/test*
 data/dataMomo.txt
 .env
 .vscode
+waitBid.txt
