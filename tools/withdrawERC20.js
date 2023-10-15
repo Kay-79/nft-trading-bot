@@ -24,7 +24,7 @@ const abi = [
         type: "function",
     },
 ];
-const contractBUSD = new web3.eth.Contract(abi, "0x55d398326f99059ff775485246999027b3197955");
+const contractToken = new web3.eth.Contract(abi, "0x55d398326f99059ff775485246999027b3197955");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
 const myAcc = configJson.myAcc;
 function sleep(ms) {
@@ -58,10 +58,10 @@ async function withdrawTo(address_) {
         if (!Number(isContract) || myAcc[index][0] == address_) {
             continue; // dont send token from address to contract
         }
-        let balanceSC = await contractBUSD.methods.balanceOf(myAcc[index][0]).call();
+        let balanceSC = await contractToken.methods.balanceOf(myAcc[index][0]).call();
         console.log(myAcc[index][0]);
         console.log(balanceSC / 10 ** 18);
-        if (balanceSC / 10 ** 18 > minWithdraw) {
+        if (balanceSC / 10 ** 18 >= minWithdraw) {
             if (cacheWithdraw + balanceSC / 10 ** 18 > maxWithdraw) {
                 balanceSC = Number((Number((maxWithdraw - cacheWithdraw).toFixed(2)) * 10 ** 18).toFixed(0));
                 await sleep(100);
@@ -79,7 +79,7 @@ async function withdrawTo(address_) {
                 };
                 let signed = await web3.eth.accounts.signTransaction(tx, Private_Key);
                 await web3.eth.sendSignedTransaction(signed.rawTransaction);
-                console.log("Tranfer " + (balanceSC / 10 ** 18).toFixed(2).toString() + "BUSD from " + myAcc[index][0] + " to " + address_);
+                console.log("Tranfer " + (balanceSC / 10 ** 18).toFixed(2).toString() + "USDT from " + myAcc[index][0] + " to " + address_);
             } catch (error) {
                 console.log("Encode Fail", error);
             }
