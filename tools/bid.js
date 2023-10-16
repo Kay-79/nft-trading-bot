@@ -161,6 +161,7 @@ async function setup(Private_Key_) {
                     if (timeSendReal != 0) {
                         timeSendReal = await web3.eth.getBlock(timeSendReal);
                         timeSendReal = timeSendReal.timestamp;
+                        console.log("timeStampFail:", timeSendReal);
                     }
                     if (timeSendReal.toFixed() != Number(startTime_[0]).toFixed() || timeSendReal > 1.6 * 10 ** 9) {
                         const oldTimeBid = timeSendTx;
