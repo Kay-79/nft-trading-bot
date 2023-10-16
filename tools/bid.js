@@ -109,8 +109,7 @@ async function setup(Private_Key_) {
                                 checkSuccess = "Success";
                                 biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
                             } catch (error) {
-                                console.log("Bid fail", error);
-                                console.log("Bid fail", biding[index].status);
+                                console.log("Bid fail", biding[index].blockNumber);
                                 checkSuccess = "Fail";
                             }
                             console.log("Successful bid! At block:", biding[index].blockNumber);
