@@ -37,6 +37,7 @@ async function setup(Private_Key_) {
         }
     } catch (err) {}
     if (Bid == true) {
+        var timeSendReal = 0;
         const startTime_ = dataBid[3].split(",");
         const index_ = dataBid[2].split(",");
         if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 10) {
@@ -108,11 +109,12 @@ async function setup(Private_Key_) {
                             try {
                                 checkSuccess = "Success";
                                 biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                console.log("Successful bid! At block:", biding[index].blockNumber);
                             } catch (error) {
-                                console.log("Bid fail", biding[index].blockNumber);
+                                console.log("Bid fail! At block: " + error.receipt.blockNumber);
                                 checkSuccess = "Fail";
+                                timeSendReal = error.receipt.blockNumber;
                             }
-                            console.log("Successful bid! At block:", biding[index].blockNumber);
                         } else {
                             if (index == tx.length - 1) {
                                 try {
@@ -155,7 +157,20 @@ async function setup(Private_Key_) {
                     }
                 } catch (error) {}
                 try {
-                    request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + priceList1, function (error, response, body) {});
+                    if (timeSendReal != 0) {
+                        timeSendReal = await web3.eth.getBlock(timeSendReal);
+                        timeSendReal = timeSendReal.timestamp;
+                    }
+                    if (timeSendReal.toFixed() != Number(startTime_[0]).toFixed() || timeSendReal > 1.6 * 10 ** 9) {
+                        timeSendTx = timeSendTx + (Number(startTime_[0]) - timeSendReal) / 3;
+                        await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=New time bid: " + timeSendTx.toFixed(2), function (error, response, body) {});
+                    }
+                } catch (error) {
+                    console.log(error);
+                    timeSendReal = 0;
+                }
+                try {
+                    await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + priceList1, function (error, response, body) {});
                 } catch (error) {}
             } else {
                 console.log("Over time (" + overTime.toString() + " seconds)!!");
@@ -221,5 +236,5 @@ const checkAvailable = async (addressCheck, indexCheck, timeCheck) => {
 const overTime = 60;
 const timeGetAvaliableAuction = 5;
 // const timeSendTx = 73.6 - 20; //time wait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2bid();
-const timeSendTx = configJson.timeBid;
+var timeSendTx = configJson.timeBid;
 bid();
