@@ -162,8 +162,10 @@ async function setup(Private_Key_) {
                         timeSendReal = timeSendReal.timestamp;
                     }
                     if (timeSendReal.toFixed() != Number(startTime_[0]).toFixed() || timeSendReal > 1.6 * 10 ** 9) {
+                        oldTimeBid = timeSendTx;
                         timeSendTx = timeSendTx + (Number(startTime_[0]) - timeSendReal) / 3;
-                        await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=New time bid: " + timeSendTx.toFixed(2), function (error, response, body) {});
+                        const contentTimeBid = `Expect: ${startTime_[0]}\nResult: ${timeSendReal}\nNew time bid: ${timeSendTx.toFixed(2)}\nOld time bid: ${oldTimeBid.toFixed(2)}`;
+                        await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + contentTimeBid, function (error, response, body) {});
                     }
                 } catch (error) {
                     console.log(error);
