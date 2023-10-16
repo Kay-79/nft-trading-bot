@@ -110,10 +110,11 @@ async function setup(Private_Key_) {
                                 checkSuccess = "Success";
                                 biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
                                 console.log("Successful bid! At block:", biding[index].blockNumber);
-                            } catch (error) {
-                                console.log("Bid fail! At block: " + error.receipt.blockNumber);
+                            } catch (errorCheck) {
+                                console.log("Bid fail! At block: " + errorCheck.receipt.blockNumber);
                                 checkSuccess = "Fail";
-                                timeSendReal = error.receipt.blockNumber;
+                                timeSendReal = errorCheck.receipt.blockNumber;
+                                console.log("BlockFail:", timeSendReal);
                             }
                         } else {
                             if (index == tx.length - 1) {
@@ -162,9 +163,14 @@ async function setup(Private_Key_) {
                         timeSendReal = timeSendReal.timestamp;
                     }
                     if (timeSendReal.toFixed() != Number(startTime_[0]).toFixed() || timeSendReal > 1.6 * 10 ** 9) {
-                        oldTimeBid = timeSendTx;
-                        timeSendTx = timeSendTx + (Number(startTime_[0]) - timeSendReal) / 3;
-                        const contentTimeBid = `Expect: ${startTime_[0]}\nResult: ${timeSendReal}\nNew time bid: ${timeSendTx.toFixed(2)}\nOld time bid: ${oldTimeBid.toFixed(2)}`;
+                        const oldTimeBid = timeSendTx;
+                        const contentTimeBid = "";
+                        if (timeSendTx + (Number(startTime_[0]) - timeSendReal) / 3 < 1000) {
+                            timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 3;
+                            contentTimeBid = `Expect: ${startTime_[0]}\nResult: ${timeSendReal}\nNew time bid: ${timeSendTx.toFixed(2)}\nOld time bid: ${oldTimeBid.toFixed(2)}`;
+                        } else {
+                            contentTimeBid = `Expect: ${startTime_[0]}\nResult: ${timeSendReal}\nNew time bid: ${oldTimeBid.toFixed(2)}\nOld time bid: ${oldTimeBid.toFixed(2)}`;
+                        }
                         await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + contentTimeBid, function (error, response, body) {});
                     }
                 } catch (error) {
