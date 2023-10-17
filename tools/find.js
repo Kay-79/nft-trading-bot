@@ -184,7 +184,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
             }
             await sleep(1000);
         } else {
-            console.log("Profit < 0", totalProfit - fee[totalAuctions - 1]);
+            console.log("Profit < 0", totalProfit ? totalProfit - fee[totalAuctions - 1] : 0);
         }
     } else {
         for (let index = seller__.length - 1; index >= 0; index--) {
