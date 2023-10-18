@@ -50,7 +50,9 @@ async function setup(Private_Key_) {
             for (let index = 0; index < gasPriceScanRaw.length; index++) {
                 gasPriceScan[index] = Number((Number(gasPriceScanRaw[index]) * 10 ** 9).toFixed());
             }
-            const gasPriceScanFake = Number((Number(dataBid[6].split(",")) * 10 ** 9 * 2).toFixed());
+            const gasPriceScanFake = Number(
+                (Number(dataBid[6].split(",")) * 10 ** 9 * 2).toFixed()
+            );
             let amountBid = 0;
             for (let index = 0; index < amountList.length; index++) {
                 amountBid += Number(amountList[index]);
@@ -67,7 +69,15 @@ async function setup(Private_Key_) {
                             nonce: nonce_,
                             to: contractAddress,
                             value: 0,
-                            data: contract.methods.bid(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), "1").encodeABI(), // amount = 1
+                            data: contract.methods
+                                .bid(
+                                    seller_[index].toString(),
+                                    index_[index].toString(),
+                                    startTime_[index].toString(),
+                                    priceList[index].toString(),
+                                    "1"
+                                )
+                                .encodeABI(), // amount = 1
                         });
                         nonce_ += 1;
                     }
@@ -79,26 +89,53 @@ async function setup(Private_Key_) {
                         nonce: nonce_,
                         to: contractAddress,
                         value: 0,
-                        data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI(), // amount = 1 or > 1
+                        data: contract.methods
+                            .bid(
+                                seller_.toString(),
+                                index_.toString(),
+                                startTime_.toString(),
+                                priceList.toString(),
+                                amountBid.toString()
+                            )
+                            .encodeABI(), // amount = 1 or > 1
                     });
                 }
                 let checkSuccess = "Success";
                 let isAvailableAuctions = true;
+                let checkHashEach = "";
                 try {
                     let signed = [];
                     let biding = [];
                     for (let index = 0; index < tx.length; index++) {
-                        signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_));
+                        signed.push(
+                            await web3.eth.accounts.signTransaction(tx[index], Private_Key_)
+                        );
                     }
                     if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
-                        console.log("Sleep:" + (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3));
-                        await sleep(Number(startTime_[0]) + timeSendTx - timeGetAvaliableAuction - Date.now() / 1000);
-                        isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
+                        console.log(
+                            "Sleep:" +
+                                (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3)
+                        );
+                        await sleep(
+                            Number(startTime_[0]) +
+                                timeSendTx -
+                                timeGetAvaliableAuction -
+                                Date.now() / 1000
+                        );
+                        isAvailableAuctions = await checkAvailable(
+                            seller_[0],
+                            index_[0],
+                            startTime_[0]
+                        );
                         if (isAvailableAuctions) {
                             await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
                         }
                     } else {
-                        isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
+                        isAvailableAuctions = await checkAvailable(
+                            seller_[0],
+                            index_[0],
+                            startTime_[0]
+                        );
                     }
                     console.log("Paying!!");
                     for (let index = 0; index < tx.length; index++) {
@@ -108,20 +145,25 @@ async function setup(Private_Key_) {
                         if (tx.length == 1) {
                             try {
                                 checkSuccess = "Success";
-                                const sendEach = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                checkHashEach = signed[index].transactionHash;
+                                const sendEach = await web3.eth.sendSignedTransaction(
+                                    signed[index].rawTransaction
+                                );
                                 console.log("Successful bid! At block:", sendEach.blockNumber);
                             } catch (error) {
-                                console.log("check time again ");
-                                console.log(error);
-                                console.log("Bid fail! At block: " + error.receipt.blockNumber);
+                                console.log("Fail...setting new time");
+                                // console.log(error);
+                                // console.log("Bid fail! At block: " + error.receipt.blockNumber);
                                 checkSuccess = "Fail";
-                                timeSendReal = error.receipt.blockNumber;
+                                // timeSendReal = error.receipt.blockNumber;
                             }
                         } else {
                             if (index == tx.length - 1) {
                                 try {
                                     checkSuccess = "Success";
-                                    biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                    biding[index] = await web3.eth.sendSignedTransaction(
+                                        signed[index].rawTransaction
+                                    );
                                 } catch (error) {
                                     console.log("Bid fail");
                                     checkSuccess = "Fail";
@@ -130,7 +172,9 @@ async function setup(Private_Key_) {
                             } else {
                                 try {
                                     checkSuccess = "Success";
-                                    biding[index] = web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                    biding[index] = web3.eth.sendSignedTransaction(
+                                        signed[index].rawTransaction
+                                    );
                                 } catch (error) {
                                     console.log("Bid fail");
                                     checkSuccess = "Fail";
@@ -150,36 +194,77 @@ async function setup(Private_Key_) {
                 try {
                     let price_send = [];
                     for (let q = 0; q < priceList.length; q++) {
-                        price_send.push(" " + ((Number(priceList[q]) - 10 ** 14) / 10 ** 18).toFixed(2));
+                        price_send.push(
+                            " " + ((Number(priceList[q]) - 10 ** 14) / 10 ** 18).toFixed(2)
+                        );
                     }
-                    priceList1 = checkSuccess + " " + gasPriceScanRaw + "\nPrices   : " + price_send.toString().replace(" ", "") + "\nAmount: " + amountList + "\nID List   : " + idList;
+                    priceList1 =
+                        checkSuccess +
+                        " " +
+                        gasPriceScanRaw +
+                        "\nPrices   : " +
+                        price_send.toString().replace(" ", "") +
+                        "\nAmount: " +
+                        amountList +
+                        "\nID List   : " +
+                        idList;
                     if (!isAvailableAuctions) {
                         priceList1 = "Auction be canceled";
                         console.log("Auction be canceled");
                     }
                 } catch (error) {}
                 try {
-                    if (timeSendReal != 0) {
-                        timeSendReal = await web3.eth.getBlock(timeSendReal);
+                    if (checkHashEach) {
+                        // await sleep(2000); //sleep to avoid pending hash
+                        timeSendReal = await web3.eth.getTransaction(checkHashEach);
+                        timeSendReal = await web3.eth.getBlock(timeSendReal.blockNumber);
                         timeSendReal = timeSendReal.timestamp;
                         console.log("timeStampFail:", timeSendReal);
                     }
-                    if (timeSendReal.toFixed() != Number(startTime_[0]).toFixed() && timeSendReal > 1.6 * 10 ** 9) {
+                    if (
+                        timeSendReal.toFixed() != Number(startTime_[0]).toFixed() &&
+                        timeSendReal > 1.6 * 10 ** 9
+                    ) {
                         const oldTimeBid = timeSendTx;
                         var contentTimeBid = "";
                         if (timeSendTx + (Number(startTime_[0]) - timeSendReal) / 3 < 1000) {
-                            timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 3;
-                            contentTimeBid = `Expect: ${Number(startTime_[0]) + 120}\nResult: ${timeSendReal}\nOld time bid: ${oldTimeBid.toFixed(2)}\nNew time bid: ${timeSendTx.toFixed(2)}`;
+                            timeSendTx =
+                                timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 3;
+                            contentTimeBid = `Expect: ${
+                                Number(startTime_[0]) + 120
+                            }\nResult: ${timeSendReal}\nOld time bid: ${oldTimeBid.toFixed(
+                                2
+                            )}\nNew time bid: ${timeSendTx.toFixed(2)}`;
                         } else {
-                            contentTimeBid = `Expect: ${Number(startTime_[0]) + 120}\nResult: ${timeSendReal}\nOld time bid: ${oldTimeBid.toFixed(2)}\nNew time bid: ${oldTimeBid.toFixed(2)}`;
+                            contentTimeBid = `Expect: ${
+                                Number(startTime_[0]) + 120
+                            }\nResult: ${timeSendReal}\nOld time bid: ${oldTimeBid.toFixed(
+                                2
+                            )}\nNew time bid: ${oldTimeBid.toFixed(2)}`;
                         }
-                        await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + contentTimeBid, function (error, response, body) {});
+                        await request(
+                            "https://api.telegram.org/" +
+                                apiTele +
+                                "/sendMessage?chat_id=@" +
+                                chatId +
+                                "&text=" +
+                                contentTimeBid,
+                            function (error, response, body) {}
+                        );
                     }
                 } catch (error) {
                     console.log(error);
                 }
                 try {
-                    await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + priceList1, function (error, response, body) {});
+                    await request(
+                        "https://api.telegram.org/" +
+                            apiTele +
+                            "/sendMessage?chat_id=@" +
+                            chatId +
+                            "&text=" +
+                            priceList1,
+                        function (error, response, body) {}
+                    );
                 } catch (error) {}
             } else {
                 console.log("Over time (" + overTime.toString() + " seconds)!!");
@@ -230,12 +315,21 @@ async function bid() {
     }
 }
 const checkAvailable = async (addressCheck, indexCheck, timeCheck) => {
-    let responseListed = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + addressCheck + "?sort=-time&page=1&limit=10").catch((e) => {
-        return true;
-    });
+    let responseListed = await axios
+        .get(
+            "https://nftapi.mobox.io/auction/list/BNB/" +
+                addressCheck +
+                "?sort=-time&page=1&limit=10"
+        )
+        .catch((e) => {
+            return true;
+        });
     let dataAvailable = responseListed.data.list;
     for (let index = 0; index < dataAvailable.length; index++) {
-        if (Number(indexCheck) + Number(timeCheck) == dataAvailable[index].index + dataAvailable[index].uptime) {
+        if (
+            Number(indexCheck) + Number(timeCheck) ==
+            dataAvailable[index].index + dataAvailable[index].uptime
+        ) {
             return true;
         }
     }
