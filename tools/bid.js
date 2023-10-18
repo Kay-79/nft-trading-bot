@@ -84,64 +84,65 @@ async function setup(Private_Key_) {
                 }
                 let checkSuccess = "Success";
                 let isAvailableAuctions = true;
-                // try {
-                let signed = [];
-                let biding = [];
-                for (let index = 0; index < tx.length; index++) {
-                    signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_));
-                }
-                if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
-                    console.log("Sleep:" + (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3));
-                    await sleep(Number(startTime_[0]) + timeSendTx - timeGetAvaliableAuction - Date.now() / 1000);
-                    isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
-                    if (isAvailableAuctions) {
-                        await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
+                try {
+                    let signed = [];
+                    let biding = [];
+                    for (let index = 0; index < tx.length; index++) {
+                        signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_));
                     }
-                } else {
-                    isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
-                }
-                console.log("Paying!!");
-                for (let index = 0; index < tx.length; index++) {
-                    if (!isAvailableAuctions) {
-                        break;
-                    }
-                    if (tx.length == 1) {
-                        try {
-                            checkSuccess = "Success";
-                            const sendEach = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
-                            console.log("Successful bid! At block:", sendEach.blockNumber);
-                        } catch (error) {
-                            console.log("Check again time");
-                            console.log("Bid fail! At block: " + error.receipt.blockNumber);
-                            checkSuccess = "Fail";
-                            timeSendReal = error.receipt.blockNumber;
+                    if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
+                        console.log("Sleep:" + (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3));
+                        await sleep(Number(startTime_[0]) + timeSendTx - timeGetAvaliableAuction - Date.now() / 1000);
+                        isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
+                        if (isAvailableAuctions) {
+                            await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
                         }
                     } else {
-                        if (index == tx.length - 1) {
-                            try {
-                                checkSuccess = "Fail"; // fail is wait pending promise
-                                biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
-                            } catch (error) {
-                                console.log("Bid fail");
-                                checkSuccess = "Fail";
-                            }
-                            console.log("Successful bid! At block:", biding[index].blockNumber);
-                        } else {
+                        isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
+                    }
+                    console.log("Paying!!");
+                    for (let index = 0; index < tx.length; index++) {
+                        if (!isAvailableAuctions) {
+                            break;
+                        }
+                        if (tx.length == 1) {
                             try {
                                 checkSuccess = "Success";
-                                biding[index] = web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                const sendEach = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                console.log("Successful bid! At block:", sendEach.blockNumber);
                             } catch (error) {
-                                console.log("Bid fail");
+                                console.log("check time again ");
+                                console.log(error);
+                                console.log("Bid fail! At block: " + error.receipt.blockNumber);
                                 checkSuccess = "Fail";
-                                next(error);
+                                timeSendReal = error.receipt.blockNumber;
+                            }
+                        } else {
+                            if (index == tx.length - 1) {
+                                try {
+                                    checkSuccess = "Success";
+                                    biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                } catch (error) {
+                                    console.log("Bid fail");
+                                    checkSuccess = "Fail";
+                                }
+                                console.log("Successful bid! At block:", biding[index].blockNumber);
+                            } else {
+                                try {
+                                    checkSuccess = "Success";
+                                    biding[index] = web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                } catch (error) {
+                                    console.log("Bid fail");
+                                    checkSuccess = "Fail";
+                                    next(error);
+                                }
                             }
                         }
                     }
+                } catch (error) {
+                    console.log("Error during bid Auction!");
+                    checkSuccess = "Fail";
                 }
-                // } catch (error) {
-                //     console.log("Error during bid Auction!");
-                //     checkSuccess = "Fail";
-                // }
                 await sleep(1000);
                 for (let op = 0; op < idList.length; op++) {
                     idList[op] = idList[op].slice(0, 1);
