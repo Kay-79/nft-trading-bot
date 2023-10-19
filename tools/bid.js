@@ -162,7 +162,7 @@ async function setup(Private_Key_) {
                 } catch (error) {}
                 try {
                     if (checkHashEach) {
-                        // await sleep(2000); //sleep to avoid pending hash
+                        await sleep(1000); //sleep to avoid pending hash
                         timeSendReal = await web3.eth.getTransaction(checkHashEach);
                         timeSendReal = await web3.eth.getBlock(timeSendReal.blockNumber);
                         timeSendReal = timeSendReal.timestamp;
