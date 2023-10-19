@@ -170,7 +170,6 @@ async function setup(Private_Key_) {
                     }
                     if (timeSendReal.toFixed() != (Number(startTime_[0]) + 120).toFixed() && timeSendReal > 1.6 * 10 ** 9) {
                         const oldTimeBid = timeSendTx;
-                        const contentTimeBid = `Expect: ${(Number(startTime_[0]) + 120).toFixed().slice(8, 10)}\nResult: ${timeSendReal.toFixed().slice(8, 10)}\nOld: ${oldTimeBid.toFixed(2)}\nNew: ${timeSendTx.toFixed(2)}`;
                         if (timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) < 1000) {
                             if (timeSendReal < Number(startTime_[0]) + 120) {
                                 timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal);
@@ -178,6 +177,7 @@ async function setup(Private_Key_) {
                                 timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 2;
                             }
                         }
+                        const contentTimeBid = `Expect: ${(Number(startTime_[0]) + 120).toFixed().slice(8, 10)}\nResult: ${timeSendReal.toFixed().slice(8, 10)}\nOld: ${oldTimeBid.toFixed(2)}\nNew: ${timeSendTx.toFixed(2)}`;
                         await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + contentTimeBid, function (error, response, body) {});
                     }
                 } catch (error) {
