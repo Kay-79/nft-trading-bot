@@ -273,7 +273,7 @@ async function checkListedAll(rate_) {
     console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed());
     sumBuyVnd = (sumBNB * bnbPrice + sumUSD + sumBuy + momoUnlist * configJson.minPrice.minUncommon) * usdPrice * rate_;
     sumSaleVnd = (sumBNB * bnbPrice + sumUSD + sumSell * 0.95 + momoUnlist * configJson.minPrice.minUncommon) * usdPrice * rate_;
-    console.log("Estimate Fund:\t", sumBuyVnd.toFixed(), "--", sumSaleVnd.toFixed());
+    // console.log("Estimate Fund:\t", sumBuyVnd.toFixed(), "--", sumSaleVnd.toFixed());
     console.log("Estimate Fund:\t", (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
     var currentdate = new Date();
     const nowSync = currentdate.getDate() + "/" + (Number(currentdate.getMonth()) + 1).toString() + "/" + currentdate.getFullYear();
