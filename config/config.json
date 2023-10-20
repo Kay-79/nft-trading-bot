@@ -5,7 +5,6 @@
     "myAcc": [
         ["0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000", "_1_0_1", true],
         ["0x55555D4de8df0c455C2Ff368253388FE669a8888", "_5_8_1", true],
-        ["0x77775a358050DE851b06603864FbD380637C7777", "_7_7_1", false],
         ["0x73A4AbD430C821B49423dB5279fb56ee72073292", "_7_3_A", true],
         ["0xA6fBE2809210CC38255959a86EC5eA13f91B636A", "_A_6_f", true],
         ["0x1DfC0656AbCfE473F968066157B0d0D740aff4e6", "_1_D_f", true],
@@ -14,8 +13,8 @@
         ["0x88888dF23F9554e4B043B00E1F4AfB39Fc078888", "_8_8_8", true]
     ],
     "minPrice": {
-        "minCommon": 2.9,
-        "minUncommon": 1.4,
+        "minCommon": 2.7,
+        "minUncommon": 1.2,
         "minUnique": 0.9,
         "minRare": 14
     },
