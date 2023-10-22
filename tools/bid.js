@@ -236,7 +236,7 @@ async function bid() {
         if (hourCache != new Date().getHours()) {
             try {
                 hourCache = new Date().getHours();
-                request(`https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: alive"+"\nTime: ${timeSendTx}`, function (error, response, body) {});
+                request(`https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: alive\nTime: ${timeSendTx}`, function (error, response, body) {});
             } catch (error) {
                 console.log("Send status fail");
             }
