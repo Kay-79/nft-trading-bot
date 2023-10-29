@@ -233,7 +233,7 @@ async function bid() {
     while (true) {
         await setup(Private_Key);
         await sleep(100);
-        if (hourCache != new Date().getHours()) {
+        if (new Date().getHours() - hourCache == 4) {
             try {
                 hourCache = new Date().getHours();
                 request(`https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: alive\nTime: ${timeSendTx}`, function (error, response, body) {});
