@@ -229,7 +229,7 @@ async function bid() {
     const Private_Key = myAccount[1];
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
-    let hourCache = -1;
+    let hourCache = new Date().getHours() - 4;
     while (true) {
         await setup(Private_Key);
         await sleep(100);
