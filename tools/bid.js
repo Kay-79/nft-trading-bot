@@ -229,11 +229,13 @@ async function bid() {
     const Private_Key = myAccount[1];
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
+    let hourCache = -1;
     while (true) {
         await setup(Private_Key);
         await sleep(100);
-        if (new Date().getHours() % 4 == 0) {
+        if (new Date().getHours() - hourCache >= 4) {
             try {
+                hourCache = new Date().getHours();
                 request(`https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: alive\nTime: ${timeSendTx}`, function (error, response, body) {});
             } catch (error) {
                 console.log("Send status fail");
