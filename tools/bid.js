@@ -156,8 +156,8 @@ async function setup(Private_Key_) {
                     }
                     priceList1 = checkSuccess + " " + gasPriceScanRaw + "\nPrices   : " + price_send.toString().replace(" ", "") + "\nAmount: " + amountList + "\nID List   : " + idList;
                     if (!isAvailableAuctions) {
-                        priceList1 = "Auction be canceled";
-                        console.log("Auction be canceled");
+                        priceList1 = `Auction be canceled by ${seller_[0]}`;
+                        console.log(priceList1);
                     }
                 } catch (error) {}
                 try {
@@ -233,7 +233,7 @@ async function bid() {
     while (true) {
         await setup(Private_Key);
         await sleep(100);
-        if (new Date().getHours() - hourCache == 4) {
+        if (new Date().getHours() - hourCache >= 4) {
             try {
                 hourCache = new Date().getHours();
                 request(`https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: alive\nTime: ${timeSendTx}`, function (error, response, body) {});
@@ -244,12 +244,13 @@ async function bid() {
     }
 }
 const checkAvailable = async (addressCheck, indexCheck, timeCheck) => {
+    // true is available
     let responseListed = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + addressCheck + "?sort=-time&page=1&limit=10").catch((e) => {
         return true;
     });
     let dataAvailable = responseListed.data.list;
     for (let index = 0; index < dataAvailable.length; index++) {
-        if (Number(indexCheck) + Number(timeCheck) == dataAvailable[index].index + dataAvailable[index].uptime) {
+        if (Number(indexCheck) == dataAvailable[index].index && Number(timeCheck) == dataAvailable[index].uptime) {
             return true;
         }
     }
