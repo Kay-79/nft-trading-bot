@@ -102,6 +102,11 @@ async function setup(Private_Key_) {
                         isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
                     }
                     console.log("Paying!!");
+                    try {
+                        checkHashEach = signed[0].transactionHash;
+                    } catch (error) {
+                        console.log("check hash fail");
+                    }
                     for (let index = 0; index < tx.length; index++) {
                         if (!isAvailableAuctions) {
                             break;
@@ -109,7 +114,6 @@ async function setup(Private_Key_) {
                         if (tx.length == 1) {
                             try {
                                 checkSuccess = "Success";
-                                checkHashEach = signed[index].transactionHash;
                                 const sendEach = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
                                 console.log("Successful bid! At block:", sendEach.blockNumber);
                             } catch (error) {
