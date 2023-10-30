@@ -55,7 +55,8 @@ async function setup(Private_Key_) {
             for (let index = 0; index < amountList.length; index++) {
                 amountBid += Number(amountList[index]);
             }
-            if (false || Date.now() / 1000 < Number(startTime_[0]) + timeSendTx - 10 + overTime) {
+            if (false || Number(startTime_[0]) + timeSendTx - 10 + overTime - Date.now() / 1000 > 0) {
+                //       Number(startTime_[0]) + timeSendTx                 - Date.now() / 1000 > 0
                 var tx = [];
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
                 if (index_.length > 1) {
@@ -92,13 +93,14 @@ async function setup(Private_Key_) {
                         signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_));
                     }
                     if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
-                        console.log("Sleep:" + (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3));
                         await sleep(Number(startTime_[0]) + timeSendTx - timeGetAvaliableAuction - Date.now() / 1000);
                         isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
                         if (isAvailableAuctions) {
+                            console.log("Sleep:" + (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3));
                             await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
                         }
                     } else {
+                        // maybe bug here
                         isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
                     }
                     console.log("Paying!!");
@@ -249,7 +251,7 @@ async function bid() {
 }
 const checkAvailable = async (addressCheck, indexCheck, timeCheck) => {
     // true is available
-    let responseListed = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + addressCheck + "?sort=-time&page=1&limit=10").catch((e) => {
+    let responseListed = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + addressCheck + "?sort=-time&page=1&limit=30").catch((e) => {
         return true;
     });
     let dataAvailable = responseListed.data.list;
