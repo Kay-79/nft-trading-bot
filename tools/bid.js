@@ -177,7 +177,7 @@ async function setup(Private_Key_) {
                     if (timeSendReal.toFixed() != (Number(startTime_[0]) + 120).toFixed() && timeSendReal > 1.6 * 10 ** 9) {
                         const oldTimeBid = timeSendTx;
                         if (timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) < 1000) {
-                            if (timeSendReal < Number(startTime_[0]) + 120 || timeSendReal - Number(startTime_[0]) + 120 > 10) {
+                            if (timeSendReal < Number(startTime_[0]) + 120 || timeSendReal - (Number(startTime_[0]) + 120) > 10) {
                                 timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal);
                             } else {
                                 timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 2;
