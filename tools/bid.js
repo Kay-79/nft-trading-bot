@@ -105,7 +105,9 @@ async function setup(Private_Key_) {
                     }
                     console.log("Paying!!");
                     try {
-                        checkHashEach = signed[0].transactionHash;
+                        if (dataBid.length < 14) {
+                            checkHashEach = signed[0].transactionHash;
+                        }
                     } catch (error) {
                         console.log("check hash fail");
                     }
