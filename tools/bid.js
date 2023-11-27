@@ -14,7 +14,7 @@ process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
 });
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
-const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
+const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed3.bnbchain.org"));
 // const web3sc = new Web3(new Web3.providers.WebsocketProvider('wss://solemn-wild-aura.bsc.discover.quiknode.pro/9fbdf28f69f47aa85c76222be804b4224c2dbd22/'));
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
@@ -22,13 +22,13 @@ const abi = JSON.parse(fs.readFileSync("./config/abiMobox.json"));
 const contractAddress = configJson.accBuy;
 const contract = new web3.eth.Contract(abi, contractAddress);
 async function setup(Private_Key_) {
-    inputdata = "Nonce";
-    Bid = false;
+    inputdata = "None";
+    var isBid = false;
     try {
         const inputdata = fs.readFileSync("waitBid.txt", "utf8");
         dataBid = inputdata.split("\n");
         if (inputdata.length > 40) {
-            Bid = true;
+            isBid = true;
             for (let index = dataBid.length - 1; index >= 0; index--) {
                 if (dataBid[index] == "\r" || dataBid[index] == "") {
                     dataBid.splice(index, 1);
@@ -36,11 +36,11 @@ async function setup(Private_Key_) {
             }
         }
     } catch (err) {}
-    if (Bid == true) {
+    if (isBid) {
         var timeSendReal = 0;
         const startTime_ = dataBid[3].split(",");
         const index_ = dataBid[2].split(",");
-        if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 10) {
+        if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 15) {
             const seller_ = dataBid[0].split(",");
             const priceList = dataBid[1].split(",");
             const amountList = dataBid[5].split(",");
@@ -50,13 +50,13 @@ async function setup(Private_Key_) {
             for (let index = 0; index < gasPriceScanRaw.length; index++) {
                 gasPriceScan[index] = Number((Number(gasPriceScanRaw[index]) * 10 ** 9).toFixed());
             }
-            const gasPriceScanFake = Number((Number(dataBid[6].split(",")) * 10 ** 9 * 2).toFixed());
+            // const gasPriceScanFake = Number((Number(dataBid[6].split(",")) * 10 ** 9 * 2).toFixed());
             let amountBid = 0;
             for (let index = 0; index < amountList.length; index++) {
                 amountBid += Number(amountList[index]);
             }
-            if (false || Number(startTime_[0]) + timeSendTx - 10 + overTime - Date.now() / 1000 > 0) {
-                //       Number(startTime_[0]) + timeSendTx                 - Date.now() / 1000 > 0
+            if (false || Number(startTime_[0]) + timeSendTx + overTime - Date.now() / 1000 > 0) {
+                //       Number(startTime_[0]) + timeSendTx            - Date.now() / 1000 > 0
                 var tx = [];
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
                 if (index_.length > 1) {
@@ -176,23 +176,25 @@ async function setup(Private_Key_) {
                         timeSendReal = timeSendReal.timestamp;
                         console.log("timeStampFail:", timeSendReal);
                     }
-                    if (timeSendReal.toFixed() != (Number(startTime_[0]) + 120).toFixed() && timeSendReal > 1.6 * 10 ** 9) {
+                    if (timeSendReal.toFixed() != (Number(startTime_[0]) + 120).toFixed() && timeSendReal > 1.7 * 10 ** 9) {
                         const oldTimeBid = timeSendTx;
-                        if (timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) < 1000) {
+                        if (Math.abs(Number(startTime_[0]) + 120 - timeSendReal) < 3600) {
                             if (timeSendReal < Number(startTime_[0]) + 120 || timeSendReal - (Number(startTime_[0]) + 120) > 10) {
                                 timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal);
+                                console.log("timeSend");
                             } else {
                                 timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 2;
+                                console.log("timeSend / 2");
                             }
                         }
                         const contentTimeBid = `Expect: ${(Number(startTime_[0]) + 120).toFixed().slice(8, 10)}\nResult: ${timeSendReal.toFixed().slice(8, 10)}\nOld: ${oldTimeBid.toFixed(2)}\nNew: ${timeSendTx.toFixed(2)}`;
-                        await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + contentTimeBid, function (error, response, body) {});
+                        request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + contentTimeBid, function (error, response, body) {});
                     }
                 } catch (error) {
                     console.log(error);
                 }
                 try {
-                    await request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + priceList1, function (error, response, body) {});
+                    request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + priceList1, function (error, response, body) {});
                 } catch (error) {}
             } else {
                 console.log("Over time (" + overTime.toString() + " seconds)!!");
@@ -207,7 +209,7 @@ async function setup(Private_Key_) {
                 }
             } catch (err) {}
             dataBid.splice(0, 7);
-            content = "";
+            let content = "";
             for (let iii = 0; iii < dataBid.length; iii++) {
                 if (iii == 0) {
                     content += dataBid[iii].toString();
