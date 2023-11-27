@@ -325,6 +325,7 @@ async function setup() {
 }
 
 async function getMinPrice() {
+    console.log(Date.now());
     try {
         budget = await contract.methods.balanceOf(accCheck).call();
         budget = budget / 10 ** 18;
