@@ -264,7 +264,7 @@ const checkAvailable = async (addressCheck, indexCheck, timeCheck) => {
             return true;
         }
     }
-    return false;
+    return true;
 };
 
 const overTime = 60;
