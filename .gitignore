@@ -8,3 +8,4 @@ data/dataMomo.txt
 .env
 .vscode
 waitBid.txt
+test*.js
