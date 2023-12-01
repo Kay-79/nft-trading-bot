@@ -70,7 +70,7 @@ async function getMpListed(amountTx) {
         }
         if (mpListed.length > 0) {
             cacheBlock = (Number(mpListed[mpListed.length - 1].blockNumber) + 1).toFixed();
-            console.log(`auctors_ ${auctors_}\nnowPrices_ ${nowPrices_}\npriceDec_ ${priceDec_}\nhashrates_ ${hashrates_}\nindexs_ ${indexs_}\nuptimes_ ${uptimes_}\nids_ ${ids_}\namounts_ ${amounts_}\nbuyMode_ ${buyMode}`);
+            // console.log(`auctors_ ${auctors_}\nnowPrices_ ${nowPrices_}\npriceDec_ ${priceDec_}\nhashrates_ ${hashrates_}\nindexs_ ${indexs_}\nuptimes_ ${uptimes_}\nids_ ${ids_}\namounts_ ${amounts_}\nbuyMode_ ${buyMode}`);
         }
         console.log(cacheBlock);
     } catch (error) {

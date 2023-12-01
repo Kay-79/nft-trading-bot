@@ -1,11 +1,28 @@
 {
-  "dependencies": {
-    "@openzeppelin/contracts": "^5.0.0",
-    "@openzeppelin/contracts-upgradeable": "^5.0.0",
-    "axios": "^1.4.0",
-    "dotenv": "^16.3.1",
-    "ethers": "^5.7.2",
-    "request": "^2.88.2",
-    "web3": "^1.10.0"
-  }
+    "dependencies": {
+        "@openzeppelin/contracts": "^5.0.0",
+        "@openzeppelin/contracts-upgradeable": "^5.0.0",
+        "axios": "^1.4.0",
+        "dotenv": "^16.3.1",
+        "ethers": "^5.7.2",
+        "request": "^2.88.2",
+        "web3": "^1.10.0"
+    },
+    "devDependencies": {
+        "concurrently": "^8.2.2"
+    },
+    "name": "buy-mobox-submarine",
+    "description": "-   Banker is 58",
+    "version": "1.0.0",
+    "main": "",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "bid": "node ./tools/bid",
+        "find": "node ./tools/findBSC",
+        "change": "node ./tools/change",
+        "dev": "concurrently --kill-others \"npm run bid\" \"npm run find\" \"npm run change\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
 }
