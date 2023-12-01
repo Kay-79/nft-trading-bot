@@ -127,6 +127,11 @@ async function checkChangePrice(indexId) {
 }
 
 async function getPriceToSell(address, boolMin) {
+    if (!amountBatchToCreate) {
+        console.log("Don't have momo to create");
+        exit();
+    }
+    idMomoBought = [];
     for (let index1 = 1; index1 < 51; index1++) {
         await checkAmountBuy(address, index1);
         if (idMomoBought.length >= value || amountBid >= valueBid) {
@@ -138,6 +143,9 @@ async function getPriceToSell(address, boolMin) {
     if (boolMin) {
         await sleep(1000);
         for (let indexMomo = 0; indexMomo < idMomoBought.length; indexMomo++) {
+            if (idMomoBought.length > amountBatchToCreate) {
+                break;
+            }
             if (idMomoBought[indexMomo] == idMomoBought[indexMomo - 1]) {
                 priceSell[indexMomo] = priceSell[indexMomo - 1];
             } else {
@@ -312,6 +320,8 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         exit();
     }
     await checkIndex(accSell);
+    amountUnList / 6 > indexs.length ? (amountBatchToCreate = indexs.length * 6) : (amountBatchToCreate = amountUnList);
+    console.log(amountBatchToCreate);
     await getPriceToSell(accSell, true); //_1_0_1
     let count = 0;
     while (true) {
@@ -348,6 +358,7 @@ timeWait = 5 * 60 * 60 * 1; //wait latest change price
 idMomoBought = [];
 priceSell = [];
 myAccounts = [];
+amountBatchToCreate = 0;
 const myAcc = configJson.myAcc;
 for (let index = 0; index < myAcc.length; index++) {
     myAccounts.push(myAcc[index][0]);
@@ -358,6 +369,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 110; // without rare and epic
+value = 6; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_1_D_f");
+createBatch(3.001, 1000000, "", "_8_8_8");
