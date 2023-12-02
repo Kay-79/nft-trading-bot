@@ -70,9 +70,9 @@ async function getMpListed(amountTx) {
         }
         if (mpListed.length > 0) {
             cacheBlock = (Number(mpListed[mpListed.length - 1].blockNumber) + 1).toFixed();
+            console.log(cacheBlock);
             // console.log(`auctors_ ${auctors_}\nnowPrices_ ${nowPrices_}\npriceDec_ ${priceDec_}\nhashrates_ ${hashrates_}\nindexs_ ${indexs_}\nuptimes_ ${uptimes_}\nids_ ${ids_}\namounts_ ${amounts_}\nbuyMode_ ${buyMode}`);
         }
-        console.log(cacheBlock);
     } catch (error) {
         var currentdate = new Date();
         var datetime = "Last Sync: " + currentdate.getDate() + "/" + (currentdate.getMonth() + 1) + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
