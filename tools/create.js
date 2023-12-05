@@ -143,14 +143,14 @@ async function getPriceToSell(address, boolMin) {
     if (boolMin) {
         await sleep(1000);
         for (let indexMomo = 0; indexMomo < idMomoBought.length; indexMomo++) {
-            if (idMomoBought.length > amountBatchToCreate) {
-                break;
-            }
             if (idMomoBought[indexMomo] == idMomoBought[indexMomo - 1]) {
                 priceSell[indexMomo] = priceSell[indexMomo - 1];
             } else {
                 await checkChangePrice(indexMomo);
                 await sleep(1000);
+            }
+            if (indexMomo + 1 >= amountBatchToCreate) {
+                break;
             }
         }
     }
@@ -369,6 +369,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 6; // without rare and epic
+value = 14; // without rare and epic
 
 createBatch(3.001, 1000000, "", "_8_8_8");
