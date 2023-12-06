@@ -278,12 +278,13 @@ async function checkListedAll(rate_) {
     var currentdate = new Date();
     const nowSync = currentdate.getDate() + "/" + (Number(currentdate.getMonth()) + 1).toString() + "/" + currentdate.getFullYear();
     var datetime = "Last Sync: " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-    console.log(
-        sumMomo + "/" + momoUnlist + " list/unlist" + " Momos: " + sumMomoCM + " Common, " + sumMomoUCM + " Uncommon, " + sumMomoUNQ + " Unique, " + sumMomoR + " Rare, " + sumMomoE + " Epic, " + sumMomoL + " Legend (" + sumBuy.toFixed() + ",",
-        (sumSell * 0.95).toFixed() + ")",
-        "Profit: " + countProfit + " - Lost: " + countLoss + " - Tie: " + countTie,
-        datetime
-    );
+    // console.log(
+    //     sumMomo + "/" + momoUnlist + " list/unlist" + " Momos: " + sumMomoCM + " Common, " + sumMomoUCM + " Uncommon, " + sumMomoUNQ + " Unique, " + sumMomoR + " Rare, " + sumMomoE + " Epic, " + sumMomoL + " Legend (" + sumBuy.toFixed() + ",",
+    //     (sumSell * 0.95).toFixed() + ")",
+    //     "Profit: " + countProfit + " - Lost: " + countLoss + " - Tie: " + countTie,
+    //     datetime
+    // );
+    console.log(`${sumMomo}/${momoUnlist} Momos: ${sumMomoCM} Common, ${sumMomoUCM} Uncommon, ${sumMomoUNQ} Unique, ${sumMomoR} Rare, ${sumMomoE} Epic, ${sumMomoL} Legend (${sumBuy.toFixed()}, ${(sumSell * 0.95).toFixed()}) Profit: ${countProfit} - Lost: ${countLoss} - Tie: ${countTie} ${datetime}`);
     var logsBalance = fs.readFileSync("logsBalance.csv", "utf8");
     var logsBalanceCheck = logsBalance.split("\n");
     logsBalanceCheck = logsBalanceCheck[logsBalanceCheck.length - 1].split("\t");
