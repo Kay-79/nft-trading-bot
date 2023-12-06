@@ -279,7 +279,7 @@ async function checkListedAll(rate_) {
     const nowSync = currentdate.getDate() + "/" + (Number(currentdate.getMonth()) + 1).toString() + "/" + currentdate.getFullYear();
     var datetime = "Last Sync: " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
     console.log(
-        sumMomo + " Momos: " + sumMomoCM + " Common, " + sumMomoUCM + " Uncommon, " + sumMomoUNQ + " Unique, " + sumMomoR + " Rare, " + sumMomoE + " Epic, " + sumMomoL + " Legend (" + sumBuy.toFixed() + ",",
+        sumMomo + "/" + momoUnlist + " list/unlist" + " Momos: " + sumMomoCM + " Common, " + sumMomoUCM + " Uncommon, " + sumMomoUNQ + " Unique, " + sumMomoR + " Rare, " + sumMomoE + " Epic, " + sumMomoL + " Legend (" + sumBuy.toFixed() + ",",
         (sumSell * 0.95).toFixed() + ")",
         "Profit: " + countProfit + " - Lost: " + countLoss + " - Tie: " + countTie,
         datetime
