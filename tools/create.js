@@ -69,7 +69,7 @@ async function checkChangePrice(indexId) {
         return false;
     }
     // console.log(data3)
-    console.log(idMomoBought[indexId].toString() + "-" + (indexId + 1).toString() + "/" + idMomoBought.length.toString());
+    console.log(idMomoBought[indexId].toString() + "-" + (indexId + 1).toString() + "/" + amountBatchToCreate.toString());
     if (myAccounts.includes(data3[0].auctor)) {
         priceSell[indexId] = (Number(data3[0].nowPrice) / 10 ** 9).toFixed(3);
         for (let index_z = 0; index_z < data3.length; index_z++) {
@@ -369,6 +369,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 14; // without rare and epic
+value = 116; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_8_8_8");
+createBatch(3.001, 1000000, "", "_2_B_4");
