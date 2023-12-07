@@ -110,8 +110,8 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
 }
 
 indexs = [0];
-ids = [["11046", "13026"]];
-prices = [["3.6", "4.699"]];
+ids = [['13033', '13035']];
+prices = [["3.479", "3.489"]];
 
 console.log(indexs.length, ids.length, prices.length);
 for (let ii = 0; ii < prices.length; ii++) {
@@ -120,5 +120,5 @@ for (let ii = 0; ii < prices.length; ii++) {
       Math.round(Number(prices[ii][jj]) * 10 ** 5).toString() + "0000000000000";
   }
 }
-const consractAddress = "0xFEA667353AB89E8B52Fb1eD18CA515e85296D596";
+const consractAddress = "0x2B4F0e0498A832275af360CbE832da8135A5d9C2";
 createBatch(3.001, 1000000, "", "_1_0_1");

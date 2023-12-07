@@ -127,17 +127,18 @@ async function checkChangePrice(indexId) {
 }
 
 async function getPriceToSell(address, boolMin) {
-    if (!amountBatchToCreate) {
-        console.log("Don't have momo to create");
-        exit();
-    }
     idMomoBought = [];
     for (let index1 = 1; index1 < 51; index1++) {
         await checkAmountBuy(address, index1);
-        if (idMomoBought.length >= value || amountBid >= valueBid) {
+        if (idMomoBought.length >= value || amountBid >= valueBid || idMomoBought.length >= amountBatchToCreate) {
             break;
         }
         await sleep(200);
+    }
+    if (!amountBatchToCreate) {
+        console.log(idMomoBought);
+        console.log("Don't have momo to create");
+        exit();
     }
     idMomoBought.reverse();
     if (boolMin) {
@@ -369,6 +370,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 116; // without rare and epic
+value = 2; // without rare and epic
 
 createBatch(3.001, 1000000, "", "_2_B_4");
