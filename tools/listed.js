@@ -277,15 +277,15 @@ async function checkListedAll(rate_) {
     logsBalanceCheck = logsBalanceCheck[logsBalanceCheck.length - 1].split("\t");
     const lastBalance = logsBalanceCheck[0];
     const lastSync = logsBalanceCheck[1];
-    if (lastSync != nowSync) {
+    if (lastSync != nowSync && rate_ == 0.1) {
         console.log("New save");
-        fs.writeFile("logsBalance" + ".csv", logsBalance + "\n" + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() + "\t" + nowSync, (err) => {
+        fs.writeFile("logsBalance.csv", logsBalance + "\n" + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() + "\t" + nowSync, (err) => {
             if (err) {
                 console.error(err);
             }
         });
     } else {
-        if (Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) - Number(lastBalance) > 1) {
+        if (Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) - Number(lastBalance) > 1 && rate_ == 0.1) {
             console.log("Save max", Number(lastBalance).toFixed(), "to", Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
             logsBalanceCheck = logsBalance.split("\n");
             logsBalance = "";
