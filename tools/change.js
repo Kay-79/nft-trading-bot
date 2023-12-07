@@ -248,7 +248,7 @@ async function loopCheck(times) {
 }
 // 0
 const minChange = 0.001;
-timeWait = 10 * 60 * 60 * 1; //wait latest change price of momo (hour)
+timeWait = 18 * 60 * 60 * 1; //wait latest change price of momo (hour)
 delayChange = 90 * 10 ** 3; //delay to update api (sec)
 myAccounts = [];
 const myAcc = configJson.myAcc;
