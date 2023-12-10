@@ -10,7 +10,8 @@
         ["0x1DfC0656AbCfE473F968066157B0d0D740aff4e6", "_1_D_f", true],
         ["0x2B4F0e0498A832275af360CbE832da8135A5d9C2", "_2_B_4", true],
         ["0xbf6F2114A230B399F0A9085AC0FC27Bd4148a465", "_b_f_6", true],
-        ["0x88888dF23F9554e4B043B00E1F4AfB39Fc078888", "_8_8_8", true]
+        ["0x88888dF23F9554e4B043B00E1F4AfB39Fc078888", "_8_8_8", true],
+        ["0x0000a7514Bc1e72058B709A713d20c1fE68b7777", "_0_0_7", true]
     ],
     "minPrice": {
         "minCommon": 3.3,
