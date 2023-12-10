@@ -86,7 +86,6 @@ function checkPriceBuy(address_, page) {
 async function checkChangePrice(indexId) {
     try {
         let response3 = await axios.get("https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=5&category=&vType=&sort=price&pType=" + idMomo[indexId]);
-        await sleep(20000 + 20000 * Math.random());
         data3 = response3.data;
         console.log(idMomo[indexId]);
     } catch (error) {
@@ -231,6 +230,7 @@ async function main(address_, boolMin, Private_Key_) {
                 }
                 boolChange[indexMomo_] = " ";
             }
+            await sleep(20000 + 20000 * Math.random());
         }
     }
     await sleep(1000);
