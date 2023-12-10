@@ -106,7 +106,7 @@ async function checkChangePrice(indexId) {
         }
         // else {
         accListCache.push(data3.list[indexid_].id);
-        indexListCache.push(data3.list[indexid_].index);
+        indexListCache.push(data3.list[indexid_].index); // to check change same momo
         // console.log(indexListCache.includes(Number(indexMomo[indexId])))
         // console.log(data3.list[indexid_].id)
         // }

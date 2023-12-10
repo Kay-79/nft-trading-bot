@@ -13,9 +13,9 @@
         ["0x88888dF23F9554e4B043B00E1F4AfB39Fc078888", "_8_8_8", true]
     ],
     "minPrice": {
-        "minCommon": 2.7,
-        "minUncommon": 1.2,
-        "minUnique": 0.9,
+        "minCommon": 3.3,
+        "minUncommon": 1.7,
+        "minUnique": 1.3,
         "minRare": 14
     },
     "timeBid": 131.5,
