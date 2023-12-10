@@ -12,6 +12,9 @@ function sleep(ms) {
         setTimeout(resolve, ms);
     });
 }
+const shuffleArray = (arr) => {
+    arr.sort(() => Math.random() - 0.5);
+};
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.public.blastapi.io"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.defibit.io"));
 minCM = configJson.minPrice.minCommon;
@@ -97,8 +100,9 @@ async function checkChangePrice(indexId) {
                 // time wait x2 for second momo
                 priceCache = priceSell[indexId]; // add to compare price
                 priceSell[indexId] = (Number(data3.list[indexid_].nowPrice) / 10 ** 9).toFixed(3);
-                if (priceCache > priceSell[indexId]) {
+                if (priceCache > priceSell[indexId] && idChangeds.includes(idMomo[indexId]) == false) {
                     boolChange[indexId] = "TRUE";
+                    idChangeds.push(idMomo[indexId]);
                     console.log(idMomo[indexId] + " " + priceCache + " to " + priceSell[indexId]);
                 }
             }
@@ -232,12 +236,14 @@ async function main(address_, boolMin, Private_Key_) {
 async function loopCheck(times) {
     for (let index = 0; index < times; index++) {
         console.log("Loop:", index.toString() + "/" + times.toString());
+        idChangeds = [];
+        shuffleArray(myAccounts);
         for (let indexAccs = 0; indexAccs < myAccounts.length; indexAccs++) {
-            console.log("Account:", myAccounts[indexAccs]);
             let isContract = await web3.eth.getStorageAt(myAccounts[indexAccs]);
             if (!Number(isContract)) {
                 continue;
             }
+            console.log("Account:", myAccounts[indexAccs]);
             await main(myAccounts[indexAccs], true, Private_Key);
             await sleep(150000 + 300000 * Math.random()); //5mins per check
         }
