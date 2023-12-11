@@ -12,11 +12,11 @@ function sleep(ms) {
         setTimeout(resolve, ms);
     });
 }
-const shuffleArray = (arr) => {
-    arr.sort(() => Math.random() - 0.5);
-};
+const shuffleArray = require("../utils/change/shuffleArray");
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.public.blastapi.io"));
-const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.defibit.io"));
+const web3 = new Web3(
+    new Web3.providers.HttpProvider("https://bsc-dataseed1.defibit.io")
+);
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
 minUNQ = configJson.minPrice.minUnique;
@@ -39,7 +39,11 @@ flagID = false;
 flagCountMomo = 0;
 async function checkListed(address) {
     axios
-        .get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-time&page=1&limit=128")
+        .get(
+            "https://nftapi.mobox.io/auction/list/BNB/" +
+                address +
+                "?sort=-time&page=1&limit=128"
+        )
         .then((response) => {
             const data = response.data;
             for (let i = 0; i < data.list.length; i++) {
@@ -56,36 +60,62 @@ async function checkListed(address) {
     await sleep(4000);
 }
 function checkPriceBuy(address_, page) {
-    axios.get("https://nftapi.mobox.io/auction/logs_new/" + address_ + "?&page=" + page + "&limit=50").then((response2) => {
-        const data2 = response2.data;
-        for (let i = 0; i < data2.list.length; i++) {
-            let sum = 0;
-            let maxAmount = 0;
-            data2.list[i].amounts.map(function (value) {
-                sum += Number(value);
-                if (Number(value) > maxAmount) {
-                    maxAmount = value;
-                }
-            });
-            if (data2.list[i].bidder == address_) {
-                for (let idx2 = 0; idx2 < data2.list[i].ids.length; idx2++) {
-                    for (let maxIndex = 0; maxIndex < maxAmount; maxIndex++) {
-                        for (let idx3 = 0; idx3 < idMomo.length; idx3++) {
-                            if (idMomo[idx3] == data2.list[i].ids[idx2] && priceBuy[idx3] == 0) {
-                                priceBuy[idx3] = Number(Number(data2.list[i].bidPrice) / 10 ** 9 / sum).toFixed(3);
-                                flagCountMomo += 1;
-                                break;
+    axios
+        .get(
+            "https://nftapi.mobox.io/auction/logs_new/" +
+                address_ +
+                "?&page=" +
+                page +
+                "&limit=50"
+        )
+        .then((response2) => {
+            const data2 = response2.data;
+            for (let i = 0; i < data2.list.length; i++) {
+                let sum = 0;
+                let maxAmount = 0;
+                data2.list[i].amounts.map(function (value) {
+                    sum += Number(value);
+                    if (Number(value) > maxAmount) {
+                        maxAmount = value;
+                    }
+                });
+                if (data2.list[i].bidder == address_) {
+                    for (
+                        let idx2 = 0;
+                        idx2 < data2.list[i].ids.length;
+                        idx2++
+                    ) {
+                        for (
+                            let maxIndex = 0;
+                            maxIndex < maxAmount;
+                            maxIndex++
+                        ) {
+                            for (let idx3 = 0; idx3 < idMomo.length; idx3++) {
+                                if (
+                                    idMomo[idx3] == data2.list[i].ids[idx2] &&
+                                    priceBuy[idx3] == 0
+                                ) {
+                                    priceBuy[idx3] = Number(
+                                        Number(data2.list[i].bidPrice) /
+                                            10 ** 9 /
+                                            sum
+                                    ).toFixed(3);
+                                    flagCountMomo += 1;
+                                    break;
+                                }
                             }
                         }
                     }
                 }
             }
-        }
-    });
+        });
 }
 async function checkChangePrice(indexId) {
     try {
-        let response3 = await axios.get("https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=5&category=&vType=&sort=price&pType=" + idMomo[indexId]);
+        let response3 = await axios.get(
+            "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=5&category=&vType=&sort=price&pType=" +
+                idMomo[indexId]
+        );
         data3 = response3.data;
         console.log(idMomo[indexId]);
     } catch (error) {
@@ -95,16 +125,39 @@ async function checkChangePrice(indexId) {
     let accListCache = [];
     let indexListCache = [];
     for (let indexid_ = 0; indexid_ < data3.list.length; indexid_++) {
-        if (myAccounts.includes(data3.list[indexid_].auctor) == false && indexListCache.includes(Number(indexMomo[indexId])) == false) {
+        if (
+            myAccounts.includes(data3.list[indexid_].auctor) == false &&
+            indexListCache.includes(Number(indexMomo[indexId])) == false
+        ) {
             //fix same momo
-            if (((Number(data3.list[indexid_].nowPrice) / 10 ** 9) * 0.95 - priceBuy[indexId] > canLost || sellOff) && Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) > timeWait * (indexid_ + 1)) {
+            if (
+                ((Number(data3.list[indexid_].nowPrice) / 10 ** 9) * 0.95 -
+                    priceBuy[indexId] >
+                    canLost ||
+                    sellOff) &&
+                Number(Date.now() / 1000).toFixed() -
+                    Number(data3.list[indexid_].uptime) >
+                    timeWait * (indexid_ + 1)
+            ) {
                 // time wait x2 for second momo
                 priceCache = priceSell[indexId]; // add to compare price
-                priceSell[indexId] = (Number(data3.list[indexid_].nowPrice) / 10 ** 9).toFixed(3);
-                if (priceCache > priceSell[indexId] && idChangeds.includes(idMomo[indexId]) == false) {
+                priceSell[indexId] = (
+                    Number(data3.list[indexid_].nowPrice) /
+                    10 ** 9
+                ).toFixed(3);
+                if (
+                    priceCache > priceSell[indexId] &&
+                    idChangeds.includes(idMomo[indexId]) == false
+                ) {
                     boolChange[indexId] = "TRUE";
                     idChangeds.push(idMomo[indexId]);
-                    console.log(idMomo[indexId] + " " + priceCache + " to " + priceSell[indexId]);
+                    console.log(
+                        idMomo[indexId] +
+                            " " +
+                            priceCache +
+                            " to " +
+                            priceSell[indexId]
+                    );
                 }
             }
             break;
@@ -126,28 +179,36 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
     for (let index = 0; index < myAccounts.length; index++) {
         if (address_ == myAccounts[index]) {
             contract = new web3.eth.Contract(abi, address_);
-            encoded = contract.methods.changePrice(index_, priceChange_, priceChange_, 2).encodeABI();
-            await web3.eth.getTransactionCount("0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000").then((nonce) => {
-                // console.log(nonceAcc, nonce)
-                tx = {
-                    nonce: nonce + nonceAcc[0],
-                    from: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
-                    gas: 57865,
-                    gasPrice: gasPriceScan,
-                    to: address_,
-                    value: 0,
-                    data: encoded,
-                };
-            });
+            encoded = contract.methods
+                .changePrice(index_, priceChange_, priceChange_, 2)
+                .encodeABI();
+            await web3.eth
+                .getTransactionCount(
+                    "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000"
+                )
+                .then((nonce) => {
+                    // console.log(nonceAcc, nonce)
+                    tx = {
+                        nonce: nonce + nonceAcc[0],
+                        from: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
+                        gas: 57865,
+                        gasPrice: gasPriceScan,
+                        to: address_,
+                        value: 0,
+                        data: encoded,
+                    };
+                });
             nonceAcc[0] += 1;
             break;
         }
     }
     try {
         await sleep(500);
-        await web3.eth.accounts.signTransaction(tx, Private_Key_).then((signed) => {
-            signArray.push(signed);
-        });
+        await web3.eth.accounts
+            .signTransaction(tx, Private_Key_)
+            .then((signed) => {
+                signArray.push(signed);
+            });
         console.log(signArray.length + "/" + amountChange);
         await sleep(500);
         if (signArray.length >= amountChange) {
@@ -156,13 +217,21 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                 try {
                     // console.log('Changing!')
                     if (index == signArray.length - 1) {
-                        await web3.eth.sendSignedTransaction(signArray[index].rawTransaction).catch((err) => {
-                            console.error(err);
-                        });
+                        await web3.eth
+                            .sendSignedTransaction(
+                                signArray[index].rawTransaction
+                            )
+                            .catch((err) => {
+                                console.error(err);
+                            });
                     } else {
-                        web3.eth.sendSignedTransaction(signArray[index].rawTransaction).catch((err) => {
-                            console.error(err);
-                        });
+                        web3.eth
+                            .sendSignedTransaction(
+                                signArray[index].rawTransaction
+                            )
+                            .catch((err) => {
+                                console.error(err);
+                            });
                     }
                     // console.log(signChange.blockNumber)
                 } catch (error) {
@@ -199,7 +268,11 @@ async function main(address_, boolMin, Private_Key_) {
     // }
     if (boolMin) {
         await sleep(5000);
-        for (let indexMomo_ = idMomo.length - 1; indexMomo_ >= 0; indexMomo_--) {
+        for (
+            let indexMomo_ = idMomo.length - 1;
+            indexMomo_ >= 0;
+            indexMomo_--
+        ) {
             if (signArray.length > amountChange + 1) {
                 // this code to check send bundle changePrice
                 nonceAcc = File_Key.map((x) => 0);
@@ -214,19 +287,79 @@ async function main(address_, boolMin, Private_Key_) {
             if (boolChange[indexMomo_] == "TRUE") {
                 // console.log('Wait!')
                 idCache.push(idMomo[indexMomo_]);
-                if (Number(idMomo[indexMomo_]) > 10000 && Number(idMomo[indexMomo_]) < 20000 && Number(priceSell[indexMomo_]) > minCM - minChange) {
-                    await changePrice(indexMomo[indexMomo_], (Number((Number(priceSell[indexMomo_]) - minChange).toFixed(3)) * 10 ** 3).toFixed().toString() + "000000000000000", Private_Key_, address_);
+                if (
+                    Number(idMomo[indexMomo_]) > 10000 &&
+                    Number(idMomo[indexMomo_]) < 20000 &&
+                    Number(priceSell[indexMomo_]) > minCM - minChange
+                ) {
+                    await changePrice(
+                        indexMomo[indexMomo_],
+                        (
+                            Number(
+                                (
+                                    Number(priceSell[indexMomo_]) - minChange
+                                ).toFixed(3)
+                            ) *
+                            10 ** 3
+                        )
+                            .toFixed()
+                            .toString() + "000000000000000",
+                        Private_Key_,
+                        address_
+                    );
                     // console.log('Done change!')
-                } else if (Number(idMomo[indexMomo_]) > 20000 && Number(idMomo[indexMomo_]) < 30000 && Number(priceSell[indexMomo_]) > minUCM - minChange) {
-                    await changePrice(indexMomo[indexMomo_], (Number((Number(priceSell[indexMomo_]) - minChange).toFixed(3)) * 10 ** 3).toFixed().toString() + "000000000000000", Private_Key_, address_);
+                } else if (
+                    Number(idMomo[indexMomo_]) > 20000 &&
+                    Number(idMomo[indexMomo_]) < 30000 &&
+                    Number(priceSell[indexMomo_]) > minUCM - minChange
+                ) {
+                    await changePrice(
+                        indexMomo[indexMomo_],
+                        (
+                            Number(
+                                (
+                                    Number(priceSell[indexMomo_]) - minChange
+                                ).toFixed(3)
+                            ) *
+                            10 ** 3
+                        )
+                            .toFixed()
+                            .toString() + "000000000000000",
+                        Private_Key_,
+                        address_
+                    );
                     // console.log('Done change!')
-                } else if (Number(idMomo[indexMomo_]) > 30000 && Number(idMomo[indexMomo_]) < 40000 && Number(priceSell[indexMomo_]) > minUNQ - minChange) {
-                    await changePrice(indexMomo[indexMomo_], (Number((Number(priceSell[indexMomo_]) - minChange).toFixed(3)) * 10 ** 3).toFixed().toString() + "000000000000000", Private_Key_, address_);
+                } else if (
+                    Number(idMomo[indexMomo_]) > 30000 &&
+                    Number(idMomo[indexMomo_]) < 40000 &&
+                    Number(priceSell[indexMomo_]) > minUNQ - minChange
+                ) {
+                    await changePrice(
+                        indexMomo[indexMomo_],
+                        (
+                            Number(
+                                (
+                                    Number(priceSell[indexMomo_]) - minChange
+                                ).toFixed(3)
+                            ) *
+                            10 ** 3
+                        )
+                            .toFixed()
+                            .toString() + "000000000000000",
+                        Private_Key_,
+                        address_
+                    );
                     // console.log('Done change!')
                 } else if (Number(idMomo[indexMomo_]) > 40000) {
-                    console.log(indexMomo[indexMomo_], "Require set price manual!");
+                    console.log(
+                        indexMomo[indexMomo_],
+                        "Require set price manual!"
+                    );
                 } else {
-                    console.log(indexMomo[indexMomo_], "Require min price, not change!");
+                    console.log(
+                        indexMomo[indexMomo_],
+                        "Require min price, not change!"
+                    );
                 }
                 boolChange[indexMomo_] = " ";
             }
