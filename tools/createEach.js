@@ -1,12 +1,21 @@
 const fs = require("fs");
 const { exit } = require("process");
+const getEmptyIndexs = require("../utils/listed/getEmptyIndexs");
 
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
     });
 }
-async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
+async function sendTxt(
+    gasPrice_,
+    gasLimit_,
+    index_,
+    ids_,
+    prices_,
+    hexData_,
+    nameFile_
+) {
     try {
         const inputdata = fs.readFileSync("myAccount_1_0_1.txt", "utf8");
         myAccount = inputdata.split("\n");
@@ -16,7 +25,9 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     }
     const Private_Key = myAccount[1];
     const Web3 = require("web3");
-    const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
+    const web3 = new Web3(
+        new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org")
+    );
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     const abi = JSON.parse(fs.readFileSync("./config/abiMobox.json"));
@@ -29,7 +40,9 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     encoded = "";
     signArray = "";
     if (hexData_.length == 0) {
-        encoded = contract.methods.createAuctionBatch(index_, emptyVar, emptyVar, ids_, prices_).encodeABI();
+        encoded = contract.methods
+            .createAuctionBatch(index_, emptyVar, emptyVar, ids_, prices_)
+            .encodeABI();
     } else {
         encoded = hexData_;
     }
@@ -47,7 +60,9 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     });
     console.log("Listing");
     try {
-        let createAuctionBatch = await web3.eth.sendSignedTransaction(signArray.rawTransaction);
+        let createAuctionBatch = await web3.eth.sendSignedTransaction(
+            signArray.rawTransaction
+        );
         console.log("Done at block:", createAuctionBatch.blockNumber);
         boolSell = "TRUE";
     } catch (error) {
@@ -58,20 +73,37 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
 
 async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     let count = 0;
+    indexs = await getEmptyIndexs(consractAddress);
     while (true) {
         if (indexs.length != ids.length || indexs.length != prices.length) {
             console.log("Length array not same!");
             break;
         }
         if (hexData_.length > 0) {
-            await sendTxt(gasPrice_, gasLimit_, "", "", "", hexData_, nameFile_);
+            await sendTxt(
+                gasPrice_,
+                gasLimit_,
+                "",
+                "",
+                "",
+                hexData_,
+                nameFile_
+            );
             break;
         }
         for (let index = 0; index < indexs.length; index++) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE";
                 console.log(indexs[index], ids[index], prices[index]);
-                await sendTxt(gasPrice_, gasLimit_, indexs[index], ids[index], prices[index], "", nameFile_);
+                await sendTxt(
+                    gasPrice_,
+                    gasLimit_,
+                    indexs[index],
+                    ids[index],
+                    prices[index],
+                    "",
+                    nameFile_
+                );
                 if (boolSell == "TRUE") {
                     indexs[index] = undefined;
                     count += 1;
@@ -87,15 +119,17 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     }
 }
 
-indexs = [0]; // must be change
-ids = [["11046", "13026"]];
-prices = [["3.6", "4.699"]];
+indexs = [999]; // must be change
+ids = [["23051", "23054", "23055", "24051", "24051"]];
+prices = [["1.949", "1.869", "1.869", "1.869", "1.869"]];
 
 console.log(indexs.length, ids.length, prices.length);
 for (let ii = 0; ii < prices.length; ii++) {
     for (let jj = 0; jj < prices[ii].length; jj++) {
-        prices[ii][jj] = Math.round(Number(prices[ii][jj]) * 10 ** 5).toString() + "0000000000000";
+        prices[ii][jj] =
+            Math.round(Number(prices[ii][jj]) * 10 ** 5).toString() +
+            "0000000000000";
     }
 }
-const consractAddress = "0xFEA667353AB89E8B52Fb1eD18CA515e85296D596";
+const consractAddress = "0x73A4AbD430C821B49423dB5279fb56ee72073292";
 createBatch(3.001, 1000000, "", "_1_0_1");

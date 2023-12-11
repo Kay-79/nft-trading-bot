@@ -135,11 +135,6 @@ async function getPriceToSell(address, boolMin) {
         }
         await sleep(200);
     }
-    if (!amountBatchToCreate) {
-        console.log(idMomoBought);
-        console.log("Don't have momo to create");
-        exit();
-    }
     idMomoBought.reverse();
     if (boolMin) {
         await sleep(1000);
@@ -150,9 +145,15 @@ async function getPriceToSell(address, boolMin) {
                 await checkChangePrice(indexMomo);
                 await sleep(1000);
             }
-            if (indexMomo + 1 >= amountBatchToCreate) {
+            if (indexMomo + 1 >= amountBatchToCreate && amountBatchToCreate != 0) {
                 break;
             }
+        }
+        if (!amountBatchToCreate) {
+            console.log(idMomoBought);
+            console.log(priceSell);
+            console.log("Don't have momo to create");
+            exit();
         }
     }
     amoutList = 0;
@@ -370,6 +371,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 2; // without rare and epic
+value = 5; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_2_B_4");
+createBatch(3.001, 1000000, "", "_7_3_A");
