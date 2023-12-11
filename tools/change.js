@@ -250,7 +250,7 @@ async function loopCheck(times) {
             await sleep(150000 + 300000 * Math.random()); //5mins per check
         }
         if (times > 1) {
-            await sleep(6 * 3600000); // last change per loop
+            await sleep(delayPerLoop); // last change per loop
         }
     }
 }
@@ -258,6 +258,7 @@ async function loopCheck(times) {
 const minChange = 0.001;
 timeWait = 18 * 60 * 60 * 1; //wait latest change price of momo (hour)
 delayChange = 90 * 10 ** 3; //delay to update api (sec)
+const delayPerLoop = 6 * 3600000;
 myAccounts = [];
 const myAcc = configJson.myAcc;
 for (let index = 0; index < myAcc.length; index++) {
