@@ -1,6 +1,7 @@
 const fs = require("fs");
 const { exit } = require("process");
-const getEmptyIndexs = require("../utils/listed/getEmptyIndexs");
+const getEmptyIndexs = require("../utils/create/getEmptyIndexs");
+const getAmountUnlist = require("../utils/common/getAmountUnlist");
 
 function sleep(ms) {
     return new Promise((resolve) => {
@@ -74,6 +75,12 @@ async function sendTxt(
 async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     let count = 0;
     indexs = await getEmptyIndexs(consractAddress);
+    const amountUnList = await getAmountUnlist(consractAddress);
+    if (amountUnList == 0 || amountUnList != ids[0].length) {
+        console.log("No listing");
+        console.log("amountUnList:", amountUnList);
+        exit();
+    }
     while (true) {
         if (indexs.length != ids.length || indexs.length != prices.length) {
             console.log("Length array not same!");

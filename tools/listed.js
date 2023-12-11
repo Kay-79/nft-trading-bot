@@ -1,6 +1,7 @@
 var axios = require("axios");
 const fs = require("fs");
 const Web3 = require("web3");
+const getAmountUnlist = require("../utils/common/getAmountUnlist");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
@@ -197,17 +198,7 @@ async function main(address, nameFile_, rate_) {
         }
         let isContract = await web3.eth.getStorageAt(address);
         if (Number(isContract)) {
-            let abiAmount = [
-                {
-                    inputs: [],
-                    name: "amountUnList",
-                    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-                    stateMutability: "view",
-                    type: "function",
-                },
-            ];
-            let contractAcc = new web3.eth.Contract(abiAmount, address);
-            let amountUnList = await contractAcc.methods.amountUnList().call();
+            let amountUnList = await getAmountUnlist(address);;
             momoUnlist += Number(amountUnList);
             flagBalance = "amountUnList: " + amountUnList + "\t\t";
         }
