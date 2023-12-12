@@ -111,7 +111,7 @@ async function checkChangePrice(indexId) {
             indexListCache.includes(Number(indexMomo[indexId])) == false
         ) {
             if (checkReject(data3.list[0].auctor)) {
-                console.log("REJECT " + data3.list[0].auctor, idMomo[indexId]);
+                console.log("REJECT", idMomo[indexId]);
                 boolChange[indexId] = " ";
                 idChangeds.push(idMomo[indexId]);
                 break;
