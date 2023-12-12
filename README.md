@@ -17,3 +17,5 @@
     -   \_2_B_4
     -   \_b_f_6
     -   \_8_8_8
+
+## Current storage is `1024` momos
