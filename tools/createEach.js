@@ -82,7 +82,11 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         exit();
     }
     while (true) {
-        if (indexs.length != ids.length || indexs.length != prices.length) {
+        if (
+            indexs.length != ids.length ||
+            indexs.length != prices.length ||
+            indexs[0] == 999
+        ) {
             console.log("Length array not same!");
             break;
         }
@@ -127,8 +131,8 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
 }
 
 indexs = [999]; // must be change
-ids = [["23051", "23054", "23055", "24051", "24051"]];
-prices = [["1.949", "1.869", "1.869", "1.869", "1.869"]];
+ids = [["12051", "13051", "14051", "14016"]];
+prices = [["3.669", "3.569", "3.879", "3.879"]];
 
 console.log(indexs.length, ids.length, prices.length);
 for (let ii = 0; ii < prices.length; ii++) {
@@ -138,5 +142,5 @@ for (let ii = 0; ii < prices.length; ii++) {
             "0000000000000";
     }
 }
-const consractAddress = "0x73A4AbD430C821B49423dB5279fb56ee72073292";
+const consractAddress = "0x44444402BC4cA69CbAeE0887917AF8949D2d0000";
 createBatch(3.001, 1000000, "", "_1_0_1");
