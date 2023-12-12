@@ -4,7 +4,9 @@ const Web3 = require("web3");
 const getAmountUnlist = require("../utils/common/getAmountUnlist");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
-const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
+const web3 = new Web3(
+    new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org")
+);
 const abiBUSD = [
     {
         inputs: [{ internalType: "address", name: "account", type: "address" }],
@@ -14,7 +16,10 @@ const abiBUSD = [
         type: "function",
     },
 ];
-const contract = new web3.eth.Contract(abiBUSD, "0x55d398326f99059ff775485246999027b3197955");
+const contract = new web3.eth.Contract(
+    abiBUSD,
+    "0x55d398326f99059ff775485246999027b3197955"
+);
 const dataMomo = fs.readFileSync("./data/dataMomo.txt", "utf8");
 const momoID = dataMomo.split("\n");
 
@@ -42,9 +47,15 @@ async function checkListed(address) {
     timeChange = [];
     flagID = false;
     flagCountMomo = 0;
-    let response = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-time&page=1&limit=128").catch((e) => {
-        console.log("Err1");
-    });
+    let response = await axios
+        .get(
+            "https://nftapi.mobox.io/auction/list/BNB/" +
+                address +
+                "?sort=-time&page=1&limit=128"
+        )
+        .catch((e) => {
+            console.log("Err1");
+        });
     const data = response.data;
     for (let i = 0; i < data.list.length; i++) {
         idMomo.push(data.list[i].prototype);
@@ -59,7 +70,9 @@ async function checkListed(address) {
         if (Number(idMomo[ii]) < 40000) {
             for (let oo = 0; oo < momoID.length; oo++) {
                 if (Number(momoID[oo]) == Number(idMomo[ii])) {
-                    nameMomo.push(momoID[oo + 1].slice(0, momoID[oo + 1].length - 1));
+                    nameMomo.push(
+                        momoID[oo + 1].slice(0, momoID[oo + 1].length - 1)
+                    );
                     if (Number(momoID[oo]) > 30000) {
                         sumMomoUNQ += 1;
                     } else if (Number(momoID[oo]) > 20000) {
@@ -76,10 +89,26 @@ async function checkListed(address) {
             nameMomo.push("##########");
         }
     }
-    if (nameMomo.length == idMomo.length && idMomo.length == indexMomo.length && indexMomo.length == priceSell.length) {
+    if (
+        nameMomo.length == idMomo.length &&
+        idMomo.length == indexMomo.length &&
+        indexMomo.length == priceSell.length
+    ) {
         dataExcel = "";
         for (let ii = 0; ii < indexMomo.length; ii++) {
-            dataExcel = dataExcel + nameMomo[ii] + "\t" + idMomo[ii] + "\t" + indexMomo[ii] + "\t" + priceSell[ii] + "\t \t" + priceBuy[ii] + "\t1" + "\n";
+            dataExcel =
+                dataExcel +
+                nameMomo[ii] +
+                "\t" +
+                idMomo[ii] +
+                "\t" +
+                indexMomo[ii] +
+                "\t" +
+                priceSell[ii] +
+                "\t \t" +
+                priceBuy[ii] +
+                "\t1" +
+                "\n";
         }
         sumMomo += idMomo.length;
     }
@@ -108,9 +137,17 @@ async function scanIndex(logData) {
 }
 
 async function checkPriceBuy(address, page) {
-    let response2 = await axios.get("https://nftapi.mobox.io/auction/logs_new/" + address + "?&page=" + page + "&limit=50").catch((e) => {
-        console.log("Err2");
-    });
+    let response2 = await axios
+        .get(
+            "https://nftapi.mobox.io/auction/logs_new/" +
+                address +
+                "?&page=" +
+                page +
+                "&limit=50"
+        )
+        .catch((e) => {
+            console.log("Err2");
+        });
     if (!response2) {
         console.log("Error connect to api");
         exit();
@@ -128,8 +165,14 @@ async function checkPriceBuy(address, page) {
         if (data2.list[i].bidder == address) {
             if (data2.list[i].amounts.length == 0) {
                 for (let idx3 = 0; idx3 < idMomo.length; idx3++) {
-                    if (Number(idMomo[idx3]) == Number(data2.list[i].tokens[0].prototype) && priceBuy[idx3] == 0) {
-                        priceBuy[idx3] = Number(Number(data2.list[i].bidPrice) / 10 ** 9).toFixed(3);
+                    if (
+                        Number(idMomo[idx3]) ==
+                            Number(data2.list[i].tokens[0].prototype) &&
+                        priceBuy[idx3] == 0
+                    ) {
+                        priceBuy[idx3] = Number(
+                            Number(data2.list[i].bidPrice) / 10 ** 9
+                        ).toFixed(3);
                         sumBuy += Number(data2.list[i].bidPrice) / 10 ** 9;
                         flagCountMomo += 1;
                         break;
@@ -139,9 +182,20 @@ async function checkPriceBuy(address, page) {
                 for (let idx2 = 0; idx2 < data2.list[i].ids.length; idx2++) {
                     for (let maxIndex = 0; maxIndex < maxAmount; maxIndex++) {
                         for (let idx3 = 0; idx3 < idMomo.length; idx3++) {
-                            if (idMomo[idx3] == data2.list[i].ids[idx2] && priceBuy[idx3] == 0) {
-                                priceBuy[idx3] = Number(Number(data2.list[i].bidPrice) / 10 ** 9 / sum).toFixed(3);
-                                sumBuy += Number(Number(data2.list[i].bidPrice) / 10 ** 9 / sum);
+                            if (
+                                idMomo[idx3] == data2.list[i].ids[idx2] &&
+                                priceBuy[idx3] == 0
+                            ) {
+                                priceBuy[idx3] = Number(
+                                    Number(data2.list[i].bidPrice) /
+                                        10 ** 9 /
+                                        sum
+                                ).toFixed(3);
+                                sumBuy += Number(
+                                    Number(data2.list[i].bidPrice) /
+                                        10 ** 9 /
+                                        sum
+                                );
                                 flagCountMomo += 1;
                                 break;
                             }
@@ -166,12 +220,21 @@ async function main(address, nameFile_, rate_) {
         }
         await sleep(100);
     }
-    if (nameMomo.length == idMomo.length && idMomo.length == indexMomo.length && indexMomo.length == priceSell.length) {
+    if (
+        nameMomo.length == idMomo.length &&
+        idMomo.length == indexMomo.length &&
+        indexMomo.length == priceSell.length
+    ) {
         dataExcel = "";
         momoListed += idMomo.length;
         amountAccount += 1;
         for (let ii = 0; ii < indexMomo.length; ii++) {
-            let profit = Number(priceSell[ii] * 0.95 - (5.4 * 10 ** -9 * 500000 * bnbPrice) / 3 - 0.0583 - Number(priceBuy[ii])).toFixed(3); //0.0583 is fee list
+            let profit = Number(
+                priceSell[ii] * 0.95 -
+                    (5.4 * 10 ** -9 * 500000 * bnbPrice) / 3 -
+                    0.0583 -
+                    Number(priceBuy[ii])
+            ).toFixed(3); //0.0583 is fee list
             if (profit < 0) {
                 countLoss += 1;
             } else if (profit > 0) {
@@ -179,11 +242,42 @@ async function main(address, nameFile_, rate_) {
             } else {
                 countTie += 1;
             }
-            dataExcel = dataExcel + nameMomo[ii] + "\t" + idMomo[ii] + "\t" + indexMomo[ii] + "\t" + priceSell[ii] + "\t" + timeChange[ii] + "\t" + priceBuy[ii] + "\t" + nameFile_ + "\t5.4\t" + profit + "\n";
+            dataExcel =
+                dataExcel +
+                nameMomo[ii] +
+                "\t" +
+                idMomo[ii] +
+                "\t" +
+                indexMomo[ii] +
+                "\t" +
+                priceSell[ii] +
+                "\t" +
+                timeChange[ii] +
+                "\t" +
+                priceBuy[ii] +
+                "\t" +
+                nameFile_ +
+                "\t5.4\t" +
+                profit +
+                "\n";
         }
         listed = listed + dataExcel;
         for (let index = idMomo.length; index < 128; index++) {
-            dataExcel = dataExcel + "" + "\t" + "" + "\t" + "" + "\t" + "" + "\t" + "" + "\t" + "" + "\t\t" + "\n";
+            dataExcel =
+                dataExcel +
+                "" +
+                "\t" +
+                "" +
+                "\t" +
+                "" +
+                "\t" +
+                "" +
+                "\t" +
+                "" +
+                "\t" +
+                "" +
+                "\t\t" +
+                "\n";
         }
         if (save == true) {
             fs.writeFile(nameFile_ + ".csv", dataExcel, (err) => {
@@ -198,15 +292,40 @@ async function main(address, nameFile_, rate_) {
         }
         let isContract = await web3.eth.getStorageAt(address);
         if (Number(isContract)) {
-            let amountUnList = await getAmountUnlist(address);;
+            let amountUnList = await getAmountUnlist(address);
             momoUnlist += Number(amountUnList);
-            flagBalance = "amountUnList: " + amountUnList + "\t\t";
+            flagBalance = "Create: " + amountUnList;
         }
-        let logData = nameFile_ + "\t" + space + flagCountMomo.toString() + " vs " + space + idMomo.length.toString() + "\t" + budget + " USDT\t" + flagBalance;
+        let logData =
+            nameFile_ +
+            "\t" +
+            space +
+            flagCountMomo.toString() +
+            " vs " +
+            space +
+            idMomo.length.toString() +
+            "\t" +
+            budget +
+            " USDT\t" +
+            flagBalance;
         scanIndex(logData);
         if (nameFile_ == lastAcc) {
             for (let index = momoListed; index < amountAccount * 128; index++) {
-                listed = listed + "" + "\t" + "" + "\t" + "" + "\t" + "" + "\t" + "" + "\t" + "" + "\t\t" + "\n";
+                listed =
+                    listed +
+                    "" +
+                    "\t" +
+                    "" +
+                    "\t" +
+                    "" +
+                    "\t" +
+                    "" +
+                    "\t" +
+                    "" +
+                    "\t" +
+                    "" +
+                    "\t\t" +
+                    "\n";
             }
             fs.writeFile("listed" + ".csv", listed, (err) => {
                 if (err) {
@@ -220,13 +339,19 @@ async function main(address, nameFile_, rate_) {
 async function checkListedAll(rate_) {
     // ip = await axios.get('https://ip.whatisproxy.net/').catch(e => { console.log("Err ip") })
     // console.log(ip.data)
-    bnbPrice = await axios.get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]").catch((e) => {
-        console.log("Err1");
-    });
+    bnbPrice = await axios
+        .get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]")
+        .catch((e) => {
+            console.log("Err1");
+        });
     bnbPrice = Number(bnbPrice.data.data.bnb.price.toFixed(2));
-    usdPrice = await axios.get("https://wise.com/rates/live?source=USD&target=VND&length=30&resolution=hourly&unit=day").catch((e) => {
-        console.log("Err1");
-    });
+    usdPrice = await axios
+        .get(
+            "https://wise.com/rates/live?source=USD&target=VND&length=30&resolution=hourly&unit=day"
+        )
+        .catch((e) => {
+            console.log("Err1");
+        });
     usdPrice = Number(usdPrice.data.value.toFixed());
     for (let index = 0; index < myAcc.length; index++) {
         if (myAcc[index][2] == false) {
@@ -236,18 +361,35 @@ async function checkListedAll(rate_) {
         if (Number(isContract)) {
             await main(myAcc[index][0], myAcc[index][1], rate_);
         } else {
-            let balance = Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18;
-            let budget = Number(await contract.methods.balanceOf(myAcc[index][0]).call()) / 10 ** 18;
+            let balance =
+                Number(await web3.eth.getBalance(myAcc[index][0])) / 10 ** 18;
+            let budget =
+                Number(
+                    await contract.methods.balanceOf(myAcc[index][0]).call()
+                ) /
+                10 ** 18;
             sumBNB += balance;
             sumUSD += budget;
             if (myAcc[index][1] == "_1_0_1") {
-                console.log("Changer: " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
+                console.log(
+                    "Changer: " + balance.toFixed(4),
+                    "BNB\t" + budget.toFixed(4),
+                    "USDT"
+                );
             }
             if (myAcc[index][1] == "_5_8_1") {
-                console.log("Banker : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
+                console.log(
+                    "Banker : " + balance.toFixed(4),
+                    "BNB\t" + budget.toFixed(4),
+                    "USDT"
+                );
             }
             if (myAcc[index][1] == "_7_7_1") {
-                console.log("Buyer  : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
+                console.log(
+                    "Buyer  : " + balance.toFixed(4),
+                    "BNB\t" + budget.toFixed(4),
+                    "USDT"
+                );
             }
         }
     }
@@ -255,36 +397,94 @@ async function checkListedAll(rate_) {
     console.log("USD Price:", usdPrice);
     console.log("Total USDT:\t\t", (sumUSD * rate_).toFixed(2));
     console.log("Total BNB:\t\t", (sumBNB * rate_).toFixed(4));
-    console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed());
-    sumBuyVnd = (sumBNB * bnbPrice + sumUSD + sumBuy + momoUnlist * configJson.minPrice.minUncommon) * usdPrice * rate_;
-    sumSaleVnd = (sumBNB * bnbPrice + sumUSD + sumSell * 0.95 + momoUnlist * configJson.minPrice.minUncommon) * usdPrice * rate_;
-    console.log("Estimate Fund:\t", (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
+    console.log(
+        "Total Fund:\t\t",
+        ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed()
+    );
+    sumBuyVnd =
+        (sumBNB * bnbPrice +
+            sumUSD +
+            sumBuy +
+            momoUnlist * configJson.minPrice.minUncommon) *
+        usdPrice *
+        rate_;
+    sumSaleVnd =
+        (sumBNB * bnbPrice +
+            sumUSD +
+            sumSell * 0.95 +
+            momoUnlist * configJson.minPrice.minUncommon) *
+        usdPrice *
+        rate_;
+    console.log(
+        "Estimate Fund:\t",
+        (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed()
+    );
     var currentdate = new Date();
-    const nowSync = currentdate.getDate() + "/" + (Number(currentdate.getMonth()) + 1).toString() + "/" + currentdate.getFullYear();
-    var datetime = "Last Sync: " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-    console.log(`${sumMomo}/${momoUnlist} Momos: ${sumMomoCM} Common, ${sumMomoUCM} Uncommon, ${sumMomoUNQ} Unique, ${sumMomoR} Rare, ${sumMomoE} Epic, ${sumMomoL} Legend (${sumBuy.toFixed()}, ${(sumSell * 0.95).toFixed()}) Profit: ${countProfit} - Lost: ${countLoss} - Tie: ${countTie} ${datetime}`);
+    const nowSync =
+        currentdate.getDate() +
+        "/" +
+        (Number(currentdate.getMonth()) + 1).toString() +
+        "/" +
+        currentdate.getFullYear();
+    var datetime =
+        "Last Sync: " +
+        currentdate.getHours() +
+        ":" +
+        currentdate.getMinutes() +
+        ":" +
+        currentdate.getSeconds();
+    console.log(
+        `${sumMomo}/${momoUnlist} Momos: ${sumMomoCM} Common, ${sumMomoUCM} Uncommon, ${sumMomoUNQ} Unique, ${sumMomoR} Rare, ${sumMomoE} Epic, ${sumMomoL} Legend (${sumBuy.toFixed()}, ${(
+            sumSell * 0.95
+        ).toFixed()}) Profit: ${countProfit} - Lost: ${countLoss} - Tie: ${countTie} ${datetime}`
+    );
     var logsBalance = fs.readFileSync("logsBalance.csv", "utf8");
     var logsBalanceCheck = logsBalance.split("\n");
-    logsBalanceCheck = logsBalanceCheck[logsBalanceCheck.length - 1].split("\t");
+    logsBalanceCheck =
+        logsBalanceCheck[logsBalanceCheck.length - 1].split("\t");
     const lastBalance = logsBalanceCheck[0];
     const lastSync = logsBalanceCheck[1];
     if (lastSync != nowSync && rate_ == 0.1) {
         console.log("New save");
-        fs.writeFile("logsBalance.csv", logsBalance + "\n" + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() + "\t" + nowSync, (err) => {
-            if (err) {
-                console.error(err);
+        fs.writeFile(
+            "logsBalance.csv",
+            logsBalance +
+                "\n" +
+                (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
+                "\t" +
+                nowSync,
+            (err) => {
+                if (err) {
+                    console.error(err);
+                }
             }
-        });
+        );
     } else {
-        if (Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) - Number(lastBalance) > 1 && rate_ == 0.1) {
-            console.log("Save max", Number(lastBalance).toFixed(), "to", Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
+        if (
+            Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) -
+                Number(lastBalance) >
+                1 &&
+            rate_ == 0.1
+        ) {
+            console.log(
+                "Save max",
+                Number(lastBalance).toFixed(),
+                "to",
+                Number(
+                    sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale
+                ).toFixed()
+            );
             logsBalanceCheck = logsBalance.split("\n");
             logsBalance = "";
             for (let index = 0; index < logsBalanceCheck.length - 1; index++) {
                 var logEach = logsBalanceCheck[index].split("\t");
                 logsBalance += logEach[0] + "\t" + logEach[1] + "\n";
             }
-            logsBalance = logsBalance + (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() + "\t" + nowSync;
+            logsBalance =
+                logsBalance +
+                (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
+                "\t" +
+                nowSync;
             fs.writeFile("logsBalance.csv", logsBalance, (err) => {
                 if (err) {
                     console.error(err);
