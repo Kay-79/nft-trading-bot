@@ -13,10 +13,9 @@ function sleep(ms) {
     });
 }
 const shuffleArray = require("../utils/change/shuffleArray");
+const checkReject = require("../utils/change/checkEnemyToReject");
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.public.blastapi.io"));
-const web3 = new Web3(
-    new Web3.providers.HttpProvider("https://bsc-dataseed1.defibit.io")
-);
+const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.defibit.io"));
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
 minUNQ = configJson.minPrice.minUnique;
@@ -39,11 +38,7 @@ flagID = false;
 flagCountMomo = 0;
 async function checkListed(address) {
     axios
-        .get(
-            "https://nftapi.mobox.io/auction/list/BNB/" +
-                address +
-                "?sort=-time&page=1&limit=128"
-        )
+        .get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-time&page=1&limit=128")
         .then((response) => {
             const data = response.data;
             for (let i = 0; i < data.list.length; i++) {
@@ -62,11 +57,7 @@ async function checkListed(address) {
 function checkPriceBuy(address_, page) {
     axios
         .get(
-            "https://nftapi.mobox.io/auction/logs_new/" +
-                address_ +
-                "?&page=" +
-                page +
-                "&limit=50"
+            "https://nftapi.mobox.io/auction/logs_new/" + address_ + "?&page=" + page + "&limit=50"
         )
         .then((response2) => {
             const data2 = response2.data;
@@ -80,25 +71,15 @@ function checkPriceBuy(address_, page) {
                     }
                 });
                 if (data2.list[i].bidder == address_) {
-                    for (
-                        let idx2 = 0;
-                        idx2 < data2.list[i].ids.length;
-                        idx2++
-                    ) {
-                        for (
-                            let maxIndex = 0;
-                            maxIndex < maxAmount;
-                            maxIndex++
-                        ) {
+                    for (let idx2 = 0; idx2 < data2.list[i].ids.length; idx2++) {
+                        for (let maxIndex = 0; maxIndex < maxAmount; maxIndex++) {
                             for (let idx3 = 0; idx3 < idMomo.length; idx3++) {
                                 if (
                                     idMomo[idx3] == data2.list[i].ids[idx2] &&
                                     priceBuy[idx3] == 0
                                 ) {
                                     priceBuy[idx3] = Number(
-                                        Number(data2.list[i].bidPrice) /
-                                            10 ** 9 /
-                                            sum
+                                        Number(data2.list[i].bidPrice) / 10 ** 9 / sum
                                     ).toFixed(3);
                                     flagCountMomo += 1;
                                     break;
@@ -129,35 +110,30 @@ async function checkChangePrice(indexId) {
             myAccounts.includes(data3.list[indexid_].auctor) == false &&
             indexListCache.includes(Number(indexMomo[indexId])) == false
         ) {
+            if (checkReject(data3.list[0].auctor)) {
+                console.log("REJECT " + data3.list[0].auctor, idMomo[indexId]);
+                boolChange[indexId] = " ";
+                idChangeds.push(idMomo[indexId]);
+                break;
+            }
             //fix same momo
             if (
-                ((Number(data3.list[indexid_].nowPrice) / 10 ** 9) * 0.95 -
-                    priceBuy[indexId] >
+                ((Number(data3.list[indexid_].nowPrice) / 10 ** 9) * 0.95 - priceBuy[indexId] >
                     canLost ||
                     sellOff) &&
-                Number(Date.now() / 1000).toFixed() -
-                    Number(data3.list[indexid_].uptime) >
+                Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) >
                     timeWait * (indexid_ + 1)
             ) {
                 // time wait x2 for second momo
                 priceCache = priceSell[indexId]; // add to compare price
-                priceSell[indexId] = (
-                    Number(data3.list[indexid_].nowPrice) /
-                    10 ** 9
-                ).toFixed(3);
+                priceSell[indexId] = (Number(data3.list[indexid_].nowPrice) / 10 ** 9).toFixed(3);
                 if (
                     priceCache > priceSell[indexId] &&
                     idChangeds.includes(idMomo[indexId]) == false
                 ) {
                     boolChange[indexId] = "TRUE";
                     idChangeds.push(idMomo[indexId]);
-                    console.log(
-                        idMomo[indexId] +
-                            " " +
-                            priceCache +
-                            " to " +
-                            priceSell[indexId]
-                    );
+                    console.log(idMomo[indexId] + " " + priceCache + " to " + priceSell[indexId]);
                 }
             }
             break;
@@ -183,9 +159,7 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                 .changePrice(index_, priceChange_, priceChange_, 2)
                 .encodeABI();
             await web3.eth
-                .getTransactionCount(
-                    "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000"
-                )
+                .getTransactionCount("0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000")
                 .then((nonce) => {
                     // console.log(nonceAcc, nonce)
                     tx = {
@@ -204,11 +178,9 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
     }
     try {
         await sleep(500);
-        await web3.eth.accounts
-            .signTransaction(tx, Private_Key_)
-            .then((signed) => {
-                signArray.push(signed);
-            });
+        await web3.eth.accounts.signTransaction(tx, Private_Key_).then((signed) => {
+            signArray.push(signed);
+        });
         console.log(signArray.length + "/" + amountChange);
         await sleep(500);
         if (signArray.length >= amountChange) {
@@ -218,17 +190,13 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                     // console.log('Changing!')
                     if (index == signArray.length - 1) {
                         await web3.eth
-                            .sendSignedTransaction(
-                                signArray[index].rawTransaction
-                            )
+                            .sendSignedTransaction(signArray[index].rawTransaction)
                             .catch((err) => {
                                 console.error(err);
                             });
                     } else {
                         web3.eth
-                            .sendSignedTransaction(
-                                signArray[index].rawTransaction
-                            )
+                            .sendSignedTransaction(signArray[index].rawTransaction)
                             .catch((err) => {
                                 console.error(err);
                             });
@@ -268,11 +236,7 @@ async function main(address_, boolMin, Private_Key_) {
     // }
     if (boolMin) {
         await sleep(5000);
-        for (
-            let indexMomo_ = idMomo.length - 1;
-            indexMomo_ >= 0;
-            indexMomo_--
-        ) {
+        for (let indexMomo_ = idMomo.length - 1; indexMomo_ >= 0; indexMomo_--) {
             if (signArray.length > amountChange + 1) {
                 // this code to check send bundle changePrice
                 nonceAcc = File_Key.map((x) => 0);
@@ -294,14 +258,7 @@ async function main(address_, boolMin, Private_Key_) {
                 ) {
                     await changePrice(
                         indexMomo[indexMomo_],
-                        (
-                            Number(
-                                (
-                                    Number(priceSell[indexMomo_]) - minChange
-                                ).toFixed(3)
-                            ) *
-                            10 ** 3
-                        )
+                        (Number((Number(priceSell[indexMomo_]) - minChange).toFixed(3)) * 10 ** 3)
                             .toFixed()
                             .toString() + "000000000000000",
                         Private_Key_,
@@ -315,14 +272,7 @@ async function main(address_, boolMin, Private_Key_) {
                 ) {
                     await changePrice(
                         indexMomo[indexMomo_],
-                        (
-                            Number(
-                                (
-                                    Number(priceSell[indexMomo_]) - minChange
-                                ).toFixed(3)
-                            ) *
-                            10 ** 3
-                        )
+                        (Number((Number(priceSell[indexMomo_]) - minChange).toFixed(3)) * 10 ** 3)
                             .toFixed()
                             .toString() + "000000000000000",
                         Private_Key_,
@@ -336,14 +286,7 @@ async function main(address_, boolMin, Private_Key_) {
                 ) {
                     await changePrice(
                         indexMomo[indexMomo_],
-                        (
-                            Number(
-                                (
-                                    Number(priceSell[indexMomo_]) - minChange
-                                ).toFixed(3)
-                            ) *
-                            10 ** 3
-                        )
+                        (Number((Number(priceSell[indexMomo_]) - minChange).toFixed(3)) * 10 ** 3)
                             .toFixed()
                             .toString() + "000000000000000",
                         Private_Key_,
@@ -351,15 +294,9 @@ async function main(address_, boolMin, Private_Key_) {
                     );
                     // console.log('Done change!')
                 } else if (Number(idMomo[indexMomo_]) > 40000) {
-                    console.log(
-                        indexMomo[indexMomo_],
-                        "Require set price manual!"
-                    );
+                    console.log(indexMomo[indexMomo_], "Require set price manual!");
                 } else {
-                    console.log(
-                        indexMomo[indexMomo_],
-                        "Require min price, not change!"
-                    );
+                    console.log(indexMomo[indexMomo_], "Require min price, not change!");
                 }
                 boolChange[indexMomo_] = " ";
             }
