@@ -1,6 +1,7 @@
 # buy-mobox-submarine
 
--   Banker is 58
+-   Changer is 110
+-   Banker is 558
 
 *   Contract fake bid
     -   \_D_1_E
@@ -17,5 +18,6 @@
     -   \_2_B_4
     -   \_b_f_6
     -   \_8_8_8
+    -   \_4_4_0
 
 ## Current storage is `1024` momos
