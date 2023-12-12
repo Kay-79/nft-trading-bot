@@ -389,7 +389,7 @@ async function loopCheck(times) {
 }
 // 0
 const minChange = 0.001;
-timeWait = 18 * 60 * 60 * 1; //wait latest change price of momo (hour)
+timeWait = 6 * 60 * 60 * 1; //wait latest change price of momo (hour)
 delayChange = 90 * 10 ** 3; //delay to update api (sec)
 const delayPerLoop = 6 * 3600000;
 myAccounts = [];
