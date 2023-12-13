@@ -242,7 +242,7 @@ async function main(address_, boolMin, Private_Key_) {
                 signArray = [];
                 idCache = [];
             }
-            if (idCache.includes(idMomo[indexMomo_])) {
+            if (idCache.includes(idMomo[indexMomo_]) || idChangeds.includes(idMomo[indexMomo_])) {
                 continue;
             }
             await checkChangePrice(indexMomo_);
