@@ -47,6 +47,7 @@ async function checkListed(address) {
         .catch((e) => {
             console.log("Err1");
         });
+    countRqs++;
     const data = response.data;
     for (let i = 0; i < data.list.length; i++) {
         idMomo.push(data.list[i].prototype);
@@ -134,6 +135,7 @@ async function checkPriceBuy(address, page) {
         .catch((e) => {
             console.log("Err2");
         });
+    countRqs++;
     if (!response2) {
         console.log("Error connect to api");
         exit();
@@ -194,7 +196,7 @@ async function main(address, nameFile_, rate_) {
         if (flagCountMomo == idMomo.length) {
             break;
         }
-        await sleep(100);
+        await sleep(1000);
     }
     if (
         nameMomo.length == idMomo.length &&
@@ -320,6 +322,7 @@ async function checkListedAll(rate_) {
         .catch((e) => {
             console.log("Err1");
         });
+    countRqs++;
     bnbPrice = Number(bnbPrice.data.data.bnb.price.toFixed(2));
     usdPrice = await axios
         .get(
@@ -430,7 +433,7 @@ async function checkListedAll(rate_) {
                 }
             });
         } else {
-            console.log("Don't save min");
+            console.log(`Don't save min, ${countRqs} requests`);
         }
     }
 }
@@ -464,6 +467,7 @@ var momoListed = 0,
     sumBuy = 0,
     sumUSD = 0,
     sumBNB = 0;
+countRqs = 0;
 const lastAcc = myAcc[myAcc.length - 1][1];
 const save = false;
 const rateSale = 0.42;
