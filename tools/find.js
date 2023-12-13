@@ -37,7 +37,11 @@ async function getMpListed(amountMomo) {
     ids_ = [];
     amounts_ = [];
     try {
-        let mpListed = await axios.get("https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=" + amountMomo + "&category=&vType=&sort=-time&pType=");
+        let mpListed = await axios.get(
+            "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=" +
+                amountMomo +
+                "&category=&vType=&sort=-time&pType="
+        );
         mpListed = mpListed.data.list;
         for (let ii = mpListed.length - 1; ii >= 0; ii--) {
             auctors_.push(mpListed[ii].auctor);
@@ -73,7 +77,19 @@ async function getMpListed(amountMomo) {
         }
     } catch (error) {
         var currentdate = new Date();
-        var datetime = "Last Sync: " + currentdate.getDate() + "/" + (currentdate.getMonth() + 1) + "/" + currentdate.getFullYear() + " @ " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+        var datetime =
+            "Last Sync: " +
+            currentdate.getDate() +
+            "/" +
+            (currentdate.getMonth() + 1) +
+            "/" +
+            currentdate.getFullYear() +
+            " @ " +
+            currentdate.getHours() +
+            ":" +
+            currentdate.getMinutes() +
+            ":" +
+            currentdate.getSeconds();
         console.log("Connect to api failed and wait 2 minutes!", datetime);
         await sleep(120000);
     }
@@ -109,7 +125,10 @@ function checkIdPrice(idCheck_, amountCheck_, lvCheck_, lvHashCheck_) {
             break;
         }
         if (Number(idCheck_) == Number(idMomo[index])) {
-            if (priceCheck < Number(priceMomo[index]) * 0.95 - profitName && Number(priceMomo[index]) < maxMomoPrice) {
+            if (
+                priceCheck < Number(priceMomo[index]) * 0.95 - profitName &&
+                Number(priceMomo[index]) < maxMomoPrice
+            ) {
                 priceCheck = Number(priceMomo[index]) * 0.95 - profitName;
             }
         }
@@ -129,7 +148,12 @@ async function checkCanBuy() {
             case "Bundle":
                 let priceBundle = 0;
                 for (let indexIds_ = 0; indexIds_ < ids_[indexx].length; indexIds_++) {
-                    priceBundle += checkIdPrice(ids_[indexx][indexIds_], amounts_[indexx][indexIds_], "lv not in bundle", "lvHP not in bundle");
+                    priceBundle += checkIdPrice(
+                        ids_[indexx][indexIds_],
+                        amounts_[indexx][indexIds_],
+                        "lv not in bundle",
+                        "lvHP not in bundle"
+                    );
                 }
                 if (priceBundle >= priceDec_[indexx]) {
                     indexCanBuy.push(indexx);
@@ -138,16 +162,28 @@ async function checkCanBuy() {
                 }
                 break;
             case "Normal":
-                if (checkIdPrice(ids_[indexx][0], 1, "lv not in normal", "lvHP not in normal") >= priceDec_[indexx]) {
+                if (
+                    checkIdPrice(ids_[indexx][0], 1, "lv not in normal", "lvHP not in normal") >=
+                    priceDec_[indexx]
+                ) {
                     indexCanBuy.push(indexx);
-                    profitCanBuy.push(checkIdPrice(ids_[indexx][0], 1, "lv not in normal", "lvHP not in normal") - priceDec_[indexx]);
+                    profitCanBuy.push(
+                        checkIdPrice(ids_[indexx][0], 1, "lv not in normal", "lvHP not in normal") -
+                            priceDec_[indexx]
+                    );
                     modeCanBuy.push("Normal");
                 }
                 break;
             case "Pro":
-                if (checkIdPrice(ids_[indexx][0], 1, lvMomo_[indexx], lvHashrate_[indexx]) >= priceDec_[indexx]) {
+                if (
+                    checkIdPrice(ids_[indexx][0], 1, lvMomo_[indexx], lvHashrate_[indexx]) >=
+                    priceDec_[indexx]
+                ) {
                     indexCanBuy.push(indexx);
-                    profitCanBuy.push(checkIdPrice(ids_[indexx][0], 1, lvMomo_[indexx], lvHashrate_[indexx]) - priceDec_[indexx]);
+                    profitCanBuy.push(
+                        checkIdPrice(ids_[indexx][0], 1, lvMomo_[indexx], lvHashrate_[indexx]) -
+                            priceDec_[indexx]
+                    );
                     modeCanBuy.push("Pro");
                 }
                 break;
@@ -164,15 +200,39 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
             try {
                 // add save second file
                 let gasPriceNew = 0;
-                gasPriceNew = Number(((rateFeePerProfit * (totalProfit - fee[totalAuctions - 1])) / (gasUsed[totalAuctions - 1] * bnbPrice * 10 ** -9) + gasPriceMin).toFixed(3));
+                gasPriceNew = Number(
+                    (
+                        (rateFeePerProfit * (totalProfit - fee[totalAuctions - 1])) /
+                            (gasUsed[totalAuctions - 1] * bnbPrice * 10 ** -9) +
+                        gasPriceMin
+                    ).toFixed(3)
+                );
                 if (gasPriceNew > gasPriceMax) {
                     gasPriceNew = gasPriceMax;
                 }
-                console.log("Estimate profit:", ((totalProfit - fee[totalAuctions - 1]) * 0.9).toFixed(2));
+                console.log(
+                    "Estimate profit:",
+                    ((totalProfit - fee[totalAuctions - 1]) * 0.9).toFixed(2)
+                );
                 console.log(tokenId__, amountDivide);
                 var inputdata = fs.readFileSync(linkSave, "utf8");
                 await sleep(25);
-                var content = inputdata + seller__ + "\n" + price__ + "\n" + index__ + "\n" + time__ + "\n" + tokenId__ + "\n" + amount__ + "\n" + gasPriceNew + "\n";
+                var content =
+                    inputdata +
+                    seller__ +
+                    "\n" +
+                    price__ +
+                    "\n" +
+                    index__ +
+                    "\n" +
+                    time__ +
+                    "\n" +
+                    tokenId__ +
+                    "\n" +
+                    amount__ +
+                    "\n" +
+                    gasPriceNew +
+                    "\n";
                 fs.writeFile(linkSave, content, (err) => {
                     if (err) {
                         console.error(err);
@@ -202,7 +262,13 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
         }
         let gasPriceNew = [];
         for (let index = 0; index < seller__.length; index++) {
-            gasPriceNew[index] = Number(((rateFeePerProfit * (profitCanBuy[index] - fee[0])) / (gasUsed[0] * bnbPrice * 10 ** -9) + gasPriceMin).toFixed(3));
+            gasPriceNew[index] = Number(
+                (
+                    (rateFeePerProfit * (profitCanBuy[index] - fee[0])) /
+                        (gasUsed[0] * bnbPrice * 10 ** -9) +
+                    gasPriceMin
+                ).toFixed(3)
+            );
             if (gasPriceNew[index] > gasPriceMax) {
                 gasPriceNew[index] = gasPriceMax;
             }
@@ -212,7 +278,22 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
             if (tokenId__.length) {
                 var inputdata = fs.readFileSync(linkSave, "utf8");
                 await sleep(25);
-                var content = inputdata + seller__ + "\n" + price__ + "\n" + index__ + "\n" + time__ + "\n" + tokenId__ + "\n" + amount__ + "\n" + gasPriceNew + "\n";
+                var content =
+                    inputdata +
+                    seller__ +
+                    "\n" +
+                    price__ +
+                    "\n" +
+                    index__ +
+                    "\n" +
+                    time__ +
+                    "\n" +
+                    tokenId__ +
+                    "\n" +
+                    amount__ +
+                    "\n" +
+                    gasPriceNew +
+                    "\n";
                 fs.writeFile(linkSave, content, (err) => {
                     if (err) {
                         console.error(err);
@@ -251,7 +332,14 @@ async function divideCanBuy() {
                     resetVar();
                 }
             }
-            let addressIdCache_ = auctors_[indexCanBuy[index]] + "_" + indexs_[indexCanBuy[index]] + "_" + ids_[indexCanBuy[index]] + "_" + amounts_[indexCanBuy[index]];
+            let addressIdCache_ =
+                auctors_[indexCanBuy[index]] +
+                "_" +
+                indexs_[indexCanBuy[index]] +
+                "_" +
+                ids_[indexCanBuy[index]] +
+                "_" +
+                amounts_[indexCanBuy[index]];
             if (addressIdCache.includes(addressIdCache_)) {
                 continue;
             } //Avoid save same auctions
@@ -276,9 +364,11 @@ async function divideCanBuy() {
 }
 
 async function runBot(amountMomo) {
-    bnbPrice = await axios.get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]").catch((e) => {
-        console.log("Err1");
-    });
+    bnbPrice = await axios
+        .get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]")
+        .catch((e) => {
+            console.log("Err1");
+        });
     bnbPrice = bnbPrice.data.data.bnb.price;
     if (rateFeePerProfit > 0.5) {
         console.warn("Rate fee too high");
@@ -334,7 +424,15 @@ async function getMinPrice() {
             budgetCache = budget;
             if (budget < minBudget) {
                 console.warn("Insufficient funds");
-                request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=Insufficient funds", function (error, response, body) {});
+                request(
+                    "https://api.telegram.org/" +
+                        apiTele +
+                        "/sendMessage?chat_id=@" +
+                        chatId +
+                        "&text=Insufficient funds " +
+                        budget.toFixed(2),
+                    function (error, response, body) {}
+                );
                 await sleep(10000);
                 exit();
             }
@@ -357,9 +455,17 @@ async function getMinPrice() {
         if (index0 >= 4) {
             limitMomo = 5;
         }
-        let dataMin = await axios.get("https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=" + limitMomo + "&category=&vType=" + (index0 + 1).toString() + "&sort=price&pType=").catch((e) => {
-            console.log("Err get min price!!");
-        });
+        let dataMin = await axios
+            .get(
+                "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=" +
+                    limitMomo +
+                    "&category=&vType=" +
+                    (index0 + 1).toString() +
+                    "&sort=price&pType="
+            )
+            .catch((e) => {
+                console.log("Err get min price!!");
+            });
         if (!dataMin) {
             index0 -= 1;
             await sleep(5000);
