@@ -113,7 +113,6 @@ async function checkChangePrice(indexId) {
             if (checkReject(data3.list[0].auctor)) {
                 console.log("REJECT", idMomo[indexId]);
                 boolChange[indexId] = " ";
-                idChangeds.push(idMomo[indexId]);
                 break;
             }
             //fix same momo
@@ -132,7 +131,6 @@ async function checkChangePrice(indexId) {
                     idChangeds.includes(idMomo[indexId]) == false
                 ) {
                     boolChange[indexId] = "TRUE";
-                    idChangeds.push(idMomo[indexId]);
                     console.log(idMomo[indexId] + " " + priceCache + " to " + priceSell[indexId]);
                 }
             }
@@ -148,6 +146,7 @@ async function checkChangePrice(indexId) {
             break;
         }
     }
+    idChangeds.push(idMomo[indexId]);
 }
 async function changePrice(index_, priceChange_, Private_Key_, address_) {
     encoded = "";
