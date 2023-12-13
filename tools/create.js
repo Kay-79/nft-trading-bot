@@ -39,9 +39,11 @@ flagCountMomo = 0;
 amountBid = 0;
 async function checkAmountBuy(address, page) {
     await sleep(2500 + 5000 * Math.random());
-    let response2 = await axios.get("https://nftapi.mobox.io/auction/logs_new/" + address + "?&page=" + page + "&limit=50").catch((e) => {
-        console.log("Err1");
-    });
+    let response2 = await axios
+        .get("https://nftapi.mobox.io/auction/logs_new/" + address + "?&page=" + page + "&limit=50")
+        .catch((e) => {
+            console.log("Err1");
+        });
     const data2 = response2.data;
     for (let i = 0; i < data2.list.length; i++) {
         if (data2.list[i].auctor != address) {
@@ -60,21 +62,35 @@ async function checkAmountBuy(address, page) {
 }
 async function checkChangePrice(indexId) {
     await sleep(2500 + 5000 * Math.random());
-    let response3 = await axios.get("https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=10&category=&vType=&sort=price&pType=" + idMomoBought[indexId]).catch((e) => {
-        console.log("Err2");
-    });
+    let response3 = await axios
+        .get(
+            "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=10&category=&vType=&sort=price&pType=" +
+                idMomoBought[indexId]
+        )
+        .catch((e) => {
+            console.log("Err2");
+        });
     const data3 = response3.data.list;
     if (!data3.length || !data3) {
         priceSell[indexId] = 15;
         return false;
     }
     // console.log(data3)
-    console.log(idMomoBought[indexId].toString() + "-" + (indexId + 1).toString() + "/" + amountBatchToCreate.toString());
+    console.log(
+        idMomoBought[indexId].toString() +
+            "-" +
+            (indexId + 1).toString() +
+            "/" +
+            amountBatchToCreate.toString()
+    );
     if (myAccounts.includes(data3[0].auctor)) {
         priceSell[indexId] = (Number(data3[0].nowPrice) / 10 ** 9).toFixed(3);
         for (let index_z = 0; index_z < data3.length; index_z++) {
             if (!myAccounts.includes(data3[index_z].auctor)) {
-                priceSell[indexId] = (Number(data3[index_z].nowPrice) / 10 ** 9 - minChange).toFixed(3);
+                priceSell[indexId] = (
+                    Number(data3[index_z].nowPrice) / 10 ** 9 -
+                    minChange
+                ).toFixed(3);
                 break;
             }
         }
@@ -85,7 +101,10 @@ async function checkChangePrice(indexId) {
                 if (myAccounts.includes(data3[index_q].auctor)) {
                     priceSell[indexId] = (Number(data3[index_q].nowPrice) / 10 ** 9).toFixed(3);
                 } else {
-                    priceSell[indexId] = (Number(data3[index_q].nowPrice) / 10 ** 9 - minChange).toFixed(3);
+                    priceSell[indexId] = (
+                        Number(data3[index_q].nowPrice) / 10 ** 9 -
+                        minChange
+                    ).toFixed(3);
                     break;
                 }
             }
@@ -130,7 +149,11 @@ async function getPriceToSell(address, boolMin) {
     idMomoBought = [];
     for (let index1 = 1; index1 < 51; index1++) {
         await checkAmountBuy(address, index1);
-        if (idMomoBought.length >= value || amountBid >= valueBid || idMomoBought.length >= amountBatchToCreate) {
+        if (
+            idMomoBought.length >= value ||
+            amountBid >= valueBid ||
+            idMomoBought.length >= amountBatchToCreate
+        ) {
             break;
         }
         await sleep(200);
@@ -175,11 +198,14 @@ async function getPriceToSell(address, boolMin) {
         }
     }
     // console.log(idList)
-    console.log("ids =\n" + JSON.stringify(idList) + "\nprices =\n" + JSON.stringify(priceList) + "\n");
+    console.log(
+        "ids =\n" + JSON.stringify(idList) + "\nprices =\n" + JSON.stringify(priceList) + "\n"
+    );
     console.log(indexs.length, idList.length, priceList.length);
     for (let ii = 0; ii < priceList.length; ii++) {
         for (let jj = 0; jj < priceList[ii].length; jj++) {
-            priceList[ii][jj] = Math.round(Number(priceList[ii][jj]) * 10 ** 5).toString() + "0000000000000";
+            priceList[ii][jj] =
+                Math.round(Number(priceList[ii][jj]) * 10 ** 5).toString() + "0000000000000";
             if (Number(priceList[ii][jj]) < 10 ** 18) {
                 console.log("Err Price");
                 exit();
@@ -197,9 +223,11 @@ async function checkIndex(address) {
     timeChange = [];
     flagID = false;
     flagCountMomo = 0;
-    let response = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-time&page=1&limit=128").catch((e) => {
-        console.log("Err1");
-    });
+    let response = await axios
+        .get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-time&page=1&limit=128")
+        .catch((e) => {
+            console.log("Err1");
+        });
     const data = response.data;
     for (let i = 0; i < data.list.length; i++) {
         indexMomo.push(data.list[i].index);
@@ -266,7 +294,9 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     encoded = "";
     signArray = "";
     if (hexData_.length == 0) {
-        encoded = contract.methods.createAuctionBatch(index_, emptyVar, emptyVar, ids_, prices_).encodeABI();
+        encoded = contract.methods
+            .createAuctionBatch(index_, emptyVar, emptyVar, ids_, prices_)
+            .encodeABI();
     } else {
         encoded = hexData_;
     }
@@ -322,7 +352,9 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         exit();
     }
     await checkIndex(accSell);
-    amountUnList / 6 > indexs.length ? (amountBatchToCreate = indexs.length * 6) : (amountBatchToCreate = amountUnList);
+    amountUnList / 6 > indexs.length
+        ? (amountBatchToCreate = indexs.length * 6)
+        : (amountBatchToCreate = amountUnList);
     console.log(amountBatchToCreate);
     await getPriceToSell(accSell, true); //_1_0_1
     let count = 0;
@@ -340,7 +372,15 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE";
                 console.log(indexs[index], idList[index], priceList[index]);
-                await sendTxt(gasPrice_, gasLimit_, indexs[index], idList[index], priceList[index], "", nameFile_);
+                await sendTxt(
+                    gasPrice_,
+                    gasLimit_,
+                    indexs[index],
+                    idList[index],
+                    priceList[index],
+                    "",
+                    nameFile_
+                );
                 if (boolSell == "TRUE") {
                     indexs[index] = undefined;
                     count += 1;
@@ -371,6 +411,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 5; // without rare and epic
+value = 7; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_7_3_A");
+createBatch(3.001, 1000000, "", "_4_4_0");

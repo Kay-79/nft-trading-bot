@@ -2,7 +2,6 @@ var axios = require("axios");
 const fs = require("fs");
 const Web3 = require("web3");
 const getAmountUnlist = require("../utils/common/getAmountUnlist");
-const { uptime } = require("process");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
