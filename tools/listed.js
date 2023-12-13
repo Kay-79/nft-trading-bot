@@ -2,6 +2,7 @@ var axios = require("axios");
 const fs = require("fs");
 const Web3 = require("web3");
 const getAmountUnlist = require("../utils/common/getAmountUnlist");
+const { uptime } = require("process");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
@@ -55,6 +56,9 @@ async function checkListed(address) {
         priceSell.push(Number(data.list[i].startPrice) / 10 ** 9);
         sumSell += Number(data.list[i].startPrice) / 10 ** 9;
         timeChange.push(Number(data.list[i].uptime));
+        if (Number(data.list[i].uptime) < firstListTime) {
+            firstListTime = Number(data.list[i].uptime);
+        }
     }
     for (let ii = 0; ii < idMomo.length; ii++) {
         flagID = false;
@@ -343,17 +347,14 @@ async function checkListedAll(rate_) {
                 console.log("Changer: " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
             }
             if (myAcc[index][1] == "_5_8_1") {
-                console.log("Banker : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
-            }
-            if (myAcc[index][1] == "_7_7_1") {
-                console.log("Buyer  : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
+                console.log("Bidder : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
             }
         }
     }
     console.log("BNB Price:", bnbPrice);
     console.log("USD Price:", usdPrice);
     console.log("Total USDT:\t\t", (sumUSD * rate_).toFixed(2));
-    console.log("Total BNB:\t\t", (sumBNB * rate_).toFixed(4));
+    // console.log("Total BNB:\t\t", (sumBNB * rate_).toFixed(4));
     console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed());
     sumBuyVnd =
         (sumBNB * bnbPrice + sumUSD + sumBuy + momoUnlist * configJson.minPrice.minUncommon) *
@@ -367,25 +368,21 @@ async function checkListedAll(rate_) {
         usdPrice *
         rate_;
     console.log("Estimate Fund:\t", (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
-    var currentdate = new Date();
+    var currentDate = new Date();
     const nowSync =
-        currentdate.getDate() +
+        currentDate.getDate() +
         "/" +
-        (Number(currentdate.getMonth()) + 1).toString() +
+        (Number(currentDate.getMonth()) + 1).toString() +
         "/" +
-        currentdate.getFullYear();
-    var datetime =
-        "Last Sync: " +
-        currentdate.getHours() +
-        ":" +
-        currentdate.getMinutes() +
-        ":" +
-        currentdate.getSeconds();
+        currentDate.getFullYear();
+    const daysAgo = Math.floor((currentDate - firstListTime * 1000) / (24 * 60 * 60 * 1000));
+    var datetime = "Last Sync: " + currentDate.getMinutes();
     console.log(
         `${sumMomo}/${momoUnlist} Momos: ${sumMomoCM} Common, ${sumMomoUCM} Uncommon, ${sumMomoUNQ} Unique, ${sumMomoR} Rare, ${sumMomoE} Epic, ${sumMomoL} Legend (${sumBuy.toFixed()}, ${(
             sumSell * 0.95
         ).toFixed()}) Profit: ${countProfit} - Lost: ${countLoss} - Tie: ${countTie} ${datetime}`
     );
+    console.log(`First list: ${daysAgo} days ago`);
     var logsBalance = fs.readFileSync("logsBalance.csv", "utf8");
     var logsBalanceCheck = logsBalance.split("\n");
     logsBalanceCheck = logsBalanceCheck[logsBalanceCheck.length - 1].split("\t");
@@ -450,6 +447,7 @@ const checkRightAccBuy = (arrayMyAcc, accRunRight) => {
 const myAcc = configJson.myAcc;
 const accRun = configJson.accBuy;
 var listed = "";
+let firstListTime = Date.now();
 var momoListed = 0,
     momoUnlist = 0,
     sumMomo = 0,
