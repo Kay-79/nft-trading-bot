@@ -268,7 +268,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     const Web3 = require("web3");
     const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
-    console.log(acc.address);
+    // console.log(acc.address);
     const abi = [
         {
             inputs: [
