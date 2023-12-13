@@ -196,7 +196,7 @@ async function main(address, nameFile_, rate_) {
         if (flagCountMomo == idMomo.length) {
             break;
         }
-        await sleep(1000);
+        await sleep(delayPerRequest);
     }
     if (
         nameMomo.length == idMomo.length &&
@@ -315,6 +315,7 @@ async function main(address, nameFile_, rate_) {
 }
 
 async function checkListedAll(rate_) {
+    var timeCheck = new Date();
     // ip = await axios.get('https://ip.whatisproxy.net/').catch(e => { console.log("Err ip") })
     // console.log(ip.data)
     bnbPrice = await axios
@@ -433,7 +434,11 @@ async function checkListedAll(rate_) {
                 }
             });
         } else {
-            console.log(`Don't save min, ${countRqs} requests`);
+            console.log(
+                `Don't save min. ${countRqs} requests. During ${
+                    (Date.now() - timeCheck) / 1000
+                } seconds`
+            );
         }
     }
 }
@@ -466,8 +471,9 @@ var momoListed = 0,
     sumSell = 0,
     sumBuy = 0,
     sumUSD = 0,
-    sumBNB = 0;
-countRqs = 0;
+    sumBNB = 0,
+    countRqs = 0;
+const delayPerRequest = 2000;
 const lastAcc = myAcc[myAcc.length - 1][1];
 const save = false;
 const rateSale = 0.42;
