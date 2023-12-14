@@ -4,28 +4,7 @@ const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const { exit } = require("process");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org"));
-const abi = [
-    {
-        constant: true,
-        inputs: [{ internalType: "address", name: "account", type: "address" }],
-        name: "balanceOf",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        payable: false,
-        stateMutability: "view",
-        type: "function",
-    },
-    {
-        inputs: [
-            { internalType: "contract IERC20", name: "token", type: "address" },
-            { internalType: "address", name: "to", type: "address" },
-            { internalType: "uint256", name: "amount", type: "uint256" },
-        ],
-        name: "transferERC20",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-    },
-];
+const abi = require("../abi/abiERC20");
 const contractToken = new web3.eth.Contract(abi, "0x55d398326f99059ff775485246999027b3197955");
 const configJson = require("../config/config");
 const myAcc = configJson.myAcc;
