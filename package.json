@@ -12,7 +12,7 @@
         "concurrently": "^8.2.2"
     },
     "name": "buy-mobox-submarine",
-    "description": "-   Banker is 58",
+    "description": "bot front run",
     "version": "1.0.0",
     "main": "",
     "scripts": {

@@ -2,7 +2,7 @@ require("dotenv").config();
 const request = require("request");
 const fs = require("fs");
 const checkAvailable = require("../utils/bid/checkAvailable");
-const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
+const configJson = require("../config/config");
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -69,7 +69,15 @@ async function setup(Private_Key_) {
                             nonce: nonce_,
                             to: contractAddress,
                             value: 0,
-                            data: contract.methods.bid(seller_[index].toString(), index_[index].toString(), startTime_[index].toString(), priceList[index].toString(), "1").encodeABI(), // amount = 1
+                            data: contract.methods
+                                .bid(
+                                    seller_[index].toString(),
+                                    index_[index].toString(),
+                                    startTime_[index].toString(),
+                                    priceList[index].toString(),
+                                    "1"
+                                )
+                                .encodeABI(), // amount = 1
                         });
                         nonce_ += 1;
                     }
@@ -81,7 +89,15 @@ async function setup(Private_Key_) {
                         nonce: nonce_,
                         to: contractAddress,
                         value: 0,
-                        data: contract.methods.bid(seller_.toString(), index_.toString(), startTime_.toString(), priceList.toString(), amountBid.toString()).encodeABI(), // amount = 1 or > 1
+                        data: contract.methods
+                            .bid(
+                                seller_.toString(),
+                                index_.toString(),
+                                startTime_.toString(),
+                                priceList.toString(),
+                                amountBid.toString()
+                            )
+                            .encodeABI(), // amount = 1 or > 1
                     });
                 }
                 let checkSuccess = "Success";
@@ -91,18 +107,40 @@ async function setup(Private_Key_) {
                     let signed = [];
                     let biding = [];
                     for (let index = 0; index < tx.length; index++) {
-                        signed.push(await web3.eth.accounts.signTransaction(tx[index], Private_Key_));
+                        signed.push(
+                            await web3.eth.accounts.signTransaction(tx[index], Private_Key_)
+                        );
                     }
                     if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
-                        await sleep(Number(startTime_[0]) + timeSendTx - timeGetAvaliableAuction - Date.now() / 1000);
-                        isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
+                        await sleep(
+                            Number(startTime_[0]) +
+                                timeSendTx -
+                                timeGetAvaliableAuction -
+                                Date.now() / 1000
+                        );
+                        isAvailableAuctions = await checkAvailable(
+                            seller_[0],
+                            index_[0],
+                            startTime_[0]
+                        );
                         if (isAvailableAuctions) {
-                            console.log("Sleep:" + (Number(startTime_[0]) + timeSendTx - Date.now() / 1000).toFixed(3));
+                            console.log(
+                                "Sleep:" +
+                                    (
+                                        Number(startTime_[0]) +
+                                        timeSendTx -
+                                        Date.now() / 1000
+                                    ).toFixed(3)
+                            );
                             await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
                         }
                     } else {
                         // maybe bug here
-                        isAvailableAuctions = await checkAvailable(seller_[0], index_[0], startTime_[0]);
+                        isAvailableAuctions = await checkAvailable(
+                            seller_[0],
+                            index_[0],
+                            startTime_[0]
+                        );
                     }
                     console.log("Paying!!");
                     try {
@@ -119,7 +157,9 @@ async function setup(Private_Key_) {
                         if (tx.length == 1) {
                             try {
                                 checkSuccess = "Success";
-                                const sendEach = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                const sendEach = await web3.eth.sendSignedTransaction(
+                                    signed[index].rawTransaction
+                                );
                                 console.log("Successful bid! At block:", sendEach.blockNumber);
                             } catch (error) {
                                 console.log("Fail...setting new time");
@@ -132,7 +172,9 @@ async function setup(Private_Key_) {
                             if (index == tx.length - 1) {
                                 try {
                                     checkSuccess = "Success";
-                                    biding[index] = await web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                    biding[index] = await web3.eth.sendSignedTransaction(
+                                        signed[index].rawTransaction
+                                    );
                                 } catch (error) {
                                     console.log("Bid fail");
                                     checkSuccess = "Fail";
@@ -141,7 +183,9 @@ async function setup(Private_Key_) {
                             } else {
                                 try {
                                     checkSuccess = "Success";
-                                    biding[index] = web3.eth.sendSignedTransaction(signed[index].rawTransaction);
+                                    biding[index] = web3.eth.sendSignedTransaction(
+                                        signed[index].rawTransaction
+                                    );
                                 } catch (error) {
                                     console.log("Bid fail");
                                     checkSuccess = "Fail";
@@ -161,9 +205,20 @@ async function setup(Private_Key_) {
                 try {
                     let price_send = [];
                     for (let q = 0; q < priceList.length; q++) {
-                        price_send.push(" " + ((Number(priceList[q]) - 10 ** 14) / 10 ** 18).toFixed(2));
+                        price_send.push(
+                            " " + ((Number(priceList[q]) - 10 ** 14) / 10 ** 18).toFixed(2)
+                        );
                     }
-                    priceList1 = checkSuccess + " " + gasPriceScanRaw + "\nPrices   : " + price_send.toString().replace(" ", "") + "\nAmount: " + amountList + "\nID List   : " + idList;
+                    priceList1 =
+                        checkSuccess +
+                        " " +
+                        gasPriceScanRaw +
+                        "\nPrices   : " +
+                        price_send.toString().replace(" ", "") +
+                        "\nAmount: " +
+                        amountList +
+                        "\nID List   : " +
+                        idList;
                     if (!isAvailableAuctions) {
                         priceList1 = `Auction be canceled by ${seller_[0]}`;
                         console.log(priceList1);
@@ -177,25 +232,55 @@ async function setup(Private_Key_) {
                         timeSendReal = timeSendReal.timestamp;
                         console.log("timeStampFail:", timeSendReal);
                     }
-                    if (timeSendReal.toFixed() != (Number(startTime_[0]) + 120).toFixed() && timeSendReal > 1.7 * 10 ** 9) {
+                    if (
+                        timeSendReal.toFixed() != (Number(startTime_[0]) + 120).toFixed() &&
+                        timeSendReal > 1.7 * 10 ** 9
+                    ) {
                         const oldTimeBid = timeSendTx;
                         if (Math.abs(Number(startTime_[0]) + 120 - timeSendReal) < 3600) {
-                            if (timeSendReal < Number(startTime_[0]) + 120 || timeSendReal - (Number(startTime_[0]) + 120) > 10) {
-                                timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal);
+                            if (
+                                timeSendReal < Number(startTime_[0]) + 120 ||
+                                timeSendReal - (Number(startTime_[0]) + 120) > 10
+                            ) {
+                                timeSendTx =
+                                    timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal);
                                 console.log("timeSend");
                             } else {
-                                timeSendTx = timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 2;
+                                timeSendTx =
+                                    timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 2;
                                 console.log("timeSend / 2");
                             }
                         }
-                        const contentTimeBid = `Expect: ${(Number(startTime_[0]) + 120).toFixed().slice(8, 10)}\nResult: ${timeSendReal.toFixed().slice(8, 10)}\nOld: ${oldTimeBid.toFixed(2)}\nNew: ${timeSendTx.toFixed(2)}`;
-                        request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + contentTimeBid, function (error, response, body) {});
+                        const contentTimeBid = `Expect: ${(Number(startTime_[0]) + 120)
+                            .toFixed()
+                            .slice(8, 10)}\nResult: ${timeSendReal
+                            .toFixed()
+                            .slice(8, 10)}\nOld: ${oldTimeBid.toFixed(
+                            2
+                        )}\nNew: ${timeSendTx.toFixed(2)}`;
+                        request(
+                            "https://api.telegram.org/" +
+                                apiTele +
+                                "/sendMessage?chat_id=@" +
+                                chatId +
+                                "&text=" +
+                                contentTimeBid,
+                            function (error, response, body) {}
+                        );
                     }
                 } catch (error) {
                     console.log(error);
                 }
                 try {
-                    request("https://api.telegram.org/" + apiTele + "/sendMessage?chat_id=@" + chatId + "&text=" + priceList1, function (error, response, body) {});
+                    request(
+                        "https://api.telegram.org/" +
+                            apiTele +
+                            "/sendMessage?chat_id=@" +
+                            chatId +
+                            "&text=" +
+                            priceList1,
+                        function (error, response, body) {}
+                    );
                 } catch (error) {}
             } else {
                 console.log("Over time (" + overTime.toString() + " seconds)!!");
@@ -241,7 +326,10 @@ async function bid() {
         if (Math.abs(new Date().getHours() - hourCache) >= 4) {
             try {
                 hourCache = new Date().getHours();
-                request(`https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: alive\nTime: ${timeSendTx}`, function (error, response, body) {});
+                request(
+                    `https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: alive\nTime: ${timeSendTx}`,
+                    function (error, response, body) {}
+                );
             } catch (error) {
                 console.log("Send status fail");
             }

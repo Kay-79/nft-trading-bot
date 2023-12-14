@@ -2,7 +2,7 @@ require("dotenv").config();
 const request = require("request");
 const fs = require("fs");
 const checkAvailable = require("../utils/bid/checkAvailable");
-const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
+const configJson = require("../config/config");
 const Private_Key = process.env.PRIVATE_KEY_FAKE_BID;
 function sleep(ms) {
     return new Promise((resolve) => {

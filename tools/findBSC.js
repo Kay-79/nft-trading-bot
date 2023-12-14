@@ -15,7 +15,7 @@ const abiBUSD = [
         type: "function",
     },
 ];
-const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
+const configJson = require("../config/config");
 const addressToken = configJson.addressToken;
 const contract = new web3.eth.Contract(abiBUSD, addressToken);
 

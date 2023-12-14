@@ -4,7 +4,7 @@ const fs = require("fs");
 const { exit } = require("process");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
-const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
+const configJson = require("../config/config");
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);

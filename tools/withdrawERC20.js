@@ -27,7 +27,7 @@ const abi = [
     },
 ];
 const contractToken = new web3.eth.Contract(abi, "0x55d398326f99059ff775485246999027b3197955");
-const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
+const configJson = require("../config/config");
 const myAcc = configJson.myAcc;
 const Private_Key = process.env.PRIVATE_KEY_BID;
 
@@ -53,13 +53,21 @@ async function withdrawTo(address_) {
         console.log(balanceSC / 10 ** 18);
         if (balanceSC / 10 ** 18 > minWithdraw) {
             if (cacheWithdraw + balanceSC / 10 ** 18 > maxWithdraw) {
-                balanceSC = Number((Number((maxWithdraw - cacheWithdraw).toFixed(2)) * 10 ** 18).toFixed(0));
+                balanceSC = Number(
+                    (Number((maxWithdraw - cacheWithdraw).toFixed(2)) * 10 ** 18).toFixed(0)
+                );
                 await sleep(100);
             }
             cacheWithdraw += balanceSC / 10 ** 18;
             try {
                 const contractAddress = new web3.eth.Contract(abi, myAcc[index][0]);
-                let encoded = await contractAddress.methods.transferERC20("0x55d398326f99059ff775485246999027b3197955", address_, balanceSC.toString()).encodeABI();
+                let encoded = await contractAddress.methods
+                    .transferERC20(
+                        "0x55d398326f99059ff775485246999027b3197955",
+                        address_,
+                        balanceSC.toString()
+                    )
+                    .encodeABI();
                 var tx = {
                     gas: 100000,
                     gasPrice: 3.001 * 10 ** 9,
@@ -69,7 +77,14 @@ async function withdrawTo(address_) {
                 };
                 let signed = await web3.eth.accounts.signTransaction(tx, Private_Key);
                 await web3.eth.sendSignedTransaction(signed.rawTransaction);
-                console.log("Tranfer " + (balanceSC / 10 ** 18).toFixed(2).toString() + "USDT from " + myAcc[index][0] + " to " + address_);
+                console.log(
+                    "Tranfer " +
+                        (balanceSC / 10 ** 18).toFixed(2).toString() +
+                        "USDT from " +
+                        myAcc[index][0] +
+                        " to " +
+                        address_
+                );
             } catch (error) {
                 console.log("Encode Fail", error);
             }
