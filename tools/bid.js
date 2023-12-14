@@ -19,7 +19,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed3.bnb
 // const web3sc = new Web3(new Web3.providers.WebsocketProvider('wss://solemn-wild-aura.bsc.discover.quiknode.pro/9fbdf28f69f47aa85c76222be804b4224c2dbd22/'));
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
-const abi = JSON.parse(fs.readFileSync("./config/abiMobox.json"));
+const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const contractAddress = configJson.accBuy;
 const contract = new web3.eth.Contract(abi, contractAddress);
 async function setup(Private_Key_) {

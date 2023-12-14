@@ -3,7 +3,7 @@ const axios = require("axios");
 const fs = require("fs");
 const Web3 = require("web3");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
-const abi = JSON.parse(fs.readFileSync("./config/abiMobox.json"));
+const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);

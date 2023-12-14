@@ -5,7 +5,7 @@ const { exit } = require("process");
 const Web3 = require("web3");
 const request = require("request");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
-const abiMobox = JSON.parse(fs.readFileSync("./config/abiMobox.json", "utf8"));
+const abiMobox = JSON.parse(fs.readFileSync("./abi/abiMobox.json", "utf8"));
 const abiBUSD = [
     {
         inputs: [{ internalType: "address", name: "account", type: "address" }],
