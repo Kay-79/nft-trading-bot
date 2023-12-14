@@ -1,3 +1,4 @@
+require("dotenv").config();
 const axios = require("axios");
 const fs = require("fs");
 const { exit } = require("process");
@@ -257,14 +258,7 @@ async function checkIndex(address) {
 }
 
 async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
-    try {
-        const inputdata = fs.readFileSync("myAccount_1_0_1.txt", "utf8");
-        myAccount = inputdata.split("\n");
-        // console.log(myAccount[1])
-    } catch (err) {
-        console.error(err);
-    }
-    const Private_Key = myAccount[1];
+    const Private_Key = process.env.PRIVATE_KEY_CHANGE;
     const Web3 = require("web3");
     const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);

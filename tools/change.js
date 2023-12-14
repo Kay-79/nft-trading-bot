@@ -1,3 +1,4 @@
+require("dotenv").config();
 const axios = require("axios");
 const fs = require("fs");
 const Web3 = require("web3");
@@ -19,15 +20,8 @@ const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.def
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
 minUNQ = configJson.minPrice.minUnique;
-Private_Key = "";
+Private_Key = process.env.PRIVATE_KEY_CHANGE;
 File_Key = ["_1_0_1"];
-try {
-    const passData = fs.readFileSync("myAccount_1_0_1.txt", "utf8");
-    myAccount = passData.split("\n");
-    Private_Key = myAccount[1];
-} catch (err) {
-    console.error(err);
-}
 idMomo = [];
 indexMomo = [];
 priceSell = [];

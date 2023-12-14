@@ -231,13 +231,7 @@ async function setup(Private_Key_) {
     }
 }
 async function bid() {
-    try {
-        const passData = fs.readFileSync("myAccount_5_8_1.txt", "utf8");
-        myAccount = passData.split("\n");
-    } catch (err) {
-        console.error(err);
-    }
-    const Private_Key = myAccount[1];
+    const Private_Key = process.env.PRIVATE_KEY_BID;
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     let hourCache = new Date().getHours() - 4;
