@@ -1,31 +1,16 @@
+require("dotenv").config();
 const fs = require("fs");
 const axios = require("axios");
 const { exit } = require("process");
-
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
 async function sendTxt(addressSC, gasPrice_, gasLimit_, index_, prices_) {
-    try {
-        const inputdata = fs.readFileSync("myAccount_1_0_1.txt", "utf8");
-        myAccount = inputdata.split("\n");
-        // console.log(myAccount[1])
-    } catch (err) {
-        console.error(err);
-    }
-    const Private_Key = myAccount[1];
+    const Private_Key = process.env.PRIVATE_KEY_CHANGE;
     const Web3 = require("web3");
     const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
     const contract = new web3.eth.Contract(abi, addressSC);
-    // console.log(contract)
     emptyVar = [];
-    // console.log(ids,prices)
-    // asd
     tx = "";
     encoded = "";
     signArray = "";
@@ -40,7 +25,6 @@ async function sendTxt(addressSC, gasPrice_, gasLimit_, index_, prices_) {
     };
     await web3.eth.accounts.signTransaction(tx, Private_Key).then((signed) => {
         signArray = signed;
-        // console.log(Date());
     });
     console.log("Listing");
     try {

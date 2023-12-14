@@ -11,19 +11,6 @@ function sleep(ms) {
     });
 }
 
-// const dataCommon = fs.readFileSync('./dataMomo/CheapestPriceMoboxCommon.csv', 'utf8');
-// const commonID = dataCommon.split('\n')
-// const dataUncommon = fs.readFileSync('./dataMomo/CheapestPriceMoboxUncommon.csv', 'utf8');
-// const uncommonID = dataUncommon.split('\n')
-// const dataUnique = fs.readFileSync('./dataMomo/CheapestPriceMoboxUnique.csv', 'utf8');
-// const uniqueID = dataUnique.split('\n')
-// const dataRare = fs.readFileSync('./dataMomo/CheapestPriceMoboxRare.csv', 'utf8');
-// const rareID = dataRare.split('\n')
-// const dataEpic = fs.readFileSync('./dataMomo/CheapestPriceMoboxEpic.csv', 'utf8');
-// const epicID = dataEpic.split('\n')
-// console.log(commonID[5])
-// console.log(uncommonID[5])
-// console.log(uniqueID[5])
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
 minUNQ = configJson.minPrice.minUnique;
@@ -76,7 +63,6 @@ async function checkChangePrice(indexId) {
         priceSell[indexId] = 15;
         return false;
     }
-    // console.log(data3)
     console.log(
         idMomoBought[indexId].toString() +
             "-" +
@@ -190,7 +176,6 @@ async function getPriceToSell(address, boolMin) {
         cacheListID.push(idMomoBought[wr]);
         cacheListPrice.push(priceSell[wr]);
         if (amoutList == 6) {
-            // console.log(cacheListID)
             idList.push(cacheListID);
             priceList.push(cacheListPrice);
             cacheListID = [];
@@ -198,7 +183,6 @@ async function getPriceToSell(address, boolMin) {
             amoutList = 0;
         }
     }
-    // console.log(idList)
     console.log(
         "ids =\n" + JSON.stringify(idList) + "\nprices =\n" + JSON.stringify(priceList) + "\n"
     );
@@ -262,7 +246,6 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     const Web3 = require("web3");
     const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
-    // console.log(acc.address);
     const abi = [
         {
             inputs: [
@@ -280,10 +263,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     ];
     const consractAddress = "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2";
     const contract = new web3.eth.Contract(abi, consractAddress);
-    // console.log(contract)
     emptyVar = [];
-    // console.log(ids,prices)
-    // asd
     tx = "";
     encoded = "";
     signArray = "";
@@ -304,7 +284,6 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     };
     await web3.eth.accounts.signTransaction(tx, Private_Key).then((signed) => {
         signArray = signed;
-        // console.log(Date());
     });
     console.log("Listing");
     try {

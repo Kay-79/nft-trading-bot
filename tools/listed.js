@@ -5,15 +5,7 @@ const getAmountUnlist = require("../utils/common/getAmountUnlist");
 const configJson = require("../config/config");
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
-const abiBUSD = [
-    {
-        inputs: [{ internalType: "address", name: "account", type: "address" }],
-        name: "balanceOf",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-    },
-];
+const abiBUSD = require("../abi/abiERC20");
 const contract = new web3.eth.Contract(abiBUSD, "0x55d398326f99059ff775485246999027b3197955");
 const dataMomo = fs.readFileSync("./data/dataMomo.txt", "utf8");
 const momoID = dataMomo.split("\n");

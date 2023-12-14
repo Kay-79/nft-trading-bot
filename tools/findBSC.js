@@ -6,15 +6,7 @@ const Web3 = require("web3");
 const request = require("request");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 const abiMobox = JSON.parse(fs.readFileSync("./abi/abiMobox.json", "utf8"));
-const abiBUSD = [
-    {
-        inputs: [{ internalType: "address", name: "account", type: "address" }],
-        name: "balanceOf",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function",
-    },
-];
+const abiBUSD = require("../abi/abiERC20");
 const configJson = require("../config/config");
 const addressToken = configJson.addressToken;
 const contract = new web3.eth.Contract(abiBUSD, addressToken);
