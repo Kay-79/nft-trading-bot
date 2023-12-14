@@ -1,4 +1,6 @@
+require("dotenv").config();
 const fs = require("fs");
+const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const { exit } = require("process");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org"));
@@ -27,19 +29,7 @@ const abi = [
 const contractToken = new web3.eth.Contract(abi, "0x55d398326f99059ff775485246999027b3197955");
 const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
 const myAcc = configJson.myAcc;
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
-try {
-    const passData = fs.readFileSync("myAccount_5_8_1.txt", "utf8");
-    myAccount = passData.split("\n");
-} catch (err) {
-    console.error(err);
-    exit();
-}
-const Private_Key = myAccount[1];
+const Private_Key = process.env.PRIVATE_KEY_BID;
 
 async function withdrawTo(address_) {
     let checkMyAcc = false;
@@ -94,4 +84,4 @@ async function withdrawTo(address_) {
 const minWithdraw = 10;
 const maxWithdraw = 999;
 
-withdrawTo("0x73A4AbD430C821B49423dB5279fb56ee72073292");
+withdrawTo("0x88888dF23F9554e4B043B00E1F4AfB39Fc078888");

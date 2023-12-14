@@ -405,6 +405,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 7; // without rare and epic
+value = 9; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_4_4_0");
+createBatch(3.001, 1000000, "", "_7_3_A");
