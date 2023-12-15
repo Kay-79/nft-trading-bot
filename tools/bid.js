@@ -14,8 +14,10 @@ process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
 });
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
-// const web3 = new Web3(new Web3.providers.HttpProvider("https://morning-summer-sanctuary.bsc.quiknode.pro/51adc3f0b87b823d2689f28e146db07a50f36b21/"));
-const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed3.bnbchain.org"));
+const web3 = new Web3(
+    new Web3.providers.HttpProvider("https://go.getblock.io/a30d0dcecbb14cf8a9cfb4ff8e00c475")
+);
+// const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed3.bnbchain.org"));
 // const web3sc = new Web3(new Web3.providers.WebsocketProvider('wss://solemn-wild-aura.bsc.discover.quiknode.pro/9fbdf28f69f47aa85c76222be804b4224c2dbd22/'));
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
