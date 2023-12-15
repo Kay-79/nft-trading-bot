@@ -381,28 +381,28 @@ async function checkListedAll(rate_) {
         ).toFixed()}) Profit: ${countProfit} - Lost: ${countLoss} - Tie: ${countTie} ${datetime}`
     );
     console.log(`First list: ${daysAgo} days ago`);
-    var logsBalance = fs.readFileSync("logsBalance.csv", "utf8");
-    var logsBalanceCheck = logsBalance.split("\n");
-    logsBalanceCheck = logsBalanceCheck[logsBalanceCheck.length - 1].split("\t");
-    const lastBalance = logsBalanceCheck[0];
-    const lastSync = logsBalanceCheck[1];
-    if (lastSync != nowSync && rate_ == 0.1) {
-        console.log("New save");
-        fs.writeFile(
-            "logsBalance.csv",
-            logsBalance +
-                "\n" +
-                (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
-                "\t" +
-                nowSync,
-            (err) => {
-                if (err) {
-                    console.error(err);
+    try {
+        var logsBalance = fs.readFileSync("logsBalance.csv", "utf8");
+        var logsBalanceCheck = logsBalance.split("\n");
+        logsBalanceCheck = logsBalanceCheck[logsBalanceCheck.length - 1].split("\t");
+        const lastBalance = logsBalanceCheck[0];
+        const lastSync = logsBalanceCheck[1];
+        if (lastSync != nowSync && rate_ == 0.1) {
+            console.log("New save");
+            fs.writeFile(
+                "logsBalance.csv",
+                logsBalance +
+                    "\n" +
+                    (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
+                    "\t" +
+                    nowSync,
+                (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
                 }
-            }
-        );
-    } else {
-        try {
+            );
+        } else {
             if (
                 Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) - Number(lastBalance) > 1 &&
                 rate_ == 0.1
@@ -436,8 +436,8 @@ async function checkListedAll(rate_) {
                     } seconds`
                 );
             }
-        } catch (e) {}
-    }
+        }
+    } catch (e) {}
 }
 const checkRightAccBuy = (arrayMyAcc, accRunRight) => {
     for (let index = 0; index < arrayMyAcc.length; index++) {
