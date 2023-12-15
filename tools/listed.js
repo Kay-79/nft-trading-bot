@@ -297,11 +297,14 @@ async function main(address, nameFile_, rate_) {
                     "\t\t" +
                     "\n";
             }
-            fs.writeFile("listed" + ".csv", listed, (err) => {
-                if (err) {
-                    console.error(err);
-                }
-            });
+            try {
+                fs.readFileSync("listed.csv", "utf8");
+                fs.writeFile("listed.csv", listed, (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            } catch (error) {}
         }
     }
 }
@@ -399,39 +402,41 @@ async function checkListedAll(rate_) {
             }
         );
     } else {
-        if (
-            Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) - Number(lastBalance) > 1 &&
-            rate_ == 0.1
-        ) {
-            console.log(
-                "Save max",
-                Number(lastBalance).toFixed(),
-                "to",
-                Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed()
-            );
-            logsBalanceCheck = logsBalance.split("\n");
-            logsBalance = "";
-            for (let index = 0; index < logsBalanceCheck.length - 1; index++) {
-                var logEach = logsBalanceCheck[index].split("\t");
-                logsBalance += logEach[0] + "\t" + logEach[1] + "\n";
-            }
-            logsBalance =
-                logsBalance +
-                (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
-                "\t" +
-                nowSync;
-            fs.writeFile("logsBalance.csv", logsBalance, (err) => {
-                if (err) {
-                    console.error(err);
+        try {
+            if (
+                Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale) - Number(lastBalance) > 1 &&
+                rate_ == 0.1
+            ) {
+                console.log(
+                    "Save max",
+                    Number(lastBalance).toFixed(),
+                    "to",
+                    Number(sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed()
+                );
+                logsBalanceCheck = logsBalance.split("\n");
+                logsBalance = "";
+                for (let index = 0; index < logsBalanceCheck.length - 1; index++) {
+                    var logEach = logsBalanceCheck[index].split("\t");
+                    logsBalance += logEach[0] + "\t" + logEach[1] + "\n";
                 }
-            });
-        } else {
-            console.log(
-                `Don't save min. ${countRqs} requests. During ${
-                    (Date.now() - timeCheck) / 1000
-                } seconds`
-            );
-        }
+                logsBalance =
+                    logsBalance +
+                    (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
+                    "\t" +
+                    nowSync;
+                fs.writeFile("logsBalance.csv", logsBalance, (err) => {
+                    if (err) {
+                        console.error(err);
+                    }
+                });
+            } else {
+                console.log(
+                    `Don't save min. ${countRqs} requests. During ${
+                        (Date.now() - timeCheck) / 1000
+                    } seconds`
+                );
+            }
+        } catch (e) {}
     }
 }
 const checkRightAccBuy = (arrayMyAcc, accRunRight) => {
