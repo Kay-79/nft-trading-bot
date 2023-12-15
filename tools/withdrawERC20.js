@@ -4,8 +4,9 @@ const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const { exit } = require("process");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org"));
-const abi = require("../abi/abiERC20");
-const contractToken = new web3.eth.Contract(abi, "0x55d398326f99059ff775485246999027b3197955");
+const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
+const abiBUSD = require("../abi/abiERC20");
+const contractToken = new web3.eth.Contract(abiBUSD, "0x55d398326f99059ff775485246999027b3197955");
 const configJson = require("../config/config");
 const myAcc = configJson.myAcc;
 const Private_Key = process.env.PRIVATE_KEY_BID;
@@ -78,4 +79,4 @@ async function withdrawTo(address_) {
 const minWithdraw = 10;
 const maxWithdraw = 999;
 
-withdrawTo("0x88888dF23F9554e4B043B00E1F4AfB39Fc078888");
+withdrawTo("0xbf6F2114A230B399F0A9085AC0FC27Bd4148a465");
