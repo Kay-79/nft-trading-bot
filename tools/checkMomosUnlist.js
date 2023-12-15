@@ -93,7 +93,7 @@ const main = async (scandBlock, addressCheck) => {
     console.log(dataBid);
     for (let i = 10000; i < 40000; i++) {
         if (dataBid[i]) {
-            console.log(dataBid[i]);
+            console.log(i, dataBid[i]);
         }
     }
 };
@@ -377,3 +377,10 @@ let dataBid = {
 };
 
 main(startBlock, addressCheckUnList);
+/*
+24050
+11031
+11030x2
+11027
+11010
+*/

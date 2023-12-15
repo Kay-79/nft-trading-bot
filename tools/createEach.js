@@ -100,9 +100,9 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     }
 }
 
-indexs = [74];
-ids = [["14045", "14031", "14025", "14008", "11026", "11025"]];
-prices = [["3.699", "3.439", "4.499", "3.439", "3.979", "3.489"]];
+indexs = [10];
+ids = [["24050", "11031", "11030", "11027", "11027", "11010"]];
+prices = [["1.969", "3.489", "3.559", "3.469", "3.469", "3.449"]];
 
 console.log(indexs.length, ids.length, prices.length);
 for (let ii = 0; ii < prices.length; ii++) {
