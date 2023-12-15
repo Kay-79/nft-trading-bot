@@ -9,20 +9,10 @@ function sleep(ms) {
         setTimeout(resolve, ms);
     });
 }
-async function sendTxt(
-    gasPrice_,
-    gasLimit_,
-    index_,
-    ids_,
-    prices_,
-    hexData_,
-    nameFile_
-) {
+async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
     const Private_Key = process.env.PRIVATE_KEY_CHANGE;
     const Web3 = require("web3");
-    const web3 = new Web3(
-        new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org")
-    );
+    const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
@@ -55,9 +45,7 @@ async function sendTxt(
     });
     console.log("Listing");
     try {
-        let createAuctionBatch = await web3.eth.sendSignedTransaction(
-            signArray.rawTransaction
-        );
+        let createAuctionBatch = await web3.eth.sendSignedTransaction(signArray.rawTransaction);
         console.log("Done at block:", createAuctionBatch.blockNumber);
         boolSell = "TRUE";
     } catch (error) {
@@ -76,30 +64,19 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         exit();
     }
     while (true) {
-        if (
-            indexs.length != ids.length ||
-            indexs.length != prices.length ||
-            indexs[0] == 999
-        ) {
+        if (indexs.length != ids.length || indexs.length != prices.length || indexs[0] == 999) {
             console.log("Length array not same!");
             break;
         }
         if (hexData_.length > 0) {
-            await sendTxt(
-                gasPrice_,
-                gasLimit_,
-                "",
-                "",
-                "",
-                hexData_,
-                nameFile_
-            );
+            await sendTxt(gasPrice_, gasLimit_, "", "", "", hexData_, nameFile_);
             break;
         }
         for (let index = 0; index < indexs.length; index++) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE";
                 console.log(indexs[index], ids[index], prices[index]);
+
                 await sendTxt(
                     gasPrice_,
                     gasLimit_,
@@ -124,17 +101,19 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     }
 }
 
-indexs = [999]; // must be change
-ids = [["12051", "13051", "14051", "14016"]];
-prices = [["3.669", "3.569", "3.879", "3.879"]];
+indexs = [999];
+ids = [["24050", "24054", "24053", "24053", "34029", "34017"]];
+prices = [["1.979", "1.979", "1.989", "1.989", "1.359", "1.879"]];
 
 console.log(indexs.length, ids.length, prices.length);
 for (let ii = 0; ii < prices.length; ii++) {
     for (let jj = 0; jj < prices[ii].length; jj++) {
-        prices[ii][jj] =
-            Math.round(Number(prices[ii][jj]) * 10 ** 5).toString() +
-            "0000000000000";
+        prices[ii][jj] = Math.round(Number(prices[ii][jj]) * 10 ** 5).toString() + "0000000000000";
+        if (!Number(prices[ii][jj])) {
+            console.log(`Invalid price`);
+            exit();
+        }
     }
 }
-const consractAddress = "0x44444402BC4cA69CbAeE0887917AF8949D2d0000";
+const consractAddress = "0x88888dF23F9554e4B043B00E1F4AfB39Fc078888";
 createBatch(3.001, 1000000, "", "_1_0_1");
