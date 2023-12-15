@@ -76,7 +76,6 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE";
                 console.log(indexs[index], ids[index], prices[index]);
-
                 await sendTxt(
                     gasPrice_,
                     gasLimit_,
@@ -101,18 +100,14 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     }
 }
 
-indexs = [999];
-ids = [["24050", "24054", "24053", "24053", "34029", "34017"]];
-prices = [["1.979", "1.979", "1.989", "1.989", "1.359", "1.879"]];
+indexs = [74];
+ids = [["14045", "14031", "14025", "14008", "11026", "11025"]];
+prices = [["3.699", "3.439", "4.499", "3.439", "3.979", "3.489"]];
 
 console.log(indexs.length, ids.length, prices.length);
 for (let ii = 0; ii < prices.length; ii++) {
     for (let jj = 0; jj < prices[ii].length; jj++) {
         prices[ii][jj] = Math.round(Number(prices[ii][jj]) * 10 ** 5).toString() + "0000000000000";
-        if (!Number(prices[ii][jj])) {
-            console.log(`Invalid price`);
-            exit();
-        }
     }
 }
 const consractAddress = "0x88888dF23F9554e4B043B00E1F4AfB39Fc078888";
