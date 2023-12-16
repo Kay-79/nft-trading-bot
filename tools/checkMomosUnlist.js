@@ -103,17 +103,22 @@ const main = async (scandBlock, addressCheck) => {
     console.log(dataBid);
     await getMomosListed(scandBlock, addressCheck);
     console.log(dataBid);
+    let momoUnlist = [];
     for (let i = 10000; i < 40000; i++) {
         if (dataBid[i]) {
-            console.log(i, dataBid[i]);
+            for (let j = 0; j < dataBid[i]; j++) {
+                momoUnlist.push(`"${i}"`);
+            }
         }
     }
+    console.log(momoUnlist.length);
+    console.log(momoUnlist.toString());
     console.log(addressCheckUnList);
 };
 
-const startBlock = 32273370;
-const nowBlock = 34375084;
-const addressCheckUnList = "0x0000000000000000000000001dfc0656abcfe473f968066157b0d0d740aff4e6";
+const startBlock = 34387402;
+const nowBlock = 34388958;
+const addressCheckUnList = "0x000000000000000000000000a6fbe2809210cc38255959a86ec5ea13f91b636a";
 let dataBid = {};
 // console.log(
 //     `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${34124837}&toBlock=99999999&address=${
