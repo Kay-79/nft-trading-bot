@@ -9,7 +9,7 @@ let dataBid = {};
 const getBlockWithZeroHash = async (blockCheck, addressCheck) => {
     console.log(blockCheck);
     try {
-        let firstBlock = blockCheck - 1000;
+        let firstBlock = blockCheck - 2000;
         let mpListed = null;
         try {
             mpListed = await axios.get(
@@ -138,7 +138,7 @@ const checkMomosUnlist = async (addressCheck) => {
     for (let i = 10000; i < 40000; i++) {
         if (dataBid[i]) {
             for (let j = 0; j < dataBid[i]; j++) {
-                momoUnlist.push(`"${i}"`);
+                momoUnlist.push(`${i}`);
             }
         }
     }

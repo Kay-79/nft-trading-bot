@@ -5,7 +5,7 @@ const { exit } = require("process");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
 const configJson = require("../config/config");
-const {checkMomosUnlist} = require("../utils/create/checkMomosUnlist");
+const { checkMomosUnlist } = require("../utils/create/checkMomosUnlist");
 
 function sleep(ms) {
     return new Promise((resolve) => {
@@ -381,4 +381,4 @@ const minChange = 0.001;
 var accSell = "";
 value = 12; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_7_3_A");
+createBatch(3.001, 1000000, "", "_4_4_0");
