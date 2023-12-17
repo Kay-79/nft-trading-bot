@@ -2,6 +2,8 @@ var axios = require("axios");
 const fs = require("fs");
 const Web3 = require("web3");
 const getAmountUnlist = require("../utils/common/getAmountUnlist");
+const { sleep, ranSleep } = require("../utils/common/sleep");
+const checkRightAccBuy = require("../utils/listed/checkRightAccBuy");
 const configJson = require("../config/config");
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
@@ -18,12 +20,6 @@ nameMomo = [];
 timeChange = [];
 flagID = false;
 flagCountMomo = 0;
-
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
 
 async function checkListed(address) {
     idMomo = [];
@@ -439,14 +435,6 @@ async function checkListedAll(rate_) {
         }
     } catch (e) {}
 }
-const checkRightAccBuy = (arrayMyAcc, accRunRight) => {
-    for (let index = 0; index < arrayMyAcc.length; index++) {
-        if (accRunRight == arrayMyAcc[index][0]) {
-            return true;
-        }
-    }
-    return false;
-};
 
 const myAcc = configJson.myAcc;
 const accRun = configJson.accBuy;
