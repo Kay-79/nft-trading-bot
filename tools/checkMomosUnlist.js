@@ -116,9 +116,9 @@ const main = async (scandBlock, addressCheck) => {
     console.log(addressCheckUnList);
 };
 
-const startBlock = 34387402;
-const nowBlock = 34388958;
-const addressCheckUnList = "0x000000000000000000000000a6fbe2809210cc38255959a86ec5ea13f91b636a";
+const startBlock = 34427290;
+const nowBlock = 34428207;
+const addressCheckUnList = "0x0000000000000000000000000000a7514bc1e72058b709a713d20c1fe68b7777";
 let dataBid = {};
 // console.log(
 //     `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${34124837}&toBlock=99999999&address=${
