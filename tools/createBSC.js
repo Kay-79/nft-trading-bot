@@ -5,6 +5,8 @@ const { exit } = require("process");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
 const configJson = require("../config/config");
+const checkMomosUnlist = require("../utils/create/checkMomosUnlist");
+
 function sleep(ms) {
     return new Promise((resolve) => {
         setTimeout(resolve, ms);
@@ -133,19 +135,7 @@ async function checkChangePrice(indexId) {
 }
 
 async function getPriceToSell(address, boolMin) {
-    // idMomoBought = [];
-    // for (let index1 = 1; index1 < 51; index1++) {
-    //     await checkAmountBuy(address, index1);
-    //     if (
-    //         idMomoBought.length >= value ||
-    //         amountBid >= valueBid ||
-    //         idMomoBought.length >= amountBatchToCreate
-    //     ) {
-    //         break;
-    //     }
-    //     await sleep(200);
-    // }
-    // idMomoBought.reverse();
+    idMomoBought = await checkMomosUnlist(address);
     if (boolMin) {
         await sleep(1000);
         for (let indexMomo = 0; indexMomo < idMomoBought.length; indexMomo++) {
@@ -370,46 +360,7 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
 }
 
 timeWait = 5 * 60 * 60 * 1; //wait latest change price
-const idMomoBought = [
-    "14053",
-    "21015",
-    "21015",
-    "21017",
-    "21017",
-    "21021",
-    "21021",
-    "21021",
-    "21022",
-    "21022",
-    "21022",
-    "21051",
-    "21053",
-    "21053",
-    "21053",
-    "22008",
-    "22008",
-    "22010",
-    "22010",
-    "22011",
-    "22011",
-    "22013",
-    "22014",
-    "22019",
-    "31008",
-    "31026",
-    "31026",
-    "31029",
-    "31030",
-    "31033",
-    "32002",
-    "32014",
-    "32025",
-    "32025",
-    "32027",
-    "32029",
-    "32035",
-    "32036",
-];
+idMomoBought = [];
 priceSell = [];
 myAccounts = [];
 amountBatchToCreate = 0;
