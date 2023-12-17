@@ -106,7 +106,12 @@ async function checkChangePrice(indexId) {
         ) {
             if (checkReject(data3.list[0].auctor)) {
                 console.log("REJECT", idMomo[indexId]);
-                boolChange[indexId] = " ";
+                // boolChange[indexId] = " ";
+                boolChange[indexId] = "TRUE";
+                priceSell[indexId] = (
+                    Number(data3.list[indexid_].nowPrice) / 10 ** 9 +
+                    0.002
+                ).toFixed(3);
                 break;
             }
             //fix same momo
