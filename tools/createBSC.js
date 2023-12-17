@@ -136,6 +136,11 @@ async function checkChangePrice(indexId) {
 
 async function getPriceToSell(address, boolMin) {
     idMomoBought = await checkMomosUnlist(address);
+    console.log(idMomoBought.toString());
+    if (idMomoBought.length != value) {
+        console.log("Balance momo is wrong");
+        return;
+    }
     if (boolMin) {
         await sleep(1000);
         for (let indexMomo = 0; indexMomo < idMomoBought.length; indexMomo++) {
@@ -374,6 +379,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 var accSell = "";
-value = 38; // without rare and epic
+value = 12; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_A_6_f");
+createBatch(3.001, 1000000, "", "_7_3_A");
