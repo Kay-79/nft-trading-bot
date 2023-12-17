@@ -147,5 +147,5 @@ const checkMomosUnlist = async (addressCheck) => {
     console.log(addressCheck);
     return momoUnlist;
 };
-checkMomosUnlist("0x0000a7514bc1e72058b709a713d20c1fe68b7777");
-module.exports = checkMomosUnlist;
+// checkMomosUnlist("0x0000a7514bc1e72058b709a713d20c1fe68b7777");
+module.exports = { checkMomosUnlist };

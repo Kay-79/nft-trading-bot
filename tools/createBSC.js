@@ -5,7 +5,7 @@ const { exit } = require("process");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
 const configJson = require("../config/config");
-const checkMomosUnlist = require("../utils/create/checkMomosUnlist");
+const {checkMomosUnlist} = require("../utils/create/checkMomosUnlist");
 
 function sleep(ms) {
     return new Promise((resolve) => {
