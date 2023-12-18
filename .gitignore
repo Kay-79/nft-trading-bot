@@ -8,3 +8,4 @@ data/dataMomo.txt
 .env
 waitBid.txt
 test*.js
+./data

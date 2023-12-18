@@ -20,7 +20,8 @@ nameMomo = [];
 timeChange = [];
 flagID = false;
 flagCountMomo = 0;
-
+const logsPath = "./data/logsBalance.csv";
+const listPath = "./data/listed.csv";
 async function checkListed(address) {
     idMomo = [];
     indexMomo = [];
@@ -294,8 +295,8 @@ async function main(address, nameFile_, rate_) {
                     "\n";
             }
             try {
-                fs.readFileSync("listed.csv", "utf8");
-                fs.writeFile("listed.csv", listed, (err) => {
+                fs.readFileSync(listPath, "utf8");
+                fs.writeFile(listPath, listed, (err) => {
                     if (err) {
                         console.error(err);
                     }
@@ -378,7 +379,7 @@ async function checkListedAll(rate_) {
     );
     console.log(`First list: ${daysAgo} days ago`);
     try {
-        var logsBalance = fs.readFileSync("logsBalance.csv", "utf8");
+        var logsBalance = fs.readFileSync(logsPath, "utf8");
         var logsBalanceCheck = logsBalance.split("\n");
         logsBalanceCheck = logsBalanceCheck[logsBalanceCheck.length - 1].split("\t");
         const lastBalance = logsBalanceCheck[0];
@@ -386,7 +387,7 @@ async function checkListedAll(rate_) {
         if (lastSync != nowSync && rate_ == 0.1) {
             console.log("New save");
             fs.writeFile(
-                "logsBalance.csv",
+                logsPath,
                 logsBalance +
                     "\n" +
                     (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
@@ -420,7 +421,7 @@ async function checkListedAll(rate_) {
                     (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
                     "\t" +
                     nowSync;
-                fs.writeFile("logsBalance.csv", logsBalance, (err) => {
+                fs.writeFile(logsPath, logsBalance, (err) => {
                     if (err) {
                         console.error(err);
                     }
