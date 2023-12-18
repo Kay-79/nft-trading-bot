@@ -2,7 +2,7 @@ require("dotenv").config();
 const axios = require("axios");
 const fs = require("fs");
 const Web3 = require("web3");
-const configJson = JSON.parse(fs.readFileSync("./config/config.json"));
+const configJson = require("../config/config");
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
