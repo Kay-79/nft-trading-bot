@@ -44,7 +44,7 @@ const getBlockWithZeroHash = async (blockCheck, addressCheck) => {
         exit();
     }
 };
-const getMomosBided = async (endBlock, addressCheck) => {
+const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
     try {
         // console.log(endBlock);
@@ -54,7 +54,7 @@ const getMomosBided = async (endBlock, addressCheck) => {
                 `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_BID}&apikey=${process.env.BSC_API_KEY}`
             );
         } catch (err) {
-            await getMomosBided(cacheBlock, addressCheck);
+            await getMomosBided(cacheBlock, nowBlock, addressCheck);
         }
         const data = mpListed.data.result;
         for (let i = 0; i < data.length; i++) {
@@ -74,11 +74,15 @@ const getMomosBided = async (endBlock, addressCheck) => {
             }
         }
         if (Number(data[data.length - 1].blockNumber) < nowBlock) {
-            await getMomosBided(Number(data[data.length - 1].blockNumber) + 1, addressCheck);
+            await getMomosBided(
+                Number(data[data.length - 1].blockNumber) + 1,
+                nowBlock,
+                addressCheck
+            );
         }
     } catch (error) {}
 };
-const getMomosListed = async (endBlock, addressCheck) => {
+const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
     try {
         console.log(endBlock);
@@ -88,7 +92,7 @@ const getMomosListed = async (endBlock, addressCheck) => {
                 `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_CREATE}&apikey=${process.env.BSC_API_KEY}`
             );
         } catch (error) {
-            await getMomosListed(cacheBlock, addressCheck);
+            await getMomosListed(cacheBlock, nowBlock, addressCheck);
         }
         const data = mpListed.data.result;
         for (let ii = 0; ii < data.length; ii++) {
@@ -109,7 +113,11 @@ const getMomosListed = async (endBlock, addressCheck) => {
             }
         }
         if (Number(data[data.length - 1].blockNumber) < nowBlock) {
-            await getMomosListed(Number(data[data.length - 1].blockNumber) + 1, addressCheck);
+            await getMomosListed(
+                Number(data[data.length - 1].blockNumber) + 1,
+                nowBlock,
+                addressCheck
+            );
         }
     } catch (error) {}
 };
@@ -128,11 +136,12 @@ const checkMomosUnlist = async (addressCheck) => {
         .catch((e) => {
             console.log("Err check block!!");
         });
-    const dataBlock = await getBlockWithZeroHash(nowBlock.data.result, hexAddress);
+    nowBlock = nowBlock.data.result;
+    const dataBlock = await getBlockWithZeroHash(nowBlock, hexAddress);
     console.log(`First block is: ${dataBlock}`);
-    await getMomosBided(dataBlock, hexAddress);
+    await getMomosBided(dataBlock, nowBlock, hexAddress);
     // console.log(dataBid);
-    await getMomosListed(dataBlock, hexAddress);
+    await getMomosListed(dataBlock, nowBlock, hexAddress);
     // console.log(dataBid);
     let momoUnlist = [];
     for (let i = 10000; i < 40000; i++) {
