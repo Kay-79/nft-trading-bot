@@ -14,13 +14,12 @@
     "name": "buy-mobox-submarine",
     "description": "bot front run",
     "version": "1.0.0",
-    "main": "",
+    "main": "./tools/listed",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "bid": "node ./tools/bid",
         "find": "node ./tools/findBSC",
-        "change": "node ./tools/change",
-        "dev": "concurrently --kill-others \"npm run bid\" \"npm run find\" \"npm run change\""
+        "change": "node ./tools/change"
     },
     "keywords": [],
     "author": "",
