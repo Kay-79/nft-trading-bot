@@ -14,9 +14,10 @@
     "name": "buy-mobox-submarine",
     "description": "bot front run",
     "version": "1.0.0",
-    "main": "./tools/listed",
+    "main": "",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node ./tools/listed",
         "bid": "node ./tools/bid",
         "find": "node ./tools/findBSC",
         "change": "node ./tools/change"
