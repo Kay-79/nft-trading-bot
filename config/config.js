@@ -15,13 +15,13 @@ const config = {
         ["0x44444402BC4cA69CbAeE0887917AF8949D2d0000", "_4_4_0", true],
     ],
     minPrice: {
-        minCommon: 3.1,
-        minUncommon: 1.6,
+        minCommon: 4.1,
+        minUncommon: 1.9,
         minUnique: 1.1,
         minRare: 14,
     },
     timeBid: 131.0,
-    accBuy: "0x44444402BC4cA69CbAeE0887917AF8949D2d0000",
+    accBuy: "0x2B4F0e0498A832275af360CbE832da8135A5d9C2",
 };
 
 module.exports = config;
