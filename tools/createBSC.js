@@ -373,7 +373,7 @@ indexs = [];
 priceList = [];
 ids = [];
 const minChange = 0.001;
-var accSell = "";
+let accSell = "";
 value = 12; // without rare and epic
 
 createBatch(3.001, 1000000, "", "_4_4_0");

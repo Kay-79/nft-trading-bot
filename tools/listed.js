@@ -1,4 +1,4 @@
-var axios = require("axios");
+let axios = require("axios");
 const fs = require("fs");
 const Web3 = require("web3");
 const getAmountUnlist = require("../utils/common/getAmountUnlist");
@@ -307,7 +307,7 @@ async function main(address, nameFile_, rate_) {
 }
 
 async function checkListedAll(rate_) {
-    var timeCheck = new Date();
+    let timeCheck = new Date();
     // ip = await axios.get('https://ip.whatisproxy.net/').catch(e => { console.log("Err ip") })
     // console.log(ip.data)
     bnbPrice = await axios
@@ -363,7 +363,7 @@ async function checkListedAll(rate_) {
         usdPrice *
         rate_;
     console.log("Estimate Fund:\t", (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
-    var currentDate = new Date();
+    let currentDate = new Date();
     const nowSync =
         currentDate.getDate() +
         "/" +
@@ -371,7 +371,7 @@ async function checkListedAll(rate_) {
         "/" +
         currentDate.getFullYear();
     const daysAgo = Math.floor((currentDate - firstListTime * 1000) / (24 * 60 * 60 * 1000));
-    var datetime = "Last Sync: " + currentDate.getMinutes();
+    let datetime = "Last Sync: " + currentDate.getMinutes();
     console.log(
         `${sumMomo}/${momoUnlist} Momos: ${sumMomoCM} Common, ${sumMomoUCM} Uncommon, ${sumMomoUNQ} Unique, ${sumMomoR} Rare, ${sumMomoE} Epic, ${sumMomoL} Legend (${sumBuy.toFixed()}, ${(
             sumSell * 0.95
@@ -379,8 +379,8 @@ async function checkListedAll(rate_) {
     );
     console.log(`First list: ${daysAgo} days ago`);
     try {
-        var logsBalance = fs.readFileSync(logsPath, "utf8");
-        var logsBalanceCheck = logsBalance.split("\n");
+        let logsBalance = fs.readFileSync(logsPath, "utf8");
+        let logsBalanceCheck = logsBalance.split("\n");
         logsBalanceCheck = logsBalanceCheck[logsBalanceCheck.length - 1].split("\t");
         const lastBalance = logsBalanceCheck[0];
         const lastSync = logsBalanceCheck[1];
@@ -413,7 +413,7 @@ async function checkListedAll(rate_) {
                 logsBalanceCheck = logsBalance.split("\n");
                 logsBalance = "";
                 for (let index = 0; index < logsBalanceCheck.length - 1; index++) {
-                    var logEach = logsBalanceCheck[index].split("\t");
+                    let logEach = logsBalanceCheck[index].split("\t");
                     logsBalance += logEach[0] + "\t" + logEach[1] + "\n";
                 }
                 logsBalance =
@@ -439,9 +439,9 @@ async function checkListedAll(rate_) {
 
 const myAcc = configJson.myAcc;
 const accRun = configJson.accBuy;
-var listed = "";
+let listed = "";
 let firstListTime = Date.now();
-var momoListed = 0,
+let momoListed = 0,
     momoUnlist = 0,
     sumMomo = 0,
     countLoss = 0,

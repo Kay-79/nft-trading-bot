@@ -48,7 +48,7 @@ async function withdrawTo(address_) {
                         balanceSC.toString()
                     )
                     .encodeABI();
-                var tx = {
+                let tx = {
                     gas: 100000,
                     gasPrice: 3.001 * 10 ** 9,
                     to: myAcc[index][0],

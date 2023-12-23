@@ -1,5 +1,5 @@
 require("dotenv").config();
-var axios = require("axios");
+let axios = require("axios");
 const fs = require("fs");
 const { exit } = require("process");
 const Web3 = require("web3");
@@ -31,8 +31,8 @@ async function getMpListed(amountTx) {
         mpListed = mpListed.data.result;
         // console.log(mpListed);
         for (let ii = 0; ii < mpListed.length; ii++) {
-            var abiCheck = [];
-            for (var i = 0; i < abiMobox.length; i++) {
+            let abiCheck = [];
+            for (let i = 0; i < abiMobox.length; i++) {
                 if (abiMobox[i].name == "createAuction") {
                     abiCheck = abiMobox[i].inputs;
                 }
@@ -65,8 +65,8 @@ async function getMpListed(amountTx) {
             // console.log(`auctors_ ${auctors_}\nnowPrices_ ${nowPrices_}\npriceDec_ ${priceDec_}\nhashrates_ ${hashrates_}\nindexs_ ${indexs_}\nuptimes_ ${uptimes_}\nids_ ${ids_}\namounts_ ${amounts_}\nbuyMode_ ${buyMode}`);
         }
     } catch (error) {
-        var currentdate = new Date();
-        var datetime =
+        let currentdate = new Date();
+        let datetime =
             "Last Sync: " +
             currentdate.getDate() +
             "/" +
@@ -204,9 +204,9 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                     ((totalProfit - fee[totalAuctions - 1]) * 0.9).toFixed(2)
                 );
                 console.log(tokenId__, amountDivide);
-                var inputdata = fs.readFileSync(linkSave, "utf8");
+                let inputdata = fs.readFileSync(linkSave, "utf8");
                 await sleep(25);
-                var content =
+                let content =
                     inputdata +
                     seller__ +
                     "\n" +
@@ -265,9 +265,9 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
         try {
             console.log(tokenId__, tokenId__.length);
             if (tokenId__.length) {
-                var inputdata = fs.readFileSync(linkSave, "utf8");
+                let inputdata = fs.readFileSync(linkSave, "utf8");
                 await sleep(25);
-                var content =
+                let content =
                     inputdata +
                     seller__ +
                     "\n" +
@@ -527,7 +527,7 @@ async function getMinPrice() {
     fee = gasUsed.map((valuee) => valuee * gasPriceMin * bnbPrice * 10 ** -9); //min fee to buy
 }
 
-var priceRaw = [0, 0, 0, 0, 0, 1000]; //lowest price in MP
+let priceRaw = [0, 0, 0, 0, 0, 1000]; //lowest price in MP
 const profits = configJson.profits;
 const profit = [
     profits.common,
@@ -538,18 +538,18 @@ const profit = [
     profits.legend,
 ]; //profit per momo
 const profitName = 30;
-var minCommon, minUncommon, minUnique, minRare, minEpic, minLegend;
-var idMomo = [];
-var nameMomo = [];
-var priceMomo = [];
+let minCommon, minUncommon, minUnique, minRare, minEpic, minLegend;
+let idMomo = [];
+let nameMomo = [];
+let priceMomo = [];
 const pricePerHash = 0;
-var budgetCache = -1;
-var cacheBlock = 0;
+let budgetCache = -1;
+let cacheBlock = 0;
 const minBudget = 30;
 const gasPriceMin = 3.1;
 const gasPriceMax = 50;
 const rateFeePerProfit = 0.3;
-var accCheck = configJson.accBuy;
+let accCheck = configJson.accBuy;
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
 const delayGetMp = 12000 + 10000 * Math.random(); // not use, around 17s per rq

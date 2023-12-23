@@ -21,7 +21,7 @@ const contractAddress = configJson.accBuy;
 const contract = new web3.eth.Contract(abi, contractAddress);
 async function setup(Private_Key_) {
     inputdata = "None";
-    var isBid = false;
+    let isBid = false;
     try {
         const inputdata = fs.readFileSync("waitBid.txt", "utf8");
         dataBid = inputdata.split("\n");
@@ -35,7 +35,7 @@ async function setup(Private_Key_) {
         }
     } catch (err) {}
     if (isBid) {
-        var timeSendReal = 0;
+        let timeSendReal = 0;
         const startTime_ = dataBid[3].split(",");
         const index_ = dataBid[2].split(",");
         if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 15) {
@@ -44,7 +44,7 @@ async function setup(Private_Key_) {
             const amountList = dataBid[5].split(",");
             const idList = dataBid[4].split(",");
             const gasPriceScanRaw = dataBid[6].split(",");
-            var gasPriceScan = [];
+            let gasPriceScan = [];
             for (let index = 0; index < gasPriceScanRaw.length; index++) {
                 gasPriceScan[index] = Number(
                     (Number(gasPriceScanRaw[index]) * 3 * 10 ** 9).toFixed()
@@ -57,7 +57,7 @@ async function setup(Private_Key_) {
             }
             if (false || Number(startTime_[0]) + timeSendTx + overTime - Date.now() / 1000 > 0) {
                 //       Number(startTime_[0]) + timeSendTx            - Date.now() / 1000 > 0
-                var tx = [];
+                let tx = [];
                 // let nonce_ = await web3.eth.getTransactionCount(acc.address);
                 let nonce_ = 12632;
                 if (index_.length > 1) {
