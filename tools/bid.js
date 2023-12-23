@@ -3,11 +3,7 @@ const request = require("request");
 const fs = require("fs");
 const checkAvailable = require("../utils/bid/checkAvailable");
 const configJson = require("../config/config");
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
+const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {

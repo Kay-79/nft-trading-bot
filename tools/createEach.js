@@ -3,12 +3,8 @@ const fs = require("fs");
 const { exit } = require("process");
 const getEmptyIndexs = require("../utils/create/getEmptyIndexs");
 const getAmountUnlist = require("../utils/common/getAmountUnlist");
+const { sleep, ranSleep } = require("../utils/common/sleep");
 
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
 async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
     const Private_Key = process.env.PRIVATE_KEY_CHANGE;
     const Web3 = require("web3");

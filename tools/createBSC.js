@@ -6,12 +6,7 @@ const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
 const configJson = require("../config/config");
 const { checkMomosUnlist } = require("../utils/create/checkMomosUnlist");
-
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
+const { sleep, ranSleep } = require("../utils/common/sleep");
 
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;

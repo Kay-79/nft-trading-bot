@@ -24,7 +24,7 @@ const config = {
         unique: 0.1,
         rare: 4,
         epic: 10,
-        legendary: 0.01,
+        legendary: 1000,
     },
     minPrice: {
         minCommon: 4.1,

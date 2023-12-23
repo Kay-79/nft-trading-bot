@@ -10,12 +10,7 @@ const abiBUSD = require("../abi/abiERC20");
 const configJson = require("../config/config");
 const addressToken = configJson.addressToken;
 const contract = new web3.eth.Contract(abiBUSD, addressToken);
-
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
+const { sleep, ranSleep } = require("../utils/common/sleep");
 
 async function getMpListed(amountTx) {
     auctors_ = [];

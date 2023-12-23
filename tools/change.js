@@ -4,15 +4,12 @@ const fs = require("fs");
 const Web3 = require("web3");
 const configJson = require("../config/config");
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
+const {sleep, ranSleep} = require("../utils/common/sleep");
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
 });
-function sleep(ms) {
-    return new Promise((resolve) => {
-        setTimeout(resolve, ms);
-    });
-}
+
 const shuffleArray = require("../utils/change/shuffleArray");
 const checkReject = require("../utils/change/checkEnemyToReject");
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.public.blastapi.io"));
