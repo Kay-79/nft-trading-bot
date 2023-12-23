@@ -7,5 +7,5 @@ tools/test*
 data/dataMomo.txt
 .env
 waitBid.txt
-test*.js
+test*.*
 ./data
