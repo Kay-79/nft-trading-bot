@@ -18,6 +18,14 @@ const config = {
         ["0x0000a7514Bc1e72058B709A713d20c1fE68b7777", "_0_0_7", true],
         ["0x44444402BC4cA69CbAeE0887917AF8949D2d0000", "_4_4_0", true],
     ],
+    profits: {
+        common: 0.15,
+        uncommon: 0.1,
+        unique: 0.1,
+        rare: 4,
+        epic: 10,
+        legendary: 0.01,
+    },
     minPrice: {
         minCommon: 4.1,
         minUncommon: 1.9,

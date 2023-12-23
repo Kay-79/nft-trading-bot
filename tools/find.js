@@ -521,7 +521,15 @@ async function getMinPrice() {
 }
 
 var priceRaw = [0, 0, 0, 0, 0, 1000]; //lowest price in MP
-const profit = [0.2, 0.15, 0.1, 4, 8, 100]; //profit per momo
+const profits = configJson.profits;
+const profit = [
+    profits.common,
+    profits.uncommon,
+    profits.unique,
+    profits.rare,
+    profits.epic,
+    profits.legend,
+]; //profit per momo
 const profitName = 30;
 var minCommon, minUncommon, minUnique, minRare, minEpic, minLegend;
 var idMomo = [];
