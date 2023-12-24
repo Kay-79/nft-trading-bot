@@ -374,6 +374,7 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 let accSell = "";
-value = 12; // without rare and epic
+value = 75; // without rare and epic
 
-createBatch(3.001, 1000000, "", "_4_4_0");
+console.warn(`Vesion create is outdate`);
+createBatch(3.001, 1000000, "", "_2_B_4");
