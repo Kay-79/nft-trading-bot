@@ -371,7 +371,7 @@ async function checkListedAll(rate_) {
         "/" +
         currentDate.getFullYear();
     const daysAgo = Math.floor((currentDate - firstListTime * 1000) / (24 * 60 * 60 * 1000));
-    let datetime = "Last Sync: " + currentDate.getMinutes();
+    let datetime = "Last Sync: " + currentDate.getHours() + ":" + currentDate.getMinutes();
     console.log(
         `${sumMomo}/${momoUnlist} Momos: ${sumMomoCM} Common, ${sumMomoUCM} Uncommon, ${sumMomoUNQ} Unique, ${sumMomoR} Rare, ${sumMomoE} Epic, ${sumMomoL} Legend (${sumBuy.toFixed()}, ${(
             sumSell * 0.95
