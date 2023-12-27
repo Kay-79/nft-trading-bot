@@ -19,7 +19,7 @@ const config = {
         ["0x44444402BC4cA69CbAeE0887917AF8949D2d0000", "_4_4_0", true],
     ],
     profits: {
-        common: 0.15,
+        common: 0.1,
         uncommon: 0.1,
         unique: 0.1,
         rare: 4,
@@ -33,7 +33,7 @@ const config = {
         minRare: 14,
     },
     timeBid: 131.0,
-    accBuy: "0x2B4F0e0498A832275af360CbE832da8135A5d9C2",
+    accBuy: "0x73A4AbD430C821B49423dB5279fb56ee72073292",
 };
 
 module.exports = config;
