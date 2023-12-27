@@ -381,5 +381,5 @@ ids = [];
 const minChange = 0.001;
 let accSell = "";
 value = 7; // without rare and epic
-
+console.warn(`Vesion create is outdate`);
 createBatch(3.001, 1000000, "", "_8_8_8");
