@@ -21,7 +21,8 @@
         "find": "node ./tools/find",
         "bid": "node ./tools/bid",
         "create": "node ./tools/cteateBSC",
-        "change": "node ./tools/change"
+        "change": "node ./tools/change",
+        "withdraw": "node ./tools/withdrawERC20"
     },
     "keywords": [],
     "author": "",
