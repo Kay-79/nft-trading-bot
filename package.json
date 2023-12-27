@@ -17,9 +17,10 @@
     "main": "",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node ./tools/listed",
+        "check": "node ./tools/listed",
+        "find": "node ./tools/find",
         "bid": "node ./tools/bid",
-        "find": "node ./tools/findBSC",
+        "create": "node ./tools/cteateBSC",
         "change": "node ./tools/change"
     },
     "keywords": [],
