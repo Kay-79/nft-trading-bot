@@ -43,7 +43,9 @@ async function checkListed(address) {
         indexMomo.push(data.list[i].index);
         priceBuy.push(0);
         priceSell.push(Number(data.list[i].startPrice) / 10 ** 9);
-        sumSell += Number(data.list[i].startPrice) / 10 ** 9;
+        Number(data.list[i].startPrice) / 10 ** 9 > 6
+            ? (sumSell += 5)
+            : (sumSell += Number(data.list[i].startPrice) / 10 ** 9);
         timeChange.push(Number(data.list[i].uptime));
         if (Number(data.list[i].uptime) < firstListTime) {
             firstListTime = Number(data.list[i].uptime);
