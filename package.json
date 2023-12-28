@@ -20,7 +20,7 @@
         "check": "node ./tools/listed",
         "find": "node ./tools/find",
         "bid": "node ./tools/bid",
-        "create": "node ./tools/cteateBSC",
+        "create": "node ./tools/createBSC",
         "change": "node ./tools/change",
         "withdraw": "node ./tools/withdrawERC20"
     },
