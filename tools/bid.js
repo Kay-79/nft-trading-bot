@@ -98,7 +98,7 @@ async function setup(Private_Key_) {
                             .encodeABI(), // amount = 1 or > 1
                     });
                 }
-                let checkSuccess = "Success";
+                let checkSuccess = "\xE2\x9C\x85";
                 let isAvailableAuctions = true;
                 let checkHashEach = "";
                 try {
@@ -154,7 +154,7 @@ async function setup(Private_Key_) {
                         }
                         if (tx.length == 1) {
                             try {
-                                checkSuccess = "Success";
+                                checkSuccess = "\xE2\x9C\x85";
                                 const sendEach = await web3.eth.sendSignedTransaction(
                                     signed[index].rawTransaction
                                 );
@@ -163,30 +163,30 @@ async function setup(Private_Key_) {
                                 console.log("Fail...setting new time");
                                 // console.log(error);
                                 // console.log("Bid fail! At block: " + error.receipt.blockNumber);
-                                checkSuccess = "Fail";
+                                checkSuccess = "\xF0\x9F\x85\xBE";
                                 // timeSendReal = error.receipt.blockNumber;
                             }
                         } else {
                             if (index == tx.length - 1) {
                                 try {
-                                    checkSuccess = "Success";
+                                    checkSuccess = "\xE2\x9C\x85";
                                     biding[index] = await web3.eth.sendSignedTransaction(
                                         signed[index].rawTransaction
                                     );
                                 } catch (error) {
                                     console.log("Bid fail");
-                                    checkSuccess = "Fail";
+                                    checkSuccess = "\xF0\x9F\x85\xBE";
                                 }
                                 console.log("Successful bid! At block:", biding[index].blockNumber);
                             } else {
                                 try {
-                                    checkSuccess = "Success";
+                                    checkSuccess = "\xE2\x9C\x85";
                                     biding[index] = web3.eth.sendSignedTransaction(
                                         signed[index].rawTransaction
                                     );
                                 } catch (error) {
                                     console.log("Bid fail");
-                                    checkSuccess = "Fail";
+                                    checkSuccess = "\xF0\x9F\x85\xBE";
                                     next(error);
                                 }
                             }
@@ -194,7 +194,7 @@ async function setup(Private_Key_) {
                     }
                 } catch (error) {
                     console.log("Error during bid Auction!");
-                    checkSuccess = "Fail";
+                    checkSuccess = "\xF0\x9F\x85\xBE";
                 }
                 await sleep(1000);
                 for (let op = 0; op < idList.length; op++) {
@@ -325,7 +325,7 @@ async function bid() {
             try {
                 hourCache = new Date().getHours();
                 request(
-                    `https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: alive\nTime: ${timeSendTx}`,
+                    `https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: \xF0\x9F\x86\x97\nTime: ${timeSendTx}`,
                     function (error, response, body) {}
                 );
             } catch (error) {
