@@ -17,7 +17,7 @@
     "main": "",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "check": "node ./tools/listed",
+        "check": "node ./tools/check",
         "find": "node ./tools/find",
         "bid": "node ./tools/bid",
         "create": "node ./tools/createBSC",
