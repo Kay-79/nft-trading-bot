@@ -79,4 +79,4 @@ async function withdrawTo(address_) {
 const minWithdraw = 10;
 const maxWithdraw = 999;
 
-withdrawTo("0xbf6F2114A230B399F0A9085AC0FC27Bd4148a465");
+withdrawTo("0x1DfC0656AbCfE473F968066157B0d0D740aff4e6");
