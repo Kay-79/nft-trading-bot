@@ -356,7 +356,11 @@ async function runBot(amountMomo) {
         .catch((e) => {
             console.log("Err1");
         });
-    bnbPrice = bnbPrice.data.data.bnb.price;
+    try {
+        bnbPrice = bnbPrice.data.data.bnb.price;
+    } catch (error) {
+        bnbPrice = 320;
+    }
     if (rateFeePerProfit > 0.5) {
         console.warn("Rate fee too high");
         exit();
