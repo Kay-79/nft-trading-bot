@@ -317,9 +317,12 @@ async function checkListedAll(rate_) {
         .catch((e) => {
             console.log("Err1");
         });
-    bnbPrice = 320;
+    try {
+        bnbPrice = Number(bnbPrice.data.data.bnb.price.toFixed(2));
+    } catch (error) {
+        bnbPrice = 320;
+    }
     countRqs++;
-    bnbPrice = Number(bnbPrice.data.data.bnb.price.toFixed(2));
     usdPrice = await axios
         .get(
             "https://wise.com/rates/live?source=USD&target=VND&length=30&resolution=hourly&unit=day"
