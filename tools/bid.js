@@ -98,7 +98,7 @@ async function setup(Private_Key_) {
                             .encodeABI(), // amount = 1 or > 1
                     });
                 }
-                let checkSuccess = "\xE2\x9C\x85";
+                let checkSuccess = emoji.success;
                 let isAvailableAuctions = true;
                 let checkHashEach = "";
                 try {
@@ -154,7 +154,7 @@ async function setup(Private_Key_) {
                         }
                         if (tx.length == 1) {
                             try {
-                                checkSuccess = "\xE2\x9C\x85";
+                                checkSuccess = emoji.success;
                                 const sendEach = await web3.eth.sendSignedTransaction(
                                     signed[index].rawTransaction
                                 );
@@ -163,30 +163,30 @@ async function setup(Private_Key_) {
                                 console.log("Fail...setting new time");
                                 // console.log(error);
                                 // console.log("Bid fail! At block: " + error.receipt.blockNumber);
-                                checkSuccess = "\xF0\x9F\x85\xBE";
+                                checkSuccess = emoji.fail;
                                 // timeSendReal = error.receipt.blockNumber;
                             }
                         } else {
                             if (index == tx.length - 1) {
                                 try {
-                                    checkSuccess = "\xE2\x9C\x85";
+                                    checkSuccess = emoji.success;
                                     biding[index] = await web3.eth.sendSignedTransaction(
                                         signed[index].rawTransaction
                                     );
                                 } catch (error) {
                                     console.log("Bid fail");
-                                    checkSuccess = "\xF0\x9F\x85\xBE";
+                                    checkSuccess = emoji.fail;
                                 }
                                 console.log("Successful bid! At block:", biding[index].blockNumber);
                             } else {
                                 try {
-                                    checkSuccess = "\xE2\x9C\x85";
+                                    checkSuccess = emoji.success;
                                     biding[index] = web3.eth.sendSignedTransaction(
                                         signed[index].rawTransaction
                                     );
                                 } catch (error) {
                                     console.log("Bid fail");
-                                    checkSuccess = "\xF0\x9F\x85\xBE";
+                                    checkSuccess = emoji.fail;
                                     next(error);
                                 }
                             }
@@ -194,7 +194,7 @@ async function setup(Private_Key_) {
                     }
                 } catch (error) {
                     console.log("Error during bid Auction!");
-                    checkSuccess = "\xF0\x9F\x85\xBE";
+                    checkSuccess = emoji.fail;
                 }
                 await sleep(1000);
                 for (let op = 0; op < idList.length; op++) {
@@ -339,4 +339,5 @@ const overTime = 60;
 const timeGetAvaliableAuction = 5;
 // const timeSendTx = 73.6 - 20; //time wait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2bid();
 let timeSendTx = configJson.timeBid;
+const emoji = configJson.emojiURL;
 bid();

@@ -6,6 +6,10 @@ const config = {
         address: "0x444444961B7CC7b0F23BCF1bC666facf44135DA2",
         owner: "0x55555D4de8df0c455C2Ff368253388FE669a8888",
     },
+    emojiURL: {
+        fail: "\xE2\x9D\x8C",
+        success: "\xE2\x9C\x85",
+    },
     myAcc: [
         ["0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000", "_1_0_1", true],
         ["0x55555D4de8df0c455C2Ff368253388FE669a8888", "_5_8_1", true],
