@@ -36,7 +36,6 @@ async function withdrawTo(address_) {
                 balanceSC = Number(
                     (Number((maxWithdraw - cacheWithdraw).toFixed(2)) * 10 ** 18).toFixed(0)
                 );
-                console.log(`Done withdraw`);
                 await sleep(100);
                 break;
             }
@@ -79,6 +78,6 @@ async function withdrawTo(address_) {
 }
 
 const minWithdraw = 10;
-const maxWithdraw = 50;
+const maxWithdraw = 500;
 
-withdrawTo("0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000");
+withdrawTo("0xA6fBE2809210CC38255959a86EC5eA13f91B636A");
