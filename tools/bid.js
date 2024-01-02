@@ -20,6 +20,10 @@ const chatId = process.env.chatId_mobox;
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const contractAddress = configJson.accBuy;
 const contract = new web3.eth.Contract(abi, contractAddress);
+const overTime = 180;
+const timeGetAvaliableAuction = 5;
+let timeSendTx = configJson.timeBid;
+const emoji = configJson.emojiURL;
 async function setup(Private_Key_) {
     inputdata = "None";
     let isBid = false;
@@ -319,25 +323,20 @@ async function bid() {
     console.log(acc.address);
     let hourCache = new Date().getHours() - 4;
     while (true) {
-        await setup(Private_Key);
-        await sleep(100);
         if (Math.abs(new Date().getHours() - hourCache) >= 4) {
             try {
                 hourCache = new Date().getHours();
                 request(
-                    `https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: \xF0\x9F\x86\x97\nTime: ${timeSendTx}`,
+                    `https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: \xF0\x9F\x86\x97\nTime: ${timeSendTx}\nAddress: ${contractAddress}`,
                     function (error, response, body) {}
                 );
             } catch (error) {
                 console.log("Send status fail");
             }
         }
+        await setup(Private_Key);
+        await sleep(100);
     }
 }
 
-const overTime = 180;
-const timeGetAvaliableAuction = 5;
-// const timeSendTx = 73.6 - 20; //time wait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2bid();
-let timeSendTx = configJson.timeBid;
-const emoji = configJson.emojiURL;
 bid();
