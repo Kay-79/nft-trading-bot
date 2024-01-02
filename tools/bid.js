@@ -335,7 +335,7 @@ async function bid() {
     }
 }
 
-const overTime = 60;
+const overTime = 180;
 const timeGetAvaliableAuction = 5;
 // const timeSendTx = 73.6 - 20; //time wait to buy (40 block ~ 120s)1:117 - may buy early, now test 117.2bid();
 let timeSendTx = configJson.timeBid;
