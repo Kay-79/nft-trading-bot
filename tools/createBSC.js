@@ -132,6 +132,7 @@ async function checkChangePrice(indexId) {
 
 async function getPriceToSell(address, boolMin) {
     idMomoBought = await checkMomosUnlist(address);
+    value = idMomoBought.length;
     console.log(idMomoBought.toString());
     if (idMomoBought.length != value) {
         console.log("Balance momo is wrong");
@@ -300,6 +301,8 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     }
     let contractAcc = new web3.eth.Contract(abiAmount, accSell);
     let amountUnList = await contractAcc.methods.amountUnList().call();
+    if (amountUnList < 6) return;
+    value = amountUnList;
     if (amountUnList != value) {
         console.log("amountUnList != value");
         console.log("amountUnList", amountUnList);
@@ -366,6 +369,14 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 let accSell = "";
-value = 12; // without rare and epic
-
-createBatch(3.001, 1000000, "", "_1_D_f");
+value = 0; // without rare and epic
+const create = async () => {
+    for (let i = 0; i < myAcc.length; i++) {
+        console.log(myAcc[i][1]);
+        if (myAcc[i][1] == "_1_0_1" || myAcc[i][1] === "_5_8_1") {
+            continue;
+        }
+        await createBatch(3.001, 1000000, "", myAcc[i][1]);
+    }
+};
+create();
