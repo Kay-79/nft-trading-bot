@@ -16,7 +16,17 @@ const abiCheckBided = [
     { internalType: "uint256[]", name: "amounts", type: "uint256[]" },
     { internalType: "uint256", name: "startTime", type: "uint256" },
 ];
+const abiAmount = [
+    {
+        inputs: [],
+        name: "amountUnList",
+        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+        stateMutability: "view",
+        type: "function",
+    },
+];
 module.exports = {
     abiCheckListed,
     abiCheckBided,
+    abiAmount,
 };

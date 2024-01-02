@@ -7,6 +7,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.bin
 const configJson = require("../config/config");
 const { checkMomosUnlist } = require("../utils/create/checkMomosUnlist");
 const { sleep, ranSleep } = require("../utils/common/sleep");
+const { abiAmount } = require("../abi/abiCheckUnlist");
 
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
@@ -297,15 +298,6 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         console.log("Empty accSell");
         exit();
     }
-    let abiAmount = [
-        {
-            inputs: [],
-            name: "amountUnList",
-            outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-            stateMutability: "view",
-            type: "function",
-        },
-    ];
     let contractAcc = new web3.eth.Contract(abiAmount, accSell);
     let amountUnList = await contractAcc.methods.amountUnList().call();
     if (amountUnList != value) {
