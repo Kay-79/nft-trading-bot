@@ -43,7 +43,7 @@ async function checkListed(address) {
         indexMomo.push(data.list[i].index);
         priceBuy.push(0);
         priceSell.push(Number(data.list[i].startPrice) / 10 ** 9);
-        Number(data.list[i].startPrice) / 10 ** 9 > 6
+        Number(data.list[i].startPrice) / 10 ** 9 > maxCanSell
             ? (sumSell += 5)
             : (sumSell += Number(data.list[i].startPrice) / 10 ** 9);
         timeChange.push(Number(data.list[i].uptime));
@@ -466,6 +466,7 @@ let momoListed = 0,
     sumBNB = 0,
     countRqs = 0;
 const delayPerRequest = 1000;
+const maxCanSell = 5;
 const lastAcc = myAcc[myAcc.length - 1][1];
 const save = false;
 const rateSale = 0.42;
