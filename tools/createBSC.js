@@ -314,6 +314,7 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         ? (amountBatchToCreate = indexs.length * 6)
         : (amountBatchToCreate = amountUnList);
     console.log(amountBatchToCreate);
+    if (amountBatchToCreate < 6) return;
     await getPriceToSell(accSell, true); //_1_0_1
     let count = 0;
     while (true) {
