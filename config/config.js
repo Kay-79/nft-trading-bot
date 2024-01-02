@@ -23,8 +23,8 @@ const config = {
         ["0x44444402BC4cA69CbAeE0887917AF8949D2d0000", "_4_4_0", true],
     ],
     profits: {
-        common: 0.3,
-        uncommon: 0.3,
+        common: 0.2,
+        uncommon: 0.15,
         unique: 0.1,
         rare: 4,
         epic: 10,
