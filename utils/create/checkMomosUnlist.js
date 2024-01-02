@@ -3,10 +3,7 @@ const axios = require("axios");
 const Web3 = require("web3");
 const { exit } = require("process");
 const web3 = new Web3();
-const {
-    abiCheckListed,
-    abiCheckBided,
-} = require("../../abi/abiCheckUnlist");
+const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
 let dataBid = {};
 
 const getBlockWithZeroHash = async (blockCheck, addressCheck) => {
@@ -20,17 +17,11 @@ const getBlockWithZeroHash = async (blockCheck, addressCheck) => {
             );
         } catch (error) {
             console.log(error);
-            return await getBlockWithZeroHash(
-                blockCheck,
-                addressCheck
-            );
+            return await getBlockWithZeroHash(blockCheck, addressCheck);
         }
         const data = mpListed.data.result;
         if (data.length === 0) {
-            return await getBlockWithZeroHash(
-                firstBlock,
-                addressCheck
-            );
+            return await getBlockWithZeroHash(firstBlock, addressCheck);
         }
         for (let i = data.length - 1; i >= 0; i--) {
             if (data[i].topics[1] === addressCheck) {
@@ -40,10 +31,7 @@ const getBlockWithZeroHash = async (blockCheck, addressCheck) => {
                 }
             }
         }
-        return await getBlockWithZeroHash(
-            Number(data[0].blockNumber) - 1,
-            addressCheck
-        );
+        return await getBlockWithZeroHash(Number(data[0].blockNumber) - 1, addressCheck);
     } catch (error) {
         console.log(error);
         exit();
@@ -51,6 +39,7 @@ const getBlockWithZeroHash = async (blockCheck, addressCheck) => {
 };
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
+    console.log(cacheBlock);
     try {
         let mpListed = "";
         try {
@@ -63,20 +52,15 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
         const data = mpListed.data.result;
         for (let i = 0; i < data.length; i++) {
             if (data[i].topics[2] === addressCheck) {
-                const decodedData =
-                    await web3.eth.abi.decodeParameters(
-                        abiCheckBided,
-                        data[i].data
-                    );
+                const decodedData = await web3.eth.abi.decodeParameters(
+                    abiCheckBided,
+                    data[i].data
+                );
                 for (let j = 0; j < decodedData.ids.length; j++) {
                     if (dataBid[decodedData.ids[j]] === undefined) {
-                        dataBid[decodedData.ids[j]] = Number(
-                            decodedData.amounts[j]
-                        );
+                        dataBid[decodedData.ids[j]] = Number(decodedData.amounts[j]);
                     } else {
-                        dataBid[decodedData.ids[j]] += Number(
-                            decodedData.amounts[j]
-                        );
+                        dataBid[decodedData.ids[j]] += Number(decodedData.amounts[j]);
                     }
                 }
             }
@@ -105,19 +89,16 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
         const data = mpListed.data.result;
         for (let ii = 0; ii < data.length; ii++) {
             if (data[ii].topics[1] === addressCheck) {
-                const decodedData =
-                    await web3.eth.abi.decodeParameters(
-                        abiCheckListed,
-                        data[ii].data
-                    );
+                const decodedData = await web3.eth.abi.decodeParameters(
+                    abiCheckListed,
+                    data[ii].data
+                );
                 for (let j = 0; j < decodedData.ids.length; j++) {
                     if (dataBid[decodedData.ids[j]] === undefined) {
                         console.log("Err scan bided");
                         exit();
                     } else {
-                        dataBid[decodedData.ids[j]] -= Number(
-                            decodedData.amounts[j]
-                        );
+                        dataBid[decodedData.ids[j]] -= Number(decodedData.amounts[j]);
                     }
                 }
             }
@@ -133,25 +114,19 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
 };
 
 const checkMomosUnlist = async (addressCheck) => {
-    const hexAddress = `0x000000000000000000000000${addressCheck
-        .toLowerCase()
-        .slice(2)}`;
+    const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
     let nowBlock = await axios
         .get(
             `https://api.bscscan.com/api?module=block&action=getblocknobytime&timestamp=${(
                 Date.now() / 1000
-            ).toFixed()}&closest=before&apikey=${
-                process.env.BSC_API_KEY
-            }`
+            ).toFixed()}&closest=before&apikey=${process.env.BSC_API_KEY}`
         )
         .catch((e) => {
             console.log("Err check block!!");
         });
     nowBlock = nowBlock.data.result;
-    const dataBlock = await getBlockWithZeroHash(
-        nowBlock,
-        hexAddress
-    );
+    const dataBlock = await getBlockWithZeroHash(nowBlock, hexAddress);
+    // const dataBlock = 34676459;
     console.log(`First block is: ${dataBlock}`);
     await getMomosBided(dataBlock, nowBlock, hexAddress);
     await getMomosListed(dataBlock, nowBlock, hexAddress);
