@@ -41,7 +41,7 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
     console.log(cacheBlock);
     try {
-        let mpListed = "";
+        let mpListed = null;
         try {
             mpListed = await axios.get(
                 `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_BID}&apikey=${process.env.BSC_API_KEY}`
