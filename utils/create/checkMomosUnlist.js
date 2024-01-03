@@ -114,6 +114,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
 };
 
 const checkMomosUnlist = async (addressCheck) => {
+    dataBid = {}; // reset data
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
     let nowBlock = await axios
         .get(
@@ -123,8 +124,10 @@ const checkMomosUnlist = async (addressCheck) => {
         )
         .catch((e) => {
             console.log("Err check block!!");
+            exit();
         });
     nowBlock = nowBlock.data.result;
+    console.log(nowBlock);
     const dataBlock = await getBlockWithZeroHash(nowBlock, hexAddress);
     // const dataBlock = 34676459;
     console.log(`First block is: ${dataBlock}`);
