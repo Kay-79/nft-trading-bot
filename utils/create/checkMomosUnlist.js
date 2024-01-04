@@ -129,7 +129,7 @@ const checkMomosUnlist = async (addressCheck) => {
     nowBlock = nowBlock.data.result;
     console.log(nowBlock);
     const dataBlock = await getBlockWithZeroHash(nowBlock, hexAddress);
-    // const dataBlock = 34676459;
+    // const dataBlock = 34740746;
     console.log(`First block is: ${dataBlock}`);
     await getMomosBided(dataBlock, nowBlock, hexAddress);
     await getMomosListed(dataBlock, nowBlock, hexAddress);
