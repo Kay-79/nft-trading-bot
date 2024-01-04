@@ -22,7 +22,9 @@
         "bid": "node ./tools/bid",
         "create": "node ./tools/createBSC",
         "change": "node ./tools/change",
-        "withdraw": "node ./tools/withdrawERC20"
+        "transfer": "node ./tools/transfer",
+        "deposit": "node ./tools/deposit",
+        "withdraw": "node ./tools/withdraw"
     },
     "keywords": [],
     "author": "",
