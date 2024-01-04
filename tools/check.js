@@ -116,7 +116,7 @@ async function scanIndex(logData) {
         }
     }
     if (indexList) {
-        console.log(`${logData}\t${indexList.split(", ").length - 1} slots`);
+        console.log(`${logData}\t${indexList.split(", ").length - 1} batchs`);
     } else console.log(logData + "\t" + "Auctions are full !!");
 }
 

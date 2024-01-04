@@ -4,7 +4,7 @@ const fs = require("fs");
 const Web3 = require("web3");
 const configJson = require("../config/config");
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
-const {sleep, ranSleep} = require("../utils/common/sleep");
+const { sleep, ranSleep } = require("../utils/common/sleep");
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
@@ -83,15 +83,19 @@ function checkPriceBuy(address_, page) {
         });
 }
 async function checkChangePrice(indexId) {
-    try {
-        let response3 = await axios.get(
-            "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=5&category=&vType=&sort=price&pType=" +
-                idMomo[indexId]
-        );
-        data3 = response3.data;
-        console.log(idMomo[indexId]);
-    } catch (error) {
-        console.log("axios err");
+    if (!idChangeds.includes(idMomo[indexId])) {
+        try {
+            let response3 = await axios.get(
+                "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=5&category=&vType=&sort=price&pType=" +
+                    idMomo[indexId]
+            );
+            data3 = response3.data;
+            console.log(idMomo[indexId]);
+        } catch (error) {
+            console.log("axios err");
+        }
+    } else {
+        data3 = [];
     }
     ///
     let accListCache = [];
@@ -103,7 +107,34 @@ async function checkChangePrice(indexId) {
         ) {
             if (checkReject(data3.list[0].auctor)) {
                 console.log("REJECT", idMomo[indexId]);
-                boolChange[indexId] = " ";
+                // boolChange[indexId] = " ";
+                if (
+                    ((Number(data3.list[indexid_].nowPrice) / 10 ** 9) * 0.95 - priceBuy[indexId] >
+                        canLost ||
+                        sellOff) &&
+                    Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) >
+                        3 * timeWait * (indexid_ + 1)
+                ) {
+                    // time wait x2 for second momo
+                    priceCache = priceSell[indexId]; // add to compare price
+                    priceSell[indexId] = (Number(data3.list[indexid_].nowPrice) / 10 ** 9).toFixed(
+                        3
+                    );
+                    if (
+                        priceCache > priceSell[indexId] &&
+                        idChangeds.includes(idMomo[indexId]) == false
+                    ) {
+                        boolChange[indexId] = "TRUE";
+                        console.log(
+                            idMomo[indexId] +
+                                " " +
+                                priceCache +
+                                " to " +
+                                priceSell[indexId] +
+                                " Over time enemy"
+                        );
+                    }
+                }
                 break;
             }
             //fix same momo
