@@ -327,7 +327,10 @@ async function bid() {
             try {
                 hourCache = new Date().getHours();
                 request(
-                    `https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: \xF0\x9F\x86\x97\nTime: ${timeSendTx}\nAddress: ${contractAddress}`,
+                    `https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: \xF0\x9F\x86\x97\nTime: ${timeSendTx}\nContract: ${contractAddress.slice(
+                        0,
+                        6
+                    )}...${contractAddress.slice(38, 42)}`,
                     function (error, response, body) {}
                 );
             } catch (error) {
