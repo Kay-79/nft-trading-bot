@@ -10,42 +10,38 @@ const contractToken = new web3.eth.Contract(abiBUSD, "0x55d398326f99059ff7754852
 const configJson = require("../config/config");
 const myAcc = configJson.myAcc;
 const Private_Key = process.env.PRIVATE_KEY_BID;
+const walletAddress = configJson.wallet.address;
 
-async function deposit() {
-    let checkMyAcc = false;
-    for (let index = 0; index < myAcc.length; index++) {
-        if (myAcc[index][0] == address_) {
-            checkMyAcc = true;
-        }
+async function transfer() {
+    let cacheTransfer = 0;
+    let isContract = await web3.eth.getStorageAt(walletAddress);
+    if (!Number(isContract)) {
+        console.log("Wallet is not contract");
+        return; // dont send token from address to contract
     }
-    if (!checkMyAcc) {
-        console.log("Owner address is not you!");
-        exit();
-    }
-    let cacheWithdraw = 0;
     for (let index = 0; index < myAcc.length; index++) {
         let isContract = await web3.eth.getStorageAt(myAcc[index][0]);
-        if (!Number(isContract) || myAcc[index][0] == address_) {
+        if (!Number(isContract)) {
             continue; // dont send token from address to contract
         }
         let balanceSC = await contractToken.methods.balanceOf(myAcc[index][0]).call();
         console.log(myAcc[index][0]);
         console.log(balanceSC / 10 ** 18);
-        if (balanceSC / 10 ** 18 > minWithdraw) {
-            if (cacheWithdraw + balanceSC / 10 ** 18 > maxWithdraw) {
+        if (balanceSC / 10 ** 18 > minTransfer) {
+            if (cacheTransfer + balanceSC / 10 ** 18 > maxTransfer) {
                 balanceSC = Number(
-                    (Number((maxWithdraw - cacheWithdraw).toFixed(2)) * 10 ** 18).toFixed(0)
+                    (Number((maxTransfer - cacheTransfer).toFixed(2)) * 10 ** 18).toFixed(0)
                 );
                 await sleep(100);
                 break;
             }
-            cacheWithdraw += balanceSC / 10 ** 18;
+            cacheTransfer += balanceSC / 10 ** 18;
             try {
                 const contractAddress = new web3.eth.Contract(abi, myAcc[index][0]);
                 let encoded = await contractAddress.methods
                     .transferERC20(
                         "0x55d398326f99059ff775485246999027b3197955",
-                        address_,
+                        walletAddress,
                         balanceSC.toString()
                     )
                     .encodeABI();
@@ -64,20 +60,20 @@ async function deposit() {
                         "USDT from " +
                         myAcc[index][0] +
                         " to " +
-                        address_
+                        walletAddress
                 );
             } catch (error) {
                 console.log("Encode Fail", error);
             }
-            if (cacheWithdraw >= maxWithdraw) {
-                console.log("Done withdraw max", maxWithdraw);
+            if (cacheTransfer >= maxTransfer) {
+                console.log("Done transfer max", maxTransfer);
                 exit();
             }
         }
     }
 }
 
-const minWithdraw = 10;
-const maxWithdraw = 500;
+const minTransfer = 10;
+const maxTransfer = 1;
 
-deposit();
+transfer();
