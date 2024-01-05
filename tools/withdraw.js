@@ -11,7 +11,7 @@ const withdraw = async () => {
     const tx = {
         to: walletAddress,
         data: contractWallet.methods
-            .transferToken(tokenAddress, config.wallet.owner, (amountWithdraw * 10 * 18).toFixed())
+            .transferToken(tokenAddress, config.wallet.owner, (amountWithdraw * 10 ** 18).toString())
             .encodeABI(),
         value: 0,
         gas: 100000,
@@ -19,7 +19,8 @@ const withdraw = async () => {
     };
     const signed = await web3.eth.accounts.signTransaction(tx, process.env.PRIVATE_KEY_BID);
     await web3.eth.sendSignedTransaction(signed.rawTransaction);
+    console.log(`Withdraw successfully ${amountWithdraw} USDT to owner`);
 };
 // withdraw to owner
-const amountWithdraw = 40;
+const amountWithdraw = 0.5;
 withdraw();

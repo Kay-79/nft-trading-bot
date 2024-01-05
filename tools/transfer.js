@@ -37,7 +37,6 @@ async function transfer(address_) {
                     (Number((maxTransfer - cacheTransfer).toFixed(2)) * 10 ** 18).toFixed(0)
                 );
                 await sleep(100);
-                break;
             }
             cacheTransfer += balanceSC / 10 ** 18;
             try {
