@@ -434,6 +434,9 @@ async function getMinPrice() {
     }
     dataMomo = fs.readFileSync("data/dataMomo.txt", "utf8");
     dataMomo = dataMomo.split("\n");
+    idMomo = [];
+    nameMomo = [];
+    priceMomo = [];
     for (let index = 0; index < dataMomo.length; index += 3) {
         if (Number(dataMomo[index]) > 0) {
             idMomo.push(dataMomo[index]);
