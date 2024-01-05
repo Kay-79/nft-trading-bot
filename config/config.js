@@ -32,9 +32,9 @@ const config = {
     },
     rateFee: 0.01,
     minPrice: {
-        minCommon: 4.1,
-        minUncommon: 1.9,
-        minUnique: 1.1,
+        minCommon: 3.5,
+        minUncommon: 1.5,
+        minUnique: 0.9,
         minRare: 14,
     },
     timeBid: 133.5,
