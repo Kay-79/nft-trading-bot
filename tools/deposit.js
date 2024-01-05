@@ -11,7 +11,7 @@ const configJson = require("../config/config");
 const myAcc = configJson.myAcc;
 const Private_Key = process.env.PRIVATE_KEY_BID;
 
-async function deposit(address_) {
+async function deposit() {
     let checkMyAcc = false;
     for (let index = 0; index < myAcc.length; index++) {
         if (myAcc[index][0] == address_) {
@@ -80,4 +80,4 @@ async function deposit(address_) {
 const minWithdraw = 10;
 const maxWithdraw = 500;
 
-deposit("0x2B4F0e0498A832275af360CbE832da8135A5d9C2");
+deposit();
