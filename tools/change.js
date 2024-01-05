@@ -6,6 +6,7 @@ const configJson = require("../config/config");
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const { exit } = require("process");
+const getMinPrice = require("../utils/common/getMinPrice");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
 });
@@ -329,6 +330,7 @@ async function main(address_, boolMin, Private_Key_) {
 async function loopCheck(times) {
     for (let index = 0; index < times; index++) {
         console.log("Loop:", index.toString() + "/" + times.toString());
+        minPrices = await getMinPrice();
         idChangeds = [];
         shuffleArray(myAccounts);
         for (let indexAccs = 0; indexAccs < myAccounts.length; indexAccs++) {
@@ -364,4 +366,5 @@ amountChange = 1; //bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed());
 const sellOff = true; // if true - sale per minPrice, if false - sale if not loss
 const canLost = -1;
+let minPrices = [];
 loopCheck(5000);
