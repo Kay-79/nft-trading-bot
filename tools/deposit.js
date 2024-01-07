@@ -32,6 +32,10 @@ async function transfer() {
                 balanceSC = Number(
                     (Number((maxTransfer - cacheTransfer).toFixed(2)) * 10 ** 18).toFixed(0)
                 );
+                if (balanceSC < minTransfer) {
+                    console.log("Zero Transfer");
+                    break;
+                }
                 await sleep(100);
             }
             cacheTransfer += balanceSC / 10 ** 18;

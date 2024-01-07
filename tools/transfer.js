@@ -36,6 +36,10 @@ async function transfer(address_) {
                 balanceSC = Number(
                     (Number((maxTransfer - cacheTransfer).toFixed(2)) * 10 ** 18).toFixed(0)
                 );
+                if (balanceSC < minTransfer) {
+                    console.log("Zero Transfer");
+                    break;
+                }
                 await sleep(100);
             }
             cacheTransfer += balanceSC / 10 ** 18;
@@ -77,6 +81,6 @@ async function transfer(address_) {
 }
 
 const minTransfer = 10;
-const maxTransfer = 500;
+const maxTransfer = 400;
 
-transfer("0x44444402BC4cA69CbAeE0887917AF8949D2d0000");
+transfer("0x1DfC0656AbCfE473F968066157B0d0D740aff4e6");
