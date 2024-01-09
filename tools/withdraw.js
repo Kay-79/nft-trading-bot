@@ -11,7 +11,11 @@ const withdraw = async () => {
     const tx = {
         to: walletAddress,
         data: contractWallet.methods
-            .transferToken(tokenAddress, config.wallet.owner, (amountWithdraw * 10 ** 18).toString())
+            .transferToken(
+                tokenAddress,
+                config.wallet.owner,
+                (amountWithdraw * 10 ** 18).toString()
+            )
             .encodeABI(),
         value: 0,
         gas: 100000,
