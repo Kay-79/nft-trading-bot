@@ -379,6 +379,9 @@ const create = async () => {
             continue;
         }
         await createBatch(3.001, 1000000, "", myAcc[i][1]);
+        indexs = [];
+        priceList = [];
+        ids = [];
     }
 };
 create();
