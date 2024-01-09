@@ -131,6 +131,7 @@ async function checkChangePrice(indexId) {
 }
 
 async function getPriceToSell(address, boolMin) {
+    idMomoBought = [];
     idMomoBought = await checkMomosUnlist(address);
     value = idMomoBought.length;
     console.log(idMomoBought.toString());
