@@ -1,10 +1,15 @@
 const config = {
+    apiMP: "",
     addressToken: "0x55d398326f99059fF775485246999027B3197955",
     addressMP: "0x55d398326f99059fF775485246999027B3197955",
     factoryContract: "0xaBf5C4ac3029f5f6892c3A98DE6DCaf3826C1394",
     wallet: {
         address: "0x444444961B7CC7b0F23BCF1bC666facf44135DA2",
         owner: "0x55555D4de8df0c455C2Ff368253388FE669a8888",
+    },
+    rpcs: {
+        bid: "https://bsc-dataseed3.bnbchain.org",
+        change: "https://bsc-dataseed1.defibit.io",
     },
     emojiURL: {
         fail: "\xE2\x9D\x8C",
