@@ -10,6 +10,7 @@ const configJson = require("../config/config");
 const addressToken = configJson.addressToken;
 const contract = new web3.eth.Contract(abiBUSD, addressToken);
 const { sleep, ranSleep } = require("../utils/common/sleep");
+const getBnbPrice = require("../utils/common/getBnbPrice");
 
 async function getMpListed(amountMomo) {
     auctors_ = [];
@@ -75,7 +76,7 @@ async function getMpListed(amountMomo) {
             currentdate.getMinutes() +
             ":" +
             currentdate.getSeconds();
-        console.log("Connect to api failed and wait 2 minutes!", datetime);
+        console.log(`Connect to api failed and wait 2 minutes! ${datetime}`);
         await sleep(120000);
     }
 }
@@ -349,16 +350,7 @@ async function divideCanBuy() {
 }
 
 async function runBot(amountMomo) {
-    bnbPrice = await axios
-        .get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]")
-        .catch((e) => {
-            console.log("Err1");
-        });
-    try {
-        bnbPrice = bnbPrice.data.data.bnb.price;
-    } catch (error) {
-        bnbPrice = 320;
-    }
+    bnbPrice = await getBnbPrice();
     if (rateFeePerProfit > 0.5) {
         console.warn("Rate fee too high");
         exit();
