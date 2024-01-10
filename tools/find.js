@@ -451,11 +451,9 @@ async function getMinPrice() {
         }
         let dataMin = await axios
             .get(
-                "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=" +
-                    limitMomo +
-                    "&category=&vType=" +
-                    (index0 + 1).toString() +
-                    "&sort=price&pType="
+                `https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=${limitMomo}&category=&vType=${(
+                    index0 + 1
+                ).toString()}&sort=price&pType=`
             )
             .catch((e) => {
                 console.log("Err get min price!!");
