@@ -25,9 +25,7 @@ async function getMpListed(amountMomo) {
     amounts_ = [];
     try {
         let mpListed = await axios.get(
-            "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=" +
-                amountMomo +
-                "&category=&vType=&sort=-time&pType="
+            `${configJson.apiMP}${amountMomo}&category=&vType=&sort=-time&pType=`
         );
         mpListed = mpListed.data.list;
         for (let ii = mpListed.length - 1; ii >= 0; ii--) {
@@ -416,12 +414,9 @@ async function getMinPrice() {
             if (budget < minBudget) {
                 console.warn("Insufficient funds");
                 request(
-                    "https://api.telegram.org/" +
-                        apiTele +
-                        "/sendMessage?chat_id=@" +
-                        chatId +
-                        "&text=Insufficient funds " +
-                        budget.toFixed(2),
+                    `https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Insufficient funds ${budget.toFixed(
+                        2
+                    )}`,
                     function (error, response, body) {}
                 );
                 await sleep(10000);
@@ -451,7 +446,7 @@ async function getMinPrice() {
         }
         let dataMin = await axios
             .get(
-                `https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=${limitMomo}&category=&vType=${(
+                `${configJson.apiMP}${limitMomo}&category=&vType=${(
                     index0 + 1
                 ).toString()}&sort=price&pType=`
             )
