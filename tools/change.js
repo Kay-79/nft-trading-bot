@@ -15,19 +15,19 @@ const shuffleArray = require("../utils/change/shuffleArray");
 const checkReject = require("../utils/change/checkEnemyToReject");
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.public.blastapi.io"));
 const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
-minCM = configJson.minPrice.minCommon;
-minUCM = configJson.minPrice.minUncommon;
-minUNQ = configJson.minPrice.minUnique;
-Private_Key = process.env.PRIVATE_KEY_CHANGE;
-File_Key = ["_1_0_1"];
-idMomo = [];
-indexMomo = [];
-priceSell = [];
-priceBuy = [];
-nameMomo = [];
-boolChange = [];
-flagID = false;
-flagCountMomo = 0;
+const minCM = configJson.minPrice.minCommon;
+const minUCM = configJson.minPrice.minUncommon;
+const minUNQ = configJson.minPrice.minUnique;
+const Private_Key = process.env.PRIVATE_KEY_CHANGE;
+const File_Key = ["_1_0_1"];
+let idMomo = [];
+let indexMomo = [];
+let priceSell = [];
+let priceBuy = [];
+let nameMomo = [];
+let boolChange = [];
+let flagID = false;
+let flagCountMomo = 0;
 async function checkListed(address) {
     axios
         .get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=price&page=1&limit=128")
@@ -114,7 +114,7 @@ async function checkChangePrice(indexId) {
                         canLost ||
                         sellOff) &&
                     Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) >
-                        3 * timeWait * (indexid_ + 1)
+                        timeWaitPro * (indexid_ + 1)
                 ) {
                     // time wait x2 for second momo
                     priceCache = priceSell[indexId]; // add to compare price
@@ -349,20 +349,21 @@ async function loopCheck(times) {
 }
 // 0
 const minChange = 0.001;
-timeWait = 6 * 60 * 60 * 1; //wait latest change price of momo (hour)
-delayChange = 90 * 10 ** 3; //delay to update api (sec)
+const timeWait = configJson.timeDelays.normal * 60 * 60 * 1; //wait latest change price of momo (hour)
+const timeWaitPro = configJson.timeDelays.pro * 60 * 60 * 1; //wait latest change price of momo (hour)
+const delayChange = 90 * 10 ** 3; //delay to update api (sec)
 const delayPerLoop = 2 * 3600000;
-myAccounts = [];
+let myAccounts = [];
 const myAcc = configJson.myAcc;
 for (let index = 0; index < myAcc.length; index++) {
     if (myAcc[index][2]) {
         myAccounts.push(myAcc[index][0]);
     }
 }
-signArray = [];
-idCache = [];
-nonceAcc = [0];
-amountChange = 1; //bundles change
+let signArray = [];
+let idCache = [];
+let nonceAcc = [0];
+const amountChange = 1; //bundles change
 const gasPriceScan = Number((3.001 * 10 ** 9).toFixed());
 const sellOff = true; // if true - sale per minPrice, if false - sale if not loss
 const canLost = -1;
