@@ -38,17 +38,6 @@ async function sendTxt(addressSC, gasPrice_, gasLimit_, index_, prices_) {
 }
 
 const getIndexs = async (address) => {
-    //     let indexs = [];
-    //     let response = await axios.get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-time&page=1&limit=128").catch((e) => {
-    //         console.log("Err1");
-    //     });
-    //     response = response.data.list;
-    //     console.log(response);
-    //     for (let i = 0; i < response.length; i++) {
-    //         await sendTxt(address, 3.001, 1000000, (response[i].index).toString(), "99000000000000000000");
-    //         await sleep(20000);
-    //     }
-    //     console.log(indexs);
     sendTxt(3.001, 1000000, "68", "12900000000000000000");
 };
 getIndexs("0xa2b607197c1A1f5FF114915c407FDDAbe3EF67E1");

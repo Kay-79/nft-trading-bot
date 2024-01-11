@@ -9,12 +9,7 @@ const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
 });
-// const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
-// const web3 = new Web3(
-//     new Web3.providers.HttpProvider("https://go.getblock.io/a30d0dcecbb14cf8a9cfb4ff8e00c475")
-// );
 const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
-// const web3sc = new Web3(new Web3.providers.WebsocketProvider('wss://solemn-wild-aura.bsc.discover.quiknode.pro/9fbdf28f69f47aa85c76222be804b4224c2dbd22/'));
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
@@ -53,13 +48,11 @@ async function setup(Private_Key_) {
             for (let index = 0; index < gasPriceScanRaw.length; index++) {
                 gasPriceScan[index] = Number((Number(gasPriceScanRaw[index]) * 10 ** 9).toFixed());
             }
-            // const gasPriceScanFake = Number((Number(dataBid[6].split(",")) * 10 ** 9 * 2).toFixed());
             let amountBid = 0;
             for (let index = 0; index < amountList.length; index++) {
                 amountBid += Number(amountList[index]);
             }
             if (false || Number(startTime_[0]) + timeSendTx + overTime - Date.now() / 1000 > 0) {
-                //       Number(startTime_[0]) + timeSendTx            - Date.now() / 1000 > 0
                 let tx = [];
                 let nonce_ = await web3.eth.getTransactionCount(acc.address);
                 if (index_.length > 1) {
@@ -137,7 +130,6 @@ async function setup(Private_Key_) {
                             await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
                         }
                     } else {
-                        // maybe bug here
                         isAvailableAuctions = await checkAvailable(
                             seller_[0],
                             index_[0],
@@ -165,10 +157,7 @@ async function setup(Private_Key_) {
                                 console.log("Successful bid! At block:", sendEach.blockNumber);
                             } catch (error) {
                                 console.log("Fail...setting new time");
-                                // console.log(error);
-                                // console.log("Bid fail! At block: " + error.receipt.blockNumber);
                                 checkSuccess = emoji.fail;
-                                // timeSendReal = error.receipt.blockNumber;
                             }
                         } else {
                             if (index == tx.length - 1) {

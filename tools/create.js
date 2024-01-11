@@ -365,7 +365,7 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     }
 }
 
-timeWait = 5 * 60 * 60 * 1; //wait latest change price
+timeWait = 5 * 60 * 60 * 1;
 idMomoBought = [];
 priceSell = [];
 myAccounts = [];
@@ -380,6 +380,6 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 let accSell = "";
-value = 7; // without rare and epic
+value = 7;
 console.warn(`Vesion create is outdate`);
 createBatch(3.001, 1000000, "", "_8_8_8");

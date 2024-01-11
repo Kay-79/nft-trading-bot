@@ -23,29 +23,6 @@ boolChange = [];
 flagID = false;
 flagCountMomo = 0;
 amountBid = 0;
-async function checkAmountBuy(address, page) {
-    await sleep(2500 + 5000 * Math.random());
-    let response2 = await axios
-        .get("https://nftapi.mobox.io/auction/logs_new/" + address + "?&page=" + page + "&limit=50")
-        .catch((e) => {
-            console.log("Err1");
-        });
-    const data2 = response2.data;
-    for (let i = 0; i < data2.list.length; i++) {
-        if (data2.list[i].auctor != address) {
-            for (let idx2 = 0; idx2 < data2.list[i].ids.length; idx2++) {
-                for (let idx3 = 0; idx3 < Number(data2.list[i].amounts[idx2]); idx3++) {
-                    if (idMomoBought.length >= value || amountBid >= valueBid) {
-                        break;
-                    } else {
-                        idMomoBought.push(data2.list[i].ids[idx2]);
-                    }
-                }
-            }
-            amountBid += 1;
-        }
-    }
-}
 async function checkChangePrice(indexId) {
     await sleep(2500 + 5000 * Math.random());
     let response3 = await axios
@@ -319,11 +296,6 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     await getPriceToSell(accSell, true); //_1_0_1
     let count = 0;
     while (true) {
-        // if (indexs.length != idList.length || idList.length != priceList.length) {
-        //     console.log('Length array not same!')
-        //     if (indexs.length<)
-        //     break
-        // }
         if (hexData_.length > 0) {
             await sendTxt(gasPrice_, gasLimit_, "", "", "", hexData_, nameFile_);
             break;

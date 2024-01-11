@@ -310,8 +310,6 @@ async function main(address, nameFile_, rate_) {
 
 async function checkListedAll(rate_) {
     let timeCheck = new Date();
-    // ip = await axios.get('https://ip.whatisproxy.net/').catch(e => { console.log("Err ip") })
-    // console.log(ip.data)
     bnbPrice = await axios
         .get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]")
         .catch((e) => {
@@ -328,7 +326,7 @@ async function checkListedAll(rate_) {
             "https://wise.com/rates/live?source=USD&target=VND&length=30&resolution=hourly&unit=day"
         )
         .catch((e) => {
-            console.log("Err1");
+            console.log("Err get usd price");
         });
     usdPrice = Number(usdPrice.data.value.toFixed());
     for (let index = 0; index < myAcc.length; index++) {
@@ -355,7 +353,6 @@ async function checkListedAll(rate_) {
     console.log("BNB Price:", bnbPrice);
     console.log("USD Price:", usdPrice);
     console.log("Total USDT:\t\t", (sumUSD * rate_).toFixed(2));
-    // console.log("Total BNB:\t\t", (sumBNB * rate_).toFixed(4));
     console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed());
     sumBuyVnd =
         (sumBNB * bnbPrice + sumUSD + sumBuy + momoUnlist * configJson.minPrice.minUncommon) *
