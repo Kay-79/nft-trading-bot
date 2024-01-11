@@ -13,7 +13,6 @@ process.on("unhandledRejection", (err) => {
 
 const shuffleArray = require("../utils/change/shuffleArray");
 const checkReject = require("../utils/change/checkEnemyToReject");
-// const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.public.blastapi.io"));
 const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
 const minCM = configJson.minPrice.minCommon;
 const minUCM = configJson.minPrice.minUncommon;
@@ -24,9 +23,7 @@ let idMomo = [];
 let indexMomo = [];
 let priceSell = [];
 let priceBuy = [];
-let nameMomo = [];
 let boolChange = [];
-let flagID = false;
 let flagCountMomo = 0;
 async function checkListed(address) {
     axios
@@ -245,9 +242,7 @@ async function main(address_, boolMin, Private_Key_) {
     indexMomo = [];
     priceSell = [];
     priceBuy = [];
-    nameMomo = [];
     boolChange = [];
-    flagID = false;
     flagCountMomo = 0;
     await sleep(1000);
     await checkListed(address_);
