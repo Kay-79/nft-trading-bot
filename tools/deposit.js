@@ -77,6 +77,6 @@ async function transfer() {
 }
 
 const minTransfer = 10;
-const maxTransfer = 1;
+const maxTransfer = 40;
 
 transfer();
