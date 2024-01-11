@@ -30,7 +30,9 @@ flagID = false;
 flagCountMomo = 0;
 async function checkListed(address) {
     axios
-        .get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=time&page=1&limit=128")
+        .get(
+            "https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-price&page=1&limit=128"
+        )
         .then((response) => {
             const data = response.data;
             for (let i = 0; i < data.list.length; i++) {
