@@ -517,7 +517,7 @@ const profit = [
     profits.epic,
     profits.legend,
 ]; //profit per momo
-const profitName = 30;
+const profitName = 3000;
 let minCommon, minUncommon, minUnique, minRare, minEpic, minLegend;
 let idMomo = [];
 let nameMomo = [];
