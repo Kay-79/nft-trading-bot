@@ -23,7 +23,7 @@ const updateZeroBlock = async () => {
         for (let i = 0; i < dataArr.length; i++) {
             let dataAddress = dataArr[i].split("|");
             const amountUnlist = await getAmountUnlist(dataAddress[0]);
-            if (amountUnlist == 0) {
+            if (amountUnlist === "0") {
                 dataAddress[1] = nowBlock;
             }
             newDataZero += `${dataAddress[0]}|${dataAddress[1]}\n`;
