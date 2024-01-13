@@ -226,6 +226,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                 });
                 await sleep(25);
                 profitCanBuy = [];
+                totalProfit = 0;
             } catch (err) {
                 console.error(err);
             }
@@ -536,3 +537,4 @@ const delayGetMp = 12000 + 10000 * Math.random(); // not use, around 17s per rq
 // now is save batch, config in bid.js
 const maxMomoPrice = 15;
 runBot(20);
+// bug: save wrong gasPrice
