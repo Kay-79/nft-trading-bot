@@ -225,6 +225,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                     }
                 });
                 await sleep(25);
+                profitCanBuy = [];
             } catch (err) {
                 console.error(err);
             }
