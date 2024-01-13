@@ -289,6 +289,8 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                 });
                 await sleep(25);
             }
+            profitCanBuy = [];
+            totalProfit = 0;
         } catch (error) {}
     }
 }
