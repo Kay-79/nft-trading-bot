@@ -28,6 +28,8 @@ const updateZeroBlock = async () => {
             }
             newDataZero += `${dataAddress[0]}|${dataAddress[1]}\n`;
         }
+        // last '\n' remove
+        newDataZero = newDataZero.trim();
         fs.writeFileSync("./data/zeroBlock.csv", newDataZero);
         await sleep(1000);
     } catch (error) {
