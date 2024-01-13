@@ -5,6 +5,7 @@ node_modules
 logs.json
 tools/test*
 data/dataMomo.txt
+./data/zeroBlock.csv
 .env
 waitBid.txt
 test*.*
