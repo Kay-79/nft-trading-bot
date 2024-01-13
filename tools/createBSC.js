@@ -8,6 +8,7 @@ const configJson = require("../config/config");
 const { checkMomosUnlist } = require("../utils/create/checkMomosUnlist");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const { abiAmount } = require("../abi/abiCheckUnlist");
+const { updateZeroBlock } = require("../utils/create/updateZeroBlock");
 
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
@@ -326,24 +327,24 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         }
         await sleep(5000);
     }
-    await updateZeroBlock(myAcc[i][1]);
 }
 
-const timeWait = 5 * 60 * 60 * 1; //wait latest change price
-let idMomoBought = [];
-let priceSell = [];
-let myAccounts = [];
-let amountBatchToCreate = 0;
+timeWait = 5 * 60 * 60 * 1; //wait latest change price
+idMomoBought = [];
+priceSell = [];
+myAccounts = [];
+amountBatchToCreate = 0;
 const myAcc = configJson.myAcc;
 for (let index = 0; index < myAcc.length; index++) {
     myAccounts.push(myAcc[index][0]);
 }
-let indexs = [];
-let priceList = [];
-let ids = [];
+valueBid = 999;
+indexs = [];
+priceList = [];
+ids = [];
 const minChange = 0.001;
 let accSell = "";
-let value = 0; // without rare and epic
+value = 0; // without rare and epic
 const create = async () => {
     for (let i = 0; i < myAcc.length; i++) {
         console.log(myAcc[i][1]);
@@ -355,5 +356,7 @@ const create = async () => {
         priceList = [];
         ids = [];
     }
+    console.log("Updating zero block");
+    await updateZeroBlock();
 };
 create();

@@ -1,12 +1,11 @@
 let axios = require("axios");
 const fs = require("fs");
-const Web3 = require("web3");
 const getAmountUnlist = require("../utils/common/getAmountUnlist");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const checkRightAccBuy = require("../utils/listed/checkRightAccBuy");
 const configJson = require("../config/config");
-// const web3 = new Web3(new Web3.providers.HttpProvider("https://rpc.ankr.com/bsc"));
-const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
+const Web3 = require("web3");
+const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.check));
 const abiBUSD = require("../abi/abiERC20");
 const contract = new web3.eth.Contract(abiBUSD, "0x55d398326f99059ff775485246999027b3197955");
 const dataMomo = fs.readFileSync("./data/dataMomo.txt", "utf8");
