@@ -83,4 +83,4 @@ async function transfer(address_) {
 const minTransfer = 10;
 const maxTransfer = 900;
 
-transfer("0x73A4AbD430C821B49423dB5279fb56ee72073292");
+transfer("0xbf6F2114A230B399F0A9085AC0FC27Bd4148a465");
