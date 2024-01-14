@@ -33,14 +33,14 @@ const config = {
         pro: 12,
     },
     profits: {
-        common: 0.25,
-        uncommon: 0.25,
+        common: 0.15,
+        uncommon: 0.15,
         unique: 0.2,
         rare: 4,
         epic: 10,
         legendary: 1000,
     },
-    rateFee: 0.5,
+    rateFee: 0.01,
     minPrice: {
         minCommon: 3.5,
         minUncommon: 1.5,
