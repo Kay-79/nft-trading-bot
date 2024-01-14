@@ -29,8 +29,8 @@ const config = {
         ["0x44444402BC4cA69CbAeE0887917AF8949D2d0000", "_4_4_0", true],
     ],
     timeDelays: {
-        normal: 4,
-        pro: 12,
+        normal: 8,
+        pro: 24,
     },
     profits: {
         common: 0.2,
