@@ -33,8 +33,8 @@ const config = {
         pro: 12,
     },
     profits: {
-        common: 0.3,
-        uncommon: 0.3,
+        common: 0.25,
+        uncommon: 0.25,
         unique: 0.2,
         rare: 4,
         epic: 10,
