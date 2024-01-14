@@ -145,6 +145,7 @@ async function checkCanBuy() {
                     indexCanBuy.push(indexx);
                     profitCanBuy.push(priceBundle - priceDec_[indexx]);
                     modeCanBuy.push("Bundle");
+                    console.log("Bundle");
                 }
                 break;
             case "Normal":
@@ -158,6 +159,7 @@ async function checkCanBuy() {
                             priceDec_[indexx]
                     );
                     modeCanBuy.push("Normal");
+                    console.log("Normal");
                 }
                 break;
             case "Pro":
@@ -171,6 +173,7 @@ async function checkCanBuy() {
                             priceDec_[indexx]
                     );
                     modeCanBuy.push("Pro");
+                    console.log("Pro");
                 }
                 break;
             default:
