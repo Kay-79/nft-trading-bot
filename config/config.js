@@ -33,9 +33,9 @@ const config = {
         pro: 12,
     },
     profits: {
-        common: 0.15,
-        uncommon: 0.15,
-        unique: 0.2,
+        common: 0.2,
+        uncommon: 0.19,
+        unique: 0.15,
         rare: 4,
         epic: 10,
         legendary: 1000,
@@ -47,8 +47,8 @@ const config = {
         minUnique: 0.9,
         minRare: 14,
     },
-    timeBid: 132.5,
-    accBuy: "0x44444402BC4cA69CbAeE0887917AF8949D2d0000",
+    timeBid: 131.0,
+    accBuy: "0x2B4F0e0498A832275af360CbE832da8135A5d9C2",
 };
 
 module.exports = config;
