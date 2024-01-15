@@ -1,7 +1,7 @@
 const config = {
     apiMP: "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=",
     addressToken: "0x55d398326f99059fF775485246999027B3197955",
-    addressMP: "0x55d398326f99059fF775485246999027B3197955",
+    addressMP: "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2",
     factoryContract: "0xaBf5C4ac3029f5f6892c3A98DE6DCaf3826C1394",
     wallet: {
         address: "0x444444961B7CC7b0F23BCF1bC666facf44135DA2",

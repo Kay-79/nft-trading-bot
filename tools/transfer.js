@@ -1,4 +1,5 @@
 require("dotenv").config();
+const configJson = require("../config/config");
 const fs = require("fs");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
@@ -6,8 +7,8 @@ const { exit } = require("process");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org"));
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const abiBUSD = require("../abi/abiERC20");
-const contractToken = new web3.eth.Contract(abiBUSD, "0x55d398326f99059ff775485246999027b3197955");
-const configJson = require("../config/config");
+const addressToken = configJson.addressToken;
+const contractToken = new web3.eth.Contract(abiBUSD, addressToken);
 const myAcc = configJson.myAcc;
 const Private_Key = process.env.PRIVATE_KEY_BID;
 
@@ -46,11 +47,7 @@ async function transfer(address_) {
             try {
                 const contractAddress = new web3.eth.Contract(abi, myAcc[index][0]);
                 let encoded = await contractAddress.methods
-                    .transferERC20(
-                        "0x55d398326f99059ff775485246999027b3197955",
-                        address_,
-                        balanceSC.toString()
-                    )
+                    .transferERC20(addressToken, address_, balanceSC.toString())
                     .encodeABI();
                 let tx = {
                     gas: 100000,

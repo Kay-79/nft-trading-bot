@@ -8,7 +8,7 @@ const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.check));
 const abiBUSD = require("../abi/abiERC20");
 const { exit } = require("process");
-const contract = new web3.eth.Contract(abiBUSD, "0x55d398326f99059ff775485246999027b3197955");
+const contract = new web3.eth.Contract(abiBUSD, configJson.addressToken);
 const dataMomo = fs.readFileSync("./data/dataMomo.txt", "utf8");
 const momoID = dataMomo.split("\n");
 

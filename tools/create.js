@@ -257,8 +257,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
             type: "function",
         },
     ];
-    const consractAddress = "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2";
-    const contract = new web3.eth.Contract(abi, consractAddress);
+    const contract = new web3.eth.Contract(abi, configJson.addressMP);
     emptyVar = [];
     tx = "";
     encoded = "";
