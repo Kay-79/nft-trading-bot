@@ -31,13 +31,13 @@ const config = {
         ["0x44444402BC4cA69CbAeE0887917AF8949D2d0000", "_4_4_0", true],
     ],
     timeDelays: {
-        normal: 8,
+        normal: 3,
         pro: 24,
     },
     profits: {
-        common: 0.2,
-        uncommon: 0.19,
-        unique: 0.15,
+        common: 0.3,
+        uncommon: 0.3,
+        unique: 0.2,
         rare: 4,
         epic: 10,
         legendary: 1000,

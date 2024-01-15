@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
-
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract Bid is OwnableUpgradeable {
     address public addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
+    address public addressMomo = 0x3bD6a582698ECCf6822dB08141818A1a8512c68D;
     uint256 public amountUnList;
     address public changer = 0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000;
 
@@ -147,6 +147,16 @@ contract Bid is OwnableUpgradeable {
             gas: gasleft(),
             value: msg.value
         }(abi.encodeWithSignature("cancelAuction(uint256)", index_));
+        if (!success) {
+            revert(string(returnData));
+        }
+    }
+
+    function getReward() external payable onlyOwner {
+        (bool success, bytes memory returnData) = addressMomo.call{
+            gas: gasleft(),
+            value: msg.value
+        }(abi.encodeWithSignature("getReward()"));
         if (!success) {
             revert(string(returnData));
         }
