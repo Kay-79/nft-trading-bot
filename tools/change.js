@@ -10,6 +10,7 @@ const getMinPrice = require("../utils/common/getMinPrice");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
 });
+const changer = configJson.changer;
 
 const shuffleArray = require("../utils/change/shuffleArray");
 const checkReject = require("../utils/change/checkEnemyToReject");
@@ -177,20 +178,18 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
             encoded = contract.methods
                 .changePrice(index_, priceChange_, priceChange_, 2)
                 .encodeABI();
-            await web3.eth
-                .getTransactionCount("0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000")
-                .then((nonce) => {
-                    // console.log(nonceAcc, nonce)
-                    tx = {
-                        nonce: nonce + nonceAcc[0],
-                        from: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
-                        gas: 57865,
-                        gasPrice: gasPriceScan,
-                        to: address_,
-                        value: 0,
-                        data: encoded,
-                    };
-                });
+            await web3.eth.getTransactionCount(changer).then((nonce) => {
+                // console.log(nonceAcc, nonce)
+                tx = {
+                    nonce: nonce + nonceAcc[0],
+                    from: changer,
+                    gas: 57865,
+                    gasPrice: gasPriceScan,
+                    to: address_,
+                    value: 0,
+                    data: encoded,
+                };
+            });
             nonceAcc[0] += 1;
             break;
         }
