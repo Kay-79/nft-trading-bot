@@ -33,9 +33,10 @@ const config = {
         ["0x179815260f9265950286918fa34b624071e09d68", "_1_7_9", true],
     ],
     timeDelays: {
-        normal: 3,
+        normal: 8,
         pro: 24,
     },
+    timeDelayPerLoop: 2,
     profits: {
         common: 0.3,
         uncommon: 0.3,
