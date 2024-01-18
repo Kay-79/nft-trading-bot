@@ -248,7 +248,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     tx = {
         from: acc.address,
         gas: gasLimit_,
-        gasPrice: gasPrice_ * 10 ** 9, // + i * 10 ** 6,
+        gasPrice: (gasPrice_ * 10 ** 9).toFixed(), // + i * 10 ** 6,
         to: accSell,
         value: 0,
         data: encoded,
