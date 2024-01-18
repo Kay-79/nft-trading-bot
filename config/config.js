@@ -36,7 +36,7 @@ const config = {
         normal: 4,
         pro: 8,
     },
-    timeDelayPerLoop: 2,
+    timeDelayPerLoop: 0,
     profits: {
         common: 0.3,
         uncommon: 0.3,
