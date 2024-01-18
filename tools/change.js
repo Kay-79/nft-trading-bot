@@ -334,7 +334,7 @@ async function loopCheck(times) {
             }
             console.log("Account:", myAccounts[indexAccs]);
             await main(myAccounts[indexAccs], true, Private_Key);
-            await sleep(150000 + 300000 * Math.random()); //5mins per check
+            // await sleep(150000 + 300000 * Math.random()); //5mins per check
         }
         if (times > 1) {
             await sleep(delayPerLoop); // last change per loop
