@@ -351,7 +351,7 @@ const create = async () => {
         if (myAcc[i][1] == "_1_0_1" || myAcc[i][1] === "_5_8_1") {
             continue;
         }
-        await createBatch(1.001, 1000000, "", myAcc[i][1]);
+        await createBatch(3.001, 1000000, "", myAcc[i][1]);
         indexs = [];
         priceList = [];
         ids = [];

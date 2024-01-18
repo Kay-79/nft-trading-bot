@@ -8,7 +8,7 @@ const { sleep, ranSleep } = require("../utils/common/sleep");
 async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
     const Private_Key = process.env.PRIVATE_KEY_CHANGE;
     const Web3 = require("web3");
-    const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
+    const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
@@ -46,6 +46,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
         boolSell = "TRUE";
     } catch (error) {
         console.log("Over time or fail during list!");
+        console.log(error);
         exit();
     }
 }
@@ -57,7 +58,7 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     if (amountUnList == 0 || amountUnList != ids[0].length) {
         console.log("No listing");
         console.log("amountUnList:", amountUnList);
-        exit();
+        // exit();
     }
     while (true) {
         if (indexs.length != ids.length || indexs.length != prices.length || indexs[0] == 999) {
@@ -97,8 +98,8 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
 }
 
 indexs = [10];
-ids = [["24054", "24054"]];
-prices = [["2.969", "2.489"]];
+ids = [["13024", "13026", "13042", "13049", "13052", "13052"]];
+prices = [["4.297", "3.892", "4.499", "4.179", "3.879", "3.879"]];
 
 console.log(indexs.length, ids.length, prices.length);
 for (let ii = 0; ii < prices.length; ii++) {
@@ -106,5 +107,5 @@ for (let ii = 0; ii < prices.length; ii++) {
         prices[ii][jj] = Math.round(Number(prices[ii][jj]) * 10 ** 5).toString() + "0000000000000";
     }
 }
-const consractAddress = "0x0000a7514Bc1e72058B709A713d20c1fE68b7777";
-createBatch(3.001, 1000000, "", "_1_0_1");
+const consractAddress = "0x88888df23f9554e4b043b00e1f4afb39fc078888";
+createBatch(1.1001, 1000000, "", "_1_0_1");
