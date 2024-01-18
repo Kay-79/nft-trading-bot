@@ -3,6 +3,7 @@ const fs = require("fs");
 const getAmountUnlist = require("../utils/common/getAmountUnlist");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const checkRightAccBuy = require("../utils/listed/checkRightAccBuy");
+const getMinPrice = require("../utils/common/getMinPrice");
 const configJson = require("../config/config");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.check));
@@ -182,13 +183,25 @@ async function main(address, nameFile_, rate_) {
     sumUSD += Number(budget);
     budget = (budget * rate_).toFixed(2);
     await checkListed(address);
-    for (let index1 = 1; index1 < 51; index1++) {
-        await checkPriceBuy(address, index1);
-        if (flagCountMomo == idMomo.length) {
-            break;
+    for (let i = 0; i < priceBuy.length; i++) {
+        if (Number(idMomo[i]) > 10000 && Number(idMomo[i]) < 20000) {
+            priceBuy[i] = minPrices[0] - 0.5;
+        } else if (Number(idMomo[i]) > 20000 && Number(idMomo[i]) < 30000) {
+            priceBuy[i] = minPrices[1] - 0.4;
+        } else if (Number(idMomo[i]) > 30000 && Number(idMomo[i]) < 40000) {
+            priceBuy[i] = minPrices[2] - 0.35;
         }
-        await sleep(delayPerRequest);
+        sumBuy += Number(priceBuy[i]);
+        flagCountMomo += 1;
     }
+    // for (let index1 = 1; index1 < 51; index1++) {
+    // await checkPriceBuy(address, index1);
+    //     if (flagCountMomo == idMomo.length) {
+    //         break;
+    //     }
+    //     await sleep(delayPerRequest);
+    // }
+
     if (
         nameMomo.length == idMomo.length &&
         idMomo.length == indexMomo.length &&
@@ -309,6 +322,7 @@ async function main(address, nameFile_, rate_) {
 }
 
 async function checkListedAll(rate_) {
+    minPrices = await getMinPrice();
     let timeCheck = new Date();
     bnbPrice = await axios
         .get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]")
@@ -463,6 +477,7 @@ let momoListed = 0,
     sumUSD = 0,
     sumBNB = 0,
     countRqs = 0;
+let minPrices = [];
 const delayPerRequest = 1000;
 const maxCanSell = 5;
 const lastAcc = myAcc[myAcc.length - 1][1];
