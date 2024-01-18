@@ -215,7 +215,7 @@ async function checkIndex(address) {
 async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
     const Private_Key = process.env.PRIVATE_KEY_CHANGE;
     const Web3 = require("web3");
-    const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
+    const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.create));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     const abi = [
         {
@@ -351,7 +351,7 @@ const create = async () => {
         if (myAcc[i][1] == "_1_0_1" || myAcc[i][1] === "_5_8_1") {
             continue;
         }
-        await createBatch(3.001, 1000000, "", myAcc[i][1]);
+        await createBatch(1.001, 1000000, "", myAcc[i][1]);
         indexs = [];
         priceList = [];
         ids = [];

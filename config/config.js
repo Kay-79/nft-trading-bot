@@ -13,6 +13,7 @@ const config = {
         bid: "https://bsc-dataseed3.bnbchain.org",
         change: "https://bsc.publicnode.com",
         check: "https://bsc-dataseed1.bnbchain.org",
+        create: "https://bsc-dataseed1.bnbchain.org",
     },
     emojiURL: {
         fail: "\xE2\x9D\x8C",
