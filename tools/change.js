@@ -316,7 +316,7 @@ async function main(address_, boolMin, Private_Key_) {
                 }
                 boolChange[indexMomo_] = " ";
             }
-            await sleep(20000 + 20000 * Math.random());
+            await sleep(10000 + 10000 * Math.random());
         }
     }
     await sleep(1000);
@@ -357,8 +357,8 @@ for (let index = 0; index < myAcc.length; index++) {
 let signArray = [];
 let idCache = [];
 let nonceAcc = [0];
-const amountChange = 1; //bundles change
-const gasPriceScan = Number((3.001 * 10 ** 9).toFixed());
+const amountChange = configJson.amountChange; //bundles change
+const gasPriceScan = Number((configJson.gasPriceChange * 10 ** 9).toFixed());
 const sellOff = true; // if true - sale per minPrice, if false - sale if not loss
 const canLost = -1;
 let minPrices = [];

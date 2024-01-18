@@ -11,7 +11,7 @@ const config = {
     changer: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
     rpcs: {
         bid: "https://bsc-dataseed3.bnbchain.org",
-        change: "https://bsc-dataseed1.defibit.io",
+        change: "https://bsc.publicnode.com",
         check: "https://bsc-dataseed1.bnbchain.org",
     },
     emojiURL: {
@@ -36,6 +36,8 @@ const config = {
         normal: 4,
         pro: 8,
     },
+    amountChange: 10,
+    gasPriceChange: 1.0001,
     timeDelayPerLoop: 0,
     profits: {
         common: 0.3,
