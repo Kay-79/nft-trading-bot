@@ -295,6 +295,14 @@ async function main(address_, boolMin, Private_Key_) {
                     Number(idMomo[indexMomo_]) < 30000 &&
                     Number(priceSell[indexMomo_]) > minUCM - minChange
                 ) {
+                    if (
+                        Number(priceSell[indexMomo_]) - minPrices[1] <
+                            configJson.minDecreasePrice &&
+                        Number(priceSell[indexMomo_]) - minPrices[1] > 0
+                    ) {
+                        priceSell[indexMomo_] = minPrices[0];
+                        console.log(`Decrease price to ${minPrices[1]}`);
+                    }
                     await changePrice(
                         indexMomo[indexMomo_],
                         (Number((Number(priceSell[indexMomo_]) - minChange).toFixed(3)) * 10 ** 3)
@@ -309,6 +317,14 @@ async function main(address_, boolMin, Private_Key_) {
                     Number(idMomo[indexMomo_]) < 40000 &&
                     Number(priceSell[indexMomo_]) > minUNQ - minChange
                 ) {
+                    if (
+                        Number(priceSell[indexMomo_]) - minPrices[1] <
+                            configJson.minDecreasePrice &&
+                        Number(priceSell[indexMomo_]) - minPrices[1] > 0
+                    ) {
+                        priceSell[indexMomo_] = minPrices[0];
+                        console.log(`Decrease price to ${minPrices[2]}`);
+                    }
                     await changePrice(
                         indexMomo[indexMomo_],
                         (Number((Number(priceSell[indexMomo_]) - minChange).toFixed(3)) * 10 ** 3)
