@@ -38,8 +38,8 @@ const config = {
         pro: 8,
     },
     minDecreasePrice: 0.15,
-    amountChange: 10,
-    gasPriceChange: 1.01,
+    amountChange: 1,
+    gasPriceChange: 3.001,
     timeDelayPerLoop: 0,
     profits: {
         common: 0.3,
