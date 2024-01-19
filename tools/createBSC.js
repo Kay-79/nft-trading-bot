@@ -304,7 +304,7 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         for (let index = 0; index < indexs.length; index++) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE";
-                console.log(indexs[index], idList[index], priceList[index]);
+                console.log(`${indexs[index]}, [], [], [${idList[index]}], [${priceList[index]}]`);
                 await sendTxt(
                     gasPrice_,
                     gasLimit_,
