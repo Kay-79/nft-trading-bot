@@ -11,9 +11,9 @@ const getZeroBlockCsv = (addressCheck) => {
             }
         }
     } catch (error) {
-        return "Failed";
+        return "Failed, add new address to zeroBlock.csv";
     }
-    return "Failed";
+    return "Failed, add new address to zeroBlock.csv";
 };
 module.exports = { getZeroBlockCsv };
 // params: blockCheck: nowBlock, addressCheck: hexAddress
