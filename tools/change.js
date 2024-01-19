@@ -155,6 +155,7 @@ async function checkChangePrice(indexId) {
                     console.log(idMomo[indexId] + " " + priceCache + " to " + priceSell[indexId]);
                 }
             }
+            // change if price lower than min
             break;
         }
         // else {
@@ -272,6 +273,14 @@ async function main(address_, boolMin, Private_Key_) {
                     Number(idMomo[indexMomo_]) < 20000 &&
                     Number(priceSell[indexMomo_]) > minCM - minChange
                 ) {
+                    if (
+                        Number(priceSell[indexMomo_]) - minPrices[0] <
+                            configJson.minDecreasePrice &&
+                        Number(priceSell[indexMomo_]) - minPrices[0] > 0
+                    ) {
+                        priceSell[indexMomo_] = minPrices[0];
+                        console.log(`Decrease price to ${minPrices[0]}`);
+                    }
                     await changePrice(
                         indexMomo[indexMomo_],
                         (Number((Number(priceSell[indexMomo_]) - minChange).toFixed(3)) * 10 ** 3)
