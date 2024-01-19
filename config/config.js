@@ -34,7 +34,7 @@ const config = {
         ["0x179815260f9265950286918fa34b624071E09D68", "_1_7_9", true],
     ],
     timeDelays: {
-        normal: 6,
+        normal: 1,
         pro: 8,
     },
     minDecreasePrice: 0.3,
