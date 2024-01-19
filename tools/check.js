@@ -370,14 +370,11 @@ async function checkListedAll(rate_) {
     console.log("Total USDT:\t\t", (sumUSD * rate_).toFixed(2));
     console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed());
     sumBuyVnd =
-        (sumBNB * bnbPrice + sumUSD + sumBuy + momoUnlist * configJson.minPrice.minUncommon) *
+        (sumBNB * bnbPrice + sumUSD + sumBuy + momoUnlist * (minPrices[1] - 0.4)) *
         usdPrice *
         rate_;
     sumSaleVnd =
-        (sumBNB * bnbPrice +
-            sumUSD +
-            sumSell * 0.95 +
-            momoUnlist * configJson.minPrice.minUncommon) *
+        (sumBNB * bnbPrice + sumUSD + sumSell * 0.95 + momoUnlist * (minPrices[1] - 0.4)) *
         usdPrice *
         rate_;
     console.log("Estimate Fund:\t", (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
