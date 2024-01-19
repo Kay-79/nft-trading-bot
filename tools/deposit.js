@@ -53,6 +53,10 @@ async function transfer() {
                     data: encoded,
                 };
                 let signed = await web3.eth.accounts.signTransaction(tx, Private_Key);
+                if (walletAddress != "0x444444961B7CC7b0F23BCF1bC666facf44135DA2") {
+                    console.warn("Please check wallet address");
+                    exit();
+                }
                 await web3.eth.sendSignedTransaction(signed.rawTransaction);
                 console.log(
                     "Tranfer " +
