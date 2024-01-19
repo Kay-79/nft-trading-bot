@@ -34,7 +34,7 @@ const config = {
         ["0x179815260f9265950286918fa34b624071E09D68", "_1_7_9", true],
     ],
     timeDelays: {
-        normal: 4,
+        normal: 6,
         pro: 8,
     },
     amountChange: 10,

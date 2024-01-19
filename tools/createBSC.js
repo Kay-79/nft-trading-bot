@@ -360,3 +360,4 @@ const create = async () => {
     await updateZeroBlock();
 };
 create();
+// module.exports = { create };

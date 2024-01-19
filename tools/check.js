@@ -1,4 +1,4 @@
-let axios = require("axios");
+const axios = require("axios");
 const fs = require("fs");
 const getAmountUnlist = require("../utils/common/getAmountUnlist");
 const { sleep, ranSleep } = require("../utils/common/sleep");

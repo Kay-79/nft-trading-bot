@@ -10,3 +10,4 @@ data/zeroBlock.csv
 waitBid.txt
 test*.*
 ./data
+.ds_store
