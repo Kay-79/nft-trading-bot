@@ -149,7 +149,9 @@ async function checkCanBuy() {
                 }
                 break;
             case "Normal":
-                break; //Disabled normal
+                if (configJson.rateFee > 0.15) {
+                    break; //Disabled normal
+                }
                 if (
                     checkIdPrice(ids_[indexx][0], 1, "lv not in normal", "lvHP not in normal") >=
                     priceDec_[indexx]
