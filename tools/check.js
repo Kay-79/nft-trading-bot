@@ -236,7 +236,7 @@ async function main(address, nameFile_, rate_) {
                 "\t" +
                 timeChange[ii] +
                 "\t" +
-                priceBuy[ii] +
+                priceBuy[ii].toFixed(2) +
                 "\t" +
                 nameFile_ +
                 "\t5.4\t" +
