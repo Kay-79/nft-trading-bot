@@ -38,7 +38,7 @@ const config = {
         normal: 1,
         pro: 8,
     },
-    minDecreasePrice: 0.3,
+    minDecreasePrice: 0.2,
     amountChange: 1,
     gasPriceChange: 3.001,
     timeDelayPerLoop: 0,
