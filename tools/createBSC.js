@@ -9,6 +9,7 @@ const { checkMomosUnlist } = require("../utils/create/checkMomosUnlist");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const { abiAmount } = require("../abi/abiCheckUnlist");
 const { updateZeroBlock } = require("../utils/create/updateZeroBlock");
+const getMinPrice = require("../utils/common/getMinPrice");
 
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
@@ -75,35 +76,35 @@ async function checkChangePrice(indexId) {
         let sttRarity = idMomoBought[indexId].toString().slice(0, 1);
         switch (sttRarity.toString()) {
             case "1":
-                if (Number(priceSell[indexId]) < minCM) {
-                    priceSell[indexId] = (minCM - minChange).toFixed(3);
+                if (Number(priceSell[indexId]) < minPrices[0]) {
+                    priceSell[indexId] = (minPrices[0] - minChange).toFixed(3);
                 }
-                if (!data3.length) {
-                    priceSell[indexId] = 15;
+                if (Number(priceSell[indexId]) - minPrices[0] < configJson.minDecreasePrice) {
+                    priceSell[indexId] = (minPrices[0] - minChange).toFixed(3);
                 }
                 break;
             case "2":
-                if (Number(priceSell[indexId]) < minUCM) {
-                    priceSell[indexId] = (minUCM - minChange).toFixed(3);
+                if (Number(priceSell[indexId]) < minPrices[1]) {
+                    priceSell[indexId] = (minPrices[1] - minChange).toFixed(3);
                 }
-                if (!data3.length) {
-                    priceSell[indexId] = 15;
+                if (Number(priceSell[indexId]) - minPrices[1] < configJson.minDecreasePrice) {
+                    priceSell[indexId] = (minPrices[1] - minChange).toFixed(3);
                 }
                 break;
             case "3":
-                if (Number(priceSell[indexId]) < minUNQ) {
-                    priceSell[indexId] = (minUNQ - minChange).toFixed(3);
+                if (Number(priceSell[indexId]) < minPrices[2]) {
+                    priceSell[indexId] = (minPrices[2] - minChange).toFixed(3);
                 }
-                if (!data3.length) {
-                    priceSell[indexId] = 15;
+                if (Number(priceSell[indexId]) - minPrices[2] < configJson.minDecreasePrice) {
+                    priceSell[indexId] = (minPrices[2] - minChange).toFixed(3);
                 }
                 break;
             default:
                 priceSell[indexId] = (minR - minChange).toFixed(3);
-                if (!data3.length) {
-                    priceSell[indexId] = 15;
-                }
                 break;
+        }
+        if (!data3.length) {
+            priceSell[indexId] = 15;
         }
     }
 }
@@ -345,7 +346,9 @@ ids = [];
 const minChange = 0.001;
 let accSell = "";
 value = 0; // without rare and epic
+let minPrices = [];
 const create = async () => {
+    minPrices = await getMinPrice();
     for (let i = 0; i < myAcc.length; i++) {
         console.log(myAcc[i][1]);
         if (myAcc[i][1] == "_1_0_1" || myAcc[i][1] === "_5_8_1") {
