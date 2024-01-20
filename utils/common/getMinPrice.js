@@ -41,7 +41,7 @@ const getMinPrice = async () => {
         if (amountMinCheck >= 5) {
             priceRaw[index0] = Number((sumMin / amountMinCheck).toFixed(2));
         } else {
-            priceRaw[index0] = (sumMin + sumMin2) / dataMin.length;
+            priceRaw[index0] = Number(((sumMin + sumMin2) / dataMin.length).toFixed(2));
         }
     }
     for (let index = 0; index < 3; index++) {
