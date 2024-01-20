@@ -1,5 +1,6 @@
 const axios = require("axios");
 const { sleep } = require("../common/sleep");
+const config = require("../../config/config");
 const getMinPrice = async () => {
     let priceRaw = [];
     for (let index0 = 0; index0 < 3; index0++) {
@@ -9,11 +10,9 @@ const getMinPrice = async () => {
         }
         let dataMin = await axios
             .get(
-                "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=" +
-                    limitMomo +
-                    "&category=&vType=" +
-                    (index0 + 1).toString() +
-                    "&sort=price&pType="
+                `${config.apiMP}${limitMomo}&category=&vType=${(
+                    index0 + 1
+                ).toString()}&sort=price&pType=`
             )
             .catch((e) => {
                 console.log("Err get min price!!");
