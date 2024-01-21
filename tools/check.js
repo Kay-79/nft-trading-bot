@@ -194,14 +194,6 @@ async function main(address, nameFile_, rate_) {
         sumBuy += Number(priceBuy[i]);
         flagCountMomo += 1;
     }
-    // for (let index1 = 1; index1 < 51; index1++) {
-    // await checkPriceBuy(address, index1);
-    //     if (flagCountMomo == idMomo.length) {
-    //         break;
-    //     }
-    //     await sleep(delayPerRequest);
-    // }
-
     if (
         nameMomo.length == idMomo.length &&
         idMomo.length == indexMomo.length &&
@@ -475,7 +467,6 @@ let momoListed = 0,
     sumBNB = 0,
     countRqs = 0;
 let minPrices = [];
-const delayPerRequest = 1000;
 const maxCanSell = 5;
 const lastAcc = myAcc[myAcc.length - 1][1];
 const save = false;
