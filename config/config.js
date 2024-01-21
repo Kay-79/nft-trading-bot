@@ -33,6 +33,9 @@ const config = {
         ["0x95de5320fffbF793D4Da4C659390D3C8647d2B99", "_9_5_d", true],
         ["0x179815260f9265950286918fa34b624071E09D68", "_1_7_9", true], // getReward()
         ["0xfa11AA3953B46c12dC1fB5c880912A80BF52203A", "_f_a_1", true],
+        ["0x891016f99BA622F8556bE12B4EA336157aA6cb20", "_8_9_1", true],
+        ["0xb8C5744D347A74484925E19F588719C846616405", "_b_8_C", true],
+        ["0x838e781DC9F070922F66f0BE415d15168bB04825", "_f_a_1", true],
     ],
     timeDelays: {
         normal: 1,
