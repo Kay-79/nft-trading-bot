@@ -28,7 +28,7 @@ const getMinPrice = async () => {
         let sumMin2 = 0;
         dataMin = dataMin.data.list;
         for (let index = 0; index < dataMin.length; index++) {
-            if (Date.now() / 1000 - dataMin[index].uptime > 60 * 60) {
+            if (Date.now() / 1000 - dataMin[index].uptime > 120 * 60) {
                 amountMinCheck += 1;
                 sumMin += dataMin[index].nowPrice / 10 ** 9;
             } else {
