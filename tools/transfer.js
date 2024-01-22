@@ -26,6 +26,7 @@ async function transfer(address_) {
         exit();
     }
     let cacheTransfer = 0;
+    cacheTransfer = (await contractToken.methods.balanceOf(address_).call()) / 10 ** 18;
     for (let index = 0; index < myAcc.length; index++) {
         let isContract = await web3.eth.getStorageAt(myAcc[index][0]);
         if (!Number(isContract) || myAcc[index][0] == address_) {
@@ -80,6 +81,6 @@ async function transfer(address_) {
 }
 
 const minTransfer = 10;
-const maxTransfer = 990;
+const maxTransfer = 350;
 
-transfer("0xfa11AA3953B46c12dC1fB5c880912A80BF52203A");
+transfer("0x179815260f9265950286918fa34b624071E09D68");
