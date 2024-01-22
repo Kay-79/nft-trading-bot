@@ -46,9 +46,9 @@ const config = {
     gasPriceChange: 3.001,
     timeDelayPerLoop: 0,
     profits: {
-        common: 0.3,
-        uncommon: 0.3,
-        unique: 0.2,
+        common: 0.25,
+        uncommon: 0.2,
+        unique: 0.15,
         rare: 4,
         epic: 10,
         legendary: 1000,
