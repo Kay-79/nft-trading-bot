@@ -61,4 +61,4 @@ module.exports = getMinPrice;
 const test = async () => {
     console.log(await getMinPrice());
 };
-test();
+// test();
