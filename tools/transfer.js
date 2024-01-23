@@ -7,12 +7,14 @@ const { exit } = require("process");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org"));
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const abiBUSD = require("../abi/abiERC20");
+const sortPerBudget = require("../utils/common/sortPerBudget");
 const addressToken = configJson.addressToken;
 const contractToken = new web3.eth.Contract(abiBUSD, addressToken);
-const myAcc = configJson.myAcc;
+let myAcc = configJson.myAcc;
 const Private_Key = process.env.PRIVATE_KEY_BID;
 
 async function transfer(address_) {
+    myAcc = await sortPerBudget(myAcc, contractToken);
     let checkMyAcc = false;
     for (let index = 0; index < myAcc.length; index++) {
         if (myAcc[index][0] == address_) {
@@ -24,6 +26,7 @@ async function transfer(address_) {
         exit();
     }
     let cacheTransfer = 0;
+    cacheTransfer = (await contractToken.methods.balanceOf(address_).call()) / 10 ** 18;
     for (let index = 0; index < myAcc.length; index++) {
         let isContract = await web3.eth.getStorageAt(myAcc[index][0]);
         if (!Number(isContract) || myAcc[index][0] == address_) {
@@ -78,6 +81,6 @@ async function transfer(address_) {
 }
 
 const minTransfer = 10;
-const maxTransfer = 990;
+const maxTransfer = 350;
 
-transfer("0xfa11AA3953B46c12dC1fB5c880912A80BF52203A");
+transfer("0x891016f99BA622F8556bE12B4EA336157aA6cb20");

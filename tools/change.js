@@ -387,4 +387,8 @@ const gasPriceScan = Number((configJson.gasPriceChange * 10 ** 9).toFixed());
 const sellOff = true; // if true - sale per minPrice, if false - sale if not loss
 const canLost = -1;
 let minPrices = [];
+if (configJson.minDecreasePrice > 0.2) {
+    console.warn("minDecreasePrice must be greater than 0.2");
+    exit();
+}
 loopCheck(5000);

@@ -7,13 +7,15 @@ const { exit } = require("process");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org"));
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const abiBUSD = require("../abi/abiERC20");
+const sortPerBudget = require("../utils/common/sortPerBudget");
 const addressToken = configJson.addressToken;
 const contractToken = new web3.eth.Contract(abiBUSD, addressToken);
-const myAcc = configJson.myAcc;
+let myAcc = configJson.myAcc;
 const Private_Key = process.env.PRIVATE_KEY_BID;
 const walletAddress = configJson.wallet.address;
 
 async function transfer() {
+    myAcc = await sortPerBudget(myAcc, contractToken);
     let cacheTransfer = 0;
     let isContract = await web3.eth.getStorageAt(walletAddress);
     if (!Number(isContract)) {
@@ -78,6 +80,6 @@ async function transfer() {
 }
 
 const minTransfer = 10;
-const maxTransfer = 120;
+const maxTransfer = 10;
 
 transfer();

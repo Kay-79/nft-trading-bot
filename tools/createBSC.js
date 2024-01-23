@@ -107,6 +107,7 @@ async function checkChangePrice(indexId) {
             priceSell[indexId] = 15;
         }
     }
+    console.log("Price to sell: " + priceSell[indexId]);
 }
 
 async function getPriceToSell(address, boolMin) {
@@ -320,7 +321,7 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
                     count += 1;
                 }
             }
-            await sleep(5000);
+            // await sleep(5000);
         }
         if (count >= indexs.length) {
             console.log("Done");

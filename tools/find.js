@@ -11,6 +11,7 @@ const addressToken = configJson.addressToken;
 const contract = new web3.eth.Contract(abiBUSD, addressToken);
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const getBnbPrice = require("../utils/common/getBnbPrice");
+const getMinPrice = require("../utils/common/getMinPrice");
 
 async function getMpListed(amountMomo) {
     auctors_ = [];
@@ -381,7 +382,7 @@ async function runBot(amountMomo) {
         if (flagCheck >= 53) {
             //1 loop around 11.37 seconds // 106 ~ 20 minutes
             flagCheck = 0;
-            await getMinPrice();
+            await getMinPriceOrdi();
         }
     }
 }
@@ -402,10 +403,10 @@ async function setup() {
     linkSave = "./waitBid.txt";
     gasUsed = [242000, 344000, 460000, 575000, 690000, 800000]; //Const avg gasUsed
     gasUsed = [242000 * 1, 242000 * 2, 242000 * 3, 242000 * 4, 242000 * 5, 242000 * 6]; //Const avg gasUsed
-    await getMinPrice(); //setup change
+    await getMinPriceOrdi(); //setup change
 }
 
-async function getMinPrice() {
+async function getMinPriceOrdi() {
     console.log(Date.now());
     try {
         budget = await contract.methods.balanceOf(accCheck).call();
@@ -441,57 +442,7 @@ async function getMinPrice() {
             priceMomo.push(dataMomo[index + 2]);
         }
     }
-    for (let index0 = 0; index0 < 3; index0++) {
-        let limitMomo = 17;
-        if (index0 >= 4) {
-            limitMomo = 5;
-        }
-        let dataMin = await axios
-            .get(
-                `${configJson.apiMP}${limitMomo}&category=&vType=${(
-                    index0 + 1
-                ).toString()}&sort=price&pType=`
-            )
-            .catch((e) => {
-                console.log("Err get min price!!");
-            });
-        if (!dataMin) {
-            index0 -= 1;
-            await sleep(5000);
-            continue;
-        }
-        await sleep(2500);
-        let amountMinCheck = 0;
-        let sumMin = 0;
-        let sumMin2 = 0;
-        dataMin = dataMin.data.list;
-        for (let index = 0; index < dataMin.length; index++) {
-            if (Date.now() / 1000 - dataMin[index].uptime > 900) {
-                amountMinCheck += 1;
-                sumMin += dataMin[index].nowPrice / 10 ** 9;
-            } else {
-                sumMin2 += dataMin[index].nowPrice / 10 ** 9;
-            }
-            if (amountMinCheck >= 5) {
-                break;
-            }
-        }
-        if (amountMinCheck >= 5) {
-            priceRaw[index0] = sumMin / amountMinCheck;
-        } else {
-            priceRaw[index0] = (sumMin + sumMin2) / dataMin.length;
-        }
-    }
-    for (let index = 0; index < 3; index++) {
-        if (priceRaw[index] > 10) {
-            console.log("Error Normal Price!!");
-            exit();
-        }
-    }
-    if (priceRaw[3] > 25 || priceRaw[4] > 100 || priceRaw[5] > 1000) {
-        console.log("Error Pro Price!!");
-        exit();
-    }
+    priceRaw = await getMinPrice();
     if (pricePerHash > 0.1) {
         console.log("Error Hash Price!!");
         exit();
