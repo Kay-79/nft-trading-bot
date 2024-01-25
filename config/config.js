@@ -53,7 +53,7 @@ const config = {
         epic: 10,
         legendary: 1000,
     },
-    rateFee: 0.35,
+    rateFee: 0.01,
     minPrice: {
         minCommon: 3.0,
         minUncommon: 1.0,
@@ -61,7 +61,7 @@ const config = {
         minRare: 14,
     },
     timeBid: 131.5,
-    accBuy: "0x179815260f9265950286918fa34b624071E09D68",
+    accBuy: "0xb8C5744D347A74484925E19F588719C846616405",
 };
 
 module.exports = config;
