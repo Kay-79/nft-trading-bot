@@ -44,7 +44,7 @@ const config = {
     minDecreasePrice: 0.2,
     amountChange: 1,
     gasPriceChange: 3.001,
-    gasPriceMinBid: 3.441,
+    gasPriceMinBid: 3.1,
     timeDelayPerLoop: 0,
     profits: {
         common: 0.25,
@@ -54,15 +54,15 @@ const config = {
         epic: 10,
         legendary: 1000,
     },
-    rateFee: 0.01,
+    rateFee: 0.25,
     minPrice: {
         minCommon: 3.0,
         minUncommon: 1.0,
         minUnique: 0.5,
         minRare: 14,
     },
-    timeBid: 131.5,
-    accBuy: "0xb8C5744D347A74484925E19F588719C846616405",
+    timeBid: 132.5,
+    accBuy: "0x891016f99BA622F8556bE12B4EA336157aA6cb20",
 };
 
 module.exports = config;
