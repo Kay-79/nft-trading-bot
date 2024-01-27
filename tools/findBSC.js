@@ -26,7 +26,7 @@ async function getMpListed(amountTx) {
     amounts_ = [];
     try {
         let mpListed = await axios.get(
-            `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${cacheBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC}&apikey=${process.env.BSC_API_KEY}`
+            `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${cacheBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_CREATE}&apikey=${process.env.BSC_API_KEY}`
         );
         mpListed = mpListed.data.result;
         // console.log(mpListed);
@@ -80,6 +80,9 @@ async function getMpListed(amountTx) {
             ":" +
             currentdate.getSeconds();
         console.log("Connect to api failed and wait 12 seconds!", datetime);
+        console.log(
+            `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${cacheBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC}&apikey=${process.env.BSC_API_KEY}`
+        );
         await sleep(12000);
     }
 }
@@ -549,7 +552,7 @@ const pricePerHash = 0;
 let budgetCache = -1;
 let cacheBlock = 0;
 const minBudget = 30;
-const gasPriceMin = 3.1;
+const gasPriceMin = configJson.gasPriceMinBid;
 const gasPriceMax = 50;
 const rateFeePerProfit = configJson.rateFee;
 let accCheck = configJson.accBuy;

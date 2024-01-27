@@ -19,6 +19,7 @@
         "test": "echo \"Error: no test specified\" && exit 1",
         "check": "node ./tools/check",
         "find": "node ./tools/find",
+        "find2": "node ./tools/findBSC",
         "bid": "node ./tools/bid",
         "create": "node ./tools/createBSC",
         "change": "node ./tools/change",
