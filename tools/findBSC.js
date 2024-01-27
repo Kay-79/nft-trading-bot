@@ -81,7 +81,7 @@ async function getMpListed(amountTx) {
             currentdate.getSeconds();
         console.log("Connect to api failed and wait 12 seconds!", datetime);
         console.log(
-            `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${cacheBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC}&apikey=${process.env.BSC_API_KEY}`
+            `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${cacheBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_CREATE}&apikey=${process.env.BSC_API_KEY}`
         );
         await sleep(12000);
     }
