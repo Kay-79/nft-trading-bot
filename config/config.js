@@ -54,14 +54,14 @@ const config = {
         epic: 10,
         legendary: 1000,
     },
-    rateFee: 0.25,
+    rateFee: 0.5,
     minPrice: {
         minCommon: 3.0,
         minUncommon: 1.0,
         minUnique: 0.5,
         minRare: 14,
     },
-    timeBid: 132.5,
+    timeBid: 133.0,
     accBuy: "0x891016f99BA622F8556bE12B4EA336157aA6cb20",
 };
 
