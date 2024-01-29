@@ -48,7 +48,7 @@ const config = {
     timeDelayPerLoop: 0,
     profits: {
         common: 0.2,
-        uncommon: 0.15,
+        uncommon: 0.1,
         unique: 0.1,
         rare: 4,
         epic: 10,
