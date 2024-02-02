@@ -15,6 +15,10 @@ const config = {
         check: "https://bsc-dataseed1.bnbchain.org",
         create: "https://bsc-dataseed1.bnbchain.org",
     },
+    wss: {
+        mainnet: "wss://bsc.publicnode.com",
+        testnet: "wss://bsc-testnet.publicnode.com",
+    },
     emojiURL: {
         fail: "\xE2\x9D\x8C",
         success: "\xE2\x9C\x85",
