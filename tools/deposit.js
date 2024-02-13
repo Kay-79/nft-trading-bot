@@ -80,6 +80,6 @@ async function transfer() {
 }
 
 const minTransfer = 10;
-const maxTransfer = 10;
+const maxTransfer = 100;
 
 transfer();
