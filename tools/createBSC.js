@@ -216,7 +216,6 @@ async function checkIndex(address) {
 
 async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
     const Private_Key = process.env.PRIVATE_KEY_CHANGE;
-    const Web3 = require("web3");
     const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.create));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     const abi = [
@@ -307,15 +306,19 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE";
                 console.log(`${indexs[index]}, [], [], [${idList[index]}], [${priceList[index]}]`);
-                await sendTxt(
-                    gasPrice_,
-                    gasLimit_,
-                    indexs[index],
-                    idList[index],
-                    priceList[index],
-                    "",
-                    nameFile_
-                );
+                try {
+                    await sendTxt(
+                        gasPrice_,
+                        gasLimit_,
+                        indexs[index],
+                        idList[index],
+                        priceList[index],
+                        "",
+                        nameFile_
+                    );
+                } catch (error) {
+                    ("Create on private node!");
+                }
                 if (boolSell == "TRUE") {
                     indexs[index] = undefined;
                     count += 1;
