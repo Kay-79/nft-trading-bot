@@ -1,7 +1,7 @@
 const Web3 = require("web3");
 const configJson = require("../config/config");
 const { exit } = require("process");
-const web3a = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
+const web3a = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed3.bnbchain.org"));
 const checkLatency = async () => {
     try {
         const latency2 = await web3a.eth.getBlockNumber();
