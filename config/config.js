@@ -11,7 +11,8 @@ const config = {
     changer: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
     rpcs: {
         bid: "https://bsc-dataseed3.bnbchain.org",
-        change: "https://bsc.publicnode.com",
+        // change: "https://bsc.publicnode.com",
+        change: "http://localhost:8545",
         check: "https://bsc-dataseed1.bnbchain.org",
         create: "https://bsc-dataseed1.bnbchain.org",
     },
