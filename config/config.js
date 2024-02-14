@@ -15,7 +15,7 @@ const config = {
         // change: "https://bsc.publicnode.com",
         change: "http://localhost:8545",
         check: "https://bsc-dataseed1.bnbchain.org",
-        create: "https://bsc-dataseed1.bnbchain.org",
+        create: "http://localhost:8545",
     },
     wss: {
         mainnet: "wss://bsc.publicnode.com",
@@ -49,8 +49,11 @@ const config = {
     },
     minDecreasePrice: 0.2,
     amountChange: 1,
-    gasPriceChange: 1.001,
-    gasPriceMinBid: 3.441,
+    gasPrices: {
+        minBid: 3.441,
+        create: 1.0,
+        change: 1.0,
+    },
     timeDelayPerLoop: 0,
     profits: {
         common: 0.2,

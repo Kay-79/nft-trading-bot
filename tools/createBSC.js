@@ -260,8 +260,8 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     });
     console.log("Listing");
     try {
-        // let createAuctionBatch = await web3.eth.sendSignedTransaction(signArray.rawTransaction);
-        // console.log("Done at block:", createAuctionBatch.blockNumber);
+        let createAuctionBatch = await web3.eth.sendSignedTransaction(signArray.rawTransaction);
+        console.log("Done at block:", createAuctionBatch.blockNumber);
         boolSell = "TRUE";
     } catch (error) {
         console.log("Over time or fail during list!");
@@ -355,7 +355,7 @@ const create = async () => {
         if (myAcc[i][1] == "_1_0_1" || myAcc[i][1] === "_5_8_1") {
             continue;
         }
-        await createBatch(1.001, 1000000, "", myAcc[i][1]);
+        await createBatch(configJson.gasPrices.create, 1000000, "", myAcc[i][1]);
         indexs = [];
         priceList = [];
         ids = [];
