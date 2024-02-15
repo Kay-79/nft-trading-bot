@@ -22,6 +22,16 @@ const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.rpcs.bid))
 const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
     if (err) console.error(err);
 });
+let txResend = {
+    from: configJson.bidder,
+    gas: 1000000,
+    gasPrice: newGasPrice, //change with new gas price
+    nonce: newNonce, //change with new nonce
+    to: contractAddress,
+    value: 0,
+    data: newData, //change with new data
+};
+let checkHashEach = "";
 async function setup(Private_Key_) {
     inputdata = "None";
     let isBid = false;
@@ -97,10 +107,20 @@ async function setup(Private_Key_) {
                             )
                             .encodeABI(), // amount = 1 or > 1
                     });
+                    txResend.gasPrice = gasPriceScan[0];
+                    txResend.nonce = nonce_;
+                    txResend.data = contract.methods
+                        .bid(
+                            seller_.toString(),
+                            index_.toString(),
+                            startTime_.toString(),
+                            priceList.toString(),
+                            amountBid.toString()
+                        )
+                        .encodeABI();
                 }
                 let checkSuccess = emoji.success;
                 let isAvailableAuctions = true;
-                let checkHashEach = "";
                 try {
                     let signed = [];
                     let biding = [];
@@ -154,7 +174,7 @@ async function setup(Private_Key_) {
                         if (tx.length == 1) {
                             try {
                                 checkSuccess = emoji.success;
-                                const sendEach = await web3.eth.sendSignedTransaction(
+                                const sendEach = web3.eth.sendSignedTransaction(
                                     signed[index].rawTransaction
                                 );
                                 getPendingTransactions.on("data", (txHash) => {
@@ -162,25 +182,18 @@ async function setup(Private_Key_) {
                                         try {
                                             let tx = await web3.eth.getTransaction(txHash);
                                             if (tx != null)
-                                                if (
-                                                    tx.to ==
-                                                    0x55d398326f99059ff775485246999027b3197955
-                                                )
-                                                    console.log(tx.hash);
-                                            // Get Transaction from a certain address and write it down in a file
-                                            var writeTxFromTether = async function (data) {
-                                                fs.appendFile(
-                                                    "./Transactions.txt",
-                                                    JSON.stringify(data) + " n",
-                                                    (err) => {
-                                                        if (err) console.log(err);
-                                                        console.log("Updated Successfully");
+                                                if (checkEnemy(tx.to)) {
+                                                    console.log(tx.hash, tx.gasPrice);
+                                                    if (
+                                                        Number(tx.gasPrice) >
+                                                            Number(txResend.gasPrice) &&
+                                                        Number(tx.gasPrice) < 15 * 10 ** 9
+                                                    ) {
+                                                        resendTxNewGasPrice(tx.gasPrice);
                                                     }
-                                                );
-                                            };
-                                            // console.log({ tx });
+                                                }
                                         } catch (err) {
-                                            console.error(err);
+                                            console.error("err");
                                         }
                                     });
                                 });
@@ -189,7 +202,8 @@ async function setup(Private_Key_) {
                                         if (success) console.log("Successfully unsubscribed!");
                                     });
                                 }, 4000);
-                                console.log("Successful bid! At block:", sendEach.blockNumber);
+                                await sleep(6000);
+                                // console.log("Successful bid! At block:", sendEach.blockNumber);
                             } catch (error) {
                                 console.log("Fail...setting new time");
                                 checkSuccess = emoji.fail;
@@ -254,6 +268,10 @@ async function setup(Private_Key_) {
                     if (checkHashEach) {
                         await sleep(1000); //sleep to avoid pending hash
                         timeSendReal = await web3.eth.getTransaction(checkHashEach);
+                        const receiptCheckStatus = web3.eth.getTransactionReceipt(checkHashEach);
+                        if (receiptCheckStatus) {
+                            priceList1 = emoji.success + priceList1;
+                        }
                         timeSendReal = await web3.eth.getBlock(timeSendReal.blockNumber);
                         timeSendReal = timeSendReal.timestamp;
                         console.log("timeStampFail:", timeSendReal);
@@ -341,6 +359,25 @@ async function setup(Private_Key_) {
         }
     }
 }
+const enemys = [
+    0x13f4ea83d0bd40e75c8222255bc855a974568dd4, 0x55d398326f99059ff775485246999027b3197955,
+];
+const checkEnemy = (toAdd) => {
+    for (let i = 0; i < enemys.length; i++) {
+        if (toAdd == enemys[i]) return true;
+    }
+    return false;
+};
+const resendTxNewGasPrice = async (newGasPriceSend) => {
+    try {
+        txResend.gasPrice = (Number(newGasPriceSend) + 10 ** 8).toFixed();
+        const signedNew = web3.eth.accounts.signTransaction(txResend, process.env.PRIVATE_KEY_BID);
+        checkHashEach = signedNew.transactionHash;
+        web3.eth.sendSignedTransaction(signedNew.rawTransaction);
+    } catch (err) {
+        console.error(err);
+    }
+};
 async function bid() {
     const Private_Key = process.env.PRIVATE_KEY_BID;
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
