@@ -41,11 +41,7 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
             }
         }
         if (Number(data[data.length - 1].blockNumber) < nowBlock) {
-            await getMomosBided(
-                Number(data[data.length - 1].blockNumber) + 1,
-                nowBlock,
-                addressCheck
-            );
+            await getMomosBided(Number(data[data.length - 1].blockNumber), nowBlock, addressCheck);
         }
     } catch (error) {}
 };
@@ -83,11 +79,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
             }
         }
         if (Number(data[data.length - 1].blockNumber) < nowBlock) {
-            await getMomosListed(
-                Number(data[data.length - 1].blockNumber) + 1,
-                nowBlock,
-                addressCheck
-            );
+            await getMomosListed(Number(data[data.length - 1].blockNumber), nowBlock, addressCheck);
         }
     } catch (error) {}
 };
