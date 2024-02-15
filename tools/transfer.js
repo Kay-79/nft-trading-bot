@@ -54,7 +54,7 @@ async function transfer(address_) {
                     .encodeABI();
                 let tx = {
                     gas: 100000,
-                    gasPrice: 3.001 * 10 ** 9,
+                    gasPrice: Number((1.0001 * 10 ** 9).toFixed(0)),
                     to: myAcc[index][0],
                     value: 0,
                     data: encoded,
