@@ -18,6 +18,7 @@ const config = {
         create: "http://localhost:8545",
     },
     wss: {
+        private: "ws://localhost:8546",
         mainnet: "wss://bsc.publicnode.com",
         testnet: "wss://bsc-testnet.publicnode.com",
     },

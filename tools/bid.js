@@ -9,7 +9,6 @@ const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
 });
-const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
@@ -19,6 +18,10 @@ const overTime = 180;
 const timeGetAvaliableAuction = 5;
 let timeSendTx = configJson.timeBid;
 const emoji = configJson.emojiURL;
+const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.rpcs.bid));
+const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
+    if (err) console.error(err);
+});
 async function setup(Private_Key_) {
     inputdata = "None";
     let isBid = false;
@@ -154,6 +157,38 @@ async function setup(Private_Key_) {
                                 const sendEach = await web3.eth.sendSignedTransaction(
                                     signed[index].rawTransaction
                                 );
+                                getPendingTransactions.on("data", (txHash) => {
+                                    setTimeout(async () => {
+                                        try {
+                                            let tx = await web3.eth.getTransaction(txHash);
+                                            if (tx != null)
+                                                if (
+                                                    tx.to ==
+                                                    0x55d398326f99059ff775485246999027b3197955
+                                                )
+                                                    console.log(tx.hash);
+                                            // Get Transaction from a certain address and write it down in a file
+                                            var writeTxFromTether = async function (data) {
+                                                fs.appendFile(
+                                                    "./Transactions.txt",
+                                                    JSON.stringify(data) + " n",
+                                                    (err) => {
+                                                        if (err) console.log(err);
+                                                        console.log("Updated Successfully");
+                                                    }
+                                                );
+                                            };
+                                            // console.log({ tx });
+                                        } catch (err) {
+                                            console.error(err);
+                                        }
+                                    });
+                                });
+                                setTimeout(() => {
+                                    getPendingTransactions.unsubscribe(function (error, success) {
+                                        if (success) console.log("Successfully unsubscribed!");
+                                    });
+                                }, 4000);
                                 console.log("Successful bid! At block:", sendEach.blockNumber);
                             } catch (error) {
                                 console.log("Fail...setting new time");
