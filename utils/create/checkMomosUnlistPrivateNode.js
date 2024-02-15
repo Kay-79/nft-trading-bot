@@ -2,7 +2,8 @@ require("dotenv").config();
 const axios = require("axios");
 const Web3 = require("web3");
 const { exit } = require("process");
-const web3 = new Web3();
+const configJson = require("../../config/config");
+const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
 const { getZeroBlockCsv } = require("./getZeroBlockCsv");
 let dataBid = {};
@@ -10,14 +11,27 @@ let dataBid = {};
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
     console.log(cacheBlock);
+    mpListed = await web3.eth.getPastLogs({
+        address: "0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2",
+        fromBlock: endBlock,
+        toBlock: endBlock + 100,
+        topics: [process.env.TOPIC_BID], // the second parameter is variable c
+    });
+    console.log(mpListed, 1);
     try {
         let mpListed = null;
         try {
-            mpListed = await axios.get(
-                `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_BID}&apikey=${process.env.BSC_API_KEY}`
-            );
+            mpListed = await web3.eth.getPastLogs({
+                address: "0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2",
+                fromBlock: endBlock,
+                toBlock: endBlock + 5000,
+                topics: [process.env.TOPIC_BID], // the second parameter is variable c
+            });
+            console.log(mpListed, 1);
+            exit();
         } catch (err) {
             await getMomosBided(cacheBlock, nowBlock, addressCheck);
+            exit();
         }
         const data = mpListed.data.result;
         for (let i = 0; i < data.length; i++) {
@@ -83,7 +97,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     } catch (error) {}
 };
 
-const checkMomosUnlist = async (addressCheck) => {
+const checkMomosUnlistPrivateNode = async (addressCheck) => {
     dataBid = {}; // reset data
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
     let nowBlock = await axios
@@ -117,4 +131,5 @@ const checkMomosUnlist = async (addressCheck) => {
     return momoUnlist;
 };
 
-module.exports = { checkMomosUnlist };
+module.exports = { checkMomosUnlistPrivateNode };
+checkMomosUnlistPrivateNode("0x891016f99BA622F8556bE12B4EA336157aA6cb20");
