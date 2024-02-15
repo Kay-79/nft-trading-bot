@@ -31,7 +31,6 @@ const config = {
         ["0x73A4AbD430C821B49423dB5279fb56ee72073292", "_7_3_A", true],
         ["0xA6fBE2809210CC38255959a86EC5eA13f91B636A", "_A_6_f", true],
         ["0x1DfC0656AbCfE473F968066157B0d0D740aff4e6", "_1_D_f", true],
-        ["0x2B4F0e0498A832275af360CbE832da8135A5d9C2", "_2_B_4", true],
         ["0xbf6F2114A230B399F0A9085AC0FC27Bd4148a465", "_b_f_6", true],
         ["0x88888dF23F9554e4B043B00E1F4AfB39Fc078888", "_8_8_8", true],
         ["0x0000a7514Bc1e72058B709A713d20c1fE68b7777", "_0_0_7", true],
@@ -50,9 +49,9 @@ const config = {
     minDecreasePrice: 0.2,
     amountChange: 1,
     gasPrices: {
-        minBid: 3.441,
-        create: 1.0,
-        change: 1.0,
+        minBid: 3.111,
+        create: 1.0001,
+        change: 1.0001,
     },
     timeDelayPerLoop: 0,
     profits: {
@@ -71,7 +70,7 @@ const config = {
         minRare: 14,
     },
     timeBid: 133.0,
-    accBuy: "0xfa11AA3953B46c12dC1fB5c880912A80BF52203A",
+    accBuy: "0x891016f99BA622F8556bE12B4EA336157aA6cb20",
 };
 
 module.exports = config;
