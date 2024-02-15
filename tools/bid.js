@@ -5,7 +5,7 @@ const checkAvailable = require("../utils/bid/checkAvailable");
 const configJson = require("../config/config");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
-const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.rpcs.bid));
+const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
@@ -183,7 +183,7 @@ async function setup(Private_Key_) {
                                             let tx = await web3.eth.getTransaction(txHash);
                                             if (tx != null)
                                                 if (checkEnemy(tx.to)) {
-                                                    console.log(tx.hash, tx.gasPrice);
+                                                    console.log(tx.hash, tx.gasPrice, tx.from);
                                                     if (
                                                         Number(tx.gasPrice) >
                                                             Number(txResend.gasPrice) &&
@@ -268,8 +268,8 @@ async function setup(Private_Key_) {
                     if (checkHashEach) {
                         await sleep(1000); //sleep to avoid pending hash
                         timeSendReal = await web3.eth.getTransaction(checkHashEach);
-                        const receiptCheckStatus = web3.eth.getTransactionReceipt(checkHashEach);
-                        if (receiptCheckStatus) {
+                        const receiptCheckStatus = await web3.eth.getTransactionReceipt(checkHashEach);
+                        if (receiptCheckStatus.status) {
                             priceList1 = emoji.success + priceList1;
                         }
                         timeSendReal = await web3.eth.getBlock(timeSendReal.blockNumber);
@@ -374,8 +374,8 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
         txResend.gasPrice = (Number(newGasPriceSend) + 10 ** 8).toFixed();
         const signedNew = web3.eth.accounts.signTransaction(txResend, process.env.PRIVATE_KEY_BID);
-        checkHashEach = signedNew.transactionHash;
         web3.eth.sendSignedTransaction(signedNew.rawTransaction);
+        checkHashEach = signedNew.transactionHash;
     } catch (err) {
         console.error(err);
     }
