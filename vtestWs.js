@@ -27,15 +27,21 @@ const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, r
     if (err) console.error(err);
 });
 const enemys = [
-    "0x13f4ea83d0bd40e75c8222255bc855a974568dd4",
-    "0x55d398326f99059ff775485246999027b3197955",
+    0x13f4ea83d0bd40e75c8222255bc855a974568dd4,
+    0x55d398326f99059ff775485246999027b3197955,
 ];
+const checkEnemy = (toAdd)=>{
+    for (let i = 0; i < enemys.length; i++) {
+        if (toAdd == enemys[i]) return true
+    }
+    return false
+}
 var main = function () {
     getPendingTransactions.on("data", (txHash) => {
         setTimeout(async () => {
             try {
                 let tx = await web3.eth.getTransaction(txHash);
-                if (tx != null) if (enemys.includes(tx.to)) console.log(tx.hash);
+                if (tx != null) if (checkEnemy(tx.to)) console.log(tx.hash);
                 // Get Transaction from a certain address and write it down in a file
                 var writeTxFromTether = async function (data) {
                     fs.appendFile("./Transactions.txt", JSON.stringify(data) + " n", (err) => {
