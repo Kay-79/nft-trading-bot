@@ -5,7 +5,6 @@ const { exit } = require("process");
 const web3 = new Web3();
 const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
 const { getZeroBlockCsv } = require("./getZeroBlockCsv");
-let cacheTransactionHash = "";
 let dataBid = {};
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
@@ -22,10 +21,6 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
         }
         const data = mpListed.data.result;
         for (let i = 0; i < data.length; i++) {
-            if (data[i].transactionHash === cacheTransactionHash) {
-                continue;
-            }
-            cacheTransactionHash = data[i].transactionHash;
             if (data[i].topics[2] === addressCheck) {
                 const decodedData = await web3.eth.abi.decodeParameters(
                     abiCheckBided,
@@ -41,7 +36,11 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
             }
         }
         if (Number(data[data.length - 1].blockNumber) < nowBlock) {
-            await getMomosBided(Number(data[data.length - 1].blockNumber), nowBlock, addressCheck);
+            await getMomosBided(
+                Number(data[data.length - 1].blockNumber) + 1,
+                nowBlock,
+                addressCheck
+            );
         }
     } catch (error) {}
 };
@@ -59,10 +58,6 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
         }
         const data = mpListed.data.result;
         for (let ii = 0; ii < data.length; ii++) {
-            if (data[i].transactionHash === cacheTransactionHash) {
-                continue;
-            }
-            cacheTransactionHash = data[i].transactionHash;
             if (data[ii].topics[1] === addressCheck) {
                 const decodedData = await web3.eth.abi.decodeParameters(
                     abiCheckListed,
@@ -79,7 +74,11 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
             }
         }
         if (Number(data[data.length - 1].blockNumber) < nowBlock) {
-            await getMomosListed(Number(data[data.length - 1].blockNumber), nowBlock, addressCheck);
+            await getMomosListed(
+                Number(data[data.length - 1].blockNumber) + 1,
+                nowBlock,
+                addressCheck
+            );
         }
     } catch (error) {}
 };
