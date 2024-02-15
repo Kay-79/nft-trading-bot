@@ -5,6 +5,7 @@ const checkAvailable = require("../utils/bid/checkAvailable");
 const configJson = require("../config/config");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
+const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.rpcs.bid));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
@@ -18,18 +19,17 @@ const overTime = 180;
 const timeGetAvaliableAuction = 5;
 let timeSendTx = configJson.timeBid;
 const emoji = configJson.emojiURL;
-const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.rpcs.bid));
 const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
     if (err) console.error(err);
 });
 let txResend = {
     from: configJson.bidder,
     gas: 1000000,
-    gasPrice: newGasPrice, //change with new gas price
-    nonce: newNonce, //change with new nonce
+    gasPrice: 0, //change with new gas price
+    nonce: 0, //change with new nonce
     to: contractAddress,
     value: 0,
-    data: newData, //change with new data
+    data: "newData", //change with new data
 };
 let checkHashEach = "";
 async function setup(Private_Key_) {
