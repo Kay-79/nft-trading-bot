@@ -268,7 +268,9 @@ async function setup(Private_Key_) {
                     if (checkHashEach) {
                         await sleep(1000); //sleep to avoid pending hash
                         timeSendReal = await web3.eth.getTransaction(checkHashEach);
-                        const receiptCheckStatus = await web3.eth.getTransactionReceipt(checkHashEach);
+                        const receiptCheckStatus = await web3.eth.getTransactionReceipt(
+                            checkHashEach
+                        );
                         if (receiptCheckStatus.status) {
                             priceList1 = emoji.success + priceList1;
                         }
@@ -372,7 +374,7 @@ const checkEnemy = (toAdd) => {
 };
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
-        txResend.gasPrice = (Number(newGasPriceSend) + 10 ** 8).toFixed();
+        txResend.gasPrice = Number((Number(newGasPriceSend) + 10 ** 8).toFixed());
         const signedNew = web3.eth.accounts.signTransaction(txResend, process.env.PRIVATE_KEY_BID);
         web3.eth.sendSignedTransaction(signedNew.rawTransaction);
         checkHashEach = signedNew.transactionHash;
