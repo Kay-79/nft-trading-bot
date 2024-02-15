@@ -164,7 +164,7 @@ async function getPriceToSell(address, boolMin) {
         for (let jj = 0; jj < priceList[ii].length; jj++) {
             priceList[ii][jj] =
                 Math.round(Number(priceList[ii][jj]) * 10 ** 5).toString() + "0000000000000";
-            if (Number(priceList[ii][jj]) < 10 ** 18) {
+            if (Number(priceList[ii][jj]) < 0.5 * 10 ** 18) {
                 console.log("Err Price");
                 exit();
             }
