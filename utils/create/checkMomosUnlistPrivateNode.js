@@ -11,29 +11,23 @@ let dataBid = {};
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
     console.log(cacheBlock);
-    mpListed = await web3.eth.getPastLogs({
-        address: "0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2",
-        fromBlock: endBlock,
-        toBlock: endBlock + 100,
-        topics: [process.env.TOPIC_BID], // the second parameter is variable c
-    });
-    console.log(mpListed, 1);
+    // console.log(mpListed, 1);
     try {
         let mpListed = null;
         try {
             mpListed = await web3.eth.getPastLogs({
-                address: "0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2",
+                address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
-                toBlock: endBlock + 5000,
+                toBlock: endBlock + 50000,
                 topics: [process.env.TOPIC_BID], // the second parameter is variable c
             });
-            console.log(mpListed, 1);
-            exit();
+            // console.log(mpListed)
+            // exit()
         } catch (err) {
+            console.log(err);
             await getMomosBided(cacheBlock, nowBlock, addressCheck);
-            exit();
         }
-        const data = mpListed.data.result;
+        const data = mpListed;
         for (let i = 0; i < data.length; i++) {
             if (data[i].topics[2] === addressCheck) {
                 const decodedData = await web3.eth.abi.decodeParameters(
@@ -67,10 +61,16 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
             mpListed = await axios.get(
                 `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_CREATE}&apikey=${process.env.BSC_API_KEY}`
             );
+            mpListed = await web3.eth.getPastLogs({
+                address: process.env.ADDRESS_MP,
+                fromBlock: endBlock,
+                toBlock: endBlock + 50000,
+                topics: [process.env.TOPIC_CREATE], // the second parameter is variable c
+            });
         } catch (error) {
             await getMomosListed(cacheBlock, nowBlock, addressCheck);
         }
-        const data = mpListed.data.result;
+        const data = mpListed;
         for (let ii = 0; ii < data.length; ii++) {
             if (data[ii].topics[1] === addressCheck) {
                 const decodedData = await web3.eth.abi.decodeParameters(
@@ -132,4 +132,4 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
 };
 
 module.exports = { checkMomosUnlistPrivateNode };
-checkMomosUnlistPrivateNode("0x891016f99BA622F8556bE12B4EA336157aA6cb20");
+// checkMomosUnlistPrivateNode("0x891016f99BA622F8556bE12B4EA336157aA6cb20");

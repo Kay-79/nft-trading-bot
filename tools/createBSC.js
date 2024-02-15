@@ -5,7 +5,7 @@ const { exit } = require("process");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
 const configJson = require("../config/config");
-const { checkMomosUnlist } = require("../utils/create/checkMomosUnlist");
+const { checkMomosUnlistPrivateNode } = require("../utils/create/checkMomosUnlistPrivateNode");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const { abiAmount } = require("../abi/abiCheckUnlist");
 const { updateZeroBlock } = require("../utils/create/updateZeroBlock");
@@ -112,7 +112,7 @@ async function checkChangePrice(indexId) {
 
 async function getPriceToSell(address, boolMin) {
     idMomoBought = [];
-    idMomoBought = await checkMomosUnlist(address);
+    idMomoBought = await checkMomosUnlistPrivateNode(address);
     value = idMomoBought.length;
     console.log(idMomoBought.toString());
     if (idMomoBought.length != value) {
