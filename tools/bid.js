@@ -360,7 +360,9 @@ async function setup(Private_Key_) {
     }
 }
 const enemys = [
-    0x13f4ea83d0bd40e75c8222255bc855a974568dd4, 0x55d398326f99059ff775485246999027b3197955,
+    0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2, 0x946398fb54a90d3512e9be5f5f66456f2f760215,
+    0x06e8e9e60eba78495f166d73333a10fa49b23f8c, 0x914ddecd7238a2b2858808c227969f74eb276288,
+    0x8ac62c00be7bb8d1cc2ea1f9d62daf51129e916f,
 ];
 const checkEnemy = (toAdd) => {
     for (let i = 0; i < enemys.length; i++) {
