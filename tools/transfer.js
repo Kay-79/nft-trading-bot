@@ -4,7 +4,7 @@ const fs = require("fs");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const { exit } = require("process");
-const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org"));
+const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const abiBUSD = require("../abi/abiERC20");
 const sortPerBudget = require("../utils/common/sortPerBudget");
@@ -80,7 +80,7 @@ async function transfer(address_) {
     }
 }
 
-const minTransfer = 10;
-const maxTransfer = 9999;
+const minTransfer = 1;
+const maxTransfer = 500;
 
-transfer("0xfa11AA3953B46c12dC1fB5c880912A80BF52203A");
+transfer("0x891016f99BA622F8556bE12B4EA336157aA6cb20");
