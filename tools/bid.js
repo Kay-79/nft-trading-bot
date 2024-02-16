@@ -250,7 +250,7 @@ async function setup(Private_Key_) {
                         );
                     }
                     priceList1 =
-                        checkSuccess +
+                        // checkSuccess +
                         " " +
                         gasPriceScanRaw +
                         "\nPrices   : " +
@@ -267,14 +267,15 @@ async function setup(Private_Key_) {
                 try {
                     if (checkHashEach) {
                         await sleep(1000); //sleep to avoid pending hash
-                        timeSendReal = await web3.eth.getTransaction(checkHashEach);
                         const receiptCheckStatus = await web3.eth.getTransactionReceipt(
                             checkHashEach
                         );
                         if (receiptCheckStatus.status) {
                             priceList1 = emoji.success + priceList1;
+                        } else {
+                            priceList1 = emoji.fail + priceList1;
                         }
-                        timeSendReal = await web3.eth.getBlock(timeSendReal.blockNumber);
+                        timeSendReal = await web3.eth.getBlock(receiptCheckStatus.blockNumber);
                         timeSendReal = timeSendReal.timestamp;
                         console.log("timeStampFail:", timeSendReal);
                     }
