@@ -285,7 +285,7 @@ async function setup(Private_Key_) {
                         timeSendReal > 1.7 * 10 ** 9
                     ) {
                         const oldTimeBid = timeSendTx;
-                        if (Math.abs(Number(startTime_[0]) + 120 - timeSendReal) < 3600) {
+                        if (Math.abs(Number(startTime_[0]) + 120 - timeSendReal) < 100) {
                             if (
                                 timeSendReal < Number(startTime_[0]) + 120 ||
                                 timeSendReal - (Number(startTime_[0]) + 120) > 10
