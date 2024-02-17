@@ -1,3 +1,4 @@
 aria2c -o geth.tar.lz4 -s14 -x14 -k100M https://pub-c0627345c16f47ab858c9469133073a8.r2.dev/geth-pbss-pebble-20240115.tar.lz4
 tail -40 nohup.out
 ./geth --config ./config.toml --datadir ./node  --cache 8000 --rpc.allow-unprotected-txs --history.transactions 0 --http --ws
+nohup ./geth --config ./config.toml --datadir ./node  --cache 16000 --rpc.allow-unprotected-txs --history.transactions 0 --http --ws &
