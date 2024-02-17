@@ -12,11 +12,13 @@ var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.testnet));
 const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
     if (err) console.error(err);
 });
+console.log(getPendingTransactions, "1");
+// exit();
 let txResend = {
     from: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
     gas: 100000,
     gasPrice: 0, //change with new gas price
-    nonce: 898, //change with new nonce
+    nonce: 902, //change with new nonce
     to: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
     value: 0,
     data: "0x", //change with new data
@@ -42,6 +44,7 @@ const checkEnemy = (toAdd) => {
     }
     return false;
 };
+let flag = false;
 var main = function () {
     getPendingTransactions.on("data", (txHash) => {
         setTimeout(async () => {
@@ -53,11 +56,13 @@ var main = function () {
                         console.log(tx.hash, tx.gasPrice, tx.from);
                         if (
                             Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                            Number(txResend.gasPrice) < 15 * 10 ** 9
+                            Number(txResend.gasPrice) < 15 * 10 ** 9 &&
+                            flag == false
                         ) {
                             txResend.data = tx.hash;
                             await resendTxNewGasPrice(tx.gasPrice);
-                            exit();
+                            flag = true;
+                            // exit();
                         }
                     }
             } catch (err) {
@@ -65,10 +70,12 @@ var main = function () {
             }
         });
     });
+    console.log(getPendingTransactions, "2");
     setTimeout(() => {
         getPendingTransactions.unsubscribe(function (error, success) {
-            if (success) console.log("Successfully unsubscribed!");
+            if (success) console.log("Successfully clearSubscriptions!");
         });
+        console.log(getPendingTransactions, "3");
         console.log("Done");
     }, 6000);
 };
