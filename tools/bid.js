@@ -187,7 +187,7 @@ async function setup(Private_Key_) {
                                                     if (
                                                         Number(tx.gasPrice) >
                                                             Number(txResend.gasPrice) &&
-                                                        Number(tx.gasPrice) < 15 * 10 ** 9
+                                                        Number(txResend.gasPrice) < 15 * 10 ** 9
                                                     ) {
                                                         resendTxNewGasPrice(tx.gasPrice);
                                                     }
@@ -377,7 +377,10 @@ const checkEnemy = (toAdd) => {
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
         txResend.gasPrice = Number((Number(newGasPriceSend) + 10 ** 8).toFixed());
-        const signedNew = web3.eth.accounts.signTransaction(txResend, process.env.PRIVATE_KEY_BID);
+        const signedNew = await web3.eth.accounts.signTransaction(
+            txResend,
+            process.env.PRIVATE_KEY_BID
+        );
         web3.eth.sendSignedTransaction(signedNew.rawTransaction);
         checkHashEach = signedNew.transactionHash;
     } catch (err) {
