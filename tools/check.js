@@ -314,8 +314,8 @@ async function main(address, nameFile_, rate_) {
 }
 
 async function checkListedAll(rate_) {
-    minPrices = await getMinPrice();
     let timeCheck = new Date();
+    minPrices = await getMinPrice();
     bnbPrice = await axios
         .get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]")
         .catch((e) => {
