@@ -8,7 +8,7 @@ const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
-    console.error("Unhandled Promise Rejection:", err);
+    console.error("Unhandled Promise Rejection:", "enable to see error");
 });
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
@@ -261,6 +261,7 @@ async function setup(Private_Key_) {
                         idList;
                     if (!isAvailableAuctions) {
                         priceList1 = `Auction be canceled by ${seller_[0]}`;
+                        checkHashEach = "";
                         console.log(priceList1);
                     }
                 } catch (error) {}
