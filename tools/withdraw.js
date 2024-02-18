@@ -19,7 +19,7 @@ const withdraw = async () => {
             .encodeABI(),
         value: 0,
         gas: 100000,
-        gasPrice: 3000000000,
+        gasPrice: 1000100000,
     };
     const signed = await web3.eth.accounts.signTransaction(tx, process.env.PRIVATE_KEY_BID);
     if (config.wallet.owner != "0x55555D4de8df0c455C2Ff368253388FE669a8888") {
