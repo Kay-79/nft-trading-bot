@@ -6,6 +6,7 @@ const configJson = require("../config/config");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
+const web3rpc = new Web3(new Web3.providers.WebsocketProvider(configJson.rpcs.bid));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
@@ -67,7 +68,7 @@ async function setup(Private_Key_) {
             }
             if (false || Number(startTime_[0]) + timeSendTx + overTime - Date.now() / 1000 > 0) {
                 let tx = [];
-                let nonce_ = await web3.eth.getTransactionCount(acc.address);
+                let nonce_ = await web3rpc.eth.getTransactionCount(acc.address);
                 if (index_.length > 1) {
                     for (let index = 0; index < index_.length; index++) {
                         tx.push({
