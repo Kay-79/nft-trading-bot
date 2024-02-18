@@ -175,9 +175,9 @@ async function setup(Private_Key_) {
                         if (tx.length == 1) {
                             try {
                                 checkSuccess = emoji.success;
-                                const sendEach = web3.eth.sendSignedTransaction(
-                                    signed[index].rawTransaction
-                                );
+                                // const sendEach = web3.eth.sendSignedTransaction(
+                                //     signed[index].rawTransaction
+                                // );
                                 getPendingTransactions.on("data", (txHash) => {
                                     setTimeout(async () => {
                                         try {
