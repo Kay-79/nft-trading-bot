@@ -46,7 +46,7 @@ const config = {
         create: 1.0001,
         change: 1.0001,
     },
-    timeDelayPerLoop: 0,
+    timeDelayPerLoop: 1,
     profits: {
         common: 0.2,
         uncommon: 0.1,
