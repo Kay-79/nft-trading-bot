@@ -18,20 +18,20 @@ let txResend = {
     from: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
     gas: 100000,
     gasPrice: 0, //change with new gas price
-    nonce: 902, //change with new nonce
+    nonce: 910, //change with new nonce
     to: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
     value: 0,
     data: "0x", //change with new data
 };
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
-        txResend.gasPrice = Number((Number(newGasPriceSend) + 10 ** 8).toFixed());
+        txResend.gasPrice = Number((Number(newGasPriceSend) + 10 ** 9).toFixed());
         console.log(txResend);
         const signedNew = await web3.eth.accounts.signTransaction(
             txResend,
             process.env.PRIVATE_KEY_1111
         );
-        await web3.eth.sendSignedTransaction(signedNew.rawTransaction);
+        web3.eth.sendSignedTransaction(signedNew.rawTransaction);
     } catch (err) {
         1;
         console.error(err);
@@ -60,7 +60,14 @@ var main = function () {
                             flag == false
                         ) {
                             txResend.data = tx.hash;
-                            await resendTxNewGasPrice(tx.gasPrice);
+                            txResend.gasPrice = tx.gasPrice;
+                            console.log(txResend);
+                            const signedNew = await web3.eth.accounts.signTransaction(
+                                txResend,
+                                process.env.PRIVATE_KEY_1111
+                            );
+                            web3.eth.sendSignedTransaction(signedNew.rawTransaction);
+                            // await resendTxNewGasPrice(tx.gasPrice);
                             flag = true;
                             // exit();
                         }
@@ -75,7 +82,7 @@ var main = function () {
         getPendingTransactions.unsubscribe(function (error, success) {
             if (success) console.log("Successfully clearSubscriptions!");
         });
-        console.log(getPendingTransactions, "3");
+        // console.log(getPendingTransactions, "3");
         console.log("Done");
     }, 6000);
 };

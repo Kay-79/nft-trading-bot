@@ -175,35 +175,35 @@ async function setup(Private_Key_) {
                         if (tx.length == 1) {
                             try {
                                 checkSuccess = emoji.success;
-                                // const sendEach = web3.eth.sendSignedTransaction(
-                                //     signed[index].rawTransaction
-                                // );
-                                getPendingTransactions.on("data", (txHash) => {
-                                    setTimeout(async () => {
-                                        try {
-                                            let tx = await web3.eth.getTransaction(txHash);
-                                            if (tx != null)
-                                                if (checkEnemy(tx.to)) {
-                                                    console.log(tx.hash, tx.gasPrice, tx.from);
-                                                    if (
-                                                        Number(tx.gasPrice) >
-                                                            Number(txResend.gasPrice) &&
-                                                        Number(txResend.gasPrice) < 15 * 10 ** 9
-                                                    ) {
-                                                        resendTxNewGasPrice(tx.gasPrice);
-                                                    }
-                                                }
-                                        } catch (err) {
-                                            console.error("err");
-                                        }
-                                    });
-                                });
-                                setTimeout(() => {
-                                    getPendingTransactions.unsubscribe(function (error, success) {
-                                        if (success) console.log("Successfully unsubscribed!");
-                                    });
-                                }, 4000);
-                                await sleep(6000);
+                                const sendEach = await web3.eth.sendSignedTransaction(
+                                    signed[index].rawTransaction
+                                );
+                                // getPendingTransactions.on("data", (txHash) => {
+                                //     setTimeout(async () => {
+                                //         try {
+                                //             let tx = await web3.eth.getTransaction(txHash);
+                                //             if (tx != null)
+                                //                 if (checkEnemy(tx.to)) {
+                                //                     console.log(tx.hash, tx.gasPrice, tx.from);
+                                //                     if (
+                                //                         Number(tx.gasPrice) >
+                                //                             Number(txResend.gasPrice) &&
+                                //                         Number(txResend.gasPrice) < 15 * 10 ** 9
+                                //                     ) {
+                                //                         resendTxNewGasPrice(tx.gasPrice);
+                                //                     }
+                                //                 }
+                                //         } catch (err) {
+                                //             console.error("err");
+                                //         }
+                                //     });
+                                // });
+                                // setTimeout(() => {
+                                //     getPendingTransactions.unsubscribe(function (error, success) {
+                                //         if (success) console.log("Successfully unsubscribed!");
+                                //     });
+                                // }, 4000);
+                                // await sleep(6000);
                                 // console.log("Successful bid! At block:", sendEach.blockNumber);
                             } catch (error) {
                                 console.log("Fail...setting new time");
