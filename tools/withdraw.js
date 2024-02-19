@@ -1,6 +1,6 @@
 require("dotenv").config();
 const Web3 = require("web3");
-const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed.binance.org"));
+const web3 = new Web3(new Web3.providers.HttpProvider(config.rpcs.change));
 const abiWallet = require("../abi/abiWallet");
 const config = require("../config/config");
 const walletAddress = config.wallet.address;
