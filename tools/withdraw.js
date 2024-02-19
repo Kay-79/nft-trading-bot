@@ -1,8 +1,8 @@
 require("dotenv").config();
+const config = require("../config/config");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider(config.rpcs.change));
 const abiWallet = require("../abi/abiWallet");
-const config = require("../config/config");
 const walletAddress = config.wallet.address;
 const contractWallet = new web3.eth.Contract(abiWallet, walletAddress);
 const tokenAddress = config.addressToken;
