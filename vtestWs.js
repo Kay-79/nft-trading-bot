@@ -6,20 +6,20 @@ const { exit } = require("process");
 // You can use any websocket provider such as infura, alchemy etc.
 // It will look like: 'wss://mainnet.infura.io/ws/v3/<API_KEY>'
 // var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.private));
-var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.testnet));
+var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.private));
 
 // Get pending transactions from ethereum network (mempool)
 const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
     if (err) console.error(err);
 });
-console.log(getPendingTransactions, "1");
+// console.log(getPendingTransactions, "1");
 // exit();
 let txResend = {
-    from: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
+    from: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
     gas: 100000,
     gasPrice: 0, //change with new gas price
-    nonce: 910, //change with new nonce
-    to: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
+    nonce: 0, //change with new nonce
+    to: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
     value: 0,
     data: "0x", //change with new data
 };
@@ -37,7 +37,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         console.error(err);
     }
 };
-const enemys = [0x06a0f0fa38ae42b7b3c8698e987862afa58e90d9];
+const enemys = [0x55555d4de8df0c455c2ff368253388fe669a8888];
 const checkEnemy = (toAdd) => {
     for (let i = 0; i < enemys.length; i++) {
         if (toAdd == enemys[i]) return true;
@@ -60,14 +60,17 @@ var main = function () {
                             flag == false
                         ) {
                             txResend.data = tx.hash;
-                            txResend.gasPrice = tx.gasPrice;
+                            txResend.gasPrice = tx.gasPrice + 10 ** 8;
+                            txResend.nonce = await web3.eth.getTransactionCount(
+                                "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000"
+                            );
                             console.log(txResend);
                             const signedNew = await web3.eth.accounts.signTransaction(
                                 txResend,
-                                process.env.PRIVATE_KEY_1111
+                                process.env.PRIVATE_KEY_CHANGE
                             );
                             web3.eth.sendSignedTransaction(signedNew.rawTransaction);
-                            // await resendTxNewGasPrice(tx.gasPrice);
+                            await resendTxNewGasPrice(tx.gasPrice);
                             flag = true;
                             // exit();
                         }
@@ -77,7 +80,7 @@ var main = function () {
             }
         });
     });
-    console.log(getPendingTransactions, "2");
+    // console.log(getPendingTransactions, "2");
     setTimeout(() => {
         getPendingTransactions.unsubscribe(function (error, success) {
             if (success) console.log("Successfully clearSubscriptions!");
