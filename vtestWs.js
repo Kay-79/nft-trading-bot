@@ -29,7 +29,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         console.log(txResend);
         const signedNew = await web3.eth.accounts.signTransaction(
             txResend,
-            process.env.PRIVATE_KEY_1111
+            process.env.PRIVATE_KEY_CHANGE
         );
         web3.eth.sendSignedTransaction(signedNew.rawTransaction);
     } catch (err) {
