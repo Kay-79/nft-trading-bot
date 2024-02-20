@@ -6,7 +6,7 @@ const { exit } = require("process");
 // You can use any websocket provider such as infura, alchemy etc.
 // It will look like: 'wss://mainnet.infura.io/ws/v3/<API_KEY>'
 // var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.private));
-var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.private));
+var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.testnet));
 
 // Get pending transactions from ethereum network (mempool)
 const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
@@ -15,21 +15,23 @@ const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, r
 // console.log(getPendingTransactions, "1");
 // exit();
 let txResend = {
-    from: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
+    from: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
     gas: 100000,
     gasPrice: 0, //change with new gas price
-    nonce: 20354, //change with new nonce
-    to: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
+    nonce: 915, //change with new nonce
+    to: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
     value: 0,
     data: "0x", //change with new data
 };
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
-        txResend.gasPrice = Number((Number(newGasPriceSend) + 10 ** 9).toFixed());
+        txResend.gasPrice = Number(
+            (Number(newGasPriceSend) + 10 ** 8 + txResend.gasPrice * 0.100001).toFixed()
+        );
         console.log(txResend);
         const signedNew = await web3.eth.accounts.signTransaction(
             txResend,
-            process.env.PRIVATE_KEY_CHANGE
+            process.env.PRIVATE_KEY_1111
         );
         web3.eth.sendSignedTransaction(signedNew.rawTransaction);
     } catch (err) {
@@ -37,7 +39,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         console.error(err);
     }
 };
-const enemys = [0x55d398326f99059ff775485246999027b3197955];
+const enemys = [0x06a0f0fa38ae42b7b3c8698e987862afa58e90d9];
 const checkEnemy = (toAdd) => {
     for (let i = 0; i < enemys.length; i++) {
         if (toAdd == enemys[i]) return true;
@@ -56,19 +58,19 @@ var main = function () {
                         // console.log(tx.hash, tx.gasPrice, tx.from);
                         if (
                             Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                            Number(tx.gasPrice) < 4 * 10 ** 9 &&
+                            Number(tx.gasPrice) < 10 * 10 ** 9 &&
                             flag == false
                         ) {
                             console.log(tx.hash, tx.gasPrice);
                             txResend.data = tx.hash;
                             txResend.gasPrice = Number((Number(tx.gasPrice) + 10 ** 8).toFixed());
                             // txResend.nonce = await web3.eth.getTransactionCount(
-                            //     "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000"
+                            //     "0x1111c16591c4ECe1c313f46A63330D8BCf461111"
                             // );
                             console.log(txResend);
                             const signedNew = await web3.eth.accounts.signTransaction(
                                 txResend,
-                                process.env.PRIVATE_KEY_CHANGE
+                                process.env.PRIVATE_KEY_1111
                             );
                             web3.eth.sendSignedTransaction(signedNew.rawTransaction);
                             await resendTxNewGasPrice(tx.gasPrice);

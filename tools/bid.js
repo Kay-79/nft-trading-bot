@@ -376,7 +376,9 @@ const checkEnemy = (toAdd) => {
 };
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
-        txResend.gasPrice = Number((Number(newGasPriceSend) + 10 ** 8).toFixed());
+        txResend.gasPrice = Number(
+            (Number(newGasPriceSend) + 10 ** 8 + txResend.gasPrice * 0.101).toFixed()
+        );
         const signedNew = await web3.eth.accounts.signTransaction(
             txResend,
             process.env.PRIVATE_KEY_BID
