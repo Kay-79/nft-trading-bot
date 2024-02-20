@@ -10,7 +10,7 @@ const web3 = new Web3(configJson.rpcs.change);
 const updateZeroBlock = async () => {
     let newDataZero = "";
     let contracts = myaccs.map((e) => e[0]);
-    let nowBlock = await Web3.eth.getBlockNumber();
+    let nowBlock = await web3.eth.getBlockNumber();
     // nowBlock = nowBlock.data.result;
     console.log(nowBlock);
     let lastContract = "";
