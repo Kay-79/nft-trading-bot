@@ -5,20 +5,13 @@ const axios = require("axios");
 const getAmountUnlist = require("../common/getAmountUnlist");
 const { sleep } = require("../common/sleep");
 const myaccs = configJson.myAcc;
+const Web3 = require("web3");
+const web3 = new Web3(configJson.rpcs.change);
 const updateZeroBlock = async () => {
     let newDataZero = "";
     let contracts = myaccs.map((e) => e[0]);
-    let nowBlock = await axios
-        .get(
-            `https://api.bscscan.com/api?module=block&action=getblocknobytime&timestamp=${(
-                Date.now() / 1000
-            ).toFixed()}&closest=before&apikey=${process.env.BSC_API_KEY}`
-        )
-        .catch((e) => {
-            console.log("Err check block!!");
-            exit();
-        });
-    nowBlock = nowBlock.data.result;
+    let nowBlock = await Web3.eth.getBlockNumber();
+    // nowBlock = nowBlock.data.result;
     console.log(nowBlock);
     let lastContract = "";
     try {
