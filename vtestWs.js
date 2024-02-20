@@ -56,7 +56,7 @@ var main = function () {
                         console.log(tx.hash, tx.gasPrice, tx.from);
                         if (
                             Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                            Number(txResend.gasPrice) < 15 * 10 ** 9 &&
+                            Number(txResend.gasPrice) < 4 * 10 ** 9 &&
                             flag == false
                         ) {
                             txResend.data = tx.hash;
