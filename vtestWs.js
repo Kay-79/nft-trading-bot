@@ -18,7 +18,7 @@ let txResend = {
     from: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
     gas: 100000,
     gasPrice: 0, //change with new gas price
-    nonce: 0, //change with new nonce
+    nonce: 20354, //change with new nonce
     to: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
     value: 0,
     data: "0x", //change with new data
@@ -52,18 +52,19 @@ var main = function () {
                 let tx = await web3.eth.getTransaction(txHash);
                 if (tx != null)
                     if (checkEnemy(tx.to)) {
-                        console.log(tx.hash, tx.gasPrice);
-                        console.log(tx.hash, tx.gasPrice, tx.from);
+                        // console.log(tx.hash, tx.gasPrice);
+                        // console.log(tx.hash, tx.gasPrice, tx.from);
                         if (
                             Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                            Number(txResend.gasPrice) < 4 * 10 ** 9 &&
+                            Number(tx.gasPrice) < 4 * 10 ** 9 &&
                             flag == false
                         ) {
+                            console.log(tx.hash, tx.gasPrice);
                             txResend.data = tx.hash;
                             txResend.gasPrice = Number((Number(tx.gasPrice) + 10 ** 8).toFixed());
-                            txResend.nonce = await web3.eth.getTransactionCount(
-                                "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000"
-                            );
+                            // txResend.nonce = await web3.eth.getTransactionCount(
+                            //     "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000"
+                            // );
                             console.log(txResend);
                             const signedNew = await web3.eth.accounts.signTransaction(
                                 txResend,
