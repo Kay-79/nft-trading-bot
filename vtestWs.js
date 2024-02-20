@@ -37,7 +37,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         console.error(err);
     }
 };
-const enemys = [0x55555d4de8df0c455c2ff368253388fe669a8888];
+const enemys = [0x55d398326f99059ff775485246999027b3197955];
 const checkEnemy = (toAdd) => {
     for (let i = 0; i < enemys.length; i++) {
         if (toAdd == enemys[i]) return true;
