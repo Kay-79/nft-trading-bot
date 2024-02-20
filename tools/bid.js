@@ -178,29 +178,29 @@ async function setup(Private_Key_) {
                                 const sendEach = /** await */ web3.eth.sendSignedTransaction(
                                     signed[index].rawTransaction
                                 );
-                                getPendingTransactions.on("data", (txHash) => {
-                                    setTimeout(async () => {
-                                        try {
-                                            if (txResend.data) {
-                                                let tx = await web3.eth.getTransaction(txHash);
-                                                if (tx != null) {
-                                                    if (checkEnemy(tx.to)) {
-                                                        console.log(tx.hash, tx.gasPrice, tx.from);
-                                                        if (
-                                                            Number(tx.gasPrice) >
-                                                                Number(txResend.gasPrice) &&
-                                                            Number(txResend.gasPrice) < 15 * 10 ** 9
-                                                        ) {
-                                                            resendTxNewGasPrice(tx.gasPrice);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        } catch (err) {
-                                            console.error("err");
-                                        }
-                                    });
-                                });
+                                // getPendingTransactions.on("data", (txHash) => {
+                                //     setTimeout(async () => {
+                                //         try {
+                                //             if (txResend.data) {
+                                //                 let tx = await web3.eth.getTransaction(txHash);
+                                //                 if (tx != null) {
+                                //                     if (checkEnemy(tx.to)) {
+                                //                         console.log(tx.hash, tx.gasPrice, tx.from);
+                                //                         if (
+                                //                             Number(tx.gasPrice) >
+                                //                                 Number(txResend.gasPrice) &&
+                                //                             Number(txResend.gasPrice) < 15 * 10 ** 9
+                                //                         ) {
+                                //                             resendTxNewGasPrice(tx.gasPrice);
+                                //                         }
+                                //                     }
+                                //                 }
+                                //             }
+                                //         } catch (err) {
+                                //             console.error("err");
+                                //         }
+                                //     });
+                                // });
                                 await sleep(6000);
                                 txResend.data = "";
                                 // console.log("Successful bid! At block:", sendEach.blockNumber);
@@ -392,6 +392,28 @@ async function bid() {
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     let hourCache = new Date().getHours() - 4;
+    getPendingTransactions.on("data", (txHash) => {
+        setTimeout(async () => {
+            try {
+                if (txResend.data) {
+                    let tx = await web3.eth.getTransaction(txHash);
+                    if (tx != null) {
+                        if (checkEnemy(tx.to)) {
+                            console.log(tx.hash, tx.gasPrice, tx.from);
+                            if (
+                                Number(tx.gasPrice) > Number(txResend.gasPrice) &&
+                                Number(txResend.gasPrice) < 15 * 10 ** 9
+                            ) {
+                                resendTxNewGasPrice(tx.gasPrice);
+                            }
+                        }
+                    }
+                }
+            } catch (err) {
+                console.error("err");
+            }
+        });
+    });
     while (true) {
         if (Math.abs(new Date().getHours() - hourCache) >= 4) {
             try {
