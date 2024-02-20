@@ -60,7 +60,7 @@ var main = function () {
                             flag == false
                         ) {
                             txResend.data = tx.hash;
-                            txResend.gasPrice = tx.gasPrice + 10 ** 8;
+                            txResend.gasPrice = Number((Number(tx.gasPrice) + 10 ** 8).toFixed());
                             txResend.nonce = await web3.eth.getTransactionCount(
                                 "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000"
                             );
