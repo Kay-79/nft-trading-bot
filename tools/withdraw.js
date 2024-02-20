@@ -30,5 +30,5 @@ const withdraw = async () => {
     console.log(`Withdraw successfully ${amountWithdraw} USDT to owner`);
 };
 // withdraw to owner
-const amountWithdraw = 100.0;
+const amountWithdraw = 50.0;
 withdraw();
