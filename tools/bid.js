@@ -52,6 +52,7 @@ async function setup(Private_Key_) {
     } catch (err) {}
     if (isBid) {
         let timeSendReal = 0;
+        let priceList1 = "";
         const startTime_ = dataBid[3].split(",");
         const index_ = dataBid[2].split(",");
         if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 15) {
@@ -253,7 +254,7 @@ async function setup(Private_Key_) {
                 try {
                     if (hashCheckStatus.length) {
                         let receiptCheckStatus = "";
-                        await sleep(1000); //sleep to avoid pending hash
+                        await sleep(1500); //sleep to avoid pending hash
                         for (let i = 0; i < hashCheckStatus.length; i++) {
                             receiptCheckStatus = await web3.eth.getTransactionReceipt(
                                 hashCheckStatus[i]
@@ -268,17 +269,14 @@ async function setup(Private_Key_) {
                             }
                         }
                         hashCheckStatus = [];
-                        // const receiptCheckStatus = await web3.eth.getTransactionReceipt(
-                        //     checkHashEach
-                        // );
-                        // if (receiptCheckStatus.status) {
-                        //     priceList1 = emoji.success + priceList1;
-                        // } else {
-                        //     priceList1 = emoji.fail + priceList1;
-                        // }
+                        if (receiptCheckStatus.status) {
+                            console.log("Success bid!! At block:", receiptCheckStatus.blockNumber);
+                        } else {
+                            console.log("Fail bid!! At block:", receiptCheckStatus.blockNumber);
+                        }
                         timeSendReal = await web3.eth.getBlock(receiptCheckStatus.blockNumber);
                         timeSendReal = timeSendReal.timestamp;
-                        console.log("timeStampFail:", timeSendReal);
+                        console.log("timeStampWrong:", timeSendReal);
                     }
                     if (
                         timeSendReal.toFixed() != (Number(startTime_[0]) + 120).toFixed() &&
@@ -385,10 +383,10 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         //     process.env.PRIVATE_KEY_BID
         // );
         if (newGasPriceSend < 15 * 10 ** 9) {
-            txResend.gasPrice = (newGasPriceSend / 10 ** 9 + 0.5).toFixed(0) * 10 ** 9;
             const signedNew = signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)];
             web3.eth.sendSignedTransaction(signedNew.rawTransaction);
             // checkHashEach = signedNew.transactionHash;
+            txResend.gasPrice = (newGasPriceSend / 10 ** 9 + 0.5).toFixed(0) * 10 ** 9;
             hashCheckStatus.push(signedNew.transactionHash);
         }
     } catch (err) {
@@ -440,10 +438,11 @@ async function bid() {
         await setup(Private_Key);
         await sleep(100);
         if (timeSendTx.data && !signedResend) {
-            txResend.gasPrice = i * 10 ** 9;
             for (let i = 4; i < 16; i++) {
-                signedResend.push(await web3.eth.accounts.signTransaction(txResend, Private_Key));
+                txResend.gasPrice = i * 10 ** 9;
+                signedResend[i] = await web3.eth.accounts.signTransaction(txResend, Private_Key);
             }
+            // txResend.gasPrice = 3 * 10 ** 9;//gasPrice change while fit time bid
         }
     }
 }
