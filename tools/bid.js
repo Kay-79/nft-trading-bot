@@ -34,7 +34,7 @@ let txResend = {
 };
 let signedResend = [];
 let hashCheckStatus = [];
-let checkHashEach = "";
+// let checkHashEach = "";
 async function setup(Private_Key_) {
     inputdata = "None";
     let isBid = false;
@@ -165,7 +165,10 @@ async function setup(Private_Key_) {
                     console.log("Paying!!");
                     try {
                         if (dataBid.length < 14) {
-                            checkHashEach = signed[0].transactionHash;
+                            // checkHashEach = signed[0].transactionHash;
+                            hashCheckStatus.push(signed[0].transactionHash);
+                        } else {
+                            hashCheckStatus = [];
                         }
                     } catch (error) {
                         console.log("check hash fail");
@@ -242,21 +245,37 @@ async function setup(Private_Key_) {
                         idList;
                     if (!isAvailableAuctions) {
                         priceList1 = `Auction be canceled by ${seller_[0]}`;
-                        checkHashEach = "";
+                        // checkHashEach = "";
+                        hashCheckStatus = [];
                         console.log(priceList1);
                     }
                 } catch (error) {}
                 try {
-                    if (checkHashEach) {
+                    if (hashCheckStatus.length) {
+                        let receiptCheckStatus = "";
                         await sleep(1000); //sleep to avoid pending hash
-                        const receiptCheckStatus = await web3.eth.getTransactionReceipt(
-                            checkHashEach
-                        );
-                        if (receiptCheckStatus.status) {
-                            priceList1 = emoji.success + priceList1;
-                        } else {
-                            priceList1 = emoji.fail + priceList1;
+                        for (let i = 0; i < hashCheckStatus.length; i++) {
+                            receiptCheckStatus = await web3.eth.getTransactionReceipt(
+                                hashCheckStatus[i]
+                            );
+                            if (!receiptCheckStatus) continue;
+                            if (receiptCheckStatus.status) {
+                                priceList1 = emoji.success + priceList1;
+                                break;
+                            } else {
+                                priceList1 = emoji.fail + priceList1;
+                                break;
+                            }
                         }
+                        hashCheckStatus = [];
+                        // const receiptCheckStatus = await web3.eth.getTransactionReceipt(
+                        //     checkHashEach
+                        // );
+                        // if (receiptCheckStatus.status) {
+                        //     priceList1 = emoji.success + priceList1;
+                        // } else {
+                        //     priceList1 = emoji.fail + priceList1;
+                        // }
                         timeSendReal = await web3.eth.getBlock(receiptCheckStatus.blockNumber);
                         timeSendReal = timeSendReal.timestamp;
                         console.log("timeStampFail:", timeSendReal);
@@ -298,6 +317,7 @@ async function setup(Private_Key_) {
                         );
                     }
                 } catch (error) {
+                    hashCheckStatus = [];
                     console.log(error);
                 }
                 try {
@@ -368,7 +388,8 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
             txResend.gasPrice = (newGasPriceSend / 10 ** 9 + 0.5).toFixed(0) * 10 ** 9;
             const signedNew = signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)];
             web3.eth.sendSignedTransaction(signedNew.rawTransaction);
-            checkHashEach = signedNew.transactionHash;
+            // checkHashEach = signedNew.transactionHash;
+            hashCheckStatus.push(signedNew.transactionHash);
         }
     } catch (err) {
         console.error(err);
