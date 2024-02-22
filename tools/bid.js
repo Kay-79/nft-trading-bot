@@ -32,6 +32,8 @@ let txResend = {
     value: 0,
     data: "", //change with new data
 };
+let signedResend = [];
+let hashCheckStatus = [];
 let checkHashEach = "";
 async function setup(Private_Key_) {
     inputdata = "None";
@@ -178,32 +180,11 @@ async function setup(Private_Key_) {
                                 const sendEach = /** await */ web3.eth.sendSignedTransaction(
                                     signed[index].rawTransaction
                                 );
-                                // getPendingTransactions.on("data", (txHash) => {
-                                //     setTimeout(async () => {
-                                //         try {
-                                //             if (txResend.data) {
-                                //                 let tx = await web3.eth.getTransaction(txHash);
-                                //                 if (tx != null) {
-                                //                     if (checkEnemy(tx.to)) {
-                                //                         console.log(tx.hash, tx.gasPrice, tx.from);
-                                //                         if (
-                                //                             Number(tx.gasPrice) >
-                                //                                 Number(txResend.gasPrice) &&
-                                //                             Number(txResend.gasPrice) < 15 * 10 ** 9
-                                //                         ) {
-                                //                             resendTxNewGasPrice(tx.gasPrice);
-                                //                         }
-                                //                     }
-                                //                 }
-                                //             }
-                                //         } catch (err) {
-                                //             console.error("err");
-                                //         }
-                                //     });
-                                // });
                                 await sleep(6000);
                                 txResend.data = "";
-                                // console.log("Successful bid! At block:", sendEach.blockNumber);
+                                txResend.gasPrice = 0;
+                                signedResend = [];
+                                hashCheckStatus = [];
                             } catch (error) {
                                 console.log("Fail...setting new time");
                                 checkSuccess = emoji.fail;
@@ -376,15 +357,18 @@ const checkEnemy = (toAdd) => {
 };
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
-        txResend.gasPrice = Number(
-            (Number(newGasPriceSend) + 10 ** 8 + txResend.gasPrice * 0.101).toFixed()
-        );
-        const signedNew = await web3.eth.accounts.signTransaction(
-            txResend,
-            process.env.PRIVATE_KEY_BID
-        );
-        web3.eth.sendSignedTransaction(signedNew.rawTransaction);
-        checkHashEach = signedNew.transactionHash;
+        // txResend.gasPrice = Number(
+        //     (Number(newGasPriceSend) + 10 ** 8 + txResend.gasPrice * 0.101).toFixed()
+        // );
+        // const signedNew = await web3.eth.accounts.signTransaction(
+        //     txResend,
+        //     process.env.PRIVATE_KEY_BID
+        // );
+        if (newGasPriceSend < 15 * 10 ** 9) {
+            const signedNew = signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)];
+            web3.eth.sendSignedTransaction(signedNew.rawTransaction);
+            checkHashEach = signedNew.transactionHash;
+        }
     } catch (err) {
         console.error(err);
     }
@@ -433,6 +417,12 @@ async function bid() {
         }
         await setup(Private_Key);
         await sleep(100);
+        if (timeSendTx.data && !signedResend) {
+            txResend.gasPrice = i * 10 ** 9;
+            for (let i = 4; i < 16; i++) {
+                signedResend.push(await web3.eth.accounts.signTransaction(txResend, Private_Key));
+            }
+        }
     }
 }
 

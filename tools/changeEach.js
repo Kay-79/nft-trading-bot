@@ -6,7 +6,7 @@ const config = require("../config/config");
 async function sendTxt(addressSC, gasPrice_, gasLimit_, index_, prices_) {
     const Private_Key = process.env.PRIVATE_KEY_CHANGE;
     const Web3 = require("web3");
-    const web3 = new Web3(new Web3.providers.HttpProvider(config.rpcs.change));
+    const web3 = new Web3(new Web3.providers.HttpProvider(config.rpcs.check));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
@@ -39,6 +39,6 @@ async function sendTxt(addressSC, gasPrice_, gasLimit_, index_, prices_) {
 }
 
 const getIndexs = async (address) => {
-    sendTxt(address, 1.0001, 1000000, "43", "650000000000000000");
+    sendTxt(address, 3.0001, 1000000, "77", "2450000000000000000");
 };
-getIndexs("0xfa11AA3953B46c12dC1fB5c880912A80BF52203A");
+getIndexs("0x891016f99BA622F8556bE12B4EA336157aA6cb20");

@@ -6,12 +6,12 @@ const { exit } = require("process");
 // You can use any websocket provider such as infura, alchemy etc.
 // It will look like: 'wss://mainnet.infura.io/ws/v3/<API_KEY>'
 // var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.private));
-var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.testnet));
+var web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
 
 // Get pending transactions from ethereum network (mempool)
-const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
-    if (err) console.error(err);
-});
+// const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
+//     if (err) console.error(err);
+// });
 // console.log(getPendingTransactions, "1");
 // exit();
 let txResend = {
@@ -31,7 +31,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         console.log(txResend);
         const signedNew = await web3.eth.accounts.signTransaction(
             txResend,
-            process.env.PRIVATE_KEY_1111
+            process.env.PRIVATE_KEY_BID
         );
         web3.eth.sendSignedTransaction(signedNew.rawTransaction);
     } catch (err) {
@@ -47,7 +47,13 @@ const checkEnemy = (toAdd) => {
     return false;
 };
 let flag = false;
-var main = function () {
+var main = async function () {
+    const startTime = Date.now();
+    for (let i = 0; i < 100; i++) {
+        signed = await web3.eth.accounts.signTransaction(txResend, process.env.PRIVATE_KEY_BID);
+    }
+    console.log("Time: ", Date.now() - startTime);
+    exit();
     getPendingTransactions.on("data", (txHash) => {
         setTimeout(async () => {
             try {
