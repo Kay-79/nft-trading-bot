@@ -386,11 +386,16 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         //     process.env.PRIVATE_KEY_BID
         // );
         if (newGasPriceSend < 15 * 10 ** 9) {
-            const signedNew = signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)];
-            web3.eth.sendSignedTransaction(signedNew.rawTransaction);
+            // const signedNew = signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)];
+            web3.eth.sendSignedTransaction(
+                signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)].rawTransaction
+            );
+            console.log("New gasPrice: ", (newGasPriceSend / 10 ** 9 + 0.5).toFixed(0) * 10 ** 9);
             // checkHashEach = signedNew.transactionHash;
             txResend.gasPrice = (newGasPriceSend / 10 ** 9 + 0.5).toFixed(0) * 10 ** 9;
-            hashCheckStatus.push(signedNew.transactionHash);
+            hashCheckStatus.push(
+                signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)].transactionHash
+            );
         }
     } catch (err) {
         console.error(err);
