@@ -452,6 +452,7 @@ async function bid() {
         if (timeSendTx.data && !signedResend) {
             for (let i = 4; i < 16; i++) {
                 txResend.gasPrice = i * 10 ** 9;
+                console.log(txResend.gasPrice);
                 signedResend[i] = await web3.eth.accounts.signTransaction(txResend, Private_Key);
             }
             // txResend.gasPrice = 3 * 10 ** 9;//gasPrice change while fit time bid

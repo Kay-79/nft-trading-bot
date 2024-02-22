@@ -42,13 +42,13 @@ const config = {
     minDecreasePrice: 0.2,
     amountChange: 1,
     gasPrices: {
-        minBid: 3.45,
+        minBid: 3.1,
         create: 1.0001,
         change: 1.0001,
     },
     timeDelayPerLoop: 1,
     profits: {
-        common: 0.2,
+        common: 0.1,
         uncommon: 0.1,
         unique: 0.1,
         rare: 4,
