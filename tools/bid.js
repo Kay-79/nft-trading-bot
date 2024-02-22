@@ -365,6 +365,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         //     process.env.PRIVATE_KEY_BID
         // );
         if (newGasPriceSend < 15 * 10 ** 9) {
+            txResend.gasPrice = (newGasPriceSend / 10 ** 9 + 0.5).toFixed(0) * 10 ** 9;
             const signedNew = signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)];
             web3.eth.sendSignedTransaction(signedNew.rawTransaction);
             checkHashEach = signedNew.transactionHash;
