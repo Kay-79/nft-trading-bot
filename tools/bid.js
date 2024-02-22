@@ -34,6 +34,7 @@ let txResend = {
 };
 let signedResend = [];
 let hashCheckStatus = [];
+let baseGasPrice = 0;
 // let checkHashEach = "";
 async function setup(Private_Key_) {
     inputdata = "None";
@@ -112,6 +113,7 @@ async function setup(Private_Key_) {
                             .encodeABI(), // amount = 1 or > 1
                     });
                     txResend.gasPrice = gasPriceScan[0];
+                    baseGasPrice = gasPriceScan[0];
                     txResend.nonce = nonce_;
                     txResend.data = contract.methods
                         .bid(
@@ -185,14 +187,15 @@ async function setup(Private_Key_) {
                                     signed[index].rawTransaction
                                 );
                                 await sleep(6000);
-                                txResend.data = "";
-                                txResend.gasPrice = 0;
-                                signedResend = [];
-                                hashCheckStatus = [];
                             } catch (error) {
                                 console.log("Fail...setting new time");
                                 checkSuccess = emoji.fail;
                             }
+                            txResend.data = "";
+                            baseGasPrice = 0;
+                            txResend.gasPrice = 0;
+                            signedResend = [];
+                            hashCheckStatus = [];
                         } else {
                             if (index == tx.length - 1) {
                                 try {
@@ -408,7 +411,11 @@ async function bid() {
                             console.log(tx.hash, tx.gasPrice, tx.from);
                             if (
                                 Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                                Number(txResend.gasPrice) < 15 * 10 ** 9
+                                Number(txResend.gasPrice) <
+                                    configJson.gasPrices.minBid * 10 ** 9 +
+                                        ((baseGasPrice - configJson.gasPrices.minBid * 10 ** 9) /
+                                            (configJson.rateFee * 100)) *
+                                            50
                             ) {
                                 resendTxNewGasPrice(tx.gasPrice);
                             }
