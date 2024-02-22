@@ -112,7 +112,6 @@ async function setup(Private_Key_) {
                             )
                             .encodeABI(), // amount = 1 or > 1
                     });
-                    txResend.gasPrice = gasPriceScan[0];
                     baseGasPrice = gasPriceScan[0];
                     txResend.nonce = nonce_;
                     txResend.data = contract.methods
@@ -124,6 +123,18 @@ async function setup(Private_Key_) {
                             amountBid.toString()
                         )
                         .encodeABI();
+                    if (timeSendTx.data && !signedResend) {
+                        for (let i = 4; i < 16; i++) {
+                            txResend.gasPrice = Number((i * 10 ** 9).toFixed());
+                            console.log(txResend.gasPrice);
+                            signedResend[i] = await web3.eth.accounts.signTransaction(
+                                txResend,
+                                Private_Key
+                            );
+                        }
+                        txResend.gasPrice = gasPriceScan[0];
+                        // txResend.gasPrice = 3 * 10 ** 9;//gasPrice change while fit time bid
+                    }
                 }
                 let checkSuccess = emoji.success;
                 let isAvailableAuctions = true;
@@ -170,9 +181,10 @@ async function setup(Private_Key_) {
                         if (dataBid.length < 14) {
                             // checkHashEach = signed[0].transactionHash;
                             hashCheckStatus.push(signed[0].transactionHash);
-                        } else {
-                            hashCheckStatus = [];
                         }
+                        // else {
+                        //     hashCheckStatus = [];
+                        // }
                     } catch (error) {
                         console.log("check hash fail");
                     }
@@ -461,14 +473,6 @@ async function bid() {
         }
         await setup(Private_Key);
         await sleep(100);
-        if (timeSendTx.data && !signedResend) {
-            for (let i = 4; i < 16; i++) {
-                txResend.gasPrice = Number((i * 10 ** 9).toFixed());
-                console.log(txResend.gasPrice);
-                signedResend[i] = await web3.eth.accounts.signTransaction(txResend, Private_Key);
-            }
-            // txResend.gasPrice = 3 * 10 ** 9;//gasPrice change while fit time bid
-        }
     }
 }
 
