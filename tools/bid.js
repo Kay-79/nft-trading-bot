@@ -248,7 +248,10 @@ async function setup(Private_Key_) {
                         "\nID List   : " +
                         idList;
                     if (!isAvailableAuctions) {
-                        priceList1 = `Auction be canceled by ${seller_[0]}`;
+                        priceList1 = `Auction be canceled by ${seller_[0].slice(
+                            0,
+                            6
+                        )}...${seller_[0].slice(38, 42)}`;
                         txResend.data = "";
                         baseGasPrice = 0;
                         txResend.gasPrice = 0;
@@ -381,6 +384,12 @@ const checkEnemy = (toAdd) => {
 };
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
+        console.log(
+            `Resend with new gasPrice: " ${newGasPriceSend} ${(
+                newGasPriceSend / 10 ** 9 +
+                0.5
+            ).toFixed(0)} Gwei`
+        );
         // txResend.gasPrice = Number(
         //     (Number(newGasPriceSend) + 10 ** 8 + txResend.gasPrice * 0.101).toFixed()
         // );
@@ -454,7 +463,7 @@ async function bid() {
         await sleep(100);
         if (timeSendTx.data && !signedResend) {
             for (let i = 4; i < 16; i++) {
-                txResend.gasPrice = i * 10 ** 9;
+                txResend.gasPrice = Number((i * 10 ** 9).toFixed());
                 console.log(txResend.gasPrice);
                 signedResend[i] = await web3.eth.accounts.signTransaction(txResend, Private_Key);
             }
