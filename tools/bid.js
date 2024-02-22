@@ -249,7 +249,10 @@ async function setup(Private_Key_) {
                         idList;
                     if (!isAvailableAuctions) {
                         priceList1 = `Auction be canceled by ${seller_[0]}`;
-                        // checkHashEach = "";
+                        txResend.data = "";
+                        baseGasPrice = 0;
+                        txResend.gasPrice = 0;
+                        signedResend = [];
                         hashCheckStatus = [];
                         console.log(priceList1);
                     }
