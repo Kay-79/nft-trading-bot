@@ -129,7 +129,7 @@ async function setup(Private_Key_) {
                             console.log(txResend.gasPrice);
                             signedResend[i] = await web3.eth.accounts.signTransaction(
                                 txResend,
-                                Private_Key
+                                process.env.PRIVATE_KEY_BID
                             );
                         }
                         txResend.gasPrice = gasPriceScan[0];
