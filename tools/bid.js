@@ -444,7 +444,7 @@ async function bid() {
                                 txResend.data &&
                                 Number(tx.gasPrice) > 3 * 10 ** 9 &&
                                 Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                                Number(txResend.gasPrice) <
+                                Number(tx.gasPrice) <
                                     configJson.gasPrices.minBid * 10 ** 9 +
                                         ((baseGasPrice - configJson.gasPrices.minBid * 10 ** 9) /
                                             (configJson.rateFee * 100)) *
