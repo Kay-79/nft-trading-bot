@@ -124,12 +124,15 @@ async function setup(Private_Key_) {
                         )
                         .encodeABI();
                     if (timeSendTx.data && !signedResend) {
-                        for (let i = 4; i < 16; i++) {
+                        signedResend = [];
+                        for (let i = 0; i < 20; i++) {
                             txResend.gasPrice = Number((i * 10 ** 9).toFixed());
                             console.log(txResend.gasPrice);
-                            signedResend[i] = await web3.eth.accounts.signTransaction(
-                                txResend,
-                                process.env.PRIVATE_KEY_BID
+                            signedResend.push(
+                                await web3.eth.accounts.signTransaction(
+                                    txResend,
+                                    process.env.PRIVATE_KEY_BID
+                                )
                             );
                         }
                         txResend.gasPrice = gasPriceScan[0];
@@ -198,11 +201,11 @@ async function setup(Private_Key_) {
                                 const sendEach = /** await */ web3.eth.sendSignedTransaction(
                                     signed[index].rawTransaction
                                 );
-                                await sleep(6000);
                             } catch (error) {
                                 console.log("Fail...setting new time");
                                 checkSuccess = emoji.fail;
                             }
+                            await sleep(6000);
                             txResend.data = "";
                             baseGasPrice = 0;
                             txResend.gasPrice = 0;
@@ -439,6 +442,8 @@ async function bid() {
                         if (checkEnemy(tx.to)) {
                             console.log(tx.hash, tx.gasPrice, tx.from);
                             if (
+                                txResend.data &&
+                                Number(tx.gasPrice) > 3 * 10 ** 9 &&
                                 Number(tx.gasPrice) > Number(txResend.gasPrice) &&
                                 Number(txResend.gasPrice) <
                                     configJson.gasPrices.minBid * 10 ** 9 +
