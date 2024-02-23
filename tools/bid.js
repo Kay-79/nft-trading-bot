@@ -123,7 +123,7 @@ async function setup(Private_Key_) {
                             amountBid.toString()
                         )
                         .encodeABI();
-                    if (timeSendTx.data && !signedResend) {
+                    if (timeSendTx.data && !signedResend.length) {
                         signedResend = [];
                         for (let i = 0; i < 20; i++) {
                             txResend.gasPrice = Number((i * 10 ** 9).toFixed());
@@ -209,7 +209,6 @@ async function setup(Private_Key_) {
                             txResend.data = "";
                             baseGasPrice = 0;
                             txResend.gasPrice = 0;
-                            signedResend = [];
                             hashCheckStatus = [];
                         } else {
                             if (index == tx.length - 1) {
