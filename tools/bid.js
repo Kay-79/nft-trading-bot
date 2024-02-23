@@ -123,21 +123,18 @@ async function setup(Private_Key_) {
                             amountBid.toString()
                         )
                         .encodeABI();
-                    if (timeSendTx.data && !signedResend.length) {
-                        signedResend = [];
-                        for (let i = 0; i < 20; i++) {
-                            txResend.gasPrice = Number((i * 10 ** 9).toFixed());
-                            console.log(txResend.gasPrice);
-                            signedResend.push(
-                                await web3.eth.accounts.signTransaction(
-                                    txResend,
-                                    process.env.PRIVATE_KEY_BID
-                                )
-                            );
-                        }
-                        txResend.gasPrice = gasPriceScan[0];
-                        // txResend.gasPrice = 3 * 10 ** 9;//gasPrice change while fit time bid
+                    signedResend = [];
+                    for (let i = 0; i < 20; i++) {
+                        txResend.gasPrice = Number((i * 10 ** 9).toFixed());
+                        console.log(txResend.gasPrice);
+                        signedResend.push(
+                            await web3.eth.accounts.signTransaction(
+                                txResend,
+                                process.env.PRIVATE_KEY_BID
+                            )
+                        );
                     }
+                    txResend.gasPrice = gasPriceScan[0];
                 }
                 let checkSuccess = emoji.success;
                 let isAvailableAuctions = true;
@@ -181,17 +178,17 @@ async function setup(Private_Key_) {
                         );
                     }
                     console.log("Paying!!");
-                    try {
-                        if (dataBid.length < 14) {
-                            // checkHashEach = signed[0].transactionHash;
-                            hashCheckStatus.push(signed[0].transactionHash);
-                        }
-                        // else {
-                        //     hashCheckStatus = [];
-                        // }
-                    } catch (error) {
-                        console.log("check hash fail");
-                    }
+                    // try {
+                    //     if (dataBid.length < 14) {
+                    //         // checkHashEach = signed[0].transactionHash;
+                    //         hashCheckStatus.push(signed[0].transactionHash);
+                    //     }
+                    //     // else {
+                    //     //     hashCheckStatus = [];
+                    //     // }
+                    // } catch (error) {
+                    //     console.log("check hash fail");
+                    // }
                     for (let index = 0; index < tx.length; index++) {
                         if (!isAvailableAuctions) {
                             break;
@@ -210,7 +207,6 @@ async function setup(Private_Key_) {
                             txResend.data = "";
                             baseGasPrice = 0;
                             txResend.gasPrice = 0;
-                            hashCheckStatus = [];
                         } else {
                             if (index == tx.length - 1) {
                                 try {
