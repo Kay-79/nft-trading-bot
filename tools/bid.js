@@ -149,6 +149,7 @@ async function setup(Private_Key_) {
                             await web3.eth.accounts.signTransaction(tx[index], Private_Key_)
                         );
                     }
+                    hashCheckStatus.push(signed[0].transactionHash);
                     if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
                         await sleep(
                             Number(startTime_[0]) +
