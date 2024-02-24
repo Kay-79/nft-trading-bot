@@ -124,8 +124,8 @@ async function setup(Private_Key_) {
                             amountBid.toString()
                         )
                         .encodeABI();
-                    signedResend = [0, 0.5, 1, 1.5, 2, 2.5];
-                    for (let i = 6; i < 41; i++) {
+                    signedResend = [0, 0.5, 1, 1.5, 2, 2.5, 3];
+                    for (let i = 7; i < 41; i++) {
                         // max is 20Gwei
                         txResend.gasPrice = Number((i * 0.5 * 10 ** 9).toFixed());
                         signedResend.push(
@@ -398,7 +398,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
         if (newGasPriceSend < 20 * 10 ** 9) {
             // max gas price 20 gwei, depend on 50% profit
-            for (let i = 6; i < 41; i++) {
+            for (let i = 7; i < 41; i++) {
                 if (
                     i * 0.5 * 10 ** 9 > txResend.gasPrice &&
                     i * 0.5 * 10 ** 9 > newGasPriceSend &&
@@ -432,7 +432,6 @@ async function bid() {
                         if (checkEnemy(tx.to)) {
                             console.log(tx.hash, tx.gasPrice, tx.from);
                             if (
-                                txResend.data &&
                                 Number(tx.gasPrice) > 3 * 10 ** 9 &&
                                 Number(tx.gasPrice) > Number(txResend.gasPrice) &&
                                 Number(tx.gasPrice) <
