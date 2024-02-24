@@ -35,6 +35,7 @@ let txResend = {
 let signedResend = [];
 let hashCheckStatus = [];
 let baseGasPrice = 0;
+let checkSuccess = "Non set";
 // let checkHashEach = "";
 async function setup(Private_Key_) {
     inputdata = "None";
@@ -123,10 +124,10 @@ async function setup(Private_Key_) {
                             amountBid.toString()
                         )
                         .encodeABI();
-                    signedResend = [];
-                    for (let i = 0; i < 20; i++) {
-                        txResend.gasPrice = Number((i * 10 ** 9).toFixed());
-                        console.log(txResend.gasPrice);
+                    signedResend = [0, 0.5, 1, 1.5, 2, 2.5];
+                    for (let i = 6; i < 41; i++) {
+                        // max is 20Gwei
+                        txResend.gasPrice = Number((i * 0.5 * 10 ** 9).toFixed());
                         signedResend.push(
                             await web3.eth.accounts.signTransaction(
                                 txResend,
@@ -136,7 +137,7 @@ async function setup(Private_Key_) {
                     }
                     txResend.gasPrice = gasPriceScan[0];
                 }
-                let checkSuccess = emoji.success;
+                checkSuccess = emoji.success;
                 let isAvailableAuctions = true;
                 try {
                     let signed = [];
@@ -395,30 +396,23 @@ const checkEnemy = (toAdd) => {
 };
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
-        console.log(
-            `Resend with new gasPrice: " ${newGasPriceSend} ${(
-                newGasPriceSend / 10 ** 9 +
-                0.5
-            ).toFixed(0)} Gwei`
-        );
-        // txResend.gasPrice = Number(
-        //     (Number(newGasPriceSend) + 10 ** 8 + txResend.gasPrice * 0.101).toFixed()
-        // );
-        // const signedNew = await web3.eth.accounts.signTransaction(
-        //     txResend,
-        //     process.env.PRIVATE_KEY_BID
-        // );
-        if (newGasPriceSend < 15 * 10 ** 9) {
-            // const signedNew = signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)];
-            web3.eth.sendSignedTransaction(
-                signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)].rawTransaction
-            );
-            console.log("New gasPrice: ", (newGasPriceSend / 10 ** 9 + 0.5).toFixed(0) * 10 ** 9);
-            // checkHashEach = signedNew.transactionHash;
-            txResend.gasPrice = (newGasPriceSend / 10 ** 9 + 0.5).toFixed(0) * 10 ** 9;
-            hashCheckStatus.push(
-                signedResend[(newGasPriceSend / 10 ** 9 + 0.5).toFixed(0)].transactionHash
-            );
+        if (newGasPriceSend < 20 * 10 ** 9) {
+            // max gas price 20 gwei, depend on 50% profit
+            for (let i = 6; i < 41; i++) {
+                if (
+                    i * 0.5 * 10 ** 9 > txResend.gasPrice &&
+                    i * 0.5 * 10 ** 9 > newGasPriceSend &&
+                    (i * 0.5 * 10 ** 9) / txResend.gasPrice > 1.1
+                ) {
+                    web3.eth.sendSignedTransaction(signedResend[i].rawTransaction);
+                    console.log("New gasPrice: ", (i * 0.5 * 10 ** 9).toFixed());
+                    txResend.gasPrice = i * 0.5 * 10 ** 9;
+                    hashCheckStatus.push(signedResend[i].transactionHash);
+                    break;
+                }
+            }
+        } else {
+            console.log("Gas price too high");
         }
     } catch (err) {
         console.error(err);
