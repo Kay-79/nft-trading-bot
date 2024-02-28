@@ -9,10 +9,13 @@ const getBnbPrice = async () => {
     try {
         bnbPriceCheck = bnbPriceCheck.data.data.bnb.price;
     } catch (error) {
-        bnbPriceCheck = 320;
+        bnbPriceCheck = 420;
         console.log(error);
     }
-    return bnbPriceCheck;
+    if (bnbPriceCheck > 0) {
+        return bnbPriceCheck;
+    }
+    return 420;
 };
 
 module.exports = getBnbPrice;
