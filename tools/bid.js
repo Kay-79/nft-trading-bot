@@ -438,7 +438,7 @@ async function bid() {
                                     configJson.gasPrices.minBid * 10 ** 9 +
                                         ((baseGasPrice - configJson.gasPrices.minBid * 10 ** 9) /
                                             (configJson.rateFee * 100)) *
-                                            50
+                                            80
                             ) {
                                 resendTxNewGasPrice(tx.gasPrice);
                             }
