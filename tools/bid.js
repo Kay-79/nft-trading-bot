@@ -427,23 +427,47 @@ async function bid() {
         setTimeout(async () => {
             try {
                 if (txResend.data) {
-                    let tx = await web3.eth.getTransaction(txHash);
-                    if (tx != null) {
-                        if (checkEnemy(tx.to)) {
-                            console.log(tx.hash, tx.gasPrice, tx.from);
-                            if (
-                                Number(tx.gasPrice) > 3 * 10 ** 9 &&
-                                Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                                Number(tx.gasPrice) <
-                                    configJson.gasPrices.minBid * 10 ** 9 +
-                                        ((baseGasPrice - configJson.gasPrices.minBid * 10 ** 9) /
-                                            (configJson.rateFee * 100)) *
-                                            80
-                            ) {
-                                resendTxNewGasPrice(tx.gasPrice);
+                    // let tx = await web3.eth.getTransaction(txHash);
+                    // if (tx != null) {
+                    //     if (checkEnemy(tx.to)) {
+                    //         console.log(tx.hash, tx.gasPrice, tx.from);
+                    //         if (
+                    //             Number(tx.gasPrice) > 3 * 10 ** 9 &&
+                    //             Number(tx.gasPrice) > Number(txResend.gasPrice) &&
+                    //             Number(tx.gasPrice) <
+                    //                 configJson.gasPrices.minBid * 10 ** 9 +
+                    //                     ((baseGasPrice - configJson.gasPrices.minBid * 10 ** 9) /
+                    //                         (configJson.rateFee * 100)) *
+                    //                         80
+                    //         ) {
+                    //             resendTxNewGasPrice(tx.gasPrice);
+                    //         }
+                    //     }
+                    // }
+                    web3.eth
+                        .getTransaction(txHash)
+                        .then((tx) => {
+                            if (tx != null) {
+                                if (checkEnemy(tx.to)) {
+                                    console.log(tx.hash, tx.gasPrice, tx.from);
+                                    if (
+                                        Number(tx.gasPrice) > 3 * 10 ** 9 &&
+                                        Number(tx.gasPrice) > Number(txResend.gasPrice) &&
+                                        Number(tx.gasPrice) <
+                                            configJson.gasPrices.minBid * 10 ** 9 +
+                                                ((baseGasPrice -
+                                                    configJson.gasPrices.minBid * 10 ** 9) /
+                                                    (configJson.rateFee * 100)) *
+                                                    80
+                                    ) {
+                                        resendTxNewGasPrice(tx.gasPrice);
+                                    }
+                                }
                             }
-                        }
-                    }
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
                 }
             } catch (err) {
                 console.error("err");
