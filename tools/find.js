@@ -401,8 +401,8 @@ async function setup() {
     uptimesCache = 0;
     addressIdCache = Array(30);
     linkSave = "./waitBid.txt";
-    gasUsed = [242000, 344000, 460000, 575000, 690000, 800000]; //Const avg gasUsed
-    gasUsed = [242000 * 1, 242000 * 2, 242000 * 3, 242000 * 4, 242000 * 5, 242000 * 6]; //Const avg gasUsed
+    gasUsed = [388000, 344000, 460000, 575000, 690000, 800000]; //Const avg gasUsed
+    gasUsed = [388000 * 1, 242000 * 2, 242000 * 3, 242000 * 4, 242000 * 5, 242000 * 6]; //Const avg gasUsed
     await getMinPriceOrdi(); //setup change
 }
 
@@ -466,6 +466,9 @@ async function getMinPriceOrdi() {
     minLegend = 0;
     console.log(minCommon, minUncommon, minUnique, minRare, minEpic, minLegend);
     fee = gasUsed.map((valuee) => valuee * gasPriceMin * bnbPrice * 10 ** -9); //min fee to buy
+    // console.log(gasUsed);
+    // console.log(fee);
+    // exit();
 }
 
 let priceRaw = [0, 0, 0, 0, 0, 1000]; //lowest price in MP
