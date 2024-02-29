@@ -282,13 +282,18 @@ async function setup(Private_Key_) {
                             );
                             if (!receiptCheckStatus) continue;
                             if (receiptCheckStatus.status) {
-                                priceList1 = emoji.success + priceList1;
+                                priceList1 = `${emoji.success} ${priceList1}`;
                                 break;
                             } else {
-                                priceList1 = emoji.fail + priceList1;
+                                priceList1 = `${emoji.fail} ${priceList1}`;
                                 break;
                             }
                         }
+                        const maxGasSent = (
+                            Number(receiptCheckStatus.effectiveGasPrice) /
+                            10 ** 9
+                        ).toFixed(2);
+                        priceList1 = `${maxGasSent} ${priceList1}`;
                         hashCheckStatus = [];
                         if (receiptCheckStatus.status) {
                             console.log("Success bid!! At block:", receiptCheckStatus.blockNumber);
