@@ -353,6 +353,7 @@ value = 0; // without rare and epic
 let minPrices = [];
 const create = async () => {
     minPrices = await getMinPrice();
+    console.log(minPrices);
     for (let i = 0; i < myAcc.length; i++) {
         console.log(myAcc[i][1]);
         if (myAcc[i][1] == "_1_0_1" || myAcc[i][1] === "_5_8_1") {

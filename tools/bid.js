@@ -304,7 +304,7 @@ async function setup(Private_Key_) {
                         const maxGasSent = (
                             Number(receiptCheckStatus.effectiveGasPrice) /
                             10 ** 9
-                        ).toFixed(2);
+                        ).toFixed(3);
                         priceList1 = `${maxGasSent} ${priceList1}`;
                         hashCheckStatus = [];
                         if (receiptCheckStatus.status) {
@@ -413,7 +413,7 @@ const checkEnemy = (toAdd) => {
 };
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
-        if (newGasPriceSend < 50 * 10 ** 9) {
+        if (Number(newGasPriceSend) < 50 * 10 ** 9) {
             // max gas price 20 gwei, depend on 50% profit
             if (txResend.gasPrice * 1.1 > newGasPriceSend) {
                 txResend.gasPrice = Math.floor(Number(txResend.gasPrice) * 1.1 + 10 ** 8);
@@ -442,7 +442,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
             //     }
             // }
         } else {
-            console.log("Gas price too high");
+            console.log("Gas price over 50Gwei");
         }
     } catch (err) {
         console.error(err);
@@ -491,6 +491,17 @@ async function bid() {
                                                     80
                                     ) {
                                         resendTxNewGasPrice(tx.gasPrice);
+                                    } else {
+                                        console.log(
+                                            `Gas price is not in range: 3Gwei - ${(
+                                                configJson.gasPrices.minBid * 10 ** 9 +
+                                                (((baseGasPrice -
+                                                    configJson.gasPrices.minBid * 10 ** 9) /
+                                                    (configJson.rateFee * 100)) *
+                                                    80) /
+                                                    10 ** 9
+                                            ).toFixed(2)}`
+                                        );
                                     }
                                 }
                             }
