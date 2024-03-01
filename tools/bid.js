@@ -494,13 +494,15 @@ async function bid() {
                                     } else {
                                         console.log(
                                             `Gas price is not in range: 3Gwei - ${(
-                                                configJson.gasPrices.minBid * 10 ** 9 +
-                                                (((baseGasPrice -
-                                                    configJson.gasPrices.minBid * 10 ** 9) /
-                                                    (configJson.rateFee * 100)) *
-                                                    80) /
-                                                    10 ** 9
-                                            ).toFixed(2)}`
+                                                Number(
+                                                    configJson.gasPrices.minBid * 10 ** 9 +
+                                                        ((baseGasPrice -
+                                                            configJson.gasPrices.minBid * 10 ** 9) /
+                                                            (configJson.rateFee * 100)) *
+                                                            80
+                                                ) /
+                                                10 ** 9
+                                            ).toFixed()}`
                                         );
                                     }
                                 }
