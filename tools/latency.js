@@ -8,6 +8,7 @@ try {
 } catch (error) {}
 const { sleep } = require("../utils/common/sleep");
 const checkLatency = async () => {
+    sleep(300);
     try {
         web3a.eth.getBlockNumber().then((latencyPublic) => {
             console.log(`Latency public : ${latencyPublic}`);
@@ -22,7 +23,6 @@ const checkLatency = async () => {
     } catch (error) {
         console.log("Error: ", error);
     }
-    await sleep(3000);
-    exit(0);
+    await sleep(2000);
 };
 checkLatency();
