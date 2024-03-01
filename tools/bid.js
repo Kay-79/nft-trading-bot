@@ -416,15 +416,17 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         if (newGasPriceSend < 50 * 10 ** 9) {
             // max gas price 20 gwei, depend on 50% profit
             if (txResend.gasPrice * 1.1 > newGasPriceSend) {
-                txResend.gasPrice = Math.floor(txResend.gasPrice * 1.1 + 10 ** 8);
+                txResend.gasPrice = Math.floor(Number(txResend.gasPrice) * 1.1 + 10 ** 8);
             } else {
-                txResend.gasPrice = Math.floor(newGasPriceSend + 10 ** 8);
+                txResend.gasPrice = Math.floor(Number(newGasPriceSend) + 10 ** 8);
             }
             var tx = new Tx(txResend, { common: chain });
             tx.sign(privateKey);
             var serializedTx = tx.serialize();
             // console.log(serializedTx.toString("hex"));
-            web3.eth.sendSignedTransaction("0x" + serializedTx.toString("hex"));
+            web3.eth.sendSignedTransaction("0x" + serializedTx.toString("hex")).then((hash) => {
+                hashCheckStatus.push(hash.transactionHash);
+            });
             console.log("New gasPrice: ", txResend.gasPrice);
             // for (let i = 7; i < 41; i++) {
             //     if (
