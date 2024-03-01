@@ -425,7 +425,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
             var serializedTx = tx.serialize();
             // console.log(serializedTx.toString("hex"));
             web3.eth.sendSignedTransaction("0x" + serializedTx.toString("hex")).then((hash) => {
-                hashCheckStatus.push(hash.transactionHash);
+                hashCheckStatus.push(hash.receipt.transactionHash);
             });
             console.log("New gasPrice: ", txResend.gasPrice);
             // for (let i = 7; i < 41; i++) {
