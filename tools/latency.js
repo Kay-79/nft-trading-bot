@@ -2,8 +2,9 @@ const Web3 = require("web3");
 const configJson = require("../config/config");
 const { exit } = require("process");
 const web3a = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed3.bnbchain.org"));
+let web3;
 try {
-    const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 } catch (error) {}
 const { sleep } = require("../utils/common/sleep");
 const checkLatency = async () => {
