@@ -5,35 +5,61 @@ var fs = require("fs");
 const { exit } = require("process");
 // You can use any websocket provider such as infura, alchemy etc.
 // It will look like: 'wss://mainnet.infura.io/ws/v3/<API_KEY>'
-// var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.private));
-var web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
+var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.testnet));
+const common = require("ethereumjs-common");
+
+const chain = common.default.forCustomChain(
+    "mainnet",
+    {
+        name: "bnb",
+        networkId: 97,
+        chainId: 97,
+    },
+    "petersburg"
+);
+// var web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
 
 // Get pending transactions from ethereum network (mempool)
-// const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
-//     if (err) console.error(err);
-// });
+const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
+    if (err) console.error(err);
+});
 // console.log(getPendingTransactions, "1");
 // exit();
 let txResend = {
-    from: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
+    from: "0x4639d35985751E9265a62e50A348d5E4C0A9d212",
     gas: 100000,
     gasPrice: 0, //change with new gas price
-    nonce: 915, //change with new nonce
-    to: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
+    nonce: 7, //change with new nonce
+    to: "0x4639d35985751E9265a62e50A348d5E4C0A9d212",
     value: 0,
     data: "0x", //change with new data
+    // chainId: 97,
+    // networkId: 97,
 };
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
         txResend.gasPrice = Number(
             (Number(newGasPriceSend) + 10 ** 8 + txResend.gasPrice * 0.100001).toFixed()
         );
-        console.log(txResend);
-        const signedNew = await web3.eth.accounts.signTransaction(
-            txResend,
-            process.env.PRIVATE_KEY_BID
-        );
-        web3.eth.sendSignedTransaction(signedNew.rawTransaction);
+        // console.log(txResend);
+        // const signedNew = await web3.eth.accounts.signTransaction(
+        //     txResend,
+        //     process.env.PRIVATE_KEY_BID
+        // );
+        // web3.eth.sendSignedTransaction(signedNew.rawTransaction);
+        const Tx = require("ethereumjs-tx").Transaction;
+        var privateKey = Buffer.from(process.env.PRIVATE_KEY_1111, "hex");
+
+        var rawTx = txResend;
+
+        var tx = new Tx(rawTx, { common: chain });
+        tx.sign(privateKey);
+
+        var serializedTx = tx.serialize();
+        console.log(tx);
+        console.log(tx.raw.toString("hex"));
+        await web3.eth.sendSignedTransaction("0x" + serializedTx.toString("hex"));
+        exit();
     } catch (err) {
         1;
         console.error(err);
@@ -48,12 +74,12 @@ const checkEnemy = (toAdd) => {
 };
 let flag = false;
 var main = async function () {
-    const startTime = Date.now();
-    for (let i = 0; i < 100; i++) {
-        signed = await web3.eth.accounts.signTransaction(txResend, process.env.PRIVATE_KEY_BID);
-    }
-    console.log("Time: ", Date.now() - startTime);
-    exit();
+    // const startTime = Date.now();
+    // for (let i = 0; i < 100; i++) {
+    //     signed = await web3.eth.accounts.signTransaction(txResend, process.env.PRIVATE_KEY_BID);
+    // }
+    // console.log("Time: ", Date.now() - startTime);
+    // exit();
     getPendingTransactions.on("data", (txHash) => {
         setTimeout(async () => {
             try {
@@ -74,11 +100,11 @@ var main = async function () {
                             //     "0x1111c16591c4ECe1c313f46A63330D8BCf461111"
                             // );
                             console.log(txResend);
-                            const signedNew = await web3.eth.accounts.signTransaction(
-                                txResend,
-                                process.env.PRIVATE_KEY_1111
-                            );
-                            web3.eth.sendSignedTransaction(signedNew.rawTransaction);
+                            // const signedNew = await web3.eth.accounts.signTransaction(
+                            //     txResend,
+                            //     process.env.PRIVATE_KEY_1111
+                            // );
+                            // web3.eth.sendSignedTransaction(signedNew.rawTransaction);
                             await resendTxNewGasPrice(tx.gasPrice);
                             flag = true;
                             // exit();
