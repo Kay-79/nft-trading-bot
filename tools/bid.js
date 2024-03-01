@@ -21,7 +21,7 @@ const timeGetAvaliableAuction = 5;
 let timeSendTx = configJson.timeBid;
 const emoji = configJson.emojiURL;
 const Tx = require("ethereumjs-tx").Transaction;
-var privateKey = Buffer.from(process.env.PRIVATE_KEY_BID, "hex");
+const privateKey = Buffer.from(process.env.PRIVATE_KEY_BID_BUFFER, "hex");
 const common = require("ethereumjs-common");
 const chain = common.default.forCustomChain(
     "mainnet",
