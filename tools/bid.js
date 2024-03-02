@@ -10,6 +10,11 @@ const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
+    try {
+        hashCheckStatus.push(err.receipt.transactionHash);
+    } catch (error) {
+        console.log("Add hash fail");
+    }
 });
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
