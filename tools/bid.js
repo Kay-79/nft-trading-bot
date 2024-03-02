@@ -507,7 +507,7 @@ async function bid() {
                                                             80
                                                 ) /
                                                 10 ** 9
-                                            ).toFixed()}`
+                                            ).toFixed(3)}Gwei or lower current gas price`
                                         );
                                     }
                                 }

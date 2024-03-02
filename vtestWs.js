@@ -7,7 +7,7 @@ const { exit } = require("process");
 // It will look like: 'wss://mainnet.infura.io/ws/v3/<API_KEY>'
 var web3 = new Web3(new Web3.providers.WebsocketProvider(configJS.wss.testnet));
 const common = require("ethereumjs-common");
-
+const Tx = require("ethereumjs-tx").Transaction;
 const chain = common.default.forCustomChain(
     "mainnet",
     {
@@ -26,11 +26,11 @@ const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, r
 // console.log(getPendingTransactions, "1");
 // exit();
 let txResend = {
-    from: "0x4639d35985751E9265a62e50A348d5E4C0A9d212",
+    from: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
     gas: 100000,
     gasPrice: 0, //change with new gas price
-    nonce: 7, //change with new nonce
-    to: "0x4639d35985751E9265a62e50A348d5E4C0A9d212",
+    nonce: 929, //change with new nonce
+    to: "0x1111c16591c4ECe1c313f46A63330D8BCf461111",
     value: 0,
     data: "0x", //change with new data
     // chainId: 97,
@@ -42,22 +42,32 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
             (Number(newGasPriceSend) + 10 ** 8 + txResend.gasPrice * 0.100001).toFixed()
         );
         // console.log(txResend);
+        // let timeStart = Date.now();
+        // for (let io = 0; io < 100; io++) {
+        const signedNew = await web3.eth.accounts.signTransaction(
+            txResend,
+            process.env.PRIVATE_KEY_1111
+        );
+        console.log(signedNew.rawTransaction);
+        // }
+        // console.log(`Sign await: Around ${Date.now() - timeStart}ms`);
         // const signedNew = await web3.eth.accounts.signTransaction(
         //     txResend,
         //     process.env.PRIVATE_KEY_BID
         // );
         // web3.eth.sendSignedTransaction(signedNew.rawTransaction);
-        const Tx = require("ethereumjs-tx").Transaction;
+
         var privateKey = Buffer.from(process.env.PRIVATE_KEY_1111, "hex");
-
-        var rawTx = txResend;
-
-        var tx = new Tx(rawTx, { common: chain });
+        // timeStart = Date.now();
+        // for (let i = 0; i < 100; i++) {
+        var tx = new Tx(txResend, { common: chain });
         tx.sign(privateKey);
-
         var serializedTx = tx.serialize();
-        console.log(tx);
-        console.log(tx.raw.toString("hex"));
+        console.log("0x" + serializedTx.toString("hex"));
+        // }
+        // console.log(`Sign without await: Around ${Date.now() - timeStart}ms`);
+        // console.log(tx);
+        // console.log(tx.raw.toString("hex"));
         await web3.eth.sendSignedTransaction("0x" + serializedTx.toString("hex"));
         exit();
     } catch (err) {
