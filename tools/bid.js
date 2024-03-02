@@ -49,6 +49,7 @@ let txResend = {
     value: 0,
     data: "", //change with new data
 };
+let maxGasPricePerFee = "0";
 // let signedResend = [];
 let hashCheckStatus = [];
 let baseGasPrice = 0;
@@ -80,6 +81,14 @@ async function setup(Private_Key_) {
             const amountList = dataBid[5].split(",");
             const idList = dataBid[4].split(",");
             const gasPriceScanRaw = dataBid[6].split(",");
+            if (gasPriceScanRaw.length == 1) {
+                maxGasPricePerFee = (
+                    ((Number(gasPriceScanRaw[0]) - configJson.gasPrices.minBid) /
+                        (configJson.rateFee * 100)) *
+                    configJson.rateMax *
+                    100
+                ).toFixed(3);
+            }
             let gasPriceScan = [];
             for (let index = 0; index < gasPriceScanRaw.length; index++) {
                 gasPriceScan[index] = Number((Number(gasPriceScanRaw[index]) * 10 ** 9).toFixed());
@@ -266,16 +275,10 @@ async function setup(Private_Key_) {
                             " " + ((Number(priceList[q]) - 10 ** 14) / 10 ** 18).toFixed(2)
                         );
                     }
-                    priceList1 =
-                        // checkSuccess +
-                        " " +
-                        gasPriceScanRaw +
-                        "\nPrices   : " +
-                        price_send.toString().replace(" ", "") +
-                        "\nAmount: " +
-                        amountList +
-                        "\nID List   : " +
-                        idList;
+                    priceList1 = ` ${gasPriceScanRaw}-${maxGasPricePerFee}\nPrices   : ${price_send
+                        .toString()
+                        .replace(" ", "")}\nAmount: ${amountList}\nID List   : ${idList}`;
+                    maxGasPricePerFee = "0";
                     if (!isAvailableAuctions) {
                         priceList1 = `Auction be canceled by ${seller_[0].slice(
                             0,
@@ -493,7 +496,8 @@ async function bid() {
                                                 ((baseGasPrice -
                                                     configJson.gasPrices.minBid * 10 ** 9) /
                                                     (configJson.rateFee * 100)) *
-                                                    80
+                                                    configJson.rateMax *
+                                                    100
                                     ) {
                                         resendTxNewGasPrice(tx.gasPrice);
                                     } else {
@@ -504,7 +508,8 @@ async function bid() {
                                                         ((baseGasPrice -
                                                             configJson.gasPrices.minBid * 10 ** 9) /
                                                             (configJson.rateFee * 100)) *
-                                                            80
+                                                            configJson.rateMax *
+                                                            100
                                                 ) /
                                                 10 ** 9
                                             ).toFixed(3)}Gwei or lower current gas price`
