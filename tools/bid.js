@@ -84,9 +84,9 @@ async function setup(Private_Key_) {
             if (gasPriceScanRaw.length == 1) {
                 maxGasPricePerFee = (
                     ((Number(gasPriceScanRaw[0]) - configJson.gasPrices.minBid) /
-                        (configJson.rateFee * 100)) *
-                    configJson.rateMax *
-                    100
+                        configJson.rateFee) *
+                        configJson.rateMax +
+                    configJson.gasPrices.minBid
                 ).toFixed(3);
             }
             let gasPriceScan = [];
@@ -491,28 +491,12 @@ async function bid() {
                                     if (
                                         Number(tx.gasPrice) > 3 * 10 ** 9 &&
                                         Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                                        Number(tx.gasPrice) <
-                                            configJson.gasPrices.minBid * 10 ** 9 +
-                                                ((baseGasPrice -
-                                                    configJson.gasPrices.minBid * 10 ** 9) /
-                                                    (configJson.rateFee * 100)) *
-                                                    configJson.rateMax *
-                                                    100
+                                        Number(tx.gasPrice) < Number(maxGasPricePerFee) * 10 ** 9
                                     ) {
                                         resendTxNewGasPrice(tx.gasPrice);
                                     } else {
                                         console.log(
-                                            `Gas price is not in range: 3Gwei - ${(
-                                                Number(
-                                                    configJson.gasPrices.minBid * 10 ** 9 +
-                                                        ((baseGasPrice -
-                                                            configJson.gasPrices.minBid * 10 ** 9) /
-                                                            (configJson.rateFee * 100)) *
-                                                            configJson.rateMax *
-                                                            100
-                                                ) /
-                                                10 ** 9
-                                            ).toFixed(3)}Gwei or lower current gas price`
+                                            `Gas price is not in range: 3Gwei - ${maxGasPricePerFee}Gwei or lower current gas price`
                                         );
                                     }
                                 }
