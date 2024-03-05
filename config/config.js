@@ -16,6 +16,7 @@ const config = {
         change: "http://localhost:8545",
         check: "https://bsc-dataseed1.bnbchain.org",
         create: "http://localhost:8545",
+        public: "https://bsc-dataseed3.bnbchain.org",
     },
     wss: {
         private: "ws://localhost:8546",
@@ -56,7 +57,7 @@ const config = {
         epic: 10,
         legendary: 1000,
     },
-    rateFee: 0.01,
+    rateFee: 0.05,
     rateMax: 0.8,
     minPrice: {
         minCommon: 3.0,

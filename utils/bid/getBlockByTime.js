@@ -1,27 +1,29 @@
-const Web3 = require("web3");
-const web3 = new Web3("https://bsc-dataseed3.bnbchain.org");
+// const Web3 = require("web3");
+// const web3 = new Web3("https://bsc-dataseed3.bnbchain.org");
 
+const { sleep, ranSleep } = require("../common/sleep");
 const getBlockByTime = async (web3_, time_) => {
     let blockNumber = await web3_.eth.getBlockNumber();
     let block = await web3_.eth.getBlock(blockNumber);
     while (true) {
+        await sleep(100);
+        const amountBlock = Math.floor(Math.abs(block.timestamp - time_) / 3);
         if (block.timestamp > time_) {
-            block = await web3_.eth.getBlock((blockNumber -= 1));
+            block = await web3_.eth.getBlock((blockNumber -= amountBlock == 0 ? 1 : amountBlock));
             console.log(block.timestamp);
-            break;
-        }
-        else if (block.timestamp < time_) {
-            block = await web3_.eth.getBlock((blockNumber += 1));
+            // break;
+        } else if (block.timestamp < time_) {
+            block = await web3_.eth.getBlock((blockNumber += amountBlock == 0 ? 1 : amountBlock));
             console.log(block.timestamp);
-            break;
-        }
-        else {
+            // break;
+        } else {
             console.log(block.timestamp);
             break;
         }
     }
-    console.log(block.timestamp);
-    return block;
+    console.log(block.number);
+    return block.number;
 };
-
-getBlockByTime(web3, 36700455);
+module.exports = getBlockByTime;
+// time per block ~ 3s
+// getBlockByTime(web3, 1709654717);
