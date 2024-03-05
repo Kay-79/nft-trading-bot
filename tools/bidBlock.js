@@ -5,11 +5,17 @@ const checkAvailable = require("../utils/bid/checkAvailable");
 const configJson = require("../config/config");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
+const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
+const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
+    try {
+        hashCheckStatus.push(err.receipt.transactionHash);
+    } catch (error) {
+        console.log("Add hash fail");
+    }
 });
-const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
@@ -19,6 +25,34 @@ const overTime = 180;
 const timeGetAvaliableAuction = 5;
 let timeSendTx = configJson.timeBid;
 const emoji = configJson.emojiURL;
+const Tx = require("ethereumjs-tx").Transaction;
+const privateKey = Buffer.from(process.env.PRIVATE_KEY_BID_BUFFER, "hex");
+const common = require("ethereumjs-common");
+const chain = common.default.forCustomChain(
+    "mainnet",
+    {
+        name: "bnb",
+        networkId: 56,
+        chainId: 56,
+    },
+    "petersburg"
+);
+const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
+    if (err) console.error(err);
+});
+let txResend = {
+    from: configJson.bidder,
+    gas: 1000000,
+    gasPrice: 0, //change with new gas price
+    nonce: 0, //change with new nonce
+    to: contractAddress,
+    value: 0,
+    data: "", //change with new data
+};
+let maxGasPricePerFee = "0";
+let hashCheckStatus = [];
+let baseGasPrice = 0;
+let checkSuccess = "Non set";
 async function setup(Private_Key_) {
     inputdata = "None";
     let isBid = false;
@@ -36,6 +70,7 @@ async function setup(Private_Key_) {
     } catch (err) {}
     if (isBid) {
         let timeSendReal = 0;
+        let priceList1 = "";
         const startTime_ = dataBid[3].split(",");
         const index_ = dataBid[2].split(",");
         if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 15) {
@@ -44,6 +79,14 @@ async function setup(Private_Key_) {
             const amountList = dataBid[5].split(",");
             const idList = dataBid[4].split(",");
             const gasPriceScanRaw = dataBid[6].split(",");
+            if (gasPriceScanRaw.length == 1) {
+                maxGasPricePerFee = (
+                    ((Number(gasPriceScanRaw[0]) - configJson.gasPrices.minBid) /
+                        configJson.rateFee) *
+                        configJson.rateMax +
+                    configJson.gasPrices.minBid
+                ).toFixed(3);
+            }
             let gasPriceScan = [];
             for (let index = 0; index < gasPriceScanRaw.length; index++) {
                 gasPriceScan[index] = Number((Number(gasPriceScanRaw[index]) * 10 ** 9).toFixed());
@@ -54,7 +97,7 @@ async function setup(Private_Key_) {
             }
             if (false || Number(startTime_[0]) + timeSendTx + overTime - Date.now() / 1000 > 0) {
                 let tx = [];
-                let nonce_ = await web3.eth.getTransactionCount(acc.address);
+                let nonce_ = await web3rpc.eth.getTransactionCount(acc.address);
                 if (index_.length > 1) {
                     for (let index = 0; index < index_.length; index++) {
                         tx.push({
@@ -94,10 +137,21 @@ async function setup(Private_Key_) {
                             )
                             .encodeABI(), // amount = 1 or > 1
                     });
+                    baseGasPrice = gasPriceScan[0];
+                    txResend.nonce = nonce_;
+                    txResend.data = contract.methods
+                        .bid(
+                            seller_.toString(),
+                            index_.toString(),
+                            startTime_.toString(),
+                            priceList.toString(),
+                            amountBid.toString()
+                        )
+                        .encodeABI();
+                    txResend.gasPrice = gasPriceScan[0];
                 }
-                let checkSuccess = emoji.success;
+                checkSuccess = emoji.success;
                 let isAvailableAuctions = true;
-                let checkHashEach = "";
                 try {
                     let signed = [];
                     let biding = [];
@@ -106,6 +160,7 @@ async function setup(Private_Key_) {
                             await web3.eth.accounts.signTransaction(tx[index], Private_Key_)
                         );
                     }
+                    hashCheckStatus.push(signed[0].transactionHash);
                     if (Number(startTime_[0]) + timeSendTx - Date.now() / 1000 > 0) {
                         await sleep(
                             Number(startTime_[0]) +
@@ -137,13 +192,6 @@ async function setup(Private_Key_) {
                         );
                     }
                     console.log("Paying!!");
-                    try {
-                        if (dataBid.length < 14) {
-                            checkHashEach = signed[0].transactionHash;
-                        }
-                    } catch (error) {
-                        console.log("check hash fail");
-                    }
                     for (let index = 0; index < tx.length; index++) {
                         if (!isAvailableAuctions) {
                             break;
@@ -151,14 +199,17 @@ async function setup(Private_Key_) {
                         if (tx.length == 1) {
                             try {
                                 checkSuccess = emoji.success;
-                                const sendEach = await web3.eth.sendSignedTransaction(
+                                const sendEach = /** await */ web3.eth.sendSignedTransaction(
                                     signed[index].rawTransaction
                                 );
-                                console.log("Successful bid! At block:", sendEach.blockNumber);
                             } catch (error) {
                                 console.log("Fail...setting new time");
                                 checkSuccess = emoji.fail;
                             }
+                            await sleep(6000);
+                            txResend.data = "";
+                            baseGasPrice = 0;
+                            txResend.gasPrice = 0;
                         } else {
                             if (index == tx.length - 1) {
                                 try {
@@ -200,35 +251,60 @@ async function setup(Private_Key_) {
                             " " + ((Number(priceList[q]) - 10 ** 14) / 10 ** 18).toFixed(2)
                         );
                     }
-                    priceList1 =
-                        checkSuccess +
-                        " " +
-                        gasPriceScanRaw +
-                        "\nPrices   : " +
-                        price_send.toString().replace(" ", "") +
-                        "\nAmount: " +
-                        amountList +
-                        "\nID List   : " +
-                        idList;
+                    priceList1 = ` ${gasPriceScanRaw}-${maxGasPricePerFee}\nPrices   : ${price_send
+                        .toString()
+                        .replace(" ", "")}\nAmount: ${amountList}\nID List   : ${idList}`;
+                    maxGasPricePerFee = "0";
                     if (!isAvailableAuctions) {
-                        priceList1 = `Auction be canceled by ${seller_[0]}`;
+                        priceList1 = `Auction be canceled by ${seller_[0].slice(
+                            0,
+                            6
+                        )}...${seller_[0].slice(38, 42)}`;
+                        txResend.data = "";
+                        baseGasPrice = 0;
+                        txResend.gasPrice = 0;
+                        hashCheckStatus = [];
                         console.log(priceList1);
                     }
                 } catch (error) {}
                 try {
-                    if (checkHashEach) {
-                        await sleep(1000); //sleep to avoid pending hash
-                        timeSendReal = await web3.eth.getTransaction(checkHashEach);
-                        timeSendReal = await web3.eth.getBlock(timeSendReal.blockNumber);
+                    if (hashCheckStatus.length) {
+                        let receiptCheckStatus = "";
+                        await sleep(1500); //sleep to avoid pending hash
+                        for (let i = 0; i < hashCheckStatus.length; i++) {
+                            receiptCheckStatus = await web3.eth.getTransactionReceipt(
+                                hashCheckStatus[i]
+                            );
+                            if (!receiptCheckStatus) continue;
+                            if (receiptCheckStatus.status) {
+                                priceList1 = `${emoji.success} ${priceList1}`;
+                                break;
+                            } else {
+                                priceList1 = `${emoji.fail} ${priceList1}`;
+                                break;
+                            }
+                        }
+                        const maxGasSent = (
+                            Number(receiptCheckStatus.effectiveGasPrice) /
+                            10 ** 9
+                        ).toFixed(3);
+                        priceList1 = `${maxGasSent} ${priceList1}`;
+                        hashCheckStatus = [];
+                        if (receiptCheckStatus.status) {
+                            console.log("Success bid!! At block:", receiptCheckStatus.blockNumber);
+                        } else {
+                            console.log("Fail bid!! At block:", receiptCheckStatus.blockNumber);
+                        }
+                        timeSendReal = await web3.eth.getBlock(receiptCheckStatus.blockNumber);
                         timeSendReal = timeSendReal.timestamp;
-                        console.log("timeStampFail:", timeSendReal);
+                        console.log("timeStampWrong:", timeSendReal);
                     }
                     if (
                         timeSendReal.toFixed() != (Number(startTime_[0]) + 120).toFixed() &&
                         timeSendReal > 1.7 * 10 ** 9
                     ) {
                         const oldTimeBid = timeSendTx;
-                        if (Math.abs(Number(startTime_[0]) + 120 - timeSendReal) < 3600) {
+                        if (Math.abs(Number(startTime_[0]) + 120 - timeSendReal) < 100) {
                             if (
                                 timeSendReal < Number(startTime_[0]) + 120 ||
                                 timeSendReal - (Number(startTime_[0]) + 120) > 10
@@ -260,6 +336,7 @@ async function setup(Private_Key_) {
                         );
                     }
                 } catch (error) {
+                    hashCheckStatus = [];
                     console.log(error);
                 }
                 try {
@@ -306,11 +383,78 @@ async function setup(Private_Key_) {
         }
     }
 }
+const enemys = [
+    0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2, 0x946398fb54a90d3512e9be5f5f66456f2f760215,
+    0x06e8e9e60eba78495f166d73333a10fa49b23f8c, 0x914ddecd7238a2b2858808c227969f74eb276288,
+    0x8ac62c00be7bb8d1cc2ea1f9d62daf51129e916f,
+];
+const checkEnemy = (toAdd) => {
+    for (let i = 0; i < enemys.length; i++) {
+        if (toAdd == enemys[i]) return true;
+    }
+    return false;
+};
+const resendTxNewGasPrice = async (newGasPriceSend) => {
+    try {
+        if (Number(newGasPriceSend) < 50 * 10 ** 9) {
+            // max gas price 20 gwei, depend on 50% profit
+            if (txResend.gasPrice * 1.1 > newGasPriceSend) {
+                txResend.gasPrice = Math.floor(Number(txResend.gasPrice) * 1.1 + 10 ** 8);
+            } else {
+                txResend.gasPrice = Math.floor(Number(newGasPriceSend) + 10 ** 8);
+            }
+            var tx = new Tx(txResend, { common: chain });
+            tx.sign(privateKey);
+            var serializedTx = tx.serialize();
+            web3.eth.sendSignedTransaction("0x" + serializedTx.toString("hex")).then((hash) => {
+                hashCheckStatus.push(hash.receipt.transactionHash);
+            });
+            console.log("New gasPrice: ", txResend.gasPrice);
+        } else {
+            console.log("Gas price over 50Gwei");
+        }
+    } catch (err) {
+        console.error(err);
+    }
+};
 async function bid() {
     const Private_Key = process.env.PRIVATE_KEY_BID;
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     let hourCache = new Date().getHours() - 4;
+    getPendingTransactions.on("data", (txHash) => {
+        setTimeout(async () => {
+            try {
+                if (txResend.data) {
+                    web3.eth
+                        .getTransaction(txHash)
+                        .then((tx) => {
+                            if (tx != null) {
+                                if (checkEnemy(tx.to)) {
+                                    console.log(tx.hash, tx.gasPrice, tx.from);
+                                    if (
+                                        Number(tx.gasPrice) > 3 * 10 ** 9 &&
+                                        Number(tx.gasPrice) > Number(txResend.gasPrice) &&
+                                        Number(tx.gasPrice) < Number(maxGasPricePerFee) * 10 ** 9
+                                    ) {
+                                        resendTxNewGasPrice(tx.gasPrice);
+                                    } else {
+                                        console.log(
+                                            `Gas price is not in range: 3Gwei - ${maxGasPricePerFee}Gwei or lower current gas price`
+                                        );
+                                    }
+                                }
+                            }
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                }
+            } catch (err) {
+                console.error("err");
+            }
+        });
+    });
     while (true) {
         if (Math.abs(new Date().getHours() - hourCache) >= 4) {
             try {

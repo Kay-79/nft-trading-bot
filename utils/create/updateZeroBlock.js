@@ -7,6 +7,7 @@ const { sleep } = require("../common/sleep");
 const myaccs = configJson.myAcc;
 const Web3 = require("web3");
 const web3 = new Web3(configJson.rpcs.change);
+// const web3 = new Web3("https://bsc-dataseed3.bnbchain.org");
 const updateZeroBlock = async () => {
     let newDataZero = "";
     let contracts = myaccs.map((e) => e[0]);

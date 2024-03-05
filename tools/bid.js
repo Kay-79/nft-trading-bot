@@ -151,16 +151,16 @@ async function setup(Private_Key_) {
                         )
                         .encodeABI();
                     // signedResend = [0, 0.5, 1, 1.5, 2, 2.5, 3];
-                    for (let i = 7; i < 41; i++) {
+                    // for (let i = 7; i < 41; i++) {
                         // max is 20Gwei
-                        txResend.gasPrice = Number((i * 0.5 * 10 ** 9).toFixed());
+                        // txResend.gasPrice = Number((i * 0.5 * 10 ** 9).toFixed());
                         // signedResend.push(
                         //     await web3.eth.accounts.signTransaction(
                         //         txResend,
                         //         process.env.PRIVATE_KEY_BID
                         //     )
                         // );
-                    }
+                    // }
                     txResend.gasPrice = gasPriceScan[0];
                 }
                 checkSuccess = emoji.success;

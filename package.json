@@ -23,6 +23,7 @@
         "find": "node ./tools/find",
         "find2": "node ./tools/findBSC",
         "bid": "node ./tools/bid",
+        "bidB": "node ./tools/bidBlock",
         "create": "node ./tools/createBSC",
         "change": "node ./tools/change",
         "transfer": "node ./tools/transfer",
