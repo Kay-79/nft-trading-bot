@@ -152,14 +152,14 @@ async function setup(Private_Key_) {
                         .encodeABI();
                     // signedResend = [0, 0.5, 1, 1.5, 2, 2.5, 3];
                     // for (let i = 7; i < 41; i++) {
-                        // max is 20Gwei
-                        // txResend.gasPrice = Number((i * 0.5 * 10 ** 9).toFixed());
-                        // signedResend.push(
-                        //     await web3.eth.accounts.signTransaction(
-                        //         txResend,
-                        //         process.env.PRIVATE_KEY_BID
-                        //     )
-                        // );
+                    // max is 20Gwei
+                    // txResend.gasPrice = Number((i * 0.5 * 10 ** 9).toFixed());
+                    // signedResend.push(
+                    //     await web3.eth.accounts.signTransaction(
+                    //         txResend,
+                    //         process.env.PRIVATE_KEY_BID
+                    //     )
+                    // );
                     // }
                     txResend.gasPrice = gasPriceScan[0];
                 }
@@ -424,9 +424,9 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
         if (Number(newGasPriceSend) < 50 * 10 ** 9) {
             // max gas price 20 gwei, depend on 50% profit
             if (txResend.gasPrice * 1.1 > newGasPriceSend) {
-                txResend.gasPrice = Math.floor(Number(txResend.gasPrice) * 1.1 + 10 ** 8);
+                txResend.gasPrice = Math.floor(Number(txResend.gasPrice) * 1.3 + 10 ** 8);
             } else {
-                txResend.gasPrice = Math.floor(Number(newGasPriceSend) + 10 ** 8);
+                txResend.gasPrice = Math.floor(Number(newGasPriceSend) + 10 ** 9);
             }
             var tx = new Tx(txResend, { common: chain });
             tx.sign(privateKey);
