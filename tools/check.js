@@ -377,14 +377,20 @@ async function checkListedAll(rate_) {
         (Number(currentDate.getMonth()) + 1).toString() +
         "/" +
         currentDate.getFullYear();
-    const daysAgo = Math.floor((currentDate - firstListTime * 1000) / (24 * 60 * 60 * 1000));
+    let daysAgo = (currentDate - firstListTime * 1000) / (24 * 60 * 60 * 1000);
+    if (daysAgo < 1) {
+        daysAgo = `${(daysAgo * 24).toFixed(0)} hours ago`;
+    } else {
+        daysAgo = `${daysAgo.toFixed(0)} days ago`;
+    }
+
     let datetime = "Last Sync: " + currentDate.getHours() + ":" + currentDate.getMinutes();
     console.log(
         `${sumMomo}/${momoUnlist} Momos: ${sumMomoCM} Common, ${sumMomoUCM} Uncommon, ${sumMomoUNQ} Unique, ${sumMomoR} Rare, ${sumMomoE} Epic, ${sumMomoL} Legend (${sumBuy.toFixed()}, ${(
             sumSell * 0.95
         ).toFixed()}) Profit: ${countProfit} - Lost: ${countLoss} - Tie: ${countTie} ${datetime}`
     );
-    console.log(`First list: ${daysAgo} days ago`);
+    console.log(`First list: ${daysAgo}`);
     try {
         let logsBalance = fs.readFileSync(logsPath, "utf8");
         let logsBalanceCheck = logsBalance.split("\n");
