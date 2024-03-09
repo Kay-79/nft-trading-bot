@@ -66,7 +66,7 @@ const config = {
         minRare: 14,
     },
     timeBid: 132.5,
-    accBuy: "0xfa11AA3953B46c12dC1fB5c880912A80BF52203A",
+    accBuy: "0xb8C5744D347A74484925E19F588719C846616405",
 };
 
 module.exports = config;
