@@ -362,6 +362,7 @@ async function loopCheck(times) {
             // await sleep(150000 + 300000 * Math.random()); //5mins per check
         }
         if (times > 1) {
+            console.log(`Wait ${(delayPerLoop / 1000).toFixed(0)} seconds...`);
             await sleep(delayPerLoop); // last change per loop
         }
     }
