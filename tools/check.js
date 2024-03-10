@@ -381,7 +381,7 @@ async function checkListedAll(rate_) {
     if (daysAgo < 1) {
         daysAgo = `${(daysAgo * 24).toFixed(0)} hours ago`;
     } else {
-        daysAgo = `${daysAgo.toFixed(0)} days ${((daysAgo % 1) * 24).toFixed(0)} hours ago`;
+        daysAgo = `${Math.floor(daysAgo)} days ${((daysAgo % 1) * 24).toFixed(0)} hours ago`;
     }
 
     let datetime = "Last Sync: " + currentDate.getHours() + ":" + currentDate.getMinutes();
