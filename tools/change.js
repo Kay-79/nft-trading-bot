@@ -1,5 +1,6 @@
 require("dotenv").config();
 const axios = require("axios");
+const request = require("request");
 const fs = require("fs");
 const Web3 = require("web3");
 const configJson = require("../config/config");
@@ -11,7 +12,8 @@ process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
 });
 const changer = configJson.changer;
-
+const apiTele = process.env.api_telegram;
+const chatId = process.env.chatId_mobox;
 const shuffleArray = require("../utils/change/shuffleArray");
 const checkReject = require("../utils/change/checkEnemyToReject");
 const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
@@ -212,12 +214,30 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                             .sendSignedTransaction(signArray[index].rawTransaction)
                             .catch((err) => {
                                 console.error(err);
+                                request(
+                                    "https://api.telegram.org/" +
+                                        apiTele +
+                                        "/sendMessage?chat_id=@" +
+                                        chatId +
+                                        "&text=" +
+                                        err.message,
+                                    function (error, response, body) {}
+                                );
                             });
                     } else {
                         web3.eth
                             .sendSignedTransaction(signArray[index].rawTransaction)
                             .catch((err) => {
                                 console.error(err);
+                                request(
+                                    "https://api.telegram.org/" +
+                                        apiTele +
+                                        "/sendMessage?chat_id=@" +
+                                        chatId +
+                                        "&text=" +
+                                        err.message,
+                                    function (error, response, body) {}
+                                );
                             });
                     }
                     // console.log(signChange.blockNumber)
