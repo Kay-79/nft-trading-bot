@@ -7,7 +7,7 @@ const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
 const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
-const web3Resend = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
+// const web3Resend = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
@@ -433,11 +433,9 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
             tx.sign(privateKey);
             var serializedTx = tx.serialize();
             // console.log(serializedTx.toString("hex"));
-            web3Resend.eth
-                .sendSignedTransaction("0x" + serializedTx.toString("hex"))
-                .then((hash) => {
-                    hashCheckStatus.push(hash.receipt.transactionHash);
-                });
+            web3rpc.eth.sendSignedTransaction("0x" + serializedTx.toString("hex")).then((hash) => {
+                hashCheckStatus.push(hash.receipt.transactionHash);
+            });
             console.log("New gasPrice: ", txResend.gasPrice);
             // for (let i = 7; i < 41; i++) {
             //     if (
