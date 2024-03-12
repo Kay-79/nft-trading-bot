@@ -42,6 +42,7 @@ const updateZeroBlock = async () => {
         fs.writeFileSync("./data/zeroBlock.csv", newDataZero);
         await sleep(1000);
     } catch (error) {
+        console.log(error);
         console.log("Update with real device!!");
         exit();
     }
