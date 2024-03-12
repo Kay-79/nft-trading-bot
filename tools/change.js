@@ -369,7 +369,6 @@ async function main(address_, boolMin, Private_Key_) {
 async function loopCheck(times) {
     for (let index = 0; index < times; index++) {
         console.log("Loop:", index.toString() + "/" + times.toString());
-        minPrices = await getMinPrice();
         idChangeds = [];
         shuffleArray(myAccounts);
         for (let indexAccs = 0; indexAccs < myAccounts.length; indexAccs++) {
@@ -377,6 +376,8 @@ async function loopCheck(times) {
             if (!Number(isContract)) {
                 continue;
             }
+            minPrices = await getMinPrice();
+            console.log("MinPrice:", minPrices);
             console.log("Account:", myAccounts[indexAccs]);
             await main(myAccounts[indexAccs], true, Private_Key);
             // await sleep(150000 + 300000 * Math.random()); //5mins per check
