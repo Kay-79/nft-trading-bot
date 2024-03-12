@@ -6,7 +6,7 @@ const getBlockByTime = async (web3_, time_) => {
     let blockNumber = await web3_.eth.getBlockNumber();
     let block = await web3_.eth.getBlock(blockNumber);
     while (true) {
-        await sleep(100);
+        await sleep(1000);
         const amountBlock = Math.floor(Math.abs(block.timestamp - time_) / 3);
         if (block.timestamp > time_) {
             block = await web3_.eth.getBlock((blockNumber -= amountBlock == 0 ? 1 : amountBlock));
@@ -19,6 +19,13 @@ const getBlockByTime = async (web3_, time_) => {
         } else {
             console.log(block.timestamp);
             break;
+        }
+        if (Math.abs(block.timestamp - time_) < 3) {
+            if (block.timestamp > time_) {
+                return block.number;
+            } else if (block.timestamp < time_) {
+                return block.number - 1;
+            }
         }
     }
     console.log(block.number);

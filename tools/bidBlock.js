@@ -7,6 +7,8 @@ const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
 const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
+// const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.mainnet));
+// const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
@@ -20,7 +22,7 @@ const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const contractAddress = configJson.accBuy;
-const contract = new web3.eth.Contract(abi, contractAddress);
+const contract = new web3rpc.eth.Contract(abi, contractAddress);
 const overTime = 180;
 const timeGetAvaliableAuction = 5;
 let timeSendTx = configJson.timeBid;
@@ -28,6 +30,7 @@ const emoji = configJson.emojiURL;
 const Tx = require("ethereumjs-tx").Transaction;
 const privateKey = Buffer.from(process.env.PRIVATE_KEY_BID_BUFFER, "hex");
 const common = require("ethereumjs-common");
+const getBlockByTime = require("../utils/bid/getBlockByTime");
 const chain = common.default.forCustomChain(
     "mainnet",
     {
@@ -72,6 +75,7 @@ async function setup(Private_Key_) {
         let timeSendReal = 0;
         let priceList1 = "";
         const startTime_ = dataBid[3].split(",");
+        let blockCreate = await getBlockByTime(web3rpc, Number(startTime_[0]));
         const index_ = dataBid[2].split(",");
         if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 15) {
             const seller_ = dataBid[0].split(",");
@@ -397,16 +401,15 @@ const checkEnemy = (toAdd) => {
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
         if (Number(newGasPriceSend) < 50 * 10 ** 9) {
-            // max gas price 20 gwei, depend on 50% profit
             if (txResend.gasPrice * 1.1 > newGasPriceSend) {
-                txResend.gasPrice = Math.floor(Number(txResend.gasPrice) * 1.1 + 10 ** 8);
+                txResend.gasPrice = Math.floor(Number(txResend.gasPrice) * 1.3 + 10 ** 8);
             } else {
-                txResend.gasPrice = Math.floor(Number(newGasPriceSend) + 10 ** 8);
+                txResend.gasPrice = Math.floor(Number(newGasPriceSend) + 10 ** 9);
             }
             var tx = new Tx(txResend, { common: chain });
             tx.sign(privateKey);
             var serializedTx = tx.serialize();
-            web3.eth.sendSignedTransaction("0x" + serializedTx.toString("hex")).then((hash) => {
+            web3rpc.eth.sendSignedTransaction("0x" + serializedTx.toString("hex")).then((hash) => {
                 hashCheckStatus.push(hash.receipt.transactionHash);
             });
             console.log("New gasPrice: ", txResend.gasPrice);
@@ -418,6 +421,9 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
     }
 };
 async function bid() {
+    // let blockCreate = await getBlockByTime(web3rpc, 1710252071);
+    // console.log(blockCreate);
+    // exit();
     const Private_Key = process.env.PRIVATE_KEY_BID;
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
@@ -471,7 +477,7 @@ async function bid() {
             }
         }
         await setup(Private_Key);
-        await sleep(100);
+        await sleep(5000);
     }
 }
 
