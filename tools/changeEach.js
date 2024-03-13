@@ -39,6 +39,6 @@ async function sendTxt(addressSC, gasPrice_, gasLimit_, index_, prices_) {
 }
 
 const getIndexs = async (address) => {
-    sendTxt(address, 3.0001, 1000000, "77", "2450000000000000000");
+    sendTxt(address, 3.0001, 1000000, "1", "500000000000000000");
 };
 getIndexs("0x891016f99BA622F8556bE12B4EA336157aA6cb20");
