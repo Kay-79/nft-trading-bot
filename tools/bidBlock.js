@@ -31,6 +31,7 @@ const Tx = require("ethereumjs-tx").Transaction;
 const privateKey = Buffer.from(process.env.PRIVATE_KEY_BID_BUFFER, "hex");
 const common = require("ethereumjs-common");
 const getBlockByTime = require("../utils/bid/getBlockByTime");
+let isFrontRun = false;
 const chain = common.default.forCustomChain(
     "mainnet",
     {
@@ -178,15 +179,27 @@ async function setup(Private_Key_) {
                             startTime_[0]
                         );
                         if (isAvailableAuctions) {
-                            console.log(
-                                "Sleep:" +
-                                    (
-                                        Number(startTime_[0]) +
-                                        timeSendTx -
-                                        Date.now() / 1000
-                                    ).toFixed(3)
-                            );
-                            await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
+                            // console.log(
+                            //     "Sleep:" +
+                            //         (
+                            //             Number(startTime_[0]) +
+                            //             timeSendTx -
+                            //             Date.now() / 1000
+                            //         ).toFixed(3)
+                            // );
+                            // await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
+                            while (true) {
+                                nowBlock = await web3rpc.eth.getBlockNumber();
+                                if (blockCreate + 38 == nowBlock) {
+                                    //control time to send here
+                                    isFrontRun = true;
+                                    break;
+                                }
+                                if (Math.abs(blockCreate - nowBlock) > 100) {
+                                    break;
+                                }
+                                await sleep(100);
+                            }
                         }
                     } else {
                         isAvailableAuctions = await checkAvailable(
@@ -210,7 +223,8 @@ async function setup(Private_Key_) {
                                 console.log("Fail...setting new time");
                                 checkSuccess = emoji.fail;
                             }
-                            await sleep(6000);
+                            await sleep(7000);
+                            isFrontRun = false;
                             txResend.data = "";
                             baseGasPrice = 0;
                             txResend.gasPrice = 0;
@@ -431,7 +445,7 @@ async function bid() {
     getPendingTransactions.on("data", (txHash) => {
         setTimeout(async () => {
             try {
-                if (txResend.data) {
+                if (txResend.data && isFrontRun) {
                     web3.eth
                         .getTransaction(txHash)
                         .then((tx) => {

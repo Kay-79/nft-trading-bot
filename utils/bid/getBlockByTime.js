@@ -22,9 +22,9 @@ const getBlockByTime = async (web3_, time_) => {
         }
         if (Math.abs(block.timestamp - time_) < 3) {
             if (block.timestamp > time_) {
-                return block.number;
-            } else if (block.timestamp < time_) {
                 return block.number - 1;
+            } else if (block.timestamp < time_) {
+                return block.number + 1;
             }
         }
     }
