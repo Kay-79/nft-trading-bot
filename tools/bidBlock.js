@@ -76,9 +76,10 @@ async function setup(Private_Key_) {
         let timeSendReal = 0;
         let priceList1 = "";
         const startTime_ = dataBid[3].split(",");
-        const blockCreate = await getBlockByTime(web3rpc, Number(startTime_[0]));
+        let blockCreate = 0;
         const index_ = dataBid[2].split(",");
         if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 15) {
+            blockCreate = await getBlockByTime(web3rpc, Number(startTime_[0]));
             const seller_ = dataBid[0].split(",");
             const priceList = dataBid[1].split(",");
             const amountList = dataBid[5].split(",");
@@ -190,7 +191,7 @@ async function setup(Private_Key_) {
                             // await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
                             while (true) {
                                 nowBlock = await web3rpc.eth.getBlockNumber();
-                                if (blockCreate + 39 == nowBlock) {
+                                if (blockCreate + 39 <= nowBlock) {
                                     //control time to send here
                                     isFrontRun = true;
                                     break;
