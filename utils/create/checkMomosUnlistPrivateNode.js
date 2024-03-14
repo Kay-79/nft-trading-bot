@@ -7,7 +7,7 @@ const configJson = require("../../config/config");
 const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
 const { getZeroBlockCsv } = require("./getZeroBlockCsv");
-const { getBlockByTime } = require("../bid/getBlockByTime");
+const  getBlockByTime  = require("../bid/getBlockByTime");
 let inventory = {};
 let dataBid = {};
 
