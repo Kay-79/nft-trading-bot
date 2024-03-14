@@ -7,7 +7,8 @@ const configJson = require("../../config/config");
 const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
 const { getZeroBlockCsv } = require("./getZeroBlockCsv");
-const  getBlockByTime  = require("../bid/getBlockByTime");
+const getBlockByTime = require("../bid/getBlockByTime");
+const { sleep, ranSleep } = require("../common/sleep");
 let inventory = {};
 let dataBid = {};
 
@@ -113,8 +114,6 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
     console.log(`First block is: ${dataBlock}`);
     await getMomosBided(dataBlock, nowBlock, hexAddress);
     await getMomosListed(dataBlock, nowBlock, hexAddress);
-    inventory[addressCheck]["momo"] = dataBid;
-    inventory[addressCheck]["block"] = nowBlock;
     let momoUnlist = [];
     for (let i = 10000; i < 40000; i++) {
         if (dataBid[i]) {
@@ -123,10 +122,14 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
             }
         }
     }
-    fs.writeFileSync("./data/inventory.json", JSON.stringify(inventory));
     console.log(momoUnlist.length);
     console.log(momoUnlist.toString());
     console.log(addressCheck);
+    inventory[addressCheck]["momo"] = dataBid;
+    inventory[addressCheck]["block"] = nowBlock;
+    inventory[addressCheck]["amount"] = momoUnlist.length;
+    fs.writeFileSync("./data/inventory.json", JSON.stringify(inventory));
+    await sleep(1000);
     return momoUnlist;
 };
 
