@@ -1,4 +1,5 @@
 require("dotenv").config();
+const fs = require("fs");
 const axios = require("axios");
 const Web3 = require("web3");
 const { exit } = require("process");
@@ -7,6 +8,7 @@ const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
 const { getZeroBlockCsv } = require("./getZeroBlockCsv");
 let dataBid = {};
+let inventory = require("../../data/inventory.json");
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
@@ -98,7 +100,8 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
 };
 
 const checkMomosUnlistPrivateNode = async (addressCheck) => {
-    dataBid = {}; // reset data
+    // console.log(inventory[addressCheck]["block"]);
+    dataBid = inventory[addressCheck]["momo"];
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
     let nowBlock = await axios
         .get(
@@ -113,10 +116,13 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
     nowBlock = nowBlock.data.result;
     console.log(nowBlock);
     // const dataBlock = await getZeroBlockApi(nowBlock, hexAddress);
-    const dataBlock = getZeroBlockCsv(addressCheck);
+    // const dataBlock = getZeroBlockCsv(addressCheck);
+    const dataBlock = inventory[addressCheck]["block"] + 1;
     console.log(`First block is: ${dataBlock}`);
     await getMomosBided(dataBlock, nowBlock, hexAddress);
     await getMomosListed(dataBlock, nowBlock, hexAddress);
+    inventory[addressCheck]["momo"] = dataBid;
+    inventory[addressCheck]["block"] = nowBlock;
     let momoUnlist = [];
     for (let i = 10000; i < 40000; i++) {
         if (dataBid[i]) {
@@ -125,6 +131,7 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
             }
         }
     }
+    fs.writeFileSync("./data/inventory.json", JSON.stringify(inventory));
     console.log(momoUnlist.length);
     console.log(momoUnlist.toString());
     console.log(addressCheck);
@@ -132,4 +139,4 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
 };
 
 module.exports = { checkMomosUnlistPrivateNode };
-// checkMomosUnlistPrivateNode("0x891016f99BA622F8556bE12B4EA336157aA6cb20");
+checkMomosUnlistPrivateNode("0x891016f99BA622F8556bE12B4EA336157aA6cb20");
