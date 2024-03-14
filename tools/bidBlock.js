@@ -78,7 +78,7 @@ async function setup(Private_Key_) {
         const startTime_ = dataBid[3].split(",");
         let blockCreate = 0;
         const index_ = dataBid[2].split(",");
-        if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 15) {
+        if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 30) {
             blockCreate = await getBlockByTime(web3rpc, Number(startTime_[0]));
             const seller_ = dataBid[0].split(",");
             const priceList = dataBid[1].split(",");
