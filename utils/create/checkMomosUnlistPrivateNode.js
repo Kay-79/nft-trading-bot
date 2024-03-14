@@ -7,8 +7,9 @@ const configJson = require("../../config/config");
 const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
 const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
 const { getZeroBlockCsv } = require("./getZeroBlockCsv");
+const { getBlockByTime } = require("../bid/getBlockByTime");
+let inventory = {};
 let dataBid = {};
-let inventory = require("../../data/inventory.json");
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
@@ -100,20 +101,11 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
 };
 
 const checkMomosUnlistPrivateNode = async (addressCheck) => {
-    // console.log(inventory[addressCheck]["block"]);
+    inventory = require("../../data/inventory.json");
+    console.log(inventory[addressCheck]["block"]);
     dataBid = inventory[addressCheck]["momo"];
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
-    let nowBlock = await axios
-        .get(
-            `https://api.bscscan.com/api?module=block&action=getblocknobytime&timestamp=${(
-                Date.now() / 1000
-            ).toFixed()}&closest=before&apikey=${process.env.BSC_API_KEY}`
-        )
-        .catch((e) => {
-            console.log("Err check block!!");
-            exit();
-        });
-    nowBlock = nowBlock.data.result;
+    let nowBlock = await getBlockByTime(web3, Date.now() / 1000);
     console.log(nowBlock);
     // const dataBlock = await getZeroBlockApi(nowBlock, hexAddress);
     // const dataBlock = getZeroBlockCsv(addressCheck);
