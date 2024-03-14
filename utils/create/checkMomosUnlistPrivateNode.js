@@ -106,7 +106,7 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
     console.log(inventory[addressCheck]["block"]);
     dataBid = inventory[addressCheck]["momo"];
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
-    let nowBlock = await getBlockByTime(web3, Date.now() / 1000);
+    let nowBlock = await getBlockByTime(web3, (Date.now() / 1000).toFixed(0));
     console.log(nowBlock);
     // const dataBlock = await getZeroBlockApi(nowBlock, hexAddress);
     // const dataBlock = getZeroBlockCsv(addressCheck);
