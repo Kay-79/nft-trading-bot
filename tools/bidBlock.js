@@ -329,13 +329,13 @@ async function setup(Private_Key_) {
                                 timeSendReal < Number(startTime_[0]) + 120 ||
                                 timeSendReal - (Number(startTime_[0]) + 120) > 10
                             ) {
-                                timeSendTx =
-                                    timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal);
-                                console.log("timeSend");
+                                // timeSendTx =
+                                //     timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal);
+                                // console.log("timeSend");
                             } else {
-                                timeSendTx =
-                                    timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 2;
-                                console.log("timeSend / 2");
+                                // timeSendTx =
+                                //     timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 2;
+                                // console.log("timeSend / 2");
                             }
                         }
                         const contentTimeBid = `Expect: ${(Number(startTime_[0]) + 120)
