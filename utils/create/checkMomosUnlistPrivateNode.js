@@ -9,7 +9,7 @@ const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
 const { getZeroBlockCsv } = require("./getZeroBlockCsv");
 const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep, ranSleep } = require("../common/sleep");
-let inventory = {};
+let momoStorage = {};
 let dataBid = {};
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
@@ -102,15 +102,15 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
 };
 
 const checkMomosUnlistPrivateNode = async (addressCheck) => {
-    inventory = require("../../data/inventory.json");
-    console.log(inventory[addressCheck]["block"]);
-    dataBid = inventory[addressCheck]["momo"];
+    momoStorage = require("../../data/momoStorage.json");
+    console.log(momoStorage[addressCheck]["block"]);
+    dataBid = momoStorage[addressCheck]["momo"];
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
     let nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0));
     console.log(nowBlock);
     // const dataBlock = await getZeroBlockApi(nowBlock, hexAddress);
     // const dataBlock = getZeroBlockCsv(addressCheck);
-    const dataBlock = inventory[addressCheck]["block"] + 1;
+    const dataBlock = momoStorage[addressCheck]["block"] + 1;
     console.log(`First block is: ${dataBlock}`);
     await getMomosBided(dataBlock, nowBlock, hexAddress);
     await getMomosListed(dataBlock, nowBlock, hexAddress);
@@ -125,10 +125,10 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
     console.log(momoUnlist.length);
     console.log(momoUnlist.toString());
     console.log(addressCheck);
-    inventory[addressCheck]["momo"] = dataBid;
-    inventory[addressCheck]["block"] = nowBlock;
-    // inventory[addressCheck]["amount"] = momoUnlist.length;
-    fs.writeFileSync("./data/inventory.json", JSON.stringify(inventory));
+    momoStorage[addressCheck]["momo"] = dataBid;
+    momoStorage[addressCheck]["block"] = nowBlock;
+    // momoStorage[addressCheck]["amount"] = momoUnlist.length;
+    fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
     await sleep(1000);
     return momoUnlist;
 };
