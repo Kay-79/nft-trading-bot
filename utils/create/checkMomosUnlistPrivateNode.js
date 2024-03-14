@@ -127,11 +127,11 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
     console.log(addressCheck);
     inventory[addressCheck]["momo"] = dataBid;
     inventory[addressCheck]["block"] = nowBlock;
-    inventory[addressCheck]["amount"] = momoUnlist.length;
+    // inventory[addressCheck]["amount"] = momoUnlist.length;
     fs.writeFileSync("./data/inventory.json", JSON.stringify(inventory));
     await sleep(1000);
     return momoUnlist;
 };
 
 module.exports = { checkMomosUnlistPrivateNode };
-checkMomosUnlistPrivateNode("0x891016f99BA622F8556bE12B4EA336157aA6cb20");
+// checkMomosUnlistPrivateNode("0x891016f99BA622F8556bE12B4EA336157aA6cb20");

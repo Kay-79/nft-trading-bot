@@ -10,6 +10,7 @@ const { sleep, ranSleep } = require("../utils/common/sleep");
 const { abiAmount } = require("../abi/abiCheckUnlist");
 const { updateZeroBlock } = require("../utils/create/updateZeroBlock");
 const getMinPrice = require("../utils/common/getMinPrice");
+const { updateInventory } = require("../utils/create/updateInventory");
 
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
@@ -364,8 +365,10 @@ const create = async () => {
         priceList = [];
         ids = [];
     }
+    sleep(4000);
     console.log("Updating zero block");
     await updateZeroBlock();
+    await updateInventory(myAccounts);
 };
 create();
 // module.exports = { create };
