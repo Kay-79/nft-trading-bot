@@ -11,6 +11,7 @@ const { abiAmount } = require("../abi/abiCheckUnlist");
 const { updateZeroBlock } = require("../utils/create/updateZeroBlock");
 const getMinPrice = require("../utils/common/getMinPrice");
 const { updateInventory } = require("../utils/create/updateInventory");
+const prepareBatch = require("../utils/create/prepareBatch");
 
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
@@ -297,6 +298,17 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     console.log(amountBatchToCreate);
     if (amountBatchToCreate < 6) return;
     await getPriceToSell(accSell, true); //_1_0_1
+    const BatchPrepare = prepareBatch(idMomoBought, priceSell);
+    idMomoBought = BatchPrepare[0];
+    priceSell = BatchPrepare[1];
+    console.log(idMomoBought);
+    console.log(priceSell);
+    exit();
+    //
+    //
+    //
+    //
+    //
     let count = 0;
     while (true) {
         if (hexData_.length > 0) {
