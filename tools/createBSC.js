@@ -115,6 +115,17 @@ async function checkChangePrice(indexId) {
 async function getPriceToSell(address, boolMin) {
     idMomoBought = [];
     idMomoBought = await checkMomosUnlistPrivateNode(address);
+    const BatchPrepare = prepareBatch(idMomoBought, priceSell);
+    idMomoBought = BatchPrepare[0];
+    priceSell = BatchPrepare[1];
+    console.log(idMomoBought);
+    console.log(priceSell);
+    // exit();
+    //
+    //
+    //
+    //
+    //
     value = idMomoBought.length;
     console.log(idMomoBought.toString());
     if (idMomoBought.length != value) {
@@ -298,17 +309,6 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     console.log(amountBatchToCreate);
     if (amountBatchToCreate < 6) return;
     await getPriceToSell(accSell, true); //_1_0_1
-    const BatchPrepare = prepareBatch(idMomoBought, priceSell);
-    idMomoBought = BatchPrepare[0];
-    priceSell = BatchPrepare[1];
-    console.log(idMomoBought);
-    console.log(priceSell);
-    exit();
-    //
-    //
-    //
-    //
-    //
     let count = 0;
     while (true) {
         if (hexData_.length > 0) {
