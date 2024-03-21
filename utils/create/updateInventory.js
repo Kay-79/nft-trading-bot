@@ -6,7 +6,7 @@ const updateInventory = async (contractBuys) => {
         if (contractBuys[i] === config.changer || contractBuys[i] === config.bidder) {
             continue;
         }
-        await checkMomosUnlistPrivateNode(contractBuys[i]);
+        await checkMomosUnlistPrivateNode(contractBuys[i], true);
     }
 };
 module.exports = { updateInventory };

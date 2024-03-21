@@ -101,7 +101,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     } catch (error) {}
 };
 
-const checkMomosUnlistPrivateNode = async (addressCheck) => {
+const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     momoStorage = require("../../data/momoStorage.json");
     console.log(momoStorage[addressCheck]["block"]);
     dataBid = momoStorage[addressCheck]["momo"];
@@ -128,7 +128,10 @@ const checkMomosUnlistPrivateNode = async (addressCheck) => {
     momoStorage[addressCheck]["momo"] = dataBid;
     momoStorage[addressCheck]["block"] = nowBlock;
     // momoStorage[addressCheck]["amount"] = momoUnlist.length;
-    fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
+    if (boolSaveInventory) {
+        fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
+    }
+    // fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
     await sleep(1000);
     return momoUnlist;
 };
