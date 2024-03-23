@@ -121,6 +121,9 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
                 momoUnlist.push(`${i}`);
             }
         }
+        if (Number(dataBid[i]) == 0) {
+            delete dataBid[i];
+        }
     }
     console.log(momoUnlist.length);
     console.log(momoUnlist.toString());
