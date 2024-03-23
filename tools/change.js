@@ -210,6 +210,7 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                 try {
                     // console.log('Changing!')
                     if (index == signArray.length - 1) {
+                        let isCrash = false;
                         await web3.eth
                             .sendSignedTransaction(signArray[index].rawTransaction)
                             .catch((err) => {
@@ -223,7 +224,14 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                                         err.message,
                                     function (error, response, body) {}
                                 );
+                                if (err.message.includes("750")) {
+                                    isCrash = true;
+                                }
                             });
+                        if (isCrash) {
+                            await sleep(5000);
+                            exit();
+                        }
                     } else {
                         web3.eth
                             .sendSignedTransaction(signArray[index].rawTransaction)
