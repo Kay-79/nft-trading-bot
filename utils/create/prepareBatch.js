@@ -1,13 +1,8 @@
 const shuffleArray = require("../change/shuffleArray");
-const prepareBatch = (arrId, arrPrice) => {
+const prepareBatch = (arrId, arrPrice, amount) => {
     var combinedArray = arrId.map(function (item, index) {
         return [item, arrPrice[index]];
     });
-
-    // // Xáo trộn mảng item
-    // arrId.sort(function () {
-    //     return 0.5 - Math.random();
-    // });
     let arrCommon = [];
     let arrUncommon = [];
     let arrUnique = [];
@@ -30,16 +25,25 @@ const prepareBatch = (arrId, arrPrice) => {
     shuffleArray(arrUncommon);
     shuffleArray(arrUnique);
     arrId = arrCommon.concat(arrUncommon, arrUnique);
-    // Lấy lại mảng giá dựa trên sự thay đổi của mảng item
     var shuffledPrices = arrId.map(function (item) {
         return combinedArray.find(function (element) {
             return element[0] === item;
         })[1];
     });
-
-    // console.log("Mả", arrId);
-    // console.log("Mảng giá tương ứng:", shuffledPrices);
-    return [arrId, shuffledPrices];
+    //sort array by id amount/all
+    let arrIdNew = [];
+    let arrPriceNew = [];
+    for (let i = 0; i < amount; i++) {
+        arrIdNew.push(arrId[i]);
+        arrPriceNew.push(shuffledPrices[i]);
+    }
+    arrIdNew.sort(function (a, b) {
+        return a - b;
+    });
+    arrPriceNew.sort(function (a, b) {
+        return a - b;
+    });
+    return [arrIdNew, arrPriceNew];
 };
 module.exports = prepareBatch;
 // prepareBatch(

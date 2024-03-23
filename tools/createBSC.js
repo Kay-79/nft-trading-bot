@@ -115,7 +115,7 @@ async function checkChangePrice(indexId) {
 async function getPriceToSell(address, boolMin) {
     idMomoBought = [];
     idMomoBought = await checkMomosUnlistPrivateNode(address, false);
-    const BatchPrepare = prepareBatch(idMomoBought, priceSell);
+    const BatchPrepare = prepareBatch(idMomoBought, priceSell, amountBatchToCreate * 6);
     idMomoBought = BatchPrepare[0];
     priceSell = BatchPrepare[1];
     console.log(idMomoBought);
