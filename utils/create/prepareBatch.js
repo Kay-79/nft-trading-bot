@@ -43,6 +43,10 @@ const prepareBatch = (arrId, arrPrice, amount) => {
     arrPriceNew.sort(function (a, b) {
         return a - b;
     });
+    for (let i = amount; i < arrId.length; i++) {
+        arrIdNew.push(arrId[i]);
+        arrPriceNew.push(shuffledPrices[i]);
+    }
     return [arrIdNew, arrPriceNew];
 };
 module.exports = prepareBatch;
