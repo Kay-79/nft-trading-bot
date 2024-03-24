@@ -34,6 +34,6 @@ const getBlockByTime = async (web3_, time_) => {
 module.exports = getBlockByTime;
 
 // Test
-const Web3 = require("web3");
-const web3 = new Web3("https://bsc-dataseed3.bnbchain.org");
-getBlockByTime(web3, "1711253261");
+// const Web3 = require("web3");
+// const web3 = new Web3("https://bsc-dataseed3.bnbchain.org");
+// getBlockByTime(web3, "1711253261");
