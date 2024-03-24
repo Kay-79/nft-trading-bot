@@ -1,36 +1,39 @@
-// const Web3 = require("web3");
-// const web3 = new Web3("https://bsc-dataseed3.bnbchain.org");
-
-const { sleep, ranSleep } = require("../common/sleep");
+const { sleep } = require("../common/sleep");
 const getBlockByTime = async (web3_, time_) => {
     let blockNumber = await web3_.eth.getBlockNumber();
     let block = await web3_.eth.getBlock(blockNumber);
     while (true) {
-        await sleep(1000);
-        const amountBlock = Math.floor(Math.abs(block.timestamp - time_) / 3);
-        if (block.timestamp > time_) {
-            block = await web3_.eth.getBlock((blockNumber -= amountBlock == 0 ? 1 : amountBlock));
-            console.log(block.timestamp);
-            // break;
-        } else if (block.timestamp < time_) {
-            block = await web3_.eth.getBlock((blockNumber += amountBlock == 0 ? 1 : amountBlock));
-            console.log(block.timestamp);
-            // break;
-        } else {
-            console.log(block.timestamp);
-            break;
-        }
-        if (Math.abs(block.timestamp - time_) < 3) {
+        for (let i = 0; i < 3; i++) {
+            await sleep(1000);
+            const amountBlock = Math.floor(Math.abs(block.timestamp - time_) / 3);
             if (block.timestamp > time_) {
+                blockNumber -= amountBlock == 0 ? 1 : amountBlock;
+                block = await web3_.eth.getBlock(blockNumber);
+                console.log(block.timestamp, typeof block.timestamp);
+            } else if (block.timestamp < time_) {
+                blockNumber += amountBlock == 0 ? 1 : amountBlock;
+                block = await web3_.eth.getBlock(blockNumber);
+                console.log(block.timestamp);
+            } else {
+                console.log(block.timestamp);
+                console.log(block.number, 11);
+                return block.number;
+            }
+        }
+        if (Math.abs(block.timestamp - time_) <= 1.5) {
+            if (block.timestamp > time_) {
+                console.log(block.number - 1, 22);
                 return block.number - 1;
             } else if (block.timestamp < time_) {
+                console.log(block.number + 1, 33);
                 return block.number + 1;
             }
         }
     }
-    console.log(block.number);
-    return block.number;
 };
 module.exports = getBlockByTime;
-// time per block ~ 3s
-// getBlockByTime(web3, 1709654717);
+
+// Test
+const Web3 = require("web3");
+const web3 = new Web3("https://bsc-dataseed3.bnbchain.org");
+getBlockByTime(web3, "1711253261");
