@@ -377,7 +377,7 @@ const create = async () => {
         priceList = [];
         ids = [];
     }
-    sleep(4000);
+    sleep(10000);
     console.log("Updating zero block");
     await updateZeroBlock();
     await updateInventory(myAccounts);
