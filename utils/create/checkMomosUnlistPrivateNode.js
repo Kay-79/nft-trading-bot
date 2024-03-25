@@ -139,6 +139,7 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     momoStorage[addressCheck]["momo"] = dataBid;
     momoStorage[addressCheck]["block"] = nowBlock;
     // momoStorage[addressCheck]["amount"] = momoUnlist.length;
+    nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0));
     if (boolSaveInventory) {
         fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
     }
