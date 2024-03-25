@@ -19,10 +19,10 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     try {
         let mpListed = null;
         try {
-            const toBlockNew = endBlock + 50000;
-            if (endBlock + 50000 > nowBlock) {
-                endBlock = nowBlock;
-            }
+            let toBlockNew = endBlock + 50000;
+            // if (endBlock + 50000 > nowBlock) {
+            //     endBlock = nowBlock;
+            // }
             mpListed = await web3.eth.getPastLogs({
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
@@ -69,10 +69,10 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
             // mpListed = await axios.get(
             //     `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_CREATE}&apikey=${process.env.BSC_API_KEY}`
             // );
-            const toBlockNew = endBlock + 50000;
-            if (endBlock + 50000 > nowBlock) {
-                endBlock = nowBlock;
-            }
+            let toBlockNew = endBlock + 50000;
+            // if (endBlock + 50000 > nowBlock) {
+            //     endBlock = nowBlock;
+            // }
             mpListed = await web3.eth.getPastLogs({
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
@@ -139,6 +139,7 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     momoStorage[addressCheck]["momo"] = dataBid;
     momoStorage[addressCheck]["block"] = nowBlock;
     // momoStorage[addressCheck]["amount"] = momoUnlist.length;
+    nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0));
     if (boolSaveInventory) {
         fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
     }
