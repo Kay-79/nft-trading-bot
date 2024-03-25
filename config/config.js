@@ -44,7 +44,7 @@ const config = {
     minDecreasePrice: 0.2,
     amountChange: 1,
     gasPrices: {
-        minBid: 5.1,
+        minBid: 3.1,
         create: 1.0001,
         change: 1.0001,
     },
@@ -57,7 +57,7 @@ const config = {
         epic: 10,
         legendary: 1000,
     },
-    rateFee: 0.1,
+    rateFee: 0.3,
     rateMax: 0.8,
     minPrice: {
         minCommon: 3.0,
