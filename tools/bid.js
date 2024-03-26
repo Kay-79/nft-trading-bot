@@ -7,7 +7,8 @@ const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
 const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
-// const web3Resend = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
+// const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.mainnet));
+// const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
@@ -21,7 +22,7 @@ const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const contractAddress = configJson.accBuy;
-const contract = new web3.eth.Contract(abi, contractAddress);
+const contract = new web3rpc.eth.Contract(abi, contractAddress);
 const overTime = 180;
 const timeGetAvaliableAuction = 5;
 let timeSendTx = configJson.timeBid;
@@ -29,6 +30,8 @@ const emoji = configJson.emojiURL;
 const Tx = require("ethereumjs-tx").Transaction;
 const privateKey = Buffer.from(process.env.PRIVATE_KEY_BID_BUFFER, "hex");
 const common = require("ethereumjs-common");
+const getBlockByTime = require("../utils/bid/getBlockByTime");
+let isFrontRun = false;
 const chain = common.default.forCustomChain(
     "mainnet",
     {
@@ -51,11 +54,9 @@ let txResend = {
     data: "", //change with new data
 };
 let maxGasPricePerFee = "0";
-// let signedResend = [];
 let hashCheckStatus = [];
 let baseGasPrice = 0;
 let checkSuccess = "Non set";
-// let checkHashEach = "";
 async function setup(Private_Key_) {
     inputdata = "None";
     let isBid = false;
@@ -75,8 +76,10 @@ async function setup(Private_Key_) {
         let timeSendReal = 0;
         let priceList1 = "";
         const startTime_ = dataBid[3].split(",");
+        let blockCreate = 0;
         const index_ = dataBid[2].split(",");
-        if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 15) {
+        if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 30) {
+            blockCreate = await getBlockByTime(web3rpc, Number(startTime_[0]));
             const seller_ = dataBid[0].split(",");
             const priceList = dataBid[1].split(",");
             const amountList = dataBid[5].split(",");
@@ -151,17 +154,6 @@ async function setup(Private_Key_) {
                             amountBid.toString()
                         )
                         .encodeABI();
-                    // signedResend = [0, 0.5, 1, 1.5, 2, 2.5, 3];
-                    // for (let i = 7; i < 41; i++) {
-                    // max is 20Gwei
-                    // txResend.gasPrice = Number((i * 0.5 * 10 ** 9).toFixed());
-                    // signedResend.push(
-                    //     await web3.eth.accounts.signTransaction(
-                    //         txResend,
-                    //         process.env.PRIVATE_KEY_BID
-                    //     )
-                    // );
-                    // }
                     txResend.gasPrice = gasPriceScan[0];
                 }
                 checkSuccess = emoji.success;
@@ -188,15 +180,28 @@ async function setup(Private_Key_) {
                             startTime_[0]
                         );
                         if (isAvailableAuctions) {
-                            console.log(
-                                "Sleep:" +
-                                    (
-                                        Number(startTime_[0]) +
-                                        timeSendTx -
-                                        Date.now() / 1000
-                                    ).toFixed(3)
-                            );
-                            await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
+                            // console.log(
+                            //     "Sleep:" +
+                            //         (
+                            //             Number(startTime_[0]) +
+                            //             timeSendTx -
+                            //             Date.now() / 1000
+                            //         ).toFixed(3)
+                            // );
+                            // await sleep(Number(startTime_[0]) + timeSendTx - Date.now() / 1000);
+                            while (true) {
+                                nowBlock = await web3rpc.eth.getBlockNumber();
+                                if (blockCreate + 38 <= nowBlock) {
+                                    //control time to send here
+                                    await sleep(2000);
+                                    isFrontRun = true;
+                                    break;
+                                }
+                                if (Math.abs(blockCreate - nowBlock) > 100) {
+                                    break;
+                                }
+                                await sleep(100);
+                            }
                         }
                     } else {
                         isAvailableAuctions = await checkAvailable(
@@ -206,17 +211,6 @@ async function setup(Private_Key_) {
                         );
                     }
                     console.log("Paying!!");
-                    // try {
-                    //     if (dataBid.length < 14) {
-                    //         // checkHashEach = signed[0].transactionHash;
-                    //         hashCheckStatus.push(signed[0].transactionHash);
-                    //     }
-                    //     // else {
-                    //     //     hashCheckStatus = [];
-                    //     // }
-                    // } catch (error) {
-                    //     console.log("check hash fail");
-                    // }
                     for (let index = 0; index < tx.length; index++) {
                         if (!isAvailableAuctions) {
                             break;
@@ -231,7 +225,8 @@ async function setup(Private_Key_) {
                                 console.log("Fail...setting new time");
                                 checkSuccess = emoji.fail;
                             }
-                            await sleep(6000);
+                            await sleep(7000);
+                            isFrontRun = false;
                             txResend.data = "";
                             baseGasPrice = 0;
                             txResend.gasPrice = 0;
@@ -288,7 +283,6 @@ async function setup(Private_Key_) {
                         txResend.data = "";
                         baseGasPrice = 0;
                         txResend.gasPrice = 0;
-                        // signedResend = [];
                         hashCheckStatus = [];
                         console.log(priceList1);
                     }
@@ -335,13 +329,13 @@ async function setup(Private_Key_) {
                                 timeSendReal < Number(startTime_[0]) + 120 ||
                                 timeSendReal - (Number(startTime_[0]) + 120) > 10
                             ) {
-                                timeSendTx =
-                                    timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal);
-                                console.log("timeSend");
+                                // timeSendTx =
+                                //     timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal);
+                                // console.log("timeSend");
                             } else {
-                                timeSendTx =
-                                    timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 2;
-                                console.log("timeSend / 2");
+                                // timeSendTx =
+                                //     timeSendTx + (Number(startTime_[0]) + 120 - timeSendReal) / 2;
+                                // console.log("timeSend / 2");
                             }
                         }
                         const contentTimeBid = `Expect: ${(Number(startTime_[0]) + 120)
@@ -412,7 +406,7 @@ async function setup(Private_Key_) {
 const enemys = [
     0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2, 0x946398fb54a90d3512e9be5f5f66456f2f760215,
     0x06e8e9e60eba78495f166d73333a10fa49b23f8c, 0x914ddecd7238a2b2858808c227969f74eb276288,
-    0x8ac62c00be7bb8d1cc2ea1f9d62daf51129e916f,
+    0x8ac62c00be7bb8d1cc2ea1f9d62daf51129e916f, 0xde3f6cf535264b7dd97c22155194834a006a5f7e,
 ];
 const checkEnemy = (toAdd) => {
     for (let i = 0; i < enemys.length; i++) {
@@ -423,7 +417,6 @@ const checkEnemy = (toAdd) => {
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
         if (Number(newGasPriceSend) < 50 * 10 ** 9) {
-            // max gas price 20 gwei, depend on 50% profit
             if (txResend.gasPrice * 1.1 > newGasPriceSend) {
                 txResend.gasPrice = Math.floor(Number(txResend.gasPrice) * 1.3 + 10 ** 8);
             } else {
@@ -432,24 +425,10 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
             var tx = new Tx(txResend, { common: chain });
             tx.sign(privateKey);
             var serializedTx = tx.serialize();
-            // console.log(serializedTx.toString("hex"));
             web3rpc.eth.sendSignedTransaction("0x" + serializedTx.toString("hex")).then((hash) => {
                 hashCheckStatus.push(hash.receipt.transactionHash);
             });
             console.log("New gasPrice: ", txResend.gasPrice);
-            // for (let i = 7; i < 41; i++) {
-            //     if (
-            //         i * 0.5 * 10 ** 9 > txResend.gasPrice &&
-            //         i * 0.5 * 10 ** 9 > newGasPriceSend &&
-            //         (i * 0.5 * 10 ** 9) / txResend.gasPrice > 1.1
-            //     ) {
-            //         web3.eth.sendSignedTransaction(signedResend[i].rawTransaction);
-            //         console.log("New gasPrice: ", (i * 0.5 * 10 ** 9).toFixed());
-            //         txResend.gasPrice = i * 0.5 * 10 ** 9;
-            //         hashCheckStatus.push(signedResend[i].transactionHash);
-            //         break;
-            //     }
-            // }
         } else {
             console.log("Gas price over 50Gwei");
         }
@@ -458,6 +437,9 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
     }
 };
 async function bid() {
+    // let blockCreate = await getBlockByTime(web3rpc, 1710252071);
+    // console.log(blockCreate);
+    // exit();
     const Private_Key = process.env.PRIVATE_KEY_BID;
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
@@ -465,24 +447,7 @@ async function bid() {
     getPendingTransactions.on("data", (txHash) => {
         setTimeout(async () => {
             try {
-                if (txResend.data) {
-                    // let tx = await web3.eth.getTransaction(txHash);
-                    // if (tx != null) {
-                    //     if (checkEnemy(tx.to)) {
-                    //         console.log(tx.hash, tx.gasPrice, tx.from);
-                    //         if (
-                    //             Number(tx.gasPrice) > 3 * 10 ** 9 &&
-                    //             Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                    //             Number(tx.gasPrice) <
-                    //                 configJson.gasPrices.minBid * 10 ** 9 +
-                    //                     ((baseGasPrice - configJson.gasPrices.minBid * 10 ** 9) /
-                    //                         (configJson.rateFee * 100)) *
-                    //                         80
-                    //         ) {
-                    //             resendTxNewGasPrice(tx.gasPrice);
-                    //         }
-                    //     }
-                    // }
+                if (txResend.data && isFrontRun) {
                     web3.eth
                         .getTransaction(txHash)
                         .then((tx) => {
@@ -528,7 +493,7 @@ async function bid() {
             }
         }
         await setup(Private_Key);
-        await sleep(100);
+        await sleep(5000);
     }
 }
 
