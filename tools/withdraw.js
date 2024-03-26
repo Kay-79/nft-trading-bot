@@ -1,11 +1,16 @@
 require("dotenv").config();
 const config = require("../config/config");
 const Web3 = require("web3");
-const web3 = new Web3(new Web3.providers.HttpProvider(config.rpcs.change));
 const abiWallet = require("../abi/abiWallet");
 const walletAddress = config.wallet.address;
-const contractWallet = new web3.eth.Contract(abiWallet, walletAddress);
 const tokenAddress = config.addressToken;
+let web3;
+try {
+    web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
+} catch (error) {
+    web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
+}
+const contractWallet = new web3.eth.Contract(abiWallet, walletAddress);
 
 const withdraw = async () => {
     const tx = {
