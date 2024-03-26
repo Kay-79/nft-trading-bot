@@ -6,9 +6,9 @@ const walletAddress = config.wallet.address;
 const tokenAddress = config.addressToken;
 let web3;
 try {
-    web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
+    web3 = new Web3(new Web3.providers.HttpProvider(config.rpcs.public));
 } catch (error) {
-    web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
+    web3 = new Web3(new Web3.providers.HttpProvider(config.rpcs.change));
 }
 const contractWallet = new web3.eth.Contract(abiWallet, walletAddress);
 

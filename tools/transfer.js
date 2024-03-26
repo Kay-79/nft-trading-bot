@@ -4,11 +4,16 @@ const fs = require("fs");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const { exit } = require("process");
-const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const abiBUSD = require("../abi/abiERC20");
 const sortPerBudget = require("../utils/common/sortPerBudget");
 const addressToken = configJson.addressToken;
+let web3;
+try {
+    web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
+} catch (error) {
+    web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
+}
 const contractToken = new web3.eth.Contract(abiBUSD, addressToken);
 let myAcc = configJson.myAcc;
 const Private_Key = process.env.PRIVATE_KEY_BID;
@@ -83,4 +88,4 @@ async function transfer(address_) {
 const minTransfer = 5;
 const maxTransfer = 9999;
 
-transfer("0x79791a6D45C4bCcaBf56dF64403d84EEFc4065EC");
+transfer("0x3A2887CEE9096cc90A00619F5fAFA5eeE8FC0e32");
