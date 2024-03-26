@@ -35,7 +35,7 @@ const config = {
         ["0x891016f99BA622F8556bE12B4EA336157aA6cb20", "_8_9_1", true],
         ["0xb8C5744D347A74484925E19F588719C846616405", "_b_8_C", true],
         ["0x838e781DC9F070922F66f0BE415d15168bB04825", "_8_3_8", true],
-        // ["0x79791a6D45C4bCcaBf56dF64403d84EEFc4065EC", "_7_9_7", true],
+        ["0x79791a6D45C4bCcaBf56dF64403d84EEFc4065EC", "_7_9_7", true],
     ],
     timeDelays: {
         normal: 1,
@@ -66,7 +66,7 @@ const config = {
         minRare: 14,
     },
     timeBid: 131.0,
-    accBuy: "0x838e781DC9F070922F66f0BE415d15168bB04825",
+    accBuy: "0x79791a6D45C4bCcaBf56dF64403d84EEFc4065EC",
 };
 
 module.exports = config;
