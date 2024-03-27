@@ -49,6 +49,7 @@ const config = {
         create: 1.0001,
         change: 1.0001,
     },
+    gasLimitBundle: 388000,
     timeDelayPerLoop: 1,
     profits: {
         common: 0.1,

@@ -1,4 +1,5 @@
 const axios = require("axios");
+let hisPriceBnb = 575;
 const getBnbPrice = async () => {
     let bnbPriceCheck = 0;
     bnbPriceCheck = await axios
@@ -7,15 +8,15 @@ const getBnbPrice = async () => {
             console.log("Err1");
         });
     try {
-        bnbPriceCheck = bnbPriceCheck.data.data.bnb.price;
+        bnbPriceCheck = Number(bnbPriceCheck.data.data.bnb.price);
     } catch (error) {
-        bnbPriceCheck = 420;
+        bnbPriceCheck = hisPriceBnb;
         console.log(error);
     }
     if (bnbPriceCheck > 0) {
         return bnbPriceCheck;
     }
-    return 420;
+    return hisPriceBnb;
 };
 
 module.exports = getBnbPrice;

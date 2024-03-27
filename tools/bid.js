@@ -1,6 +1,7 @@
 require("dotenv").config();
 const request = require("request");
 const fs = require("fs");
+const getBnbPrice = require("../utils/common/getBnbPrice");
 const checkAvailable = require("../utils/bid/checkAvailable");
 const configJson = require("../config/config");
 const { sleep, ranSleep } = require("../utils/common/sleep");
@@ -18,6 +19,8 @@ process.on("unhandledRejection", (err) => {
         console.log("Add hash fail");
     }
 });
+let maxGasPiceEnemy = "";
+let bnbPrice = 0;
 const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
@@ -308,7 +311,29 @@ async function setup(Private_Key_) {
                             Number(receiptCheckStatus.effectiveGasPrice) /
                             10 ** 9
                         ).toFixed(3);
-                        priceList1 = `${maxGasSent} ${priceList1}`;
+                        let profitBundle;
+                        if (true) {
+                            if (receiptCheckStatus.status) {
+                                profitBundle = `${(
+                                    (1 / configJson.rateMax - maxGasSent) *
+                                    receiptCheckStatus.gasUsed *
+                                    bnbPrice *
+                                    10 ** -9
+                                ).toFixed(3)}`;
+                            } else {
+                                profitBundle`${(
+                                    maxGasSent *
+                                    receiptCheckStatus.gasUsed *
+                                    bnbPrice *
+                                    10 ** -9
+                                ).toFixed(3)}`;
+                            }
+                        }
+                        profitBundle = `\nProfit: $${profitBundle}`;
+                        maxGasPiceEnemy = `\nEnemy :${(Number(maxGasPiceEnemy) / 10 ** 9).toFixed(
+                            2
+                        )} Gwei`;
+                        priceList1 = `${maxGasSent} ${priceList1} ${profitBundle} ${maxGasPiceEnemy}`;
                         hashCheckStatus = [];
                         if (receiptCheckStatus.status) {
                             console.log("Success bid!! At block:", receiptCheckStatus.blockNumber);
@@ -461,6 +486,7 @@ async function bid() {
                                     ) {
                                         resendTxNewGasPrice(tx.gasPrice);
                                     } else {
+                                        maxGasPiceEnemy = tx.gasPrice;
                                         console.log(
                                             `Gas price is not in range: 3Gwei - ${maxGasPricePerFee}Gwei or lower current gas price`
                                         );
@@ -480,6 +506,7 @@ async function bid() {
     while (true) {
         if (Math.abs(new Date().getHours() - hourCache) >= 4) {
             try {
+                bnbPrice = await getBnbPrice();
                 hourCache = new Date().getHours();
                 request(
                     `https://api.telegram.org/${apiTele}/sendMessage?chat_id=@${chatId}&text=Status: \xF0\x9F\x86\x97\nTime: ${timeSendTx}\nContract: ${contractAddress.slice(
