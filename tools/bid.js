@@ -261,6 +261,7 @@ async function setup(Private_Key_) {
                     }
                 } catch (error) {
                     console.log("Error during bid Auction!");
+                    console.log(error);
                     checkSuccess = emoji.fail;
                 }
                 await sleep(1000);
