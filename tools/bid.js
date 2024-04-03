@@ -322,7 +322,7 @@ async function setup(Private_Key_) {
                                     10 ** -9
                                 ).toFixed(3)}`;
                             } else {
-                                profitBundle`${(
+                                profitBundle = `${(
                                     maxGasSent *
                                     receiptCheckStatus.gasUsed *
                                     bnbPrice *
