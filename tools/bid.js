@@ -315,14 +315,14 @@ async function setup(Private_Key_) {
                         let profitBundle;
                         if (true) {
                             if (receiptCheckStatus.status) {
-                                profitBundle = `${(
-                                    (1 / configJson.rateMax - maxGasSent) *
+                                profitBundle = `$${(
+                                    (Number(maxGasPricePerFee) / configJson.rateMax - maxGasSent) *
                                     receiptCheckStatus.gasUsed *
                                     bnbPrice *
                                     10 ** -9
                                 ).toFixed(3)}`;
                             } else {
-                                profitBundle = `${(
+                                profitBundle = `-$${(
                                     maxGasSent *
                                     receiptCheckStatus.gasUsed *
                                     bnbPrice *
@@ -330,7 +330,7 @@ async function setup(Private_Key_) {
                                 ).toFixed(3)}`;
                             }
                         }
-                        profitBundle = `\nProfit: $${profitBundle}`;
+                        profitBundle = `\nProfit: ${profitBundle}`;
                         maxGasPiceEnemy = `\nEnemy :${(Number(maxGasPiceEnemy) / 10 ** 9).toFixed(
                             2
                         )} Gwei`;
