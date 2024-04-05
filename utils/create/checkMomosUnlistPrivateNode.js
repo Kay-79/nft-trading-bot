@@ -116,6 +116,10 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
     let nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0));
     console.log(nowBlock);
+    if (nowBlock - momoStorage[addressCheck]["block"] > 144000) {
+        console.log(`${addressCheck} wait for update after 5 days`);
+        return;
+    }
     // const dataBlock = await getZeroBlockApi(nowBlock, hexAddress);
     // const dataBlock = getZeroBlockCsv(addressCheck);
     const dataBlock = momoStorage[addressCheck]["block"] + 1;
