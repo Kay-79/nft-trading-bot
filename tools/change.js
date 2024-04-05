@@ -384,8 +384,14 @@ async function loopCheck(times) {
             if (!Number(isContract)) {
                 continue;
             }
-            minPrices = await getMinPrice();
-            console.log("MinPrice:", minPrices);
+            if (Date.now() - lastSync > 1800000) {
+                // 30 mins
+                lastSync = Date.now();
+                minPrices = await getMinPrice();
+                console.log("New minPrice:", minPrices);
+            } else {
+                console.log("Current minPrice:", minPrices);
+            }
             console.log("Account:", myAccounts[indexAccs]);
             await main(myAccounts[indexAccs], true, Private_Key);
             // await sleep(150000 + 300000 * Math.random()); //5mins per check
@@ -417,6 +423,7 @@ const gasPriceScan = Number((configJson.gasPrices.change * 10 ** 9).toFixed());
 const sellOff = true; // if true - sale per minPrice, if false - sale if not loss
 const canLost = -1;
 let minPrices = [];
+let lastSync = 0;
 if (configJson.minDecreasePrice > 0.2) {
     console.warn("minDecreasePrice must be greater than 0.2");
     exit();
