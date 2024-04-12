@@ -294,6 +294,7 @@ async function setup(Private_Key_) {
                 try {
                     if (hashCheckStatus.length) {
                         let receiptCheckStatus = "";
+                        let maxGasSent;
                         await sleep(1500); //sleep to avoid pending hash
                         for (let i = 0; i < hashCheckStatus.length; i++) {
                             receiptCheckStatus = await web3.eth.getTransactionReceipt(
@@ -308,7 +309,7 @@ async function setup(Private_Key_) {
                                 break;
                             }
                         }
-                        const maxGasSent = (
+                        maxGasSent = (
                             Number(receiptCheckStatus.effectiveGasPrice) /
                             10 ** 9
                         ).toFixed(3);
@@ -316,7 +317,8 @@ async function setup(Private_Key_) {
                         if (true) {
                             if (receiptCheckStatus.status) {
                                 profitBundle = `$${(
-                                    (Number(maxGasPricePerFee) / configJson.rateMax - maxGasSent) *
+                                    ((Number(maxGasPricePerFee) * 10 ** 9) / configJson.rateMax -
+                                        maxGasSent) *
                                     receiptCheckStatus.gasUsed *
                                     bnbPrice *
                                     10 ** -9
