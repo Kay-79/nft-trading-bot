@@ -14,23 +14,17 @@ let dataBid = {};
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
-    console.log(cacheBlock);
-    // console.log(mpListed, 1);
+    console.log(`Checking bided: ${cacheBlock}`);
     try {
         let mpListed = null;
         try {
             let toBlockNew = endBlock + 50000;
-            // if (endBlock + 50000 > nowBlock) {
-            //     endBlock = nowBlock;
-            // }
             mpListed = await web3.eth.getPastLogs({
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
                 toBlock: toBlockNew,
                 topics: [process.env.TOPIC_BID], // the second parameter is variable c
             });
-            // console.log(mpListed)
-            // exit()
         } catch (err) {
             console.log(err);
             await getMomosBided(cacheBlock, nowBlock, addressCheck);
@@ -62,17 +56,12 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
 };
 const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
+    console.log(`Checking listed: ${cacheBlock}`);
     try {
         console.log(endBlock);
         let mpListed = "";
         try {
-            // mpListed = await axios.get(
-            //     `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_CREATE}&apikey=${process.env.BSC_API_KEY}`
-            // );
             let toBlockNew = endBlock + 50000;
-            // if (endBlock + 50000 > nowBlock) {
-            //     endBlock = nowBlock;
-            // }
             mpListed = await web3.eth.getPastLogs({
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
@@ -111,19 +100,16 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
 
 const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     momoStorage = require("../../data/momoStorage.json");
-    console.log(momoStorage[addressCheck]["block"]);
+    console.log(`Last block checked: ${momoStorage[addressCheck]["block"]}`);
     dataBid = momoStorage[addressCheck]["momo"];
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
-    let nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0));
-    console.log(nowBlock);
+    let nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
+    console.log(`Now block is: ${nowBlock}`);
     if (nowBlock - momoStorage[addressCheck]["block"] < 144000 && boolSaveInventory) {
         console.log(`${addressCheck} wait for update after 5 days`);
         return;
     }
-    // const dataBlock = await getZeroBlockApi(nowBlock, hexAddress);
-    // const dataBlock = getZeroBlockCsv(addressCheck);
     const dataBlock = momoStorage[addressCheck]["block"] + 1;
-    console.log(`First block is: ${dataBlock}`);
     await getMomosBided(dataBlock, nowBlock, hexAddress);
     await getMomosListed(dataBlock, nowBlock, hexAddress);
     let momoUnlist = [];
@@ -137,17 +123,14 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
             delete dataBid[i];
         }
     }
-    console.log(momoUnlist.length);
+    console.log(`Have ${momoUnlist.length} momos unlist in ${addressCheck}`);
     console.log(momoUnlist.toString());
-    console.log(addressCheck);
     momoStorage[addressCheck]["momo"] = dataBid;
     momoStorage[addressCheck]["block"] = nowBlock;
-    // momoStorage[addressCheck]["amount"] = momoUnlist.length;
-    nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0));
+    nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
     if (boolSaveInventory) {
         fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
     }
-    // fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
     await sleep(1000);
     return momoUnlist;
 };
