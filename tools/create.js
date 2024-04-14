@@ -5,7 +5,13 @@ const { exit } = require("process");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
 const configJson = require("../config/config");
+const { checkMomosUnlistPrivateNode } = require("../utils/create/checkMomosUnlistPrivateNode");
 const { sleep, ranSleep } = require("../utils/common/sleep");
+const { abiAmount } = require("../abi/abiCheckUnlist");
+const { updateZeroBlock } = require("../utils/create/updateZeroBlock");
+const getMinPrice = require("../utils/common/getMinPrice");
+const { updateInventory } = require("../utils/create/updateInventory");
+const prepareBatch = require("../utils/create/prepareBatch");
 
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
@@ -21,29 +27,6 @@ boolChange = [];
 flagID = false;
 flagCountMomo = 0;
 amountBid = 0;
-async function checkAmountBuy(address, page) {
-    await sleep(2500 + 5000 * Math.random());
-    let response2 = await axios
-        .get("https://nftapi.mobox.io/auction/logs_new/" + address + "?&page=" + page + "&limit=50")
-        .catch((e) => {
-            console.log("Err1");
-        });
-    const data2 = response2.data;
-    for (let i = 0; i < data2.list.length; i++) {
-        if (data2.list[i].auctor != address) {
-            for (let idx2 = 0; idx2 < data2.list[i].ids.length; idx2++) {
-                for (let idx3 = 0; idx3 < Number(data2.list[i].amounts[idx2]); idx3++) {
-                    if (idMomoBought.length >= value || amountBid >= valueBid) {
-                        break;
-                    } else {
-                        idMomoBought.push(data2.list[i].ids[idx2]);
-                    }
-                }
-            }
-            amountBid += 1;
-        }
-    }
-}
 async function checkChangePrice(indexId) {
     await sleep(2500 + 5000 * Math.random());
     let response3 = await axios
@@ -95,53 +78,60 @@ async function checkChangePrice(indexId) {
         let sttRarity = idMomoBought[indexId].toString().slice(0, 1);
         switch (sttRarity.toString()) {
             case "1":
-                if (Number(priceSell[indexId]) < minCM) {
-                    priceSell[indexId] = (minCM - minChange).toFixed(3);
+                if (Number(priceSell[indexId]) < minPrices[0]) {
+                    priceSell[indexId] = (minPrices[0] - minChange).toFixed(3);
                 }
-                if (!data3.length) {
-                    priceSell[indexId] = 15;
+                if (Number(priceSell[indexId]) - minPrices[0] < configJson.minDecreasePrice) {
+                    priceSell[indexId] = (minPrices[0] - minChange).toFixed(3);
                 }
                 break;
             case "2":
-                if (Number(priceSell[indexId]) < minUCM) {
-                    priceSell[indexId] = (minUCM - minChange).toFixed(3);
+                if (Number(priceSell[indexId]) < minPrices[1]) {
+                    priceSell[indexId] = (minPrices[1] - minChange).toFixed(3);
                 }
-                if (!data3.length) {
-                    priceSell[indexId] = 15;
+                if (Number(priceSell[indexId]) - minPrices[1] < configJson.minDecreasePrice) {
+                    priceSell[indexId] = (minPrices[1] - minChange).toFixed(3);
                 }
                 break;
             case "3":
-                if (Number(priceSell[indexId]) < minUNQ) {
-                    priceSell[indexId] = (minUNQ - minChange).toFixed(3);
+                if (Number(priceSell[indexId]) < minPrices[2]) {
+                    priceSell[indexId] = (minPrices[2] - minChange).toFixed(3);
                 }
-                if (!data3.length) {
-                    priceSell[indexId] = 15;
+                if (Number(priceSell[indexId]) - minPrices[2] < configJson.minDecreasePrice) {
+                    priceSell[indexId] = (minPrices[2] - minChange).toFixed(3);
                 }
                 break;
             default:
                 priceSell[indexId] = (minR - minChange).toFixed(3);
-                if (!data3.length) {
-                    priceSell[indexId] = 15;
-                }
                 break;
         }
+        if (!data3.length) {
+            priceSell[indexId] = 15;
+        }
     }
+    console.log("Price to sell: " + priceSell[indexId]);
 }
 
 async function getPriceToSell(address, boolMin) {
     idMomoBought = [];
-    for (let index1 = 1; index1 < 51; index1++) {
-        await checkAmountBuy(address, index1);
-        if (
-            idMomoBought.length >= value ||
-            amountBid >= valueBid ||
-            idMomoBought.length >= amountBatchToCreate
-        ) {
-            break;
-        }
-        await sleep(200);
+    idMomoBought = await checkMomosUnlistPrivateNode(address, false);
+    const BatchPrepare = prepareBatch(idMomoBought, priceSell, amountBatchToCreate * 6);
+    idMomoBought = BatchPrepare[0];
+    priceSell = BatchPrepare[1];
+    console.log(idMomoBought);
+    console.log(priceSell);
+    // exit();
+    //
+    //
+    //
+    //
+    //
+    value = idMomoBought.length;
+    console.log(idMomoBought.toString());
+    if (idMomoBought.length != value) {
+        console.log("Balance momo is wrong");
+        return;
     }
-    idMomoBought.reverse();
     if (boolMin) {
         await sleep(1000);
         for (let indexMomo = 0; indexMomo < idMomoBought.length; indexMomo++) {
@@ -187,7 +177,7 @@ async function getPriceToSell(address, boolMin) {
         for (let jj = 0; jj < priceList[ii].length; jj++) {
             priceList[ii][jj] =
                 Math.round(Number(priceList[ii][jj]) * 10 ** 5).toString() + "0000000000000";
-            if (Number(priceList[ii][jj]) < 10 ** 18) {
+            if (Number(priceList[ii][jj]) < 0.5 * 10 ** 18) {
                 console.log("Err Price");
                 exit();
             }
@@ -239,8 +229,7 @@ async function checkIndex(address) {
 
 async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
     const Private_Key = process.env.PRIVATE_KEY_CHANGE;
-    const Web3 = require("web3");
-    const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
+    const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.create));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     const abi = [
         {
@@ -257,7 +246,8 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
             type: "function",
         },
     ];
-    const contract = new web3.eth.Contract(abi, configJson.addressMP);
+    const consractAddress = configJson.addressMP;
+    const contract = new web3.eth.Contract(abi, consractAddress);
     emptyVar = [];
     tx = "";
     encoded = "";
@@ -272,7 +262,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     tx = {
         from: acc.address,
         gas: gasLimit_,
-        gasPrice: gasPrice_ * 10 ** 9, // + i * 10 ** 6,
+        gasPrice: (gasPrice_ * 10 ** 9).toFixed(), // + i * 10 ** 6,
         to: accSell,
         value: 0,
         data: encoded,
@@ -302,17 +292,10 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         console.log("Empty accSell");
         exit();
     }
-    let abiAmount = [
-        {
-            inputs: [],
-            name: "amountUnList",
-            outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-            stateMutability: "view",
-            type: "function",
-        },
-    ];
     let contractAcc = new web3.eth.Contract(abiAmount, accSell);
     let amountUnList = await contractAcc.methods.amountUnList().call();
+    if (amountUnList < 6) return;
+    value = amountUnList;
     if (amountUnList != value) {
         console.log("amountUnList != value");
         console.log("amountUnList", amountUnList);
@@ -324,14 +307,10 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         ? (amountBatchToCreate = indexs.length * 6)
         : (amountBatchToCreate = amountUnList);
     console.log(amountBatchToCreate);
+    if (amountBatchToCreate < 6) return;
     await getPriceToSell(accSell, true); //_1_0_1
     let count = 0;
     while (true) {
-        // if (indexs.length != idList.length || idList.length != priceList.length) {
-        //     console.log('Length array not same!')
-        //     if (indexs.length<)
-        //     break
-        // }
         if (hexData_.length > 0) {
             await sendTxt(gasPrice_, gasLimit_, "", "", "", hexData_, nameFile_);
             break;
@@ -339,22 +318,26 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         for (let index = 0; index < indexs.length; index++) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE";
-                console.log(indexs[index], idList[index], priceList[index]);
-                await sendTxt(
-                    gasPrice_,
-                    gasLimit_,
-                    indexs[index],
-                    idList[index],
-                    priceList[index],
-                    "",
-                    nameFile_
-                );
+                console.log(`${indexs[index]}, [], [], [${idList[index]}], [${priceList[index]}]`);
+                try {
+                    await sendTxt(
+                        gasPrice_,
+                        gasLimit_,
+                        indexs[index],
+                        idList[index],
+                        priceList[index],
+                        "",
+                        nameFile_
+                    );
+                } catch (error) {
+                    ("Create on private node!");
+                }
                 if (boolSell == "TRUE") {
                     indexs[index] = undefined;
                     count += 1;
                 }
             }
-            await sleep(5000);
+            // await sleep(5000);
         }
         if (count >= indexs.length) {
             console.log("Done");
@@ -364,7 +347,7 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
     }
 }
 
-timeWait = 5 * 60 * 60 * 1;
+timeWait = 5 * 60 * 60 * 1; //wait latest change price
 idMomoBought = [];
 priceSell = [];
 myAccounts = [];
@@ -379,6 +362,25 @@ priceList = [];
 ids = [];
 const minChange = 0.001;
 let accSell = "";
-value = 7;
-console.warn(`Vesion create is outdate`);
-createBatch(3.001, 1000000, "", "_8_8_8");
+value = 0; // without rare and epic
+let minPrices = [];
+const create = async () => {
+    minPrices = await getMinPrice();
+    console.log(minPrices);
+    for (let i = 0; i < myAcc.length; i++) {
+        console.log(myAcc[i][1]);
+        if (myAcc[i][1] == "_1_0_1" || myAcc[i][1] === "_5_8_1") {
+            continue;
+        }
+        await createBatch(configJson.gasPrices.create, 1000000, "", myAcc[i][1]);
+        indexs = [];
+        priceList = [];
+        ids = [];
+    }
+    sleep(10000);
+    console.log("Updating zero block");
+    await updateZeroBlock();
+    await updateInventory(myAccounts);
+};
+create();
+// module.exports = { create };
