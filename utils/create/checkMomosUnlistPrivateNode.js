@@ -58,7 +58,6 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
     console.log(`Checking listed: ${cacheBlock}`);
     try {
-        console.log(endBlock);
         let mpListed = "";
         try {
             let toBlockNew = endBlock + 50000;
