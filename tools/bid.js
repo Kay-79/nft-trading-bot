@@ -3,6 +3,7 @@ const request = require("request");
 const fs = require("fs");
 const getBnbPrice = require("../utils/common/getBnbPrice");
 const checkAvailable = require("../utils/bid/checkAvailable");
+const checkEnemy = require("../utils/bid/checkEnemy");
 const configJson = require("../config/config");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
@@ -431,17 +432,6 @@ async function setup(Private_Key_) {
         }
     }
 }
-const enemys = [
-    0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2, 0x946398fb54a90d3512e9be5f5f66456f2f760215,
-    0x06e8e9e60eba78495f166d73333a10fa49b23f8c, 0x914ddecd7238a2b2858808c227969f74eb276288,
-    0x8ac62c00be7bb8d1cc2ea1f9d62daf51129e916f, 0xde3f6cf535264b7dd97c22155194834a006a5f7e,
-];
-const checkEnemy = (toAdd) => {
-    for (let i = 0; i < enemys.length; i++) {
-        if (toAdd == enemys[i]) return true;
-    }
-    return false;
-};
 const resendTxNewGasPrice = async (newGasPriceSend) => {
     try {
         if (Number(newGasPriceSend) < 50 * 10 ** 9) {
@@ -465,9 +455,6 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
     }
 };
 async function bid() {
-    // let blockCreate = await getBlockByTime(web3rpc, 1710252071);
-    // console.log(blockCreate);
-    // exit();
     const Private_Key = process.env.PRIVATE_KEY_BID;
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
@@ -480,7 +467,8 @@ async function bid() {
                         .getTransaction(txHash)
                         .then((tx) => {
                             if (tx != null) {
-                                if (checkEnemy(tx.to)) {
+                                if (checkEnemy(tx.input)) {
+                                    // avoid code bid func in smart contract same enemy methodID
                                     console.log(tx.hash, tx.gasPrice, tx.from);
                                     if (
                                         Number(tx.gasPrice) > 3 * 10 ** 9 &&
