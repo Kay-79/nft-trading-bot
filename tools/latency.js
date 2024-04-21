@@ -8,14 +8,18 @@ try {
 } catch (error) {}
 const { sleep } = require("../utils/common/sleep");
 const checkLatency = async () => {
+    let privateBlock = 0;
+    let publicBlock = 0;
     sleep(300);
     try {
         web3a.eth.getBlockNumber().then((latencyPublic) => {
             console.log(`Latency public : ${latencyPublic}`);
+            publicBlock = Number(latencyPublic);
         });
         try {
             web3.eth.getBlockNumber().then((latencyPrivate) => {
                 console.log(`Latency private: ${latencyPrivate}`);
+                privateBlock = Number(latencyPrivate);
             });
         } catch (error) {
             console.log("Check on private node failed");
@@ -23,7 +27,7 @@ const checkLatency = async () => {
     } catch (error) {
         console.log("Error: ", error);
     }
-    if (latencyPublic - latencyPrivate > 10) {
+    if (publicBlock - privateBlock > 10) {
         console.log(`Node is syncing... ${(Date.now() / 1000).toFixed()}`);
     }
     await sleep(2000);
