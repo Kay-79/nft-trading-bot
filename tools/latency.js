@@ -24,5 +24,7 @@ const checkLatency = async () => {
         console.log("Error: ", error);
     }
     await sleep(2000);
+    //log time
+    console.log(`${Date.now() / 1000}`);
 };
 checkLatency();
