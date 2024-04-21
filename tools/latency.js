@@ -23,8 +23,9 @@ const checkLatency = async () => {
     } catch (error) {
         console.log("Error: ", error);
     }
+    if (latencyPublic - latencyPrivate > 10) {
+        console.log(`Node is syncing... ${(Date.now() / 1000).toFixed()}`);
+    }
     await sleep(2000);
-    //log time
-    console.log(`${Date.now() / 1000}`);
 };
 checkLatency();
