@@ -29,7 +29,7 @@ const checkLatency = async () => {
     }
     await sleep(2000);
     if (publicBlock - privateBlock > 10) {
-        console.log(`Node is syncing... ${(Date.now() / 1000).toFixed()}`);
+        console.log(`Node is syncing... delay ${publicBlock - privateBlock} blocks`);
     }
 };
 checkLatency();
