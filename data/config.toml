@@ -37,8 +37,10 @@ WSModules = ["net", "web3", "eth"]
 
 [Node.P2P]
 MaxPeers = 200
-NoDiscovery = false
-StaticNodes = []
+NoDiscovery = true
+StaticNodes = [
+    "enode://ba88d1a8a5e849bec0eb7df9eabf059f8edeae9a9eb1dcf51b7768276d78b10d4ceecf0cde2ef191ced02f66346d96a36ca9da7d73542757d9677af8da3bad3f@54.198.97.197:30311",
+]
 ListenAddr = ":30311"
 EnableMsgEvents = false
 
