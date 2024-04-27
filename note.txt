@@ -3,3 +3,4 @@ tail -40 nohup.out
 ./geth --config ./config.toml --datadir ./node  --cache 8000 --rpc.allow-unprotected-txs --history.transactions 0 --http --ws
 nohup ./geth --config ./config.toml --datadir ./node  --cache 16000 --rpc.allow-unprotected-txs --history.transactions 0 --http --ws &
 nohup ./geth --tries-verify-mode none --config ./config.toml --datadir ./node --cache 40000 --rpc.allow-unprotected-txs --history.transactions 0 --http --ws &
+./geth --datadir ./node init ./genesis.json
