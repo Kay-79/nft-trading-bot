@@ -12,6 +12,7 @@ let web3;
 try {
     web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
 } catch (error) {
+    console.log(error);
     web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
 }
 const contractToken = new web3.eth.Contract(abiBUSD, addressToken);
