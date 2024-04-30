@@ -1,4 +1,5 @@
 const Web3 = require("web3");
+const configJson = require("../config/config");
 const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
 const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
     if (err) console.error(err);
