@@ -8,9 +8,9 @@ const configJson = require("../config/config");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
-const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
+// const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
 // const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.mainnet));
-// const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
+const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
 const { exit } = require("process");
 process.on("unhandledRejection", (err) => {
     console.error("Unhandled Promise Rejection:", err);
