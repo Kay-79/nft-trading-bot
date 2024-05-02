@@ -222,7 +222,7 @@ async function setup(Private_Key_) {
                         if (tx.length == 1) {
                             try {
                                 checkSuccess = emoji.success;
-                                const sendEach = /** await */ web3.eth.sendSignedTransaction(
+                                const sendEach = /** await */ web3rpc.eth.sendSignedTransaction(
                                     signed[index].rawTransaction
                                 );
                             } catch (error) {
