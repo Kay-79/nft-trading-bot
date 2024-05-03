@@ -31,5 +31,7 @@ const checkLatency = async () => {
     if (publicBlock - privateBlock > 10) {
         console.log(`Node is syncing... delay ${publicBlock - privateBlock} blocks`);
     }
+    const amountPeer = await web3.eth.net.getPeerCount();
+    console.log(`Amount peer: ${amountPeer}`);
 };
 checkLatency();
