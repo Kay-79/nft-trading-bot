@@ -3,7 +3,7 @@ const Web3 = require("web3");
 const config = require("../config/config");
 require("dotenv").config();
 // Thay thế YOUR_TELEGRAM_BOT_TOKEN bằng mã thông báo (token) của bot của bạn
-const token = process.env.api_telegram_bot;
+const token = process.env.api_telegram.replace("bot", "");
 
 // Tạo một bot
 const bot = new TelegramBot(token, { polling: true });
