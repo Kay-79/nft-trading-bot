@@ -19,9 +19,17 @@ bot.onText(/\/status/, async (msg) => {
         // const blockNumber = await web3.eth.getBlockNumber();
         // bot.sendMessage(chatId, "Block number: " + blockNumber);
         const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-        const isSyncing = await web3.eth.isSyncing();
-        // isSyncing = {startingBlock: 100, currentBlock: 312, highestBlock: 512, knownStates: 234566, pulledStates: 123455}
-        bot.sendMessage(chatId, "Syncing: " + isSyncing);
+        const blockNumber = await web3.eth.getBlockNumber();
+        if (blockNumber > 0) {
+            bot.sendMessage(chatId, "Block number: " + blockNumber);
+        } else {
+            const isSyncing = await web3.eth.isSyncing();
+            console.log(isSyncing.toString());
+            bot.sendMessage(
+                chatId,
+                `Syncing:\nstartingBlock: ${isSyncing.startingBlock}\ncurrentBlock: ${isSyncing.currentBlock}\nhighestBlock: ${isSyncing.highestBlock}\nknownStates: ${isSyncing.knownStates}\npulledStates: ${isSyncing.pulledStates}`
+            );
+        }
     } catch (error) {
         bot.sendMessage(chatId, "Fail connect node");
     }
