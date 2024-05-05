@@ -6,6 +6,7 @@
         "dotenv": "^16.3.1",
         "ethereumjs-tx": "^2.1.2",
         "ethers": "^5.7.2",
+        "node-telegram-bot-api": "^0.65.1",
         "request": "^2.88.2",
         "web3": "^1.10.0"
     },
@@ -19,6 +20,7 @@
     "scripts": {
         "check": "node ./tools/check",
         "status": "node ./tools/statusNode",
+        "node": "node ./tools/hostNode",
         "latency": "node ./tools/latency",
         "find": "node ./tools/find",
         "findBSC": "node ./tools/findApiBSC",
