@@ -19,7 +19,6 @@
     "main": "",
     "scripts": {
         "check": "node ./tools/check",
-        "status": "node ./tools/statusNode",
         "node": "node ./tools/hostNode",
         "latency": "node ./tools/latency",
         "find": "node ./tools/find",

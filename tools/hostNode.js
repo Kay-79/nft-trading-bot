@@ -14,7 +14,6 @@ bot.onText(/\/status/, async (msg) => {
             bot.sendMessage(chatId, "Block number: " + blockNumber);
         } else {
             const isSyncing = await web3.eth.isSyncing();
-            console.log(isSyncing.toString());
             bot.sendMessage(
                 chatId,
                 `Syncing:\nstartingBlock: ${isSyncing.startingBlock}\ncurrentBlock: ${isSyncing.currentBlock}\nhighestBlock: ${isSyncing.highestBlock}\nknownStates: ${isSyncing.knownStates}\npulledStates: ${isSyncing.pulledStates}`
