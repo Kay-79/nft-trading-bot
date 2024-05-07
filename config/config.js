@@ -17,6 +17,7 @@ const config = {
         check: "https://bsc-dataseed1.bnbchain.org",
         create: "http://localhost:8545",
         public: "https://bsc-dataseed3.bnbchain.org",
+        protect: "https://bsc.rpc.blxrbdn.com",
     },
     wss: {
         private: "ws://localhost:8546",
