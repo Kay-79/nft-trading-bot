@@ -198,7 +198,7 @@ async function setup(Private_Key_) {
                                 nowBlock = await web3rpc.eth.getBlockNumber();
                                 if (blockCreate + 38 <= nowBlock) {
                                     //control time to send here
-                                    await sleep(1750);
+                                    await sleep(1550);
                                     isFrontRun = true;
                                     break;
                                 }
