@@ -380,7 +380,11 @@ async function checkListedAll(rate_) {
         currentDate.getFullYear();
     let daysAgo = (currentDate - firstListTime * 1000) / (24 * 60 * 60 * 1000);
     if (daysAgo < 1) {
-        daysAgo = `${(daysAgo * 24).toFixed(0)} hours ago`;
+        if (daysAgo > 0) {
+            daysAgo = `${(daysAgo * 24).toFixed(0)} hours ago`;
+        } else {
+            daysAgo = `Don't have listed yet`;
+        }
     } else {
         daysAgo = `${Math.floor(daysAgo)} days ${((daysAgo % 1) * 24).toFixed(0)} hours ago`;
     }
