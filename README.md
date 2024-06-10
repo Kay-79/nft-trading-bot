@@ -9,5 +9,7 @@
     -   \_8_9_1
     -   \_b_8_C
     -   \_8_3_8
+    -   \_7_9_7
+    -   \_3_A_2
 
-## Current storage is `1280` momos
+## Current storage is `896` momos
