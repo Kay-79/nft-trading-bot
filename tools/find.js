@@ -150,8 +150,8 @@ async function checkCanBuy() {
                 }
                 break;
             case "Normal":
-                break; //disabled normal
-                if (configJson.rateFee > 0.15) {
+                // break; //disabled normal
+                if (configJson.rateFee > 0.11) {
                     break; //Disabled normal
                 }
                 if (

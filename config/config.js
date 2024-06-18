@@ -60,7 +60,7 @@ const config = {
         epic: 10,
         legendary: 1000,
     },
-    rateFee: 0.1,
+    rateFee: 0.05,
     rateMax: 0.8,
     minPrice: {
         minCommon: 3.0,
