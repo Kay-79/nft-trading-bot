@@ -85,7 +85,20 @@ async function setup(Private_Key_) {
         let blockCreate = 0;
         const index_ = dataBid[2].split(",");
         if (index_[0] != "" && Date.now() / 1000 > Number(startTime_[0]) + timeSendTx - 30) {
-            blockCreate = await getBlockByTime(web3rpc, Number(startTime_[0]), 3);
+            try {
+                blockCreate = await getBlockByTime(web3rpc, Number(startTime_[0]), 3);
+            } catch (error) {
+                request(
+                    "https://api.telegram.org/" +
+                        apiTele +
+                        "/sendMessage?chat_id=@" +
+                        chatId +
+                        "&text=Error get block by time, plese check private node",
+                    function (error, response, body) {}
+                );
+                await sleep(10000);
+                exit();
+            }
             const seller_ = dataBid[0].split(",");
             const priceList = dataBid[1].split(",");
             const amountList = dataBid[5].split(",");
