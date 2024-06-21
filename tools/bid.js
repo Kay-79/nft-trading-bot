@@ -30,6 +30,7 @@ const contractAddress = configJson.accBuy;
 const contract = new web3rpc.eth.Contract(abi, contractAddress);
 const overTime = 180;
 const timeGetAvaliableAuction = 5;
+const minGasPrice = configJson.gasPrices.minBid;
 let timeSendTx = configJson.timeBid;
 const emoji = configJson.emojiURL;
 const Tx = require("ethereumjs-tx").Transaction;
@@ -92,10 +93,9 @@ async function setup(Private_Key_) {
             const gasPriceScanRaw = dataBid[6].split(",");
             if (gasPriceScanRaw.length == 1) {
                 maxGasPricePerFee = (
-                    ((Number(gasPriceScanRaw[0]) - configJson.gasPrices.minBid) /
-                        configJson.rateFee) *
+                    ((Number(gasPriceScanRaw[0]) - minGasPrice) / configJson.rateFee) *
                         configJson.rateMax +
-                    configJson.gasPrices.minBid
+                    minGasPrice
                 ).toFixed(3);
             }
             let gasPriceScan = [];
@@ -472,7 +472,7 @@ async function bid() {
                                     // avoid code bid func in smart contract same enemy methodID
                                     console.log(tx.hash, tx.gasPrice, tx.from);
                                     if (
-                                        Number(tx.gasPrice) > 3 * 10 ** 9 &&
+                                        Number(tx.gasPrice) > minGasPrice * 10 ** 9 &&
                                         Number(tx.gasPrice) > Number(txResend.gasPrice) &&
                                         Number(tx.gasPrice) < Number(maxGasPricePerFee) * 10 ** 9
                                     ) {
@@ -480,7 +480,7 @@ async function bid() {
                                     } else {
                                         maxGasPiceEnemy = tx.gasPrice;
                                         console.log(
-                                            `Gas price is not in range: 3Gwei - ${maxGasPricePerFee}Gwei or lower current gas price`
+                                            `Gas price is not in range: ${minGasPrice}Gwei - ${maxGasPricePerFee}Gwei or lower current gas price`
                                         );
                                     }
                                 }
