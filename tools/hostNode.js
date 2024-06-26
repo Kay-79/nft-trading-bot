@@ -10,8 +10,9 @@ bot.onText(/\/status/, async (msg) => {
     try {
         const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
         const blockNumber = await web3.eth.getBlockNumber();
+        const amountPeer = await web3.eth.net.getPeerCount();
         if (blockNumber > 0) {
-            bot.sendMessage(chatId, "Block number: " + blockNumber);
+            bot.sendMessage(chatId, "Block number: " + blockNumber + "\nAmount peer: " + amountPeer);
         } else {
             const isSyncing = await web3.eth.isSyncing();
             bot.sendMessage(
