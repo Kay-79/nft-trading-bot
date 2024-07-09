@@ -4,7 +4,7 @@ const getBnbPrice = async () => {
     let bnbPriceCheck = 0;
     bnbPriceCheck = await axios
         .get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]")
-        .catch((e) => {
+        .catch(e => {
             console.log("Err1");
         });
     try {

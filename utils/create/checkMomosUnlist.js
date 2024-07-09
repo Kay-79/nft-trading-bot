@@ -85,7 +85,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     } catch (error) {}
 };
 
-const checkMomosUnlist = async (addressCheck) => {
+const checkMomosUnlist = async addressCheck => {
     dataBid = {}; // reset data
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
     let nowBlock = await axios
@@ -94,7 +94,7 @@ const checkMomosUnlist = async (addressCheck) => {
                 Date.now() / 1000
             ).toFixed()}&closest=before&apikey=${process.env.BSC_API_KEY}`
         )
-        .catch((e) => {
+        .catch(e => {
             console.log("Err check block!!");
             exit();
         });

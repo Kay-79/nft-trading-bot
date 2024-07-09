@@ -5,7 +5,7 @@ const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, r
     if (err) console.error(err);
 });
 const testWss = async () => {
-    getPendingTransactions.on("data", (txHash) => {
+    getPendingTransactions.on("data", txHash => {
         setTimeout(async () => {
             try {
                 console.log(txHash);

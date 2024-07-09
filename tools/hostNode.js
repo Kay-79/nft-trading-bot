@@ -5,26 +5,26 @@ require("dotenv").config();
 const token = process.env.api_telegram.replace("bot", "");
 const bot = new TelegramBot(token, {
     polling: {
-        interval: 1000,
+        interval: 60000,
         autoStart: true,
         params: {
-            timeout: 10,
-        },
-    },
+            timeout: 100
+        }
+    }
 });
 
-bot.on("polling_error", (error) => {
+bot.on("polling_error", error => {
     console.error("Polling error:", error);
 });
 
-bot.on("webhook_error", (error) => {
+bot.on("webhook_error", error => {
     console.error("Webhook error:", error);
 });
 
-bot.onText(/\/status/, async (msg) => {
+bot.onText(/\/status/, async msg => {
     const chatId = msg.chat.id;
     try {
-        const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+        const web3 = new Web3(new Web3.providers.HttpProvider(config.rpcs.bid));
         const blockNumber = await web3.eth.getBlockNumber();
         const amountPeer = await web3.eth.net.getPeerCount();
         if (blockNumber > 0) {

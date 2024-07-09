@@ -6,11 +6,11 @@ const abiWallet = [
                 indexed: false,
                 internalType: "uint8",
                 name: "version",
-                type: "uint8",
-            },
+                type: "uint8"
+            }
         ],
         name: "Initialized",
-        type: "event",
+        type: "event"
     },
     {
         anonymous: false,
@@ -19,17 +19,17 @@ const abiWallet = [
                 indexed: true,
                 internalType: "address",
                 name: "previousOwner",
-                type: "address",
+                type: "address"
             },
             {
                 indexed: true,
                 internalType: "address",
                 name: "newOwner",
-                type: "address",
-            },
+                type: "address"
+            }
         ],
         name: "OwnershipTransferred",
-        type: "event",
+        type: "event"
     },
     {
         inputs: [],
@@ -38,37 +38,37 @@ const abiWallet = [
             {
                 internalType: "uint256",
                 name: "",
-                type: "uint256",
-            },
+                type: "uint256"
+            }
         ],
         stateMutability: "view",
-        type: "function",
+        type: "function"
     },
     {
         inputs: [
             {
                 internalType: "contract IERC20",
                 name: "token",
-                type: "address",
-            },
+                type: "address"
+            }
         ],
         name: "balanceToken",
         outputs: [
             {
                 internalType: "uint256",
                 name: "",
-                type: "uint256",
-            },
+                type: "uint256"
+            }
         ],
         stateMutability: "view",
-        type: "function",
+        type: "function"
     },
     {
         inputs: [],
         name: "initialize",
         outputs: [],
         stateMutability: "nonpayable",
-        type: "function",
+        type: "function"
     },
     {
         inputs: [],
@@ -77,76 +77,76 @@ const abiWallet = [
             {
                 internalType: "address",
                 name: "",
-                type: "address",
-            },
+                type: "address"
+            }
         ],
         stateMutability: "view",
-        type: "function",
+        type: "function"
     },
     {
         inputs: [],
         name: "renounceOwnership",
         outputs: [],
         stateMutability: "nonpayable",
-        type: "function",
+        type: "function"
     },
     {
         inputs: [
             {
                 internalType: "address",
                 name: "newOwner",
-                type: "address",
-            },
+                type: "address"
+            }
         ],
         name: "transferOwnership",
         outputs: [],
         stateMutability: "nonpayable",
-        type: "function",
+        type: "function"
     },
     {
         inputs: [
             {
                 internalType: "contract IERC20",
                 name: "token",
-                type: "address",
+                type: "address"
             },
             {
                 internalType: "address",
                 name: "to",
-                type: "address",
+                type: "address"
             },
             {
                 internalType: "uint256",
                 name: "amount",
-                type: "uint256",
-            },
+                type: "uint256"
+            }
         ],
         name: "transferToken",
         outputs: [],
         stateMutability: "nonpayable",
-        type: "function",
+        type: "function"
     },
     {
         inputs: [
             {
                 internalType: "uint256",
                 name: "amount",
-                type: "uint256",
+                type: "uint256"
             },
             {
                 internalType: "address payable",
                 name: "destAddr",
-                type: "address",
-            },
+                type: "address"
+            }
         ],
         name: "withdraw",
         outputs: [],
         stateMutability: "nonpayable",
-        type: "function",
+        type: "function"
     },
     {
         stateMutability: "payable",
-        type: "receive",
-    },
+        type: "receive"
+    }
 ];
 module.exports = abiWallet;

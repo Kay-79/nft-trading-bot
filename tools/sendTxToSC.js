@@ -11,7 +11,7 @@ const sendTxToSC = async () => {
         data: contract.methods.changeAmountUnList("6").encodeABI(),
         value: 0,
         gas: 100000,
-        gasPrice: 3000000000,
+        gasPrice: 3000000000
     };
     const signed = await web3.eth.accounts.signTransaction(tx, process.env.PRIVATE_KEY_BID);
     await web3.eth.sendSignedTransaction(signed.rawTransaction);

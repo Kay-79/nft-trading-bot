@@ -34,7 +34,7 @@ async function checkChangePrice(indexId) {
             "https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=10&category=&vType=&sort=price&pType=" +
                 idMomoBought[indexId]
         )
-        .catch((e) => {
+        .catch(e => {
             console.log("Err2");
         });
     const data3 = response3.data.list;
@@ -196,7 +196,7 @@ async function checkIndex(address) {
     flagCountMomo = 0;
     let response = await axios
         .get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-time&page=1&limit=128")
-        .catch((e) => {
+        .catch(e => {
             console.log("Err1");
         });
     const data = response.data;
@@ -238,13 +238,13 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
                 { name: "tokenIds_", type: "uint256[]" },
                 { name: "prices721_", type: "uint256[]" },
                 { name: "ids_", type: "uint256[]" },
-                { name: "prices1155_", type: "uint256[]" },
+                { name: "prices1155_", type: "uint256[]" }
             ],
             name: "createAuctionBatch",
             outputs: [],
             stateMutability: "payable",
-            type: "function",
-        },
+            type: "function"
+        }
     ];
     const consractAddress = configJson.addressMP;
     const contract = new web3.eth.Contract(abi, consractAddress);
@@ -265,9 +265,9 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
         gasPrice: (gasPrice_ * 10 ** 9).toFixed(), // + i * 10 ** 6,
         to: accSell,
         value: 0,
-        data: encoded,
+        data: encoded
     };
-    await web3.eth.accounts.signTransaction(tx, Private_Key).then((signed) => {
+    await web3.eth.accounts.signTransaction(tx, Private_Key).then(signed => {
         signArray = signed;
     });
     console.log("Listing");

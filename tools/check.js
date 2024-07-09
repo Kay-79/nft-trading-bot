@@ -34,7 +34,7 @@ async function checkListed(address) {
     flagCountMomo = 0;
     let response = await axios
         .get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=-time&page=1&limit=128")
-        .catch((e) => {
+        .catch(e => {
             console.log("Err1");
         });
     countRqs++;
@@ -124,7 +124,7 @@ async function scanIndex(logData) {
 async function checkPriceBuy(address, page) {
     let response2 = await axios
         .get("https://nftapi.mobox.io/auction/logs_new/" + address + "?&page=" + page + "&limit=50")
-        .catch((e) => {
+        .catch(e => {
             console.log("Err2");
         });
     countRqs++;
@@ -254,7 +254,7 @@ async function main(address, nameFile_, rate_) {
                 "\n";
         }
         if (save == true) {
-            fs.writeFile(nameFile_ + ".csv", dataExcel, (err) => {
+            fs.writeFile(nameFile_ + ".csv", dataExcel, err => {
                 if (err) {
                     console.error(err);
                 }
@@ -303,7 +303,7 @@ async function main(address, nameFile_, rate_) {
             }
             try {
                 fs.readFileSync(listPath, "utf8");
-                fs.writeFile(listPath, listed, (err) => {
+                fs.writeFile(listPath, listed, err => {
                     if (err) {
                         console.error(err);
                     }
@@ -319,7 +319,7 @@ async function checkListedAll(rate_) {
     console.log("Min Prices:", minPrices);
     bnbPrice = await axios
         .get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]")
-        .catch((e) => {
+        .catch(e => {
             console.log("Err1");
         });
     try {
@@ -332,7 +332,7 @@ async function checkListedAll(rate_) {
         .get(
             "https://wise.com/rates/live?source=USD&target=VND&length=30&resolution=hourly&unit=day"
         )
-        .catch((e) => {
+        .catch(e => {
             console.log("Err get usd price");
             exit();
         });
@@ -411,7 +411,7 @@ async function checkListedAll(rate_) {
                     (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
                     "\t" +
                     nowSync,
-                (err) => {
+                err => {
                     if (err) {
                         console.error(err);
                     }
@@ -439,7 +439,7 @@ async function checkListedAll(rate_) {
                     (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed() +
                     "\t" +
                     nowSync;
-                fs.writeFile(logsPath, logsBalance, (err) => {
+                fs.writeFile(logsPath, logsBalance, err => {
                     if (err) {
                         console.error(err);
                     }

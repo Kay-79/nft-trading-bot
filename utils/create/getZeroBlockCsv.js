@@ -1,5 +1,5 @@
 const fs = require("fs");
-const getZeroBlockCsv = (addressCheck) => {
+const getZeroBlockCsv = addressCheck => {
     let dataAddress = [];
     try {
         const data = fs.readFileSync("./data/zeroBlock.csv", "utf8");

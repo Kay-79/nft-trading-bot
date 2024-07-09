@@ -227,7 +227,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                     "\n" +
                     gasPriceNew +
                     "\n";
-                fs.writeFile(linkSave, content, (err) => {
+                fs.writeFile(linkSave, content, err => {
                     if (err) {
                         console.error(err);
                     }
@@ -290,7 +290,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                     "\n" +
                     gasPriceNew +
                     "\n";
-                fs.writeFile(linkSave, content, (err) => {
+                fs.writeFile(linkSave, content, err => {
                     if (err) {
                         console.error(err);
                     }
@@ -466,7 +466,7 @@ async function getMinPriceOrdi() {
     minEpic = 0;
     minLegend = 0;
     console.log(minCommon, minUncommon, minUnique, minRare, minEpic, minLegend);
-    fee = gasUsed.map((valuee) => valuee * gasPriceMin * bnbPrice * 10 ** -9); //min fee to buy
+    fee = gasUsed.map(valuee => valuee * gasPriceMin * bnbPrice * 10 ** -9); //min fee to buy
     // console.log(gasUsed);
     // console.log(fee);
     // exit();
@@ -480,7 +480,7 @@ const profit = [
     profits.unique,
     profits.rare,
     profits.epic,
-    profits.legend,
+    profits.legend
 ]; //profit per momo
 const profitName = 3000;
 let minCommon, minUncommon, minUnique, minRare, minEpic, minLegend;

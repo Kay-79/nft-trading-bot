@@ -63,7 +63,7 @@ async function transfer(address_) {
                     gasPrice: Number((1.0001 * 10 ** 9).toFixed(0)),
                     to: myAcc[index][0],
                     value: 0,
-                    data: encoded,
+                    data: encoded
                 };
                 let signed = await web3.eth.accounts.signTransaction(tx, Private_Key);
                 await web3.eth.sendSignedTransaction(signed.rawTransaction);

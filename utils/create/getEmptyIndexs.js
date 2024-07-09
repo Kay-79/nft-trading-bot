@@ -1,15 +1,13 @@
 const axios = require("axios");
 
-const getEmptyIndexs = async (address) => {
+const getEmptyIndexs = async address => {
     let emptyIndexs = [];
     for (let i = 0; i < 128; i++) {
         emptyIndexs.push(i);
     }
     let response = await axios
-        .get(
-            `https://nftapi.mobox.io/auction/list/BNB/${address}?sort=-time&page=1&limit=128`
-        )
-        .catch((e) => {
+        .get(`https://nftapi.mobox.io/auction/list/BNB/${address}?sort=-time&page=1&limit=128`)
+        .catch(e => {
             console.log("Err1");
             return [];
         });

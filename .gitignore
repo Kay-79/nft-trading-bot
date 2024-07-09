@@ -12,3 +12,4 @@ test*.*
 ./data
 .ds_store
 data/momoStorage.json
+.vscode

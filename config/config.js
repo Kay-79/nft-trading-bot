@@ -5,7 +5,7 @@ const config = {
     factoryContract: "0xaBf5C4ac3029f5f6892c3A98DE6DCaf3826C1394",
     wallet: {
         address: "0x444444961B7CC7b0F23BCF1bC666facf44135DA2",
-        owner: "0x55555D4de8df0c455C2Ff368253388FE669a8888",
+        owner: "0x55555D4de8df0c455C2Ff368253388FE669a8888"
     },
     bidder: "0x55555D4de8df0c455C2Ff368253388FE669a8888",
     changer: "0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000",
@@ -17,16 +17,16 @@ const config = {
         check: "https://bsc-dataseed1.bnbchain.org",
         create: "http://127.0.0.1:8545",
         public: "https://bsc-dataseed3.bnbchain.org",
-        protect: "https://bsc.rpc.blxrbdn.com",
+        protect: "https://bsc.rpc.blxrbdn.com"
     },
     wss: {
         private: "ws://127.0.0.1:8546",
         mainnet: "wss://bsc.publicnode.com",
-        testnet: "wss://bsc-testnet.publicnode.com",
+        testnet: "wss://bsc-testnet.publicnode.com"
     },
     emojiURL: {
         fail: "\xE2\x9D\x8C",
-        success: "\xE2\x9C\x85",
+        success: "\xE2\x9C\x85"
     },
     myAcc: [
         ["0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000", "_1_0_1", true],
@@ -37,18 +37,18 @@ const config = {
         ["0xb8C5744D347A74484925E19F588719C846616405", "_b_8_C", true],
         ["0x838e781DC9F070922F66f0BE415d15168bB04825", "_8_3_8", true],
         ["0x79791a6D45C4bCcaBf56dF64403d84EEFc4065EC", "_7_9_7", true],
-        ["0x3A2887CEE9096cc90A00619F5fAFA5eeE8FC0e32", "_3_A_2", true],
+        ["0x3A2887CEE9096cc90A00619F5fAFA5eeE8FC0e32", "_3_A_2", true]
     ],
     timeDelays: {
         normal: 1,
-        pro: 8,
+        pro: 8
     },
     minDecreasePrice: 0.2,
     amountChange: 1,
     gasPrices: {
         minBid: 1.1,
         create: 1.0001,
-        change: 1.0001,
+        change: 1.0001
     },
     gasLimitBundle: 388000,
     timeDelayPerLoop: 1,
@@ -58,7 +58,7 @@ const config = {
         unique: 0.1,
         rare: 4,
         epic: 10,
-        legendary: 1000,
+        legendary: 1000
     },
     rateFee: 0.05,
     rateMax: 0.8,
@@ -66,10 +66,10 @@ const config = {
         minCommon: 3.0,
         minUncommon: 1.0,
         minUnique: 0.5,
-        minRare: 14,
+        minRare: 14
     },
     timeBid: 131.0,
-    accBuy: "0x179815260f9265950286918fa34b624071E09D68",
+    accBuy: "0x179815260f9265950286918fa34b624071E09D68"
 };
 
 module.exports = config;

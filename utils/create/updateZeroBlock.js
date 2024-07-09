@@ -10,7 +10,7 @@ const Web3 = require("web3");
 const web3 = new Web3("https://bsc-dataseed1.binance.org:443");
 const updateZeroBlock = async () => {
     let newDataZero = "";
-    let contracts = myaccs.map((e) => e[0]);
+    let contracts = myaccs.map(e => e[0]);
     let nowBlock = await web3.eth.getBlockNumber();
     nowBlock++;
     console.log(nowBlock);

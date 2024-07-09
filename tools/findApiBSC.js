@@ -225,7 +225,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                     "\n" +
                     gasPriceNew +
                     "\n";
-                fs.writeFile(linkSave, content, (err) => {
+                fs.writeFile(linkSave, content, err => {
                     if (err) {
                         console.error(err);
                     }
@@ -286,7 +286,7 @@ async function saveWaitBuy(seller__, price__, index__, time__, tokenId__, amount
                     "\n" +
                     gasPriceNew +
                     "\n";
-                fs.writeFile(linkSave, content, (err) => {
+                fs.writeFile(linkSave, content, err => {
                     if (err) {
                         console.error(err);
                     }
@@ -358,7 +358,7 @@ async function divideCanBuy() {
 async function runBot(amountTx) {
     bnbPrice = await axios
         .get("https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]")
-        .catch((e) => {
+        .catch(e => {
             console.log("Err1");
         });
     bnbPrice = bnbPrice.data.data.bnb.price;
@@ -407,7 +407,7 @@ async function setup() {
                 Date.now() / 1000
             ).toFixed()}&closest=before&apikey=${process.env.BSC_API_KEY}`
         )
-        .catch((e) => {
+        .catch(e => {
             console.log("Err check block!!");
         });
     cacheBlock = getCacheBlock.data.result;
@@ -468,7 +468,7 @@ async function getMinPrice() {
                     (index0 + 1).toString() +
                     "&sort=price&pType="
             )
-            .catch((e) => {
+            .catch(e => {
                 console.log("Err get min price!!");
             });
         if (!dataMin) {
@@ -530,7 +530,7 @@ async function getMinPrice() {
     minEpic = 0;
     minLegend = 0;
     console.log(minCommon, minUncommon, minUnique, minRare, minEpic, minLegend);
-    fee = gasUsed.map((valuee) => valuee * gasPriceMin * bnbPrice * 10 ** -9); //min fee to buy
+    fee = gasUsed.map(valuee => valuee * gasPriceMin * bnbPrice * 10 ** -9); //min fee to buy
 }
 
 let priceRaw = [0, 0, 0, 0, 0, 1000]; //lowest price in MP
@@ -541,7 +541,7 @@ const profit = [
     profits.unique,
     profits.rare,
     profits.epic,
-    profits.legend,
+    profits.legend
 ]; //profit per momo
 const profitName = 30;
 let minCommon, minUncommon, minUnique, minRare, minEpic, minLegend;

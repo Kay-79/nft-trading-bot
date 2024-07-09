@@ -23,7 +23,7 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
                 toBlock: toBlockNew,
-                topics: [process.env.TOPIC_BID], // the second parameter is variable c
+                topics: [process.env.TOPIC_BID] // the second parameter is variable c
             });
         } catch (err) {
             console.log(err);
@@ -65,7 +65,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
                 toBlock: toBlockNew,
-                topics: [process.env.TOPIC_CREATE], // the second parameter is variable c
+                topics: [process.env.TOPIC_CREATE] // the second parameter is variable c
             });
         } catch (error) {
             await getMomosListed(cacheBlock, nowBlock, addressCheck);

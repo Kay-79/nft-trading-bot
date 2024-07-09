@@ -33,9 +33,9 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
         gasPrice: gasPrice_ * 10 ** 9, // + i * 10 ** 6,
         to: consractAddress,
         value: 0,
-        data: encoded,
+        data: encoded
     };
-    await web3.eth.accounts.signTransaction(tx, Private_Key).then((signed) => {
+    await web3.eth.accounts.signTransaction(tx, Private_Key).then(signed => {
         signArray = signed;
         // console.log(Date());
     });

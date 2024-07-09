@@ -14,7 +14,7 @@ const getMinPrice = async () => {
                     index0 + 1
                 ).toString()}&sort=price&pType=`
             )
-            .catch((e) => {
+            .catch(e => {
                 console.log("Err get min price!!");
             });
         if (!dataMin) {

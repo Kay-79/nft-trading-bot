@@ -12,12 +12,12 @@ const checkLatency = async () => {
     let publicBlock = 0;
     sleep(300);
     try {
-        web3a.eth.getBlockNumber().then((latencyPublic) => {
+        web3a.eth.getBlockNumber().then(latencyPublic => {
             console.log(`Latency public : ${latencyPublic}`);
             publicBlock = Number(latencyPublic);
         });
         try {
-            web3.eth.getBlockNumber().then((latencyPrivate) => {
+            web3.eth.getBlockNumber().then(latencyPrivate => {
                 console.log(`Latency private: ${latencyPrivate}`);
                 privateBlock = Number(latencyPrivate);
             });

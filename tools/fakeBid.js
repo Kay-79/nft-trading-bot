@@ -7,7 +7,7 @@ const Private_Key = process.env.PRIVATE_KEY_FAKE_BID;
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
 const { exit } = require("process");
-process.on("unhandledRejection", (err) => {
+process.on("unhandledRejection", err => {
     console.error("Unhandled Promise Rejection:", err);
 });
 // const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-testnet.publicnode.com"));
@@ -77,7 +77,7 @@ async function setup(Private_Key_) {
                                     priceList[index].toString(),
                                     "1"
                                 )
-                                .encodeABI(), // amount = 1
+                                .encodeABI() // amount = 1
                         });
                         nonce_ += 1;
                     }
@@ -97,7 +97,7 @@ async function setup(Private_Key_) {
                                 priceList.toString(),
                                 amountBid.toString()
                             )
-                            .encodeABI(), // amount = 1 or > 1
+                            .encodeABI() // amount = 1 or > 1
                     });
                 }
                 let checkSuccess = "Success";
@@ -306,7 +306,7 @@ async function setup(Private_Key_) {
             if (dataBid.length) {
                 content += "\n";
             }
-            fs.writeFile("waitBid.txt", content, (err) => {
+            fs.writeFile("waitBid.txt", content, err => {
                 if (err) {
                     console.error(err);
                 }

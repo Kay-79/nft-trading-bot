@@ -8,7 +8,7 @@ const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const { exit } = require("process");
 const getMinPrice = require("../utils/common/getMinPrice");
-process.on("unhandledRejection", (err) => {
+process.on("unhandledRejection", err => {
     console.error("Unhandled Promise Rejection:", err);
 });
 const changer = configJson.changer;
@@ -31,7 +31,7 @@ let flagCountMomo = 0;
 async function checkListed(address) {
     axios
         .get("https://nftapi.mobox.io/auction/list/BNB/" + address + "?sort=price&page=1&limit=128")
-        .then((response) => {
+        .then(response => {
             const data = response.data;
             for (let i = 0; i < data.list.length; i++) {
                 idMomo.push(data.list[i].prototype);
@@ -41,7 +41,7 @@ async function checkListed(address) {
                 boolChange.push(" ");
             }
         })
-        .catch((error) => {
+        .catch(error => {
             console.log(error);
         });
     await sleep(4000);
@@ -51,7 +51,7 @@ function checkPriceBuy(address_, page) {
         .get(
             "https://nftapi.mobox.io/auction/logs_new/" + address_ + "?&page=" + page + "&limit=50"
         )
-        .then((response2) => {
+        .then(response2 => {
             const data2 = response2.data;
             for (let i = 0; i < data2.list.length; i++) {
                 let sum = 0;
@@ -181,7 +181,7 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
             encoded = contract.methods
                 .changePrice(index_, priceChange_, priceChange_, 2)
                 .encodeABI();
-            await web3.eth.getTransactionCount(changer).then((nonce) => {
+            await web3.eth.getTransactionCount(changer).then(nonce => {
                 // console.log(nonceAcc, nonce)
                 tx = {
                     nonce: nonce + nonceAcc[0],
@@ -190,7 +190,7 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                     gasPrice: gasPriceScan,
                     to: address_,
                     value: 0,
-                    data: encoded,
+                    data: encoded
                 };
             });
             nonceAcc[0] += 1;
@@ -199,7 +199,7 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
     }
     try {
         await sleep(500);
-        await web3.eth.accounts.signTransaction(tx, Private_Key_).then((signed) => {
+        await web3.eth.accounts.signTransaction(tx, Private_Key_).then(signed => {
             signArray.push(signed);
         });
         console.log(signArray.length + "/" + amountChange);
@@ -213,7 +213,7 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                         let isCrash = false;
                         await web3.eth
                             .sendSignedTransaction(signArray[index].rawTransaction)
-                            .catch((err) => {
+                            .catch(err => {
                                 console.error(err);
                                 request(
                                     "https://api.telegram.org/" +
@@ -235,7 +235,7 @@ async function changePrice(index_, priceChange_, Private_Key_, address_) {
                     } else {
                         web3.eth
                             .sendSignedTransaction(signArray[index].rawTransaction)
-                            .catch((err) => {
+                            .catch(err => {
                                 console.error(err);
                                 request(
                                     "https://api.telegram.org/" +
@@ -284,7 +284,7 @@ async function main(address_, boolMin, Private_Key_) {
         for (let indexMomo_ = idMomo.length - 1; indexMomo_ >= 0; indexMomo_--) {
             if (signArray.length > amountChange + 1) {
                 // this code to check send bundle changePrice
-                nonceAcc = File_Key.map((x) => 0);
+                nonceAcc = File_Key.map(x => 0);
                 signArray = [];
                 idCache = [];
             }

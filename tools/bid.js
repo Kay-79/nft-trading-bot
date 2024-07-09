@@ -13,7 +13,7 @@ const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
 // const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.mainnet));
 // const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.public));
 const { exit } = require("process");
-process.on("unhandledRejection", (err) => {
+process.on("unhandledRejection", err => {
     console.error("Unhandled Promise Rejection:", err);
     try {
         hashCheckStatus.push(err.receipt.transactionHash);
@@ -43,7 +43,7 @@ const chain = common.default.forCustomChain(
     {
         name: "bnb",
         networkId: 56,
-        chainId: 56,
+        chainId: 56
     },
     "petersburg"
 );
@@ -57,7 +57,7 @@ let txResend = {
     nonce: 0, //change with new nonce
     to: contractAddress,
     value: 0,
-    data: "", //change with new data
+    data: "" //change with new data
 };
 let maxGasPricePerFee = "0";
 let hashCheckStatus = [];
@@ -139,7 +139,7 @@ async function setup(Private_Key_) {
                                     priceList[index].toString(),
                                     "1"
                                 )
-                                .encodeABI(), // amount = 1
+                                .encodeABI() // amount = 1
                         });
                         nonce_ += 1;
                     }
@@ -159,7 +159,7 @@ async function setup(Private_Key_) {
                                 priceList.toString(),
                                 amountBid.toString()
                             )
-                            .encodeABI(), // amount = 1 or > 1
+                            .encodeABI() // amount = 1 or > 1
                     });
                     baseGasPrice = gasPriceScan[0];
                     txResend.nonce = nonce_;
@@ -437,7 +437,7 @@ async function setup(Private_Key_) {
             if (dataBid.length) {
                 content += "\n";
             }
-            fs.writeFile("waitBid.txt", content, (err) => {
+            fs.writeFile("waitBid.txt", content, err => {
                 if (err) {
                     console.error(err);
                 }
@@ -446,7 +446,7 @@ async function setup(Private_Key_) {
         }
     }
 }
-const resendTxNewGasPrice = async (newGasPriceSend) => {
+const resendTxNewGasPrice = async newGasPriceSend => {
     try {
         if (Number(newGasPriceSend) < 50 * 10 ** 9) {
             if (txResend.gasPrice * 1.1 > newGasPriceSend) {
@@ -457,7 +457,7 @@ const resendTxNewGasPrice = async (newGasPriceSend) => {
             var tx = new Tx(txResend, { common: chain });
             tx.sign(privateKey);
             var serializedTx = tx.serialize();
-            web3rpc.eth.sendSignedTransaction("0x" + serializedTx.toString("hex")).then((hash) => {
+            web3rpc.eth.sendSignedTransaction("0x" + serializedTx.toString("hex")).then(hash => {
                 hashCheckStatus.push(hash.receipt.transactionHash);
             });
             console.log("New gasPrice: ", txResend.gasPrice);
@@ -473,13 +473,13 @@ async function bid() {
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     let hourCache = new Date().getHours() - 4;
-    getPendingTransactions.on("data", (txHash) => {
+    getPendingTransactions.on("data", txHash => {
         setTimeout(async () => {
             try {
                 if (txResend.data && isFrontRun) {
                     web3.eth
                         .getTransaction(txHash)
-                        .then((tx) => {
+                        .then(tx => {
                             if (tx != null) {
                                 if (checkEnemy(tx.input)) {
                                     // avoid code bid func in smart contract same enemy methodID
@@ -499,7 +499,7 @@ async function bid() {
                                 }
                             }
                         })
-                        .catch((err) => {
+                        .catch(err => {
                             console.error(err);
                         });
                 }
