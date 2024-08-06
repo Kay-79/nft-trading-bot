@@ -63,9 +63,9 @@ const config = {
     gasLimitBundle: 388000,
     timeDelayPerLoop: 1,
     profits: {
-        common: 0.1,
-        uncommon: 0.1,
-        unique: 0.1,
+        common: 0.01,
+        uncommon: 0.01,
+        unique: 0.01,
         rare: 4,
         epic: 10,
         legendary: 1000
