@@ -7,7 +7,8 @@ const checkEnemy = require("../utils/bid/checkEnemy");
 const configJson = require("../config/config");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const Web3 = require("web3");
-const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
+// const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.private));
+const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
 const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.bid));
 // const web3rpc = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.protect));
 // const web3 = new Web3(new Web3.providers.WebsocketProvider(configJson.wss.mainnet));
@@ -473,41 +474,41 @@ async function bid() {
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     let hourCache = new Date().getHours() - 4;
-    getPendingTransactions.on("data", txHash => {
-        setTimeout(async () => {
-            try {
-                if (txResend.data && isFrontRun) {
-                    web3.eth
-                        .getTransaction(txHash)
-                        .then(tx => {
-                            if (tx != null) {
-                                if (checkEnemy(tx.input)) {
-                                    // avoid code bid func in smart contract same enemy methodID
-                                    console.log(tx.hash, tx.gasPrice, tx.from);
-                                    if (
-                                        Number(tx.gasPrice) > minGasPrice * 10 ** 9 &&
-                                        Number(tx.gasPrice) > Number(txResend.gasPrice) &&
-                                        Number(tx.gasPrice) < Number(maxGasPricePerFee) * 10 ** 9
-                                    ) {
-                                        resendTxNewGasPrice(tx.gasPrice);
-                                    } else {
-                                        maxGasPiceEnemy = tx.gasPrice;
-                                        console.log(
-                                            `Gas price is not in range: ${minGasPrice}Gwei - ${maxGasPricePerFee}Gwei or lower current gas price`
-                                        );
-                                    }
-                                }
-                            }
-                        })
-                        .catch(err => {
-                            console.error(err);
-                        });
-                }
-            } catch (err) {
-                console.error("err");
-            }
-        });
-    });
+    // getPendingTransactions.on("data", txHash => {
+    //     setTimeout(async () => {
+    //         try {
+    //             if (txResend.data && isFrontRun) {
+    //                 web3.eth
+    //                     .getTransaction(txHash)
+    //                     .then(tx => {
+    //                         if (tx != null) {
+    //                             if (checkEnemy(tx.input)) {
+    //                                 // avoid code bid func in smart contract same enemy methodID
+    //                                 console.log(tx.hash, tx.gasPrice, tx.from);
+    //                                 if (
+    //                                     Number(tx.gasPrice) > minGasPrice * 10 ** 9 &&
+    //                                     Number(tx.gasPrice) > Number(txResend.gasPrice) &&
+    //                                     Number(tx.gasPrice) < Number(maxGasPricePerFee) * 10 ** 9
+    //                                 ) {
+    //                                     resendTxNewGasPrice(tx.gasPrice);
+    //                                 } else {
+    //                                     maxGasPiceEnemy = tx.gasPrice;
+    //                                     console.log(
+    //                                         `Gas price is not in range: ${minGasPrice}Gwei - ${maxGasPricePerFee}Gwei or lower current gas price`
+    //                                     );
+    //                                 }
+    //                             }
+    //                         }
+    //                     })
+    //                     .catch(err => {
+    //                         console.error(err);
+    //                     });
+    //             }
+    //         } catch (err) {
+    //             console.error("err");
+    //         }
+    //     });
+    // });
     while (true) {
         if (Math.abs(new Date().getHours() - hourCache) >= 4) {
             try {
