@@ -21,7 +21,7 @@ const config = {
     // },
     rpcs: {
         // bid: "https://bsc-dataseed3.bnbchain.org",
-        bid: "https://rpc2.hne.to/",
+        bid: "https://bsc-dataseed1.bnbchain.org",
         // change: "https://bsc.publicnode.com",
         change: "https://rpc2.hne.to/",
         check: "https://bsc-dataseed1.bnbchain.org",
