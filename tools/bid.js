@@ -48,9 +48,9 @@ const chain = common.default.forCustomChain(
     },
     "petersburg"
 );
-const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
-    if (err) console.error(err);
-});
+// const getPendingTransactions = web3.eth.subscribe("pendingTransactions", (err, res) => {
+//     if (err) console.error(err);
+// });
 let txResend = {
     from: configJson.bidder,
     gas: 1000000,
