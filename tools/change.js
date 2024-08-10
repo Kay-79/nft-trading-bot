@@ -279,6 +279,7 @@ async function main(address_, boolMin, Private_Key_) {
     //     if (flagCountMomo == idMomo.length) { break }
     //     await sleep(1000)
     // }
+    totalMomos += idMomo.length;
     if (boolMin) {
         await sleep(5000);
         for (let indexMomo_ = idMomo.length - 1; indexMomo_ >= 0; indexMomo_--) {
@@ -376,6 +377,7 @@ async function main(address_, boolMin, Private_Key_) {
 }
 async function loopCheck(times) {
     for (let index = 0; index < times; index++) {
+        totalMomos = 0;
         console.log("Loop:", index.toString() + "/" + times.toString());
         idChangeds = [];
         shuffleArray(myAccounts);
@@ -388,15 +390,19 @@ async function loopCheck(times) {
                 // 30 mins
                 lastSync = Date.now();
                 minPrices = await getMinPrice();
-                console.log("New minPrice:", minPrices);
+                console.log("New minPrices:", minPrices);
             } else {
-                console.log("Current minPrice:", minPrices);
+                console.log("Current minPrices:", minPrices);
             }
             console.log("Account:", myAccounts[indexAccs]);
             await main(myAccounts[indexAccs], true, Private_Key);
             // await sleep(150000 + 300000 * Math.random()); //5mins per check
         }
         if (times > 1) {
+            if (totalMomos == 0) {
+                console.log("No momos to change");
+                break;
+            }
             console.log(`Wait ${(delayPerLoop / 1000).toFixed(0)} seconds...`);
             await sleep(delayPerLoop); // last change per loop
         }
@@ -424,6 +430,7 @@ const sellOff = true; // if true - sale per minPrice, if false - sale if not los
 const canLost = -1;
 let minPrices = [];
 let lastSync = 0;
+let totalMomos = 0;
 if (configJson.minDecreasePrice > 0.2) {
     console.warn("minDecreasePrice must be greater than 0.2");
     exit();
