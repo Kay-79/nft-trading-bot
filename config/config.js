@@ -56,7 +56,7 @@ const config = {
     minDecreasePrice: 0.2,
     amountChange: 1,
     gasPrices: {
-        minBid: 3.01,
+        minBid: 1.01,
         create: 1.0001,
         change: 1.0001
     },
