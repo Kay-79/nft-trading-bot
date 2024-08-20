@@ -73,7 +73,7 @@ const config = {
     rateFee: 0.05,
     rateMax: 0.8,
     minPrice: {
-        minCommon: 3.0,
+        minCommon: 1.0,
         minUncommon: 1.0,
         minUnique: 0.5,
         minRare: 14
