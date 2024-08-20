@@ -4,7 +4,7 @@ const axios = require("axios");
 const Web3 = require("web3");
 const { exit } = require("process");
 const configJson = require("../../config/config");
-const web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:8545"));
+const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.create));
 const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
 const { getZeroBlockCsv } = require("./getZeroBlockCsv");
 const getBlockByTime = require("../bid/getBlockByTime");
@@ -13,12 +13,13 @@ let momoStorage = {};
 let dataBid = {};
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
+    await sleep(20000);
     const cacheBlock = endBlock;
     console.log(`Checking bided: ${cacheBlock}`);
     try {
         let mpListed = null;
         try {
-            let toBlockNew = endBlock + 50000;
+            let toBlockNew = endBlock + configJson.limitBlockUpdate;
             mpListed = await web3.eth.getPastLogs({
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
@@ -60,7 +61,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     try {
         let mpListed = "";
         try {
-            let toBlockNew = endBlock + 50000;
+            let toBlockNew = endBlock + configJson.limitBlockUpdate;
             mpListed = await web3.eth.getPastLogs({
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
