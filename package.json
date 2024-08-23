@@ -29,6 +29,7 @@
         "transfer": "node ./tools/transfer",
         "deposit": "node ./tools/deposit",
         "withdraw": "node ./tools/withdraw",
+        "update": "node ./tools/updateInventory",
         "test": "node ./tools/wssTest"
     },
     "keywords": [],

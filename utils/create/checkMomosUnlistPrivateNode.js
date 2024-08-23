@@ -13,7 +13,7 @@ let momoStorage = {};
 let dataBid = {};
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
-    await sleep(20000);
+    await sleep(10000);
     const cacheBlock = endBlock;
     console.log(`Checking bided: ${cacheBlock}`);
     try {
@@ -136,4 +136,3 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
 };
 
 module.exports = { checkMomosUnlistPrivateNode };
-// checkMomosUnlistPrivateNode("0x891016f99BA622F8556bE12B4EA336157aA6cb20");
