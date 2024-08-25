@@ -13,24 +13,27 @@ let momoStorage = {};
 let dataBid = {};
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
-    await sleep(10000);
+    // await sleep(5000);
     const cacheBlock = endBlock;
-    console.log(`Checking bided: ${cacheBlock}`);
+    console.log(
+        `Checking bided: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
+    );
     try {
-        let mpListed = null;
+        let data = null;
         try {
             let toBlockNew = endBlock + configJson.limitBlockUpdate;
-            mpListed = await web3.eth.getPastLogs({
+            data = await web3.eth.getPastLogs({
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
                 toBlock: toBlockNew,
                 topics: [process.env.TOPIC_BID] // the second parameter is variable c
             });
         } catch (err) {
-            console.log(err);
+            console.log(err.message);
+            await sleep(5000);
             await getMomosBided(cacheBlock, nowBlock, addressCheck);
         }
-        const data = mpListed;
+        // const data = mpListed;
         for (let i = 0; i < data.length; i++) {
             if (data[i].topics[2] === addressCheck) {
                 const decodedData = await web3.eth.abi.decodeParameters(
@@ -46,32 +49,46 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
                 }
             }
         }
-        if (Number(data[data.length - 1].blockNumber) < nowBlock) {
-            await getMomosBided(
-                Number(data[data.length - 1].blockNumber) + 1,
-                nowBlock,
-                addressCheck
-            );
+        if (!data.length && cacheBlock + configJson.limitBlockUpdate < nowBlock) {
+            console.log(`data length: ${data.length} ==> continue scan bided`);
+            await getMomosBided(cacheBlock + configJson.limitBlockUpdate, nowBlock, addressCheck);
         }
-    } catch (error) {}
+        if (cacheBlock + 2*configJson.limitBlockUpdate < nowBlock) {
+            if (Number(data[data.length - 1].blockNumber) < nowBlock) {
+                await getMomosBided(
+                    Number(data[data.length - 1].blockNumber) + 1,
+                    nowBlock,
+                    addressCheck
+                );
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    console.log(`End get momos bided: ${cacheBlock}/${nowBlock}`);
 };
 const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
-    console.log(`Checking listed: ${cacheBlock}`);
+    // await sleep(5000);
+    console.log(
+        `Checking listed: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
+    );
     try {
-        let mpListed = "";
+        let data = "";
         try {
             let toBlockNew = endBlock + configJson.limitBlockUpdate;
-            mpListed = await web3.eth.getPastLogs({
+            data = await web3.eth.getPastLogs({
                 address: process.env.ADDRESS_MP,
                 fromBlock: endBlock,
                 toBlock: toBlockNew,
                 topics: [process.env.TOPIC_CREATE] // the second parameter is variable c
             });
         } catch (error) {
+            console.log(error.message);
+            await sleep(5000);
             await getMomosListed(cacheBlock, nowBlock, addressCheck);
         }
-        const data = mpListed;
+        // const data = mpListed;
         for (let ii = 0; ii < data.length; ii++) {
             if (data[ii].topics[1] === addressCheck) {
                 const decodedData = await web3.eth.abi.decodeParameters(
@@ -88,14 +105,24 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
                 }
             }
         }
-        if (Number(data[data.length - 1].blockNumber) < nowBlock) {
-            await getMomosListed(
-                Number(data[data.length - 1].blockNumber) + 1,
-                nowBlock,
-                addressCheck
-            );
+        // console.log(data);
+        if (!data.length && cacheBlock + 2*configJson.limitBlockUpdate < nowBlock) {
+            console.log(`data length: ${data.length} ==> continue scan listed`);
+            await getMomosListed(cacheBlock + configJson.limitBlockUpdate, nowBlock, addressCheck);
         }
-    } catch (error) {}
+        if (cacheBlock + configJson.limitBlockUpdate < nowBlock) {
+            if (Number(data[data.length - 1].blockNumber) < nowBlock) {
+                await getMomosListed(
+                    Number(data[data.length - 1].blockNumber) + 1,
+                    nowBlock,
+                    addressCheck
+                );
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+    console.log(`End get momos listed: ${cacheBlock}/${nowBlock}`);
 };
 
 const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
@@ -104,6 +131,7 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     dataBid = momoStorage[addressCheck]["momo"];
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
     let nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
+    // let nowBlock = 40673530
     console.log(`Now block is: ${nowBlock}`);
     if (nowBlock - momoStorage[addressCheck]["block"] < 144000 && boolSaveInventory) {
         console.log(`${addressCheck} wait for update after 5 days`);
@@ -128,6 +156,7 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     momoStorage[addressCheck]["momo"] = dataBid;
     momoStorage[addressCheck]["block"] = nowBlock;
     nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
+    // nowBlock = 40673530
     if (boolSaveInventory) {
         fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
     }

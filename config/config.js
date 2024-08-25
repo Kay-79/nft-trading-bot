@@ -25,7 +25,8 @@ const config = {
         // change: "https://bsc.publicnode.com",
         change: "https://bsc-dataseed1.bnbchain.org",
         check: "https://bsc-dataseed1.bnbchain.org",
-        create: "https://bsc-mainnet.nodereal.io/v1/64a9df0874fb4a93b9d0a3849de012d3",
+        // create: "https://bsc-mainnet.nodereal.io/v1/64a9df0874fb4a93b9d0a3849de012d3",
+        create: "https://go.getblock.io/5ca94193fc69438aa954477d5e5701e0",
         public: "https://bsc-dataseed3.bnbchain.org",
         protect: "https://bsc.rpc.blxrbdn.com"
     },
@@ -78,7 +79,7 @@ const config = {
         minUnique: 0.5,
         minRare: 14
     },
-    limitBlockUpdate: 5000,
+    limitBlockUpdate: 10000,
     timeBid: 131.0,
     accBuy: "0x179815260f9265950286918fa34b624071E09D68"
 };
