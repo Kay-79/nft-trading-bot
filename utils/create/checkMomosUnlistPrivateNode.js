@@ -29,10 +29,13 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
                 topics: [process.env.TOPIC_BID] // the second parameter is variable c
             });
         } catch (err) {
-            console.log(err.message);
+            console.warn(err.message);
             await sleep(5000);
             await getMomosBided(cacheBlock, nowBlock, addressCheck);
         }
+        // if (!data) {
+        //     await getMomosBided(cacheBlock, nowBlock, addressCheck);
+        // }
         // const data = mpListed;
         for (let i = 0; i < data.length; i++) {
             if (data[i].topics[2] === addressCheck) {
@@ -64,7 +67,7 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
             }
         }
     } catch (error) {
-        console.log(error);
+        console.warn(error);
     }
     // console.log(`End get momos bid: ${cacheBlock}/${nowBlock}`);
 };
@@ -84,7 +87,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
                 topics: [process.env.TOPIC_CREATE] // the second parameter is variable c
             });
         } catch (error) {
-            console.log(error.message);
+            console.warn(error.message);
             await sleep(5000);
             await getMomosListed(cacheBlock, nowBlock, addressCheck);
         }
@@ -121,7 +124,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
             }
         }
     } catch (error) {
-        console.log(error);
+        console.warn(error);
     }
     // console.log(`End get momos listed: ${cacheBlock}/${nowBlock}`);
 };

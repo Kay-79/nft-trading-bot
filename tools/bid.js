@@ -284,6 +284,7 @@ async function setup(Private_Key_) {
                 for (let op = 0; op < idList.length; op++) {
                     idList[op] = idList[op].slice(0, 1);
                 }
+                let cacheMaxGasPricePerFee;
                 try {
                     let price_send = [];
                     for (let q = 0; q < priceList.length; q++) {
@@ -294,6 +295,7 @@ async function setup(Private_Key_) {
                     priceList1 = ` ${gasPriceScanRaw}-${maxGasPricePerFee}\nPrices   : ${price_send
                         .toString()
                         .replace(" ", "")}\nAmount: ${amountList}\nID List   : ${idList}`;
+                    cacheMaxGasPricePerFee = maxGasPricePerFee;
                     maxGasPricePerFee = "0";
                     if (!isAvailableAuctions) {
                         priceList1 = `Auction be canceled by ${seller_[0].slice(
@@ -333,7 +335,8 @@ async function setup(Private_Key_) {
                         if (true) {
                             if (receiptCheckStatus.status) {
                                 profitBundle = `$${(
-                                    ((Number(maxGasPricePerFee) * 10 ** 9) / configJson.rateMax -
+                                    ((Number(cacheMaxGasPricePerFee) * 10 ** 9) /
+                                        configJson.rateMax -
                                         maxGasSent) *
                                     receiptCheckStatus.gasUsed *
                                     bnbPrice *
