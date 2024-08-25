@@ -11,12 +11,12 @@ const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep, ranSleep } = require("../common/sleep");
 let momoStorage = {};
 let dataBid = {};
+const fiveDaysBlock = 144000;
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
-    // await sleep(5000);
     const cacheBlock = endBlock;
     console.log(
-        `Checking bided: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
+        `Checking bid: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
     );
     try {
         let data = null;
@@ -49,11 +49,12 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
                 }
             }
         }
-        if (!data.length && cacheBlock + configJson.limitBlockUpdate < nowBlock) {
-            console.log(`data length: ${data.length} ==> continue scan bided`);
+        if (cacheBlock + 2 * configJson.limitBlockUpdate > nowBlock) return;
+        if (!data.length) {
+            console.log(`data length: ${data.length} ==> continue scan bid`);
             await getMomosBided(cacheBlock + configJson.limitBlockUpdate, nowBlock, addressCheck);
         }
-        if (cacheBlock + 2*configJson.limitBlockUpdate < nowBlock) {
+        if (cacheBlock + 2 * configJson.limitBlockUpdate < nowBlock) {
             if (Number(data[data.length - 1].blockNumber) < nowBlock) {
                 await getMomosBided(
                     Number(data[data.length - 1].blockNumber) + 1,
@@ -65,16 +66,15 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     } catch (error) {
         console.log(error);
     }
-    console.log(`End get momos bided: ${cacheBlock}/${nowBlock}`);
+    // console.log(`End get momos bid: ${cacheBlock}/${nowBlock}`);
 };
 const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
-    // await sleep(5000);
     console.log(
         `Checking listed: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
     );
     try {
-        let data = "";
+        let data = null;
         try {
             let toBlockNew = endBlock + configJson.limitBlockUpdate;
             data = await web3.eth.getPastLogs({
@@ -97,7 +97,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
                 );
                 for (let j = 0; j < decodedData.ids.length; j++) {
                     if (dataBid[decodedData.ids[j]] === undefined) {
-                        console.log("Err scan bided");
+                        console.log("Err scan bid");
                         exit();
                     } else {
                         dataBid[decodedData.ids[j]] -= Number(decodedData.amounts[j]);
@@ -106,7 +106,8 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
             }
         }
         // console.log(data);
-        if (!data.length && cacheBlock + 2*configJson.limitBlockUpdate < nowBlock) {
+        if (cacheBlock + 2 * configJson.limitBlockUpdate > nowBlock) return;
+        if (!data.length) {
             console.log(`data length: ${data.length} ==> continue scan listed`);
             await getMomosListed(cacheBlock + configJson.limitBlockUpdate, nowBlock, addressCheck);
         }
@@ -122,7 +123,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     } catch (error) {
         console.log(error);
     }
-    console.log(`End get momos listed: ${cacheBlock}/${nowBlock}`);
+    // console.log(`End get momos listed: ${cacheBlock}/${nowBlock}`);
 };
 
 const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
@@ -131,9 +132,9 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     dataBid = momoStorage[addressCheck]["momo"];
     const hexAddress = `0x000000000000000000000000${addressCheck.toLowerCase().slice(2)}`;
     let nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
-    // let nowBlock = 40673530
+    // nowBlock = 38920490
     console.log(`Now block is: ${nowBlock}`);
-    if (nowBlock - momoStorage[addressCheck]["block"] < 144000 && boolSaveInventory) {
+    if (nowBlock - momoStorage[addressCheck]["block"] < fiveDaysBlock && boolSaveInventory) {
         console.log(`${addressCheck} wait for update after 5 days`);
         return;
     }
@@ -156,7 +157,7 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     momoStorage[addressCheck]["momo"] = dataBid;
     momoStorage[addressCheck]["block"] = nowBlock;
     nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
-    // nowBlock = 40673530
+    // nowBlock = 38920490
     if (boolSaveInventory) {
         fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
     }
