@@ -11,7 +11,7 @@ const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep, ranSleep } = require("../common/sleep");
 let momoStorage = {};
 let dataBid = {};
-const fiveDaysBlock = 100;
+const fiveDaysBlock = 144000;
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
