@@ -335,8 +335,7 @@ async function setup(Private_Key_) {
                         if (true) {
                             if (receiptCheckStatus.status) {
                                 profitBundle = `$${(
-                                    ((Number(cacheMaxGasPricePerFee) * 10 ** 9) /
-                                        configJson.rateMax -
+                                    (Number(cacheMaxGasPricePerFee) / configJson.rateMax -
                                         maxGasSent) *
                                     receiptCheckStatus.gasUsed *
                                     bnbPrice *
