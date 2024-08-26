@@ -11,7 +11,7 @@ const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep, ranSleep } = require("../common/sleep");
 let momoStorage = {};
 let dataBid = {};
-const fiveDaysBlock = 144000;
+const fiveDaysBlock = 100;
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
@@ -145,8 +145,24 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     await getMomosBided(dataBlock, nowBlock, hexAddress);
     await getMomosListed(dataBlock, nowBlock, hexAddress);
     let momoUnlist = [];
+    let amountMomos = 0;
+    let hashRate = 0;
     for (let i = 10000; i < 40000; i++) {
         if (dataBid[i]) {
+            amountMomos += Number(dataBid[i]);
+            switch (i.toString().slice(0, 1)) {
+                case "1":
+                    hashRate += 1;
+                    break;
+                case "2":
+                    hashRate += 2;
+                    break;
+                case "3":
+                    hashRate += 3;
+                    break;
+                default:
+                    break;
+            }
             for (let j = 0; j < dataBid[i]; j++) {
                 momoUnlist.push(`${i}`);
             }
@@ -159,6 +175,8 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     console.log(momoUnlist.toString());
     momoStorage[addressCheck]["momo"] = dataBid;
     momoStorage[addressCheck]["block"] = nowBlock;
+    momoStorage[addressCheck]["hash"] = hashRate;
+    momoStorage[addressCheck]["amount"] = amountMomos;
     nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
     // nowBlock = 38920490
     if (boolSaveInventory) {
