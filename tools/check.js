@@ -446,7 +446,7 @@ async function checkListedAll(rate_) {
                 });
             } else {
                 console.log(
-                    `Don't save min. ${countRqs} requests. During ${
+                    `Block save min. ${countRqs} requests. During ${
                         (Date.now() - timeCheck) / 1000
                     } seconds`
                 );

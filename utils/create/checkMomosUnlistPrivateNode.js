@@ -1,14 +1,12 @@
 require("dotenv").config();
 const fs = require("fs");
-const axios = require("axios");
 const Web3 = require("web3");
 const { exit } = require("process");
 const configJson = require("../../config/config");
 const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.create));
 const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
-const { getZeroBlockCsv } = require("./getZeroBlockCsv");
 const getBlockByTime = require("../bid/getBlockByTime");
-const { sleep, ranSleep } = require("../common/sleep");
+const { sleep } = require("../common/sleep");
 let momoStorage = {};
 let dataBid = {};
 const fiveDaysBlock = 144000;
@@ -19,7 +17,7 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
         `Checking bid: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
     );
     try {
-        let data = null;
+        let data = [];
         try {
             let toBlockNew = endBlock + configJson.limitBlockUpdate;
             data = await web3.eth.getPastLogs({
@@ -77,7 +75,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
         `Checking listed: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
     );
     try {
-        let data = null;
+        let data = [];
         try {
             let toBlockNew = endBlock + configJson.limitBlockUpdate;
             data = await web3.eth.getPastLogs({

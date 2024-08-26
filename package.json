@@ -30,6 +30,7 @@
         "deposit": "node ./tools/deposit",
         "withdraw": "node ./tools/withdraw",
         "update": "node ./tools/updateInventory",
+        "updateZero": "node ./tools/updateZeroHashBlockInventory",
         "test": "node ./tools/wssTest"
     },
     "keywords": [],

@@ -25,8 +25,14 @@ const abiAmount = [
         type: "function"
     }
 ];
+const abiCheckZeroHash = [
+    { internalType: "uint256", name: "index", type: "uint256" },
+    { internalType: "uint256", name: "preHash", type: "uint256" },
+    { internalType: "uint256", name: "lastHash", type: "uint256" }
+];
 module.exports = {
     abiCheckListed,
     abiCheckBided,
-    abiAmount
+    abiAmount,
+    abiCheckZeroHash
 };
