@@ -50,12 +50,12 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
                 }
             }
         }
-        if (cacheBlock + 2 * configJson.limitBlockUpdate > nowBlock) return;
+        // if (cacheBlock + configJson.limitBlockUpdate > nowBlock) return;
         if (!data.length) {
             console.log(`data length: ${data.length} ==> continue scan bid`);
             await getMomosBided(cacheBlock + configJson.limitBlockUpdate, nowBlock, addressCheck);
         }
-        if (cacheBlock + 2 * configJson.limitBlockUpdate < nowBlock) {
+        if (cacheBlock + configJson.limitBlockUpdate < nowBlock) {
             if (Number(data[data.length - 1].blockNumber) < nowBlock) {
                 await getMomosBided(
                     Number(data[data.length - 1].blockNumber) + 1,
@@ -107,7 +107,8 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
             }
         }
         // console.log(data);
-        if (cacheBlock + 2 * configJson.limitBlockUpdate > nowBlock) return;
+        // if (cacheBlock + configJson.limitBlockUpdate > nowBlock) {
+        //     return};
         if (!data.length) {
             console.log(`data length: ${data.length} ==> continue scan listed`);
             await getMomosListed(cacheBlock + configJson.limitBlockUpdate, nowBlock, addressCheck);
