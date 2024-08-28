@@ -48,8 +48,13 @@ const config = {
         ["0x3A2887CEE9096cc90A00619F5fAFA5eeE8FC0e32", "_3_A_2", true]
     ],
     timeDelays: {
+        //in hours
         normal: 1,
         pro: 8
+    },
+    timeChangeSecond: {
+        normal: 24,
+        pro: 24
     },
     minDecreasePrice: 0.2,
     amountChange: 1,

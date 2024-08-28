@@ -116,6 +116,13 @@ async function checkChangePrice(indexId) {
                     Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) >
                         timeWaitPro * (indexid_ + 1)
                 ) {
+                    if (
+                        indexid_ === 1 &&
+                        Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) <
+                            timeChangeSecondPro
+                    ) {
+                        break;
+                    }
                     // time wait x2 for second momo
                     priceCache = priceSell[indexId]; // add to compare price
                     priceSell[indexId] = (Number(data3.list[indexid_].nowPrice) / 10 ** 9).toFixed(
@@ -146,6 +153,13 @@ async function checkChangePrice(indexId) {
                 Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) >
                     timeWait * (indexid_ + 1)
             ) {
+                if (
+                    indexid_ === 1 &&
+                    Number(Date.now() / 1000).toFixed() - Number(data3.list[indexid_].uptime) <
+                        timeChangeSecond
+                ) {
+                    break;
+                }
                 // time wait x2 for second momo
                 priceCache = priceSell[indexId]; // add to compare price
                 priceSell[indexId] = (Number(data3.list[indexid_].nowPrice) / 10 ** 9).toFixed(3);
@@ -412,6 +426,8 @@ async function loopCheck(times) {
 const minChange = 0.001;
 const timeWait = configJson.timeDelays.normal * 60 * 60 * 1; //wait latest change price of momo (hour)
 const timeWaitPro = configJson.timeDelays.pro * 60 * 60 * 1; //wait latest change price of momo (hour)
+const timeChangeSecond = configJson.timeChangeSecond.normal;
+const timeChangeSecondPro = configJson.timeChangeSecond.pro;
 const delayChange = 90 * 10 ** 3; //delay to update api (sec)
 const delayPerLoop = configJson.timeDelayPerLoop * 3600000;
 let myAccounts = [];
