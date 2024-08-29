@@ -31,10 +31,6 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
             await sleep(5000);
             await getMomosBided(cacheBlock, nowBlock, addressCheck);
         }
-        // if (!data) {
-        //     await getMomosBided(cacheBlock, nowBlock, addressCheck);
-        // }
-        // const data = mpListed;
         for (let i = 0; i < data.length; i++) {
             if (data[i].topics[2] === addressCheck) {
                 const decodedData = await web3.eth.abi.decodeParameters(
@@ -50,7 +46,6 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
                 }
             }
         }
-        // if (cacheBlock + configJson.limitBlockUpdate > nowBlock) return;
         if (!data.length) {
             console.log(`data length: ${data.length} ==> continue scan bid`);
             await getMomosBided(cacheBlock + configJson.limitBlockUpdate, nowBlock, addressCheck);
@@ -67,7 +62,6 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     } catch (error) {
         console.warn(error);
     }
-    // console.log(`End get momos bid: ${cacheBlock}/${nowBlock}`);
 };
 const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
     const cacheBlock = endBlock;
@@ -89,7 +83,6 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
             await sleep(5000);
             await getMomosListed(cacheBlock, nowBlock, addressCheck);
         }
-        // const data = mpListed;
         for (let ii = 0; ii < data.length; ii++) {
             if (data[ii].topics[1] === addressCheck) {
                 const decodedData = await web3.eth.abi.decodeParameters(
@@ -106,9 +99,6 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
                 }
             }
         }
-        // console.log(data);
-        // if (cacheBlock + configJson.limitBlockUpdate > nowBlock) {
-        //     return};
         if (!data.length) {
             console.log(`data length: ${data.length} ==> continue scan listed`);
             await getMomosListed(cacheBlock + configJson.limitBlockUpdate, nowBlock, addressCheck);

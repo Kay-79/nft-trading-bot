@@ -115,6 +115,7 @@ async function checkChangePrice(indexId) {
 async function getPriceToSell(address, boolMin) {
     idMomoBought = [];
     idMomoBought = await checkMomosUnlistPrivateNode(address, false);
+    // idMomoBought = idMomoBought[address];
     const BatchPrepare = prepareBatch(idMomoBought, priceSell, amountBatchToCreate * 6);
     idMomoBought = BatchPrepare[0];
     priceSell = BatchPrepare[1];
@@ -377,10 +378,11 @@ const create = async () => {
         priceList = [];
         ids = [];
     }
-    sleep(10000);
-    console.log("Updating zero block");
-    await updateZeroBlock();
-    await updateInventory(myAccounts);
+    console.log("Done listing momos");
+    // sleep(10000);
+    // console.log("Updating zero block");
+    // await updateZeroBlock();
+    // await updateInventory(myAccounts);
 };
 create();
 // module.exports = { create };
