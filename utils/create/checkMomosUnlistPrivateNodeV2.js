@@ -4,14 +4,25 @@ const Web3 = require("web3");
 const { exit } = require("process");
 const configJson = require("../../config/config");
 const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.create));
-const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
+const {
+    abiCheckListed,
+    abiCheckBided,
+    abiCheckCanceled,
+    abiCheckZeroHash,
+    abiAmount
+} = require("../../abi/abiCheckUnlist");
 const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep } = require("../common/sleep");
-let momoStorage = {};
-let dataBid = {};
-const fiveDaysBlock = 144000;
+let momoStorage = require("../../data/inventory.json");
+const HEX_ADDRESSES = momoStorage.contracts.map(item => item.hexAddress);
+const TOPICS = [
+    process.env.TOPIC_BID,
+    process.env.TOPIC_CREATE,
+    process.env.TOPIC_CANCEL,
+    process.env.TOPIC_HASH
+];
 
-const syncInventory = async (endBlock, nowBlock, addressCheck) => {
+const syncInventory = async (endBlock, nowBlock) => {
     if (endBlock > nowBlock) {
         return;
     }
@@ -26,120 +37,207 @@ const syncInventory = async (endBlock, nowBlock, addressCheck) => {
             data = await web3.eth.getPastLogs({
                 address: [process.env.ADDRESS_MP, process.env.ADDRESS_MOMO],
                 fromBlock: endBlock,
-                toBlock: toBlockNew,
-                topics: [
-                    process.env.TOPIC_BID,
-                    process.env.TOPIC_CREATE,
-                    process.env.TOPIC_CANCEL,
-                    process.env.TOPIC_HASH
-                ] // the second parameter is variable c
+                toBlock: toBlockNew
             });
         } catch (err) {
             console.warn(err.message);
+            await saveInventory();
             await sleep(5000);
-            await syncInventory(cacheBlock, nowBlock, addressCheck);
+            await syncInventory(cacheBlock, nowBlock);
         }
         for (let i = 0; i < data.length; i++) {
-            if (data[i].topics[2] === addressCheck) {
-                const decodedData = await web3.eth.abi.decodeParameters(
-                    abiCheckBided,
-                    data[i].data
-                );
-                for (let j = 0; j < decodedData.ids.length; j++) {
-                    if (dataBid[decodedData.ids[j]] === undefined) {
-                        dataBid[decodedData.ids[j]] = Number(decodedData.amounts[j]);
-                    } else {
-                        dataBid[decodedData.ids[j]] += Number(decodedData.amounts[j]);
-                    }
+            let decodedData;
+            if (TOPICS.includes(data[i].topics[0])) {
+                switch (data[i].topics[0]) {
+                    case process.env.TOPIC_BID:
+                        if (HEX_ADDRESSES.includes(data[i].topics[2])) {
+                            // im a bidder
+                            console.log(`TOPIC_BID: ${data[i].transactionHash}`);
+                            const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[2]);
+                            decodedData = await web3.eth.abi.decodeParameters(
+                                abiCheckBided,
+                                data[i].data
+                            );
+                            for (let k = 0; k < decodedData.ids.length; k++) {
+                                if (
+                                    momoStorage.contracts[indexContract].momo[
+                                        decodedData.ids[k]
+                                    ] === undefined
+                                ) {
+                                    momoStorage.contracts[indexContract].momo[
+                                        decodedData.ids[k]
+                                    ] = 0;
+                                }
+                                momoStorage.contracts[indexContract].momo[decodedData.ids[k]] +=
+                                    Number(decodedData.amounts[k]);
+                            }
+                            momoStorage.syncedBlock = data[i].blockNumber;
+                        } else if (HEX_ADDRESSES.includes(data[i].topics[1])) {
+                            // im a author
+                            const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[1]);
+                            decodedData = await web3.eth.abi.decodeParameters(
+                                abiCheckBided,
+                                data[i].data
+                            );
+                            for (let k = 0; k < decodedData.ids.length; k++) {
+                                if (
+                                    momoStorage.contracts[indexContract].list[
+                                        decodedData.ids[k]
+                                    ] === undefined
+                                ) {
+                                    momoStorage.contracts[indexContract].list[
+                                        decodedData.ids[k]
+                                    ] = 0;
+                                }
+                                momoStorage.contracts[indexContract].list[decodedData.ids[k]] -=
+                                    Number(decodedData.amounts[k]);
+                            }
+                            momoStorage.syncedBlock = data[i].blockNumber;
+                        }
+                        break;
+                    case process.env.TOPIC_CREATE:
+                        if (HEX_ADDRESSES.includes(data[i].topics[1])) {
+                            console.log(`TOPIC_CREATE: ${data[i].transactionHash}`);
+                            const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[1]);
+                            decodedData = await web3.eth.abi.decodeParameters(
+                                abiCheckListed,
+                                data[i].data
+                            );
+                            for (let k = 0; k < decodedData.ids.length; k++) {
+                                if (
+                                    momoStorage.contracts[indexContract].list[
+                                        decodedData.ids[k]
+                                    ] === undefined
+                                ) {
+                                    momoStorage.contracts[indexContract].list[
+                                        decodedData.ids[k]
+                                    ] = 0;
+                                }
+                                momoStorage.contracts[indexContract].list[decodedData.ids[k]] +=
+                                    Number(decodedData.amounts[k]);
+                                momoStorage.contracts[indexContract].momo[decodedData.ids[k]] -=
+                                    Number(decodedData.amounts[k]);
+                            }
+                            momoStorage.syncedBlock = data[i].blockNumber;
+                        }
+                        break;
+                    case process.env.TOPIC_HASH:
+                        if (HEX_ADDRESSES.includes(data[i].topics[1])) {
+                            console.log(`TOPIC_HASH: ${data[i].transactionHash}`);
+                            const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[1]);
+                            decodedData = await web3.eth.abi.decodeParameters(
+                                abiCheckZeroHash,
+                                data[i].data
+                            );
+                            if (Number(decodedData.lastHash) === 0) {
+                                momoStorage.contracts[indexContract].latestZeroHashBlock =
+                                    data[i].blockNumber;
+                            }
+                            momoStorage.contracts[indexContract].hash = Number(
+                                decodedData.lastHash
+                            );
+                            momoStorage.syncedBlock = data[i].blockNumber;
+                        }
+                        break;
+                    case process.env.TOPIC_CANCEL:
+                        if (HEX_ADDRESSES.includes(data[i].topics[1])) {
+                            console.log(`TOPIC_CANCEL: ${data[i].transactionHash}`);
+                            const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[1]);
+                            decodedData = await web3.eth.abi.decodeParameters(
+                                abiCheckCanceled,
+                                data[i].data
+                            );
+                            for (let k = 0; k < decodedData.ids.length; k++) {
+                                momoStorage.contracts[indexContract].momo[decodedData.ids[k]] +=
+                                    Number(decodedData.amounts[k]);
+                                momoStorage.contracts[indexContract].list[decodedData.ids[k]] -=
+                                    Number(decodedData.amounts[k]);
+                            }
+                            momoStorage.syncedBlock = data[i].blockNumber;
+                        }
+                        break;
+                    default:
+                        break;
                 }
             }
         }
         if (!data.length) {
             console.log(`data length: ${data.length} ==> continue scan bid`);
-            await syncInventory(cacheBlock + configJson.limitBlockUpdate, nowBlock, addressCheck);
+            await syncInventory(cacheBlock + configJson.limitBlockUpdate, nowBlock);
         }
         if (cacheBlock + configJson.limitBlockUpdate < nowBlock) {
             if (Number(data[data.length - 1].blockNumber) < nowBlock) {
-                await syncInventory(
-                    Number(data[data.length - 1].blockNumber) + 1,
-                    nowBlock,
-                    addressCheck
-                );
+                await syncInventory(Number(data[data.length - 1].blockNumber) + 1, nowBlock);
             }
         }
     } catch (error) {
         console.warn(error);
     }
 };
-
 const updateInventory = async boolSaveInventory => {
-    momoStorage = require("../../data/inventory.json");
-    for (let i = 0; i < momoStorage.contracts.length; i++) {
-        const hexAddress = `0x000000000000000000000000${momoStorage.contracts[i].contractAddress
-            .toLowerCase()
-            .slice(2)}`;
-        momoStorage.contracts[i].hexAddress = hexAddress;
-    }
-    console.log(`Last date: ${JSON.stringify(momoStorage)}`);
     console.log(`Last block synced: ${momoStorage.syncedBlock}`);
     const nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
     console.log(`Now block is: ${nowBlock}`);
     const dataBlock = momoStorage["syncedBlock"] + 1;
-    await syncInventory(dataBlock, nowBlock, momoStorage);
-    let momoUnlist = [];
-    let amountMomos = 0;
-    let hashRate = 0;
-    for (let i = 10000; i < 40000; i++) {
-        if (dataBid[i]) {
-            amountMomos += Number(dataBid[i]);
-            switch (i.toString().slice(0, 1)) {
-                case "1":
-                    hashRate += 1;
-                    break;
-                case "2":
-                    hashRate += 2;
-                    break;
-                case "3":
-                    hashRate += 3;
-                    break;
-                default:
-                    break;
-            }
-            for (let j = 0; j < dataBid[i]; j++) {
-                momoUnlist.push(`${i}`);
-            }
-        }
-        if (Number(dataBid[i]) == 0) {
-            delete dataBid[i];
-        }
-    }
+    await syncInventory(dataBlock, nowBlock);
+    momoStorage["syncedBlock"] = nowBlock;
+    // for (let i = 10000; i < 40000; i++) {
+    //     if (dataBid[i]) {
+    //         amountMomos += Number(dataBid[i]);
+    //         switch (i.toString().slice(0, 1)) {
+    //             case "1":
+    //                 hashRate += 1;
+    //                 break;
+    //             case "2":
+    //                 hashRate += 2;
+    //                 break;
+    //             case "3":
+    //                 hashRate += 3;
+    //                 break;
+    //             default:
+    //                 break;
+    //         }
+    //         for (let j = 0; j < dataBid[i]; j++) {
+    //             momoUnlist.push(`${i}`);
+    //         }
+    //     }
+    //     if (Number(dataBid[i]) == 0) {
+    //         delete dataBid[i];
+    //     }
+    // }
     // console.log(`Have ${momoUnlist.length} momos unlist in ${addressCheck}`);
     // console.log(momoUnlist.toString());
     // momoStorage[addressCheck]["momo"] = dataBid;
     // momoStorage[addressCheck]["block"] = nowBlock;
     // momoStorage[addressCheck]["hash"] = hashRate;
     // momoStorage[addressCheck]["amount"] = amountMomos;
-    nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
+    // nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
     if (boolSaveInventory) {
-        fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
+        await saveInventory();
     }
     await sleep(1000);
-    return momoUnlist;
 };
-const test = async () => {
-    const data = await web3.eth.getPastLogs({
-        address: [process.env.ADDRESS_MP, process.env.ADDRESS_MOMO],
-        fromBlock: 41693900,
-        toBlock: 41693902
-        // topics: [
-        //     process.env.TOPIC_BID,
-        //     process.env.TOPIC_CREATE,
-        //     process.env.TOPIC_CANCEL,
-        //     process.env.TOPIC_HASH
-        // ] // the second parameter is variable c
-    });
-    console.log(`data: ${JSON.stringify(data)}`);
+const saveInventory = async () => {
+    for (let i = 0; i < momoStorage.contracts.length; i++) {
+        momoStorage.contracts[i].amount = 0;
+        momoStorage.contracts[i].amountList = 0;
+        for (let j = 10000; j < 40000; j++) {
+            if (!momoStorage.contracts[i].momo[j]) {
+                delete momoStorage.contracts[i].momo[j];
+            }
+            else {
+                momoStorage.contracts[i].amount += momoStorage.contracts[i].momo[j];
+            }
+            if (!momoStorage.contracts[i].list[j]) {
+                delete momoStorage.contracts[i].list[j];
+            }
+            else {
+                momoStorage.contracts[i].amountList += momoStorage.contracts[i].list[j];
+            }
+        }
+    }
+    fs.writeFileSync("./data/inventory.json", JSON.stringify(momoStorage));
+    await sleep(1000);
 };
-test();
-// updateInventory(false);
+updateInventory(true);
 // module.exports = { updateInventory };
