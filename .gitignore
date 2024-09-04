@@ -11,5 +11,5 @@ waitBid.txt
 test*.*
 ./data
 .ds_store
-data/momoStorage.json
+data/*.json
 .vscode
