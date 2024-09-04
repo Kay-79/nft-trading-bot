@@ -26,6 +26,7 @@ const syncInventory = async (endBlock, nowBlock) => {
     if (endBlock > nowBlock) {
         return;
     }
+    momoStorage.syncedBlock = endBlock;
     const cacheBlock = endBlock;
     console.log(
         `Syncing inventory: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
@@ -181,37 +182,6 @@ const updateInventory = async boolSaveInventory => {
     const dataBlock = momoStorage["syncedBlock"] + 1;
     await syncInventory(dataBlock, nowBlock);
     momoStorage["syncedBlock"] = nowBlock;
-    // for (let i = 10000; i < 40000; i++) {
-    //     if (dataBid[i]) {
-    //         amountMomos += Number(dataBid[i]);
-    //         switch (i.toString().slice(0, 1)) {
-    //             case "1":
-    //                 hashRate += 1;
-    //                 break;
-    //             case "2":
-    //                 hashRate += 2;
-    //                 break;
-    //             case "3":
-    //                 hashRate += 3;
-    //                 break;
-    //             default:
-    //                 break;
-    //         }
-    //         for (let j = 0; j < dataBid[i]; j++) {
-    //             momoUnlist.push(`${i}`);
-    //         }
-    //     }
-    //     if (Number(dataBid[i]) == 0) {
-    //         delete dataBid[i];
-    //     }
-    // }
-    // console.log(`Have ${momoUnlist.length} momos unlist in ${addressCheck}`);
-    // console.log(momoUnlist.toString());
-    // momoStorage[addressCheck]["momo"] = dataBid;
-    // momoStorage[addressCheck]["block"] = nowBlock;
-    // momoStorage[addressCheck]["hash"] = hashRate;
-    // momoStorage[addressCheck]["amount"] = amountMomos;
-    // nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
     if (boolSaveInventory) {
         await saveInventory();
     }
@@ -224,14 +194,12 @@ const saveInventory = async () => {
         for (let j = 10000; j < 40000; j++) {
             if (!momoStorage.contracts[i].momo[j]) {
                 delete momoStorage.contracts[i].momo[j];
-            }
-            else {
+            } else {
                 momoStorage.contracts[i].amount += momoStorage.contracts[i].momo[j];
             }
             if (!momoStorage.contracts[i].list[j]) {
                 delete momoStorage.contracts[i].list[j];
-            }
-            else {
+            } else {
                 momoStorage.contracts[i].amountList += momoStorage.contracts[i].list[j];
             }
         }

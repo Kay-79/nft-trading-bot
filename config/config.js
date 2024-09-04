@@ -25,7 +25,9 @@ const config = {
         check: "https://bsc-dataseed1.bnbchain.org",
         create: "https://go.getblock.io/5ca94193fc69438aa954477d5e5701e0",
         public: "https://bsc-dataseed3.bnbchain.org",
-        protect: "https://bsc.rpc.blxrbdn.com"
+        protect: "https://bsc.rpc.blxrbdn.com",
+        quickNode:
+            "https://solemn-wild-aura.bsc.quiknode.pro/9fbdf28f69f47aa85c76222be804b4224c2dbd22"
     },
     wss: {
         private: "ws://127.0.0.1:8546",
