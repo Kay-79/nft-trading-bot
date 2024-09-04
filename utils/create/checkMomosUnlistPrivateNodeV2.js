@@ -26,7 +26,6 @@ const syncInventory = async (endBlock, nowBlock) => {
     if (endBlock > nowBlock) {
         return;
     }
-    momoStorage.syncedBlock = endBlock;
     const cacheBlock = endBlock;
     console.log(
         `Syncing inventory: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
