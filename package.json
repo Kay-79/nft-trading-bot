@@ -15,7 +15,7 @@
     },
     "name": "buy-mobox-submarine",
     "description": "bot front run",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "main": "",
     "scripts": {
         "check": "node ./tools/check",
