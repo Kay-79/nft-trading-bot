@@ -161,14 +161,14 @@ const syncInventory = async (endBlock, nowBlock) => {
                 }
             }
         }
-        if (!data.length) {
-            console.log(`data length: ${data.length} ==> continue scan bid`);
-            await syncInventory(cacheBlock + configJson.limitBlockUpdate, nowBlock);
-        }
         if (cacheBlock + configJson.limitBlockUpdate < nowBlock) {
             if (Number(data[data.length - 1].blockNumber) < nowBlock) {
                 await syncInventory(Number(data[data.length - 1].blockNumber) + 1, nowBlock);
             }
+        }
+        if (!data.length) {
+            console.log(`data length: ${data.length} ==> continue scan bid`);
+            await syncInventory(cacheBlock + configJson.limitBlockUpdate, nowBlock);
         }
     } catch (error) {
         console.warn(error);
@@ -180,7 +180,10 @@ const updateInventory = async boolSaveInventory => {
     console.log(`Now block is: ${nowBlock}`);
     const dataBlock = momoStorage["syncedBlock"] + 1;
     await syncInventory(dataBlock, nowBlock);
-    momoStorage["syncedBlock"] = nowBlock;
+    console.log(`Complete sync inventory: ${dataBlock} - ${nowBlock}`);
+    if (nowBlock > momoStorage["syncedBlock"]) {
+        momoStorage["syncedBlock"] = nowBlock;
+    }
     if (boolSaveInventory) {
         await saveInventory();
     }
