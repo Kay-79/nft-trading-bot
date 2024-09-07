@@ -27,8 +27,9 @@ contract Bid is OwnableUpgradeable {
         addressMP = address(newMP_);
     }
 
-    function withdraw(uint256 amount, address payable destAddr) public onlyOwner {
-        destAddr.transfer(amount);
+    function withdraw(address payable destAddr) public onlyOwner {
+        uint256 balance = address(this).balance;
+        destAddr.transfer(balance);
     }
 
     function transferERC20(IERC20 token, address to, uint256 amount) public onlyOwner {
