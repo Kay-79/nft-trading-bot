@@ -1,5 +1,50 @@
 [
     {
+        "inputs": [],
+        "name": "InvalidInitialization",
+        "type": "error"
+    },
+    {
+        "inputs": [],
+        "name": "NotInitializing",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "owner",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableInvalidOwner",
+        "type": "error"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "account",
+                "type": "address"
+            }
+        ],
+        "name": "OwnableUnauthorizedAccount",
+        "type": "error"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint64",
+                "name": "version",
+                "type": "uint64"
+            }
+        ],
+        "name": "Initialized",
+        "type": "event"
+    },
+    {
         "anonymous": false,
         "inputs": [
             {
@@ -33,12 +78,12 @@
     },
     {
         "inputs": [],
-        "name": "amountUnList",
+        "name": "addressMomo",
         "outputs": [
             {
-                "internalType": "uint256",
+                "internalType": "address",
                 "name": "",
-                "type": "uint256"
+                "type": "address"
             }
         ],
         "stateMutability": "view",
@@ -83,11 +128,6 @@
                 "internalType": "uint256",
                 "name": "price_",
                 "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "amount_",
-                "type": "uint256"
             }
         ],
         "name": "bid",
@@ -106,19 +146,6 @@
         "name": "cancelAuction",
         "outputs": [],
         "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "newAmount",
-                "type": "uint256"
-            }
-        ],
-        "name": "changeAmountUnList",
-        "outputs": [],
-        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -166,49 +193,6 @@
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "startPrice_",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "endPrice_",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "durationDays_",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "suggestIndex_",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256",
-                "name": "tokenId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "uint256[]",
-                "name": "ids_",
-                "type": "uint256[]"
-            },
-            {
-                "internalType": "uint256[]",
-                "name": "amounts_",
-                "type": "uint256[]"
-            }
-        ],
-        "name": "createAuction",
-        "outputs": [],
-        "stateMutability": "payable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
                 "name": "suggestIndex_",
                 "type": "uint256"
             },
@@ -236,6 +220,20 @@
         "name": "createAuctionBatch",
         "outputs": [],
         "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "getReward",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "initialize",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -322,11 +320,6 @@
     },
     {
         "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-            },
             {
                 "internalType": "address payable",
                 "name": "destAddr",

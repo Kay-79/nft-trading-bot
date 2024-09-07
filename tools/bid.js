@@ -137,10 +137,9 @@ async function setup(Private_Key_) {
                                     seller_[index].toString(),
                                     index_[index].toString(),
                                     startTime_[index].toString(),
-                                    priceList[index].toString(),
-                                    "1"
+                                    priceList[index].toString()
                                 )
-                                .encodeABI() // amount = 1
+                                .encodeABI()
                         });
                         nonce_ += 1;
                     }
@@ -157,8 +156,7 @@ async function setup(Private_Key_) {
                                 seller_.toString(),
                                 index_.toString(),
                                 startTime_.toString(),
-                                priceList.toString(),
-                                amountBid.toString()
+                                priceList.toString()
                             )
                             .encodeABI() // amount = 1 or > 1
                     });
@@ -169,8 +167,7 @@ async function setup(Private_Key_) {
                             seller_.toString(),
                             index_.toString(),
                             startTime_.toString(),
-                            priceList.toString(),
-                            amountBid.toString()
+                            priceList.toString()
                         )
                         .encodeABI();
                     txResend.gasPrice = gasPriceScan[0];

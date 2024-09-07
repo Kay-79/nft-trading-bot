@@ -42,6 +42,6 @@ module.exports = {
     abiCheckListed,
     abiCheckBided,
     abiCheckCanceled,
-    abiAmount,
+    // abiAmount,
     abiCheckZeroHash
 };
