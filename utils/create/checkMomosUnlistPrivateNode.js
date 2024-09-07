@@ -12,6 +12,9 @@ let dataBid = {};
 const fiveDaysBlock = 144000;
 
 const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
+    if (endBlock > nowBlock) {
+        return;
+    }
     const cacheBlock = endBlock;
     console.log(
         `Checking bid: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
@@ -70,6 +73,9 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
     // console.log(`End get momos bid: ${cacheBlock}/${nowBlock}`);
 };
 const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
+    if (endBlock > nowBlock) {
+        return;
+    }
     const cacheBlock = endBlock;
     console.log(
         `Checking listed: ${cacheBlock}/${nowBlock}... blocks in queue: ${nowBlock - cacheBlock}`
