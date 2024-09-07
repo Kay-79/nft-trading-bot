@@ -19,3 +19,6 @@ all:
 	make change
 killAll:
 	kill -9 $(shell ps aux | grep node | grep -v grep | awk '{print $$2}')
+
+temp:
+	cat /sys/class/thermal/thermal_zone0/temp
