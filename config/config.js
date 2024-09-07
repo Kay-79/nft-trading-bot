@@ -23,9 +23,11 @@ const config = {
         bid: "https://bsc-dataseed1.bnbchain.org",
         change: "https://bsc-dataseed1.bnbchain.org",
         check: "https://bsc-dataseed1.bnbchain.org",
-        create: "https://go.getblock.io/5ca94193fc69438aa954477d5e5701e0",
+        create: "https://go.getblock.io/b805bce42dc1483cb1a12cd398429122",
         public: "https://bsc-dataseed3.bnbchain.org",
-        protect: "https://bsc.rpc.blxrbdn.com"
+        protect: "https://bsc.rpc.blxrbdn.com",
+        quickNode:
+            "https://solemn-wild-aura.bsc.quiknode.pro/9fbdf28f69f47aa85c76222be804b4224c2dbd22"
     },
     wss: {
         private: "ws://127.0.0.1:8546",
@@ -81,7 +83,7 @@ const config = {
         minUnique: 0.5,
         minRare: 14
     },
-    limitBlockUpdate: 10000,
+    limitBlockUpdate: 5000,
     timeBid: 131.0,
     accBuy: "0x838e781DC9F070922F66f0BE415d15168bB04825"
 };
