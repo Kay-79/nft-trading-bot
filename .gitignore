@@ -13,3 +13,4 @@ test*.*
 .ds_store
 data/*.json
 .vscode
+nohup.out
