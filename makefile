@@ -13,5 +13,9 @@ change:
 killChange:
 	kill -9 $(shell ps aux | grep change | grep -v grep | awk '{print $$2}')
 
+all:
+	make bid
+	make find
+	make change
 killAll:
 	kill -9 $(shell ps aux | grep node | grep -v grep | awk '{print $$2}')
