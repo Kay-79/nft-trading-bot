@@ -23,15 +23,7 @@ const abiCheckCanceled = [
     { internalType: "uint256[]", name: "amounts", type: "uint256[]" },
     { internalType: "uint256", name: "startTime", type: "uint256" }
 ];
-const abiAmount = [
-    {
-        inputs: [],
-        name: "amountUnList",
-        outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-        stateMutability: "view",
-        type: "function"
-    }
-];
+
 const abiCheckZeroHash = [
     { internalType: "uint256", name: "index", type: "uint256" },
     { internalType: "uint256", name: "preHash", type: "uint256" },
@@ -42,6 +34,5 @@ module.exports = {
     abiCheckListed,
     abiCheckBided,
     abiCheckCanceled,
-    // abiAmount,
     abiCheckZeroHash
 };

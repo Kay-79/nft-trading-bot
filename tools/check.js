@@ -1,6 +1,5 @@
 const axios = require("axios");
 const fs = require("fs");
-const getAmountUnlist = require("../utils/common/getAmountUnlist");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const checkRightAccBuy = require("../utils/listed/checkRightAccBuy");
 const getMinPrice = require("../utils/common/getMinPrice");
@@ -12,6 +11,7 @@ const { exit } = require("process");
 const contract = new web3.eth.Contract(abiBUSD, configJson.addressToken);
 const dataMomo = fs.readFileSync("./data/dataMomo.txt", "utf8");
 const momoID = dataMomo.split("\n");
+const { updateInventory } = require("../utils/create/checkMomosUnlistPrivateNodeV2");
 
 idMomo = [];
 indexMomo = [];
@@ -266,7 +266,7 @@ async function main(address, nameFile_, rate_) {
         }
         let isContract = await web3.eth.getStorageAt(address);
         if (Number(isContract)) {
-            let amountUnList = await getAmountUnlist(address);
+            let amountUnList = inventory.contracts.find(e => e.contractAddress === address).amount;
             momoUnlist += Number(amountUnList);
             flagBalance = "Create: " + amountUnList;
         }
@@ -314,6 +314,8 @@ async function main(address, nameFile_, rate_) {
 }
 
 async function checkListedAll(rate_) {
+    await updateInventory(true);
+    inventory = require("../data/inventory.json");
     let timeCheck = new Date();
     minPrices = await getMinPrice();
     console.log("Min Prices:", minPrices);
@@ -481,8 +483,8 @@ let minPrices = [];
 const maxCanSell = 5;
 const lastAcc = myAcc[myAcc.length - 1][1];
 const save = false;
+let inventory;
 const rateSale = 0.42;
-
 if (!checkRightAccBuy(myAcc, accRun)) {
     console.error("Acc buy is wrongs!!");
 }

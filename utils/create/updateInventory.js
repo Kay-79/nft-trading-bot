@@ -10,4 +10,4 @@ const updateInventory = async contractBuys => {
         await checkMomosUnlistPrivateNode(contractBuys[i], true);
     }
 };
-module.exports = { updateInventory };
+// module.exports = { updateInventory };

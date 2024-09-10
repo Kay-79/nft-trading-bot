@@ -210,5 +210,5 @@ const saveInventory = async () => {
     fs.writeFileSync("./data/inventory.json", JSON.stringify(momoStorage));
     await sleep(1000);
 };
-updateInventory(true);
-// module.exports = { updateInventory };
+
+module.exports = { updateInventory };
