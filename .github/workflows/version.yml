@@ -24,11 +24,10 @@ jobs:
                   cache: "npm"
 
             - name: Install dependencies
-              run: npm install
+              run: npm ci @changesets/cli
 
             - name: Force create minor changeset
               run: |
-                  npx changeset add --empty
                   echo "---\n\"be-mobox-front-run\": patch\n---\n\nAuto changeset" > .changeset/auto-minor-changeset.md
 
             - name: Commit Changeset
