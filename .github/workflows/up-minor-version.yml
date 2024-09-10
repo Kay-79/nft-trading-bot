@@ -1,7 +1,7 @@
 name: Release Packages
 
 on:
-    merge_group:
+    push:
         branches:
             - "main"
 
