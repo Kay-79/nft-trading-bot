@@ -1,0 +1,36 @@
+name: Version
+
+on:
+    workflow_dispatch:
+
+permissions:
+    actions: write
+    contents: write
+
+jobs:
+    build:
+        runs-on: windows-latest
+
+        steps:
+            - name: Setup Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 21.x
+
+            - name: Install NPM Packages
+              run: npm ci
+              working-directory: ./
+
+            - name: Bump Version
+              run: npm run version
+              working-directory: ./
+
+            - name: Commit Version Bump
+              run: |
+                  git config user.name "GitHub Actions Bot"
+                  git config user.email "<>"
+                  git add .
+                  git commit -m "Bump version"
+
+            - name: Push Version Bump
+              run: git push

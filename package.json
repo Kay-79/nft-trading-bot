@@ -1,5 +1,6 @@
 {
     "dependencies": {
+        "@changesets/cli": "^2.27.8",
         "@openzeppelin/contracts": "^5.0.0",
         "@openzeppelin/contracts-upgradeable": "^5.0.0",
         "axios": "^1.4.0",
@@ -16,6 +17,7 @@
     "name": "be-mobox-front-run",
     "description": "bot front run",
     "version": "3.0.1",
+    "private": true,
     "main": "",
     "scripts": {
         "check": "node ./tools/check",
@@ -30,7 +32,9 @@
         "withdraw": "node ./tools/withdraw",
         "update": "node ./tools/updateInventory",
         "updateZero": "node ./tools/updateZeroHashBlockInventory",
-        "test": "node ./tools/wssTest"
+        "test": "node ./tools/wssTest",
+        "changeset": "changeset",
+        "version": "changeset version"
     },
     "keywords": [],
     "author": "",
