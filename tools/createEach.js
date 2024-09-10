@@ -2,10 +2,10 @@ require("dotenv").config();
 const fs = require("fs");
 const { exit } = require("process");
 const getEmptyIndexs = require("../utils/create/getEmptyIndexs");
-const getAmountUnlist = require("../utils/common/getAmountUnlist");
 const { sleep, ranSleep } = require("../utils/common/sleep");
+const { updateInventory } = require("../utils/create/checkMomosUnlistPrivateNodeV2");
 
-async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
+async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_) {
     const Private_Key = process.env.PRIVATE_KEY_CHANGE;
     const Web3 = require("web3");
     const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
@@ -51,10 +51,12 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, na
     }
 }
 
-async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
+async function createBatch(gasPrice_, gasLimit_, hexData_) {
+    await updateInventory(true);
+    inventory = require("../data/inventory.json");
     let count = 0;
     indexs = await getEmptyIndexs(consractAddress);
-    const amountUnList = await getAmountUnlist(consractAddress);
+    let amountUnList = inventory.contracts.find(e => e.contractAddress === consractAddress).amount;
     if (amountUnList == 0 || amountUnList != ids[0].length) {
         console.log("No listing");
         console.log("amountUnList:", amountUnList);
@@ -66,22 +68,14 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
             break;
         }
         if (hexData_.length > 0) {
-            await sendTxt(gasPrice_, gasLimit_, "", "", "", hexData_, nameFile_);
+            await sendTxt(gasPrice_, gasLimit_, "", "", "", hexData_);
             break;
         }
         for (let index = 0; index < indexs.length; index++) {
             if (indexs[index] != undefined) {
                 boolSell = "FALSE";
                 console.log(indexs[index], ids[index], prices[index]);
-                await sendTxt(
-                    gasPrice_,
-                    gasLimit_,
-                    indexs[index],
-                    ids[index],
-                    prices[index],
-                    "",
-                    nameFile_
-                );
+                await sendTxt(gasPrice_, gasLimit_, indexs[index], ids[index], prices[index], "");
                 if (boolSell == "TRUE") {
                     indexs[index] = undefined;
                     count += 1;
