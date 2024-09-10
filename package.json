@@ -13,9 +13,9 @@
     "devDependencies": {
         "concurrently": "^8.2.2"
     },
-    "name": "buy-mobox-submarine",
+    "name": "be-mobox-front-run",
     "description": "bot front run",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "main": "",
     "scripts": {
         "check": "node ./tools/check",
