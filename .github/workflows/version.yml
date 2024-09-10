@@ -31,8 +31,8 @@ jobs:
                   printf -- "---\n\"be-mobox-front-run\": patch\n---\n\nAuto changeset\n" > .changeset/auto-minor-changeset.md
 
             - name: Create changeset
-              run: npx changeset create
-              
+              run: npx changeset version
+
             - name: Commit Changeset
               run: |
                   git config --global user.name "github-actions[bot]"
