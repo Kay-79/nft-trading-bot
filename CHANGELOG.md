@@ -1,5 +1,11 @@
 # be-mobox-front-run
 
+## 3.0.7
+
+### Patch Changes
+
+-   Auto changeset
+
 ## 3.0.6
 
 ### Patch Changes
