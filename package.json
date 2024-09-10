@@ -32,7 +32,6 @@
         "withdraw": "node ./tools/withdraw",
         "update": "node ./tools/updateInventory",
         "updateZero": "node ./tools/updateZeroHashBlockInventory",
-        "test": "node ./tools/wssTest",
         "changeset": "changeset",
         "version": "changeset version"
     },
