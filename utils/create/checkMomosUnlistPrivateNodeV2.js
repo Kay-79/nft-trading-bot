@@ -10,7 +10,7 @@ const {
     abiCheckCanceled,
     abiCheckZeroHash,
     abiAmount
-} = require("../../abi/abiCheckUnlist");
+} = require("../../abi/abiCheckLogs");
 const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep } = require("../common/sleep");
 let momoStorage = require("../../data/inventory.json");
@@ -157,6 +157,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                         }
                         break;
                     default:
+                        console.warn(`Unknown topic: ${data[i].topics[0]}`);
                         break;
                 }
             }

@@ -3,7 +3,7 @@ const axios = require("axios");
 const Web3 = require("web3");
 const { exit } = require("process");
 const web3 = new Web3();
-const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckUnlist");
+const { abiCheckListed, abiCheckBided } = require("../../abi/abiCheckLogs");
 const { getZeroBlockCsv } = require("./getZeroBlockCsv");
 let dataBid = {};
 
