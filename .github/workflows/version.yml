@@ -28,13 +28,13 @@ jobs:
 
             - name: Force create minor changeset
               run: |
-                  echo "---\n\"be-mobox-front-run\": patch\n---\n\nAuto changeset" > .changeset/auto-minor-changeset.md
+                  printf "---\n\"be-mobox-front-run\": patch\n---\n\nAuto changeset\n" > .changeset/auto-minor-changeset.md
 
             - name: Commit Changeset
               run: |
                   git config --global user.name "github-actions[bot]"
                   git config --global user.email "github-actions[bot]@users.noreply.github.com"
-                  git add .
+                  git add ./package.json ./package-lock.json
                   git commit -m "Auto changeset"
               continue-on-error: true
 
