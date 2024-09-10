@@ -3,7 +3,7 @@ name: Release Packages
 on:
     push:
         branches:
-            - "*"
+            - "v3"
 
 jobs:
     create_changeset:
