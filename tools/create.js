@@ -5,13 +5,12 @@ const { exit } = require("process");
 const Web3 = require("web3");
 const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed4.binance.org"));
 const configJson = require("../config/config");
-const { checkMomosUnlistPrivateNode } = require("../utils/create/checkMomosUnlistPrivateNode");
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const { abiAmount } = require("../abi/abiCheckLogs");
-const { updateZeroBlock } = require("../utils/create/updateZeroBlock");
 const getMinPrice = require("../utils/common/getMinPrice");
-const { updateInventory } = require("../utils/create/updateInventory");
+const { updateInventory } = require("../utils/create/checkMomosUnlistPrivateNodeV2");
 const prepareBatch = require("../utils/create/prepareBatch");
+const { id } = require("ethers/lib/utils");
 
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
@@ -114,8 +113,15 @@ async function checkChangePrice(indexId) {
 
 async function getPriceToSell(address, boolMin) {
     idMomoBought = [];
-    idMomoBought = await checkMomosUnlistPrivateNode(address, false);
-    // idMomoBought = idMomoBought[address];
+    // idMomoBought = await checkMomosUnlistPrivateNode(address, false);
+    let idMomoBoughtRaw = inventory.contracts.find(e => e.contractAddress === address).momo;
+    for (let i = 9999; i < 40000; i++) {
+        if (idMomoBoughtRaw[i]) {
+            for (let j = 0; j < idMomoBoughtRaw[i]; j++) {
+                idMomoBought.push(`${i}`);
+            }
+        }
+    }
     const BatchPrepare = prepareBatch(idMomoBought, priceSell, amountBatchToCreate * 6);
     idMomoBought = BatchPrepare[0];
     priceSell = BatchPrepare[1];
@@ -293,8 +299,7 @@ async function createBatch(gasPrice_, gasLimit_, hexData_, nameFile_) {
         console.log("Empty accSell");
         exit();
     }
-    let contractAcc = new web3.eth.Contract(abiAmount, accSell);
-    let amountUnList = await contractAcc.methods.amountUnList().call();
+    let amountUnList = inventory.contracts.find(e => e.contractAddress === accSell).amount;
     if (amountUnList < 6) return;
     value = amountUnList;
     if (amountUnList != value) {
@@ -365,7 +370,10 @@ const minChange = 0.001;
 let accSell = "";
 value = 0; // without rare and epic
 let minPrices = [];
+let inventory;
 const create = async () => {
+    await updateInventory(true);
+    inventory = require("../data/inventory.json");
     minPrices = await getMinPrice();
     console.log(minPrices);
     for (let i = 0; i < myAcc.length; i++) {
