@@ -12,6 +12,7 @@ const contract = new web3.eth.Contract(abiBUSD, addressToken);
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const getBnbPrice = require("../utils/common/getBnbPrice");
 const getMinPrice = require("../utils/common/getMinPrice");
+const linkSave = "./waitBid.txt";
 
 async function getMpListed(amountMomo) {
     auctors_ = [];
@@ -401,7 +402,6 @@ async function setup() {
     totalAuctions = 0;
     uptimesCache = 0;
     addressIdCache = Array(30);
-    linkSave = "./waitBid.txt";
     gasUsed = [388000, 344000, 460000, 575000, 690000, 800000]; //Const avg gasUsed
     gasUsed = [388000 * 1, 242000 * 2, 242000 * 3, 242000 * 4, 242000 * 5, 242000 * 6]; //Const avg gasUsed
     await getMinPriceOrdi(); //setup change
