@@ -71,13 +71,16 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 momoStorage.contracts[indexContract].momo[decodedData.ids[k]] +=
                                     Number(decodedData.amounts[k]);
                             }
-                            momoStorage.syncedBlock = data[i].blockNumber;
+                            // momoStorage.syncedBlock = data[i].blockNumber;
                         } else if (HEX_ADDRESSES.includes(data[i].topics[1])) {
                             // im a author
                             const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[1]);
                             decodedData = await web3.eth.abi.decodeParameters(
                                 abiCheckBided,
                                 data[i].data
+                            );
+                            console.log(
+                                `Sale ${decodedData.ids} for $${decodedData.bidPrice / 10 ** 18}`
                             );
                             for (let k = 0; k < decodedData.ids.length; k++) {
                                 if (
@@ -92,7 +95,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 momoStorage.contracts[indexContract].list[decodedData.ids[k]] -=
                                     Number(decodedData.amounts[k]);
                             }
-                            momoStorage.syncedBlock = data[i].blockNumber;
+                            // momoStorage.syncedBlock = data[i].blockNumber;
                         }
                         break;
                     case process.env.TOPIC_CREATE:
@@ -118,7 +121,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 momoStorage.contracts[indexContract].momo[decodedData.ids[k]] -=
                                     Number(decodedData.amounts[k]);
                             }
-                            momoStorage.syncedBlock = data[i].blockNumber;
+                            // momoStorage.syncedBlock = data[i].blockNumber;
                         }
                         break;
                     case process.env.TOPIC_HASH:
@@ -136,7 +139,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                             momoStorage.contracts[indexContract].hash = Number(
                                 decodedData.lastHash
                             );
-                            momoStorage.syncedBlock = data[i].blockNumber;
+                            // momoStorage.syncedBlock = data[i].blockNumber;
                         }
                         break;
                     case process.env.TOPIC_CANCEL:
@@ -153,7 +156,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 momoStorage.contracts[indexContract].list[decodedData.ids[k]] -=
                                     Number(decodedData.amounts[k]);
                             }
-                            momoStorage.syncedBlock = data[i].blockNumber;
+                            // momoStorage.syncedBlock = data[i].blockNumber;
                         }
                         break;
                     default:
@@ -161,15 +164,16 @@ const syncInventory = async (endBlock, nowBlock) => {
                         break;
                 }
             }
+            momoStorage.syncedBlock = data[i].blockNumber;
+        }
+        if (!data.length) {
+            console.log(`data length: ${data.length} ==> continue scan bid`);
+            await syncInventory(cacheBlock + configJson.limitBlockUpdate, nowBlock);
         }
         if (cacheBlock + configJson.limitBlockUpdate < nowBlock) {
             if (Number(data[data.length - 1].blockNumber) < nowBlock) {
                 await syncInventory(Number(data[data.length - 1].blockNumber) + 1, nowBlock);
             }
-        }
-        if (!data.length) {
-            console.log(`data length: ${data.length} ==> continue scan bid`);
-            await syncInventory(cacheBlock + configJson.limitBlockUpdate, nowBlock);
         }
     } catch (error) {
         console.warn(error);
@@ -182,9 +186,9 @@ const updateInventory = async boolSaveInventory => {
     const dataBlock = momoStorage["syncedBlock"] + 1;
     await syncInventory(dataBlock, nowBlock);
     console.log(`Complete sync inventory: ${dataBlock} - ${nowBlock}`);
-    if (nowBlock > momoStorage["syncedBlock"]) {
-        momoStorage["syncedBlock"] = nowBlock;
-    }
+    // if (nowBlock > momoStorage["syncedBlock"]) {
+    //     momoStorage["syncedBlock"] = nowBlock;
+    // }
     if (boolSaveInventory) {
         await saveInventory();
     }

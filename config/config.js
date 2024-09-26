@@ -23,7 +23,8 @@ const config = {
         bid: "https://bsc-dataseed1.bnbchain.org",
         change: "https://bsc-dataseed1.bnbchain.org",
         check: "https://bsc-dataseed1.bnbchain.org",
-        create: "https://go.getblock.io/b805bce42dc1483cb1a12cd398429122",
+        create: "https://bnb.rpc.subquery.network/public",
+        // create: "https://go.getblock.io/970d05bb6ae946339226221d29d5934e",
         public: "https://bsc-dataseed3.bnbchain.org",
         protect: "https://bsc.rpc.blxrbdn.com",
         quickNode:
@@ -83,7 +84,7 @@ const config = {
         minUnique: 0.5,
         minRare: 14
     },
-    limitBlockUpdate: 5000,
+    limitBlockUpdate: 2000,
     timeBid: 131.0,
     accBuy: "0x838e781DC9F070922F66f0BE415d15168bB04825"
 };
