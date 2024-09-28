@@ -12,4 +12,6 @@
     -   \_7_9_7
     -   \_3_A_2
 
+-   ignoreSold = true to pass failure send
+
 ## Current storage is `896` momos

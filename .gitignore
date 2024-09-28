@@ -8,6 +8,7 @@ data/dataMomo.txt
 data/zeroBlock.csv
 .env
 waitBid.txt
+waitBid.json
 test*.*
 ./data
 .ds_store
