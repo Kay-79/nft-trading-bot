@@ -53,7 +53,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                     case process.env.TOPIC_BID:
                         if (HEX_ADDRESSES.includes(data[i].topics[2])) {
                             // im a bidder
-                            console.log(`TOPIC_BID: ${data[i].transactionHash}`);
+                            console.log(`TX_BID: ${data[i].transactionHash}`);
                             const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[2]);
                             decodedData = await web3.eth.abi.decodeParameters(
                                 abiCheckBided,
@@ -72,6 +72,11 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 momoStorage.contracts[indexContract].momo[decodedData.ids[k]] +=
                                     Number(decodedData.amounts[k]);
                             }
+                            console.log(
+                                `✅ Success bid: ${decodedData.ids} price: $${
+                                    decodedData.bidPrice / 10 ** 18
+                                }`
+                            );
                             // momoStorage.syncedBlock = data[i].blockNumber;
                         } else if (HEX_ADDRESSES.includes(data[i].topics[1])) {
                             // im a author
@@ -81,7 +86,9 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 data[i].data
                             );
                             console.log(
-                                `🛒 Sale ${decodedData.ids} for $${decodedData.bidPrice / 10 ** 18}`
+                                `🛒 Sale ${decodedData.ids} for $${
+                                    decodedData.bidPrice / 10 ** 18
+                                } ${data[i].transactionHash}`
                             );
                             for (let k = 0; k < decodedData.ids.length; k++) {
                                 if (
@@ -101,11 +108,16 @@ const syncInventory = async (endBlock, nowBlock) => {
                         break;
                     case process.env.TOPIC_CREATE:
                         if (HEX_ADDRESSES.includes(data[i].topics[1])) {
-                            console.log(`TOPIC_CREATE: ${data[i].transactionHash}`);
+                            // console.log(`TX_CREATE: ${data[i].transactionHash}`);
                             const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[1]);
                             decodedData = await web3.eth.abi.decodeParameters(
                                 abiCheckListed,
                                 data[i].data
+                            );
+                            console.log(
+                                `🤑 Selling ${decodedData.ids || decodedData.tokenId} for $${
+                                    decodedData.startPrice / 10 ** 18
+                                } ${data[i].transactionHash}`
                             );
                             for (let k = 0; k < decodedData.ids.length; k++) {
                                 if (
@@ -127,7 +139,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                         break;
                     case process.env.TOPIC_HASH:
                         if (HEX_ADDRESSES.includes(data[i].topics[1])) {
-                            console.log(`TOPIC_HASH: ${data[i].transactionHash}`);
+                            // console.log(`TX_HASH: ${data[i].transactionHash}`);
                             const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[1]);
                             decodedData = await web3.eth.abi.decodeParameters(
                                 abiCheckZeroHash,
@@ -145,7 +157,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                         break;
                     case process.env.TOPIC_CANCEL:
                         if (HEX_ADDRESSES.includes(data[i].topics[1])) {
-                            console.log(`TOPIC_CANCEL: ${data[i].transactionHash}`);
+                            console.log(`TX_CANCEL: ${data[i].transactionHash}`);
                             const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[1]);
                             decodedData = await web3.eth.abi.decodeParameters(
                                 abiCheckCanceled,
@@ -162,7 +174,6 @@ const syncInventory = async (endBlock, nowBlock) => {
                         break;
                     case process.env.TOPIC_CHANGE:
                         if (HEX_ADDRESSES.includes(data[i].topics[1])) {
-                            console.log(`TOPIC_CHANGE: ${data[i].transactionHash}`);
                             decodedData = await web3.eth.abi.decodeParameters(
                                 abiCheckChange,
                                 data[i].data
@@ -173,7 +184,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 } === TimeDiff: ${(
                                     (decodedData.newStartTime - decodedData.oldStartTime) /
                                     3600
-                                ).toFixed(2)} hours`
+                                ).toFixed(2)} hours ${data[i].transactionHash}`
                             );
                         }
                         break;
