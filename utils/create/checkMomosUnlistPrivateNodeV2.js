@@ -9,7 +9,7 @@ const {
     abiCheckBided,
     abiCheckCanceled,
     abiCheckZeroHash,
-    abiAmount
+    abiCheckChange
 } = require("../../abi/abiCheckLogs");
 const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep } = require("../common/sleep");
@@ -19,6 +19,7 @@ const TOPICS = [
     process.env.TOPIC_BID,
     process.env.TOPIC_CREATE,
     process.env.TOPIC_CANCEL,
+    process.env.TOPIC_CHANGE,
     process.env.TOPIC_HASH
 ];
 
@@ -157,6 +158,23 @@ const syncInventory = async (endBlock, nowBlock) => {
                                     Number(decodedData.amounts[k]);
                             }
                             // momoStorage.syncedBlock = data[i].blockNumber;
+                        }
+                        break;
+                    case process.env.TOPIC_CHANGE:
+                        if (HEX_ADDRESSES.includes(data[i].topics[1])) {
+                            console.log(`TOPIC_CHANGE: ${data[i].transactionHash}`);
+                            decodedData = await web3.eth.abi.decodeParameters(
+                                abiCheckChange,
+                                data[i].data
+                            );
+                            console.log(
+                                `Changing index: ${decodedData.index} to $${
+                                    decodedData.startPrice / 10 ** 18
+                                } === TimeDiff: ${(
+                                    (decodedData.newStartTime - decodedData.oldStartTime) /
+                                    3600
+                                ).toFixed(2)} hours`
+                            );
                         }
                         break;
                     default:
