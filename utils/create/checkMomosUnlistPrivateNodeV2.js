@@ -81,7 +81,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 data[i].data
                             );
                             console.log(
-                                `Sale ${decodedData.ids} for $${decodedData.bidPrice / 10 ** 18}`
+                                `🛒 Sale ${decodedData.ids} for $${decodedData.bidPrice / 10 ** 18}`
                             );
                             for (let k = 0; k < decodedData.ids.length; k++) {
                                 if (
@@ -168,7 +168,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 data[i].data
                             );
                             console.log(
-                                `Changing index: ${decodedData.index} to $${
+                                `🔁 Changing index: ${decodedData.index} to $${
                                     decodedData.startPrice / 10 ** 18
                                 } === TimeDiff: ${(
                                     (decodedData.newStartTime - decodedData.oldStartTime) /
