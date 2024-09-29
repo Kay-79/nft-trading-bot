@@ -1,5 +1,11 @@
 # be-mobox-front-run
 
+## 3.2.1
+
+### Patch Changes
+
+-   Pump patch version
+
 ## 3.2.0
 
 ### Minor Changes
