@@ -75,7 +75,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                             console.log(
                                 `✅ Success bid: ${decodedData.ids} price: $${
                                     decodedData.bidPrice / 10 ** 18
-                                }`
+                                } ${((nowBlock - data[i].blockNumber) / 1200).toFixed(2)} hours ago`
                             );
                             // momoStorage.syncedBlock = data[i].blockNumber;
                         } else if (HEX_ADDRESSES.includes(data[i].topics[1])) {
@@ -86,9 +86,12 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 data[i].data
                             );
                             console.log(
-                                `🛒 Sale ${decodedData.ids} for $${
+                                `🛒 Sold ${decodedData.ids} for $${
                                     decodedData.bidPrice / 10 ** 18
-                                } ${data[i].transactionHash}`
+                                } ${data[i].transactionHash} ${(
+                                    (nowBlock - data[i].blockNumber) /
+                                    1200
+                                ).toFixed(2)} hours ago`
                             );
                             for (let k = 0; k < decodedData.ids.length; k++) {
                                 if (
@@ -117,7 +120,10 @@ const syncInventory = async (endBlock, nowBlock) => {
                             console.log(
                                 `🤑 Selling ${decodedData.ids || decodedData.tokenId} for $${
                                     decodedData.startPrice / 10 ** 18
-                                } ${data[i].transactionHash}`
+                                } ${data[i].transactionHash} ${(
+                                    (nowBlock - data[i].blockNumber) /
+                                    1200
+                                ).toFixed(2)} hours ago`
                             );
                             for (let k = 0; k < decodedData.ids.length; k++) {
                                 if (
@@ -184,7 +190,10 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 } === TimeDiff: ${(
                                     (decodedData.newStartTime - decodedData.oldStartTime) /
                                     3600
-                                ).toFixed(2)} hours ${data[i].transactionHash}`
+                                ).toFixed(2)} hours ${data[i].transactionHash} ${(
+                                    (nowBlock - data[i].blockNumber) /
+                                    1200
+                                ).toFixed(2)} hours ago`
                             );
                         }
                         break;
