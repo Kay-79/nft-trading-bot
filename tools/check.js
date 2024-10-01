@@ -268,6 +268,34 @@ async function main(address, nameFile_, rate_) {
         if (Number(isContract)) {
             let amountUnList = inventory.contracts.find(e => e.contractAddress === address).amount;
             momoUnlist += Number(amountUnList);
+            let momo_UL = inventory.contracts.find(e => e.contractAddress === address).momo;
+            for (let index_UL = 0; index_UL < 70000; index_UL++) {
+                if (momo_UL[index_UL] === undefined) {
+                    continue;
+                }
+                switch (index_UL.toString().slice(0, 1)) {
+                    case "1":
+                        sumMomoCM_UL += Number(momo_UL[index_UL]);
+                        break;
+                    case "2":
+                        sumMomoUCM_UL += Number(momo_UL[index_UL]);
+                        break;
+                    case "3":
+                        sumMomoUNQ_UL += Number(momo_UL[index_UL]);
+                        break;
+                    case "4":
+                        sumMomoR_UL += Number(momo_UL[index_UL]);
+                        break;
+                    case "5":
+                        sumMomoE_UL += Number(momo_UL[index_UL]);
+                        break;
+                    case "6":
+                        sumMomoL_UL += Number(momo_UL[index_UL]);
+                        break;
+                    default:
+                        break;
+                }
+            }
             flagBalance = "Create: " + amountUnList;
         }
         let logData =
@@ -364,14 +392,14 @@ async function checkListedAll(rate_) {
     console.log("USD Price:", usdPrice);
     console.log("Total USDT:\t\t", (sumUSD * rate_).toFixed(2));
     console.log("Total Fund:\t\t", ((sumBNB * bnbPrice + sumUSD) * usdPrice * rate_).toFixed());
-    sumBuyVnd =
-        (sumBNB * bnbPrice + sumUSD + sumBuy + momoUnlist * (minPrices[1] - 0.4)) *
-        usdPrice *
-        rate_;
-    sumSaleVnd =
-        (sumBNB * bnbPrice + sumUSD + sumSell * 0.95 + momoUnlist * (minPrices[1] - 0.4)) *
-        usdPrice *
-        rate_;
+    let momoUnlistValue =
+        sumMomoCM_UL * (minPrices[0] - 0.4) +
+        sumMomoUCM_UL * (minPrices[1] - 0.4) +
+        sumMomoUNQ_UL *
+            (minPrices[2] -
+                0.4); /* + sumMomoR_UL * (minPrices[3] - 0.4) + sumMomoE_UL * (minPrices[4] - 0.4) + sumMomoL_UL * (minPrices[5] - 0.4) */
+    sumBuyVnd = (sumBNB * bnbPrice + sumUSD + sumBuy + momoUnlistValue) * usdPrice * rate_;
+    sumSaleVnd = (sumBNB * bnbPrice + sumUSD + sumSell * 0.95 + momoUnlistValue) * usdPrice * rate_;
     console.log("Estimate Fund:\t", (sumBuyVnd + (sumSaleVnd - sumBuyVnd) * rateSale).toFixed());
     let currentDate = new Date();
     const nowSync =
@@ -393,7 +421,7 @@ async function checkListedAll(rate_) {
 
     let datetime = "Last Sync: " + currentDate.getHours() + ":" + currentDate.getMinutes();
     console.log(
-        `${sumMomo}/${momoUnlist} Momos: ${sumMomoCM} Common, ${sumMomoUCM} Uncommon, ${sumMomoUNQ} Unique, ${sumMomoR} Rare, ${sumMomoE} Epic, ${sumMomoL} Legend (${sumBuy.toFixed()}, ${(
+        `${sumMomo}/${momoUnlist} Momos: ${sumMomoCM}/${sumMomoCM_UL} Common, ${sumMomoUCM}/${sumMomoUCM_UL} Uncommon, ${sumMomoUNQ}/${sumMomoUNQ_UL} Unique, ${sumMomoR}/${sumMomoR_UL} Rare, ${sumMomoE}/${sumMomoE_UL} Epic, ${sumMomoL}/${sumMomoL_UL} Legend (-$${sumBuy.toFixed()}, +$${(
             sumSell * 0.95
         ).toFixed()}) Profit: ${countProfit} - Lost: ${countLoss} - Tie: ${countTie} ${datetime}`
     );
@@ -473,6 +501,12 @@ let momoListed = 0,
     sumMomoR = 0,
     sumMomoE = 0,
     sumMomoL = 0,
+    sumMomoCM_UL = 0,
+    sumMomoUCM_UL = 0,
+    sumMomoUNQ_UL = 0,
+    sumMomoR_UL = 0,
+    sumMomoE_UL = 0,
+    sumMomoL_UL = 0,
     amountAccount = 0,
     sumSell = 0,
     sumBuy = 0,

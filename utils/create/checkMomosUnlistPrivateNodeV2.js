@@ -53,7 +53,6 @@ const syncInventory = async (endBlock, nowBlock) => {
                     case process.env.TOPIC_BID:
                         if (HEX_ADDRESSES.includes(data[i].topics[2])) {
                             // im a bidder
-                            console.log(`TX_BID: ${data[i].transactionHash}`);
                             const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[2]);
                             decodedData = await web3.eth.abi.decodeParameters(
                                 abiCheckBided,
