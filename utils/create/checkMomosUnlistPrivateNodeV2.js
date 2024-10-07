@@ -72,7 +72,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                                     Number(decodedData.amounts[k]);
                             }
                             console.log(
-                                `✅ Success bid: ${decodedData.ids} price: $${
+                                `🛒 Success bid: ${decodedData.ids} price: $${
                                     decodedData.bidPrice / 10 ** 18
                                 } ${((nowBlock - data[i].blockNumber) / 1200).toFixed(2)} hours ago`
                             );
@@ -85,7 +85,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 data[i].data
                             );
                             console.log(
-                                `🛒 Sold ${decodedData.ids} for $${
+                                `🤑 Sold ${decodedData.ids} for $${
                                     decodedData.bidPrice / 10 ** 18
                                 } ${data[i].transactionHash} ${(
                                     (nowBlock - data[i].blockNumber) /
@@ -117,7 +117,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                                 data[i].data
                             );
                             console.log(
-                                `🤑 Selling ${decodedData.ids || decodedData.tokenId} for $${
+                                `📃 Listing ${decodedData.ids || decodedData.tokenId} for $${
                                     decodedData.startPrice / 10 ** 18
                                 } ${data[i].transactionHash} ${(
                                     (nowBlock - data[i].blockNumber) /
@@ -162,7 +162,7 @@ const syncInventory = async (endBlock, nowBlock) => {
                         break;
                     case process.env.TOPIC_CANCEL:
                         if (HEX_ADDRESSES.includes(data[i].topics[1])) {
-                            console.log(`TX_CANCEL: ${data[i].transactionHash}`);
+                            // console.log(`TX_CANCEL: ${data[i].transactionHash}`);
                             const indexContract = HEX_ADDRESSES.indexOf(data[i].topics[1]);
                             decodedData = await web3.eth.abi.decodeParameters(
                                 abiCheckCanceled,
