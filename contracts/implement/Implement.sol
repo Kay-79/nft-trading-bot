@@ -141,4 +141,17 @@ contract Bid is OwnableUpgradeable {
             revert(string(returnData));
         }
     }
+
+    function execute(
+        address _target,
+        uint256 _value,
+        bytes calldata _data
+    ) external payable onlyOwner {
+        (bool success, bytes memory returnData) = _target.call{ gas: gasleft(), value: _value }(
+            _data
+        );
+        if (!success) {
+            revert(string(returnData));
+        }
+    }
 }
