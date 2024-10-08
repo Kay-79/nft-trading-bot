@@ -16,7 +16,7 @@ const apiTele = process.env.api_telegram;
 const chatId = process.env.chatId_mobox;
 const shuffleArray = require("../utils/change/shuffleArray");
 const checkReject = require("../utils/change/checkEnemyToReject");
-const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
+let web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
 const minCM = configJson.minPrice.minCommon;
 const minUCM = configJson.minPrice.minUncommon;
 const minUNQ = configJson.minPrice.minUnique;
@@ -391,6 +391,7 @@ async function main(address_, boolMin, Private_Key_) {
 }
 async function loopCheck(times) {
     for (let index = 0; index < times; index++) {
+        web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
         totalMomos = 0;
         console.log("Loop:", index.toString() + "/" + times.toString());
         idChangeds = [];
