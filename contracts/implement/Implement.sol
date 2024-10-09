@@ -74,6 +74,31 @@ contract Bid is OwnableUpgradeable {
         }
     }
 
+    function bid(
+        address[] memory auctors_,
+        uint256[] memory indexs_,
+        uint256[] memory startTimes_,
+        uint256[] memory prices_,
+        bool ignoreSold
+    ) external payable onlyOwner {
+        (bool success, bytes memory returnData) = addressMP.call{
+            gas: gasleft(),
+            value: msg.value
+        }(
+            abi.encodeWithSignature(
+                "bid(address[],uint256[],uint256[],uint256[],bool)",
+                auctors_,
+                indexs_,
+                startTimes_,
+                prices_,
+                ignoreSold
+            )
+        );
+        if (!success) {
+            revert(string(returnData));
+        }
+    }
+
     function changePrice(
         uint256 index_,
         uint256 startPrice_,

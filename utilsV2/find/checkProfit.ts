@@ -9,5 +9,7 @@ const checkProfit = (auction: AuctionDto, priceMins: PriceMinDto) => {
     } else {
         //normal
     }
+    console.log(profit);
     return profit;
 };
+checkProfit({} as AuctionDto, {} as PriceMinDto);
