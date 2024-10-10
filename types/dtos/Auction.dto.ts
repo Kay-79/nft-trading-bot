@@ -6,8 +6,8 @@ export class AuctionDto {
     endPrice?: number;
     durationDays?: number;
     index?: number;
-    ids?: string[];
-    amounts?: number[];
+    ids?: string[] | undefined;
+    amounts?: string[] | undefined;
     tokenId?: number;
     uptime?: number;
     prototype?: number;
@@ -18,6 +18,6 @@ export class AuctionDto {
     category?: number;
     quality?: number;
     tx?: string;
-    deleted?: string;
-    nowPrice?: number;
+    deleted?: boolean | null;
+    nowPrice?: number | undefined;
 }
