@@ -1,3 +1,4 @@
+import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierValue } from "../../types/dtos/TierValue.dto";
 import {
@@ -9,17 +10,25 @@ import {
 } from "./utils";
 import fs from "fs";
 
-export const checkProfit = (auctions: AuctionDto[], priceMins: TierValue, bnbPrice: number) => {
-    //read cache auctionsProfit in waitbid.json
-    let auctionsProfit = JSON.parse(fs.readFileSync("waitbid.json", "utf8"));
-    if (!auctionsProfit) {
-        auctionsProfit = {};
-    }
+export const checkProfit = (
+    auctions: AuctionDto[],
+    priceMins: TierValue,
+    bnbPrice: number
+): BidAuction => {
+    // let auctionsProfit: BidAuction[] = JSON.parse(fs.readFileSync("waitBid.json", "utf8")).data;
+    // if (!auctionsProfit) {
+    //     auctionsProfit = [];
+    // }
+    // console.log(auctionsProfit);
     let normalAuctions: AuctionDto[] = [];
     let proAuctions: AuctionDto[] = [];
     let bundleAuctions: AuctionDto[] = [];
     for (let i = 0; i < auctions.length; i++) {
         const auction = auctions[i];
+        //check same auction in cache
+        // if (auctionsProfit.find((a: BidAuction) => a.id === auction.id)) {
+        //     continue;
+        // }
         if (isProAuction(auction)) {
             proAuctions.push(auction);
         } else if (isBundleAuction(auction)) {
@@ -44,30 +53,6 @@ export const checkProfit = (auctions: AuctionDto[], priceMins: TierValue, bnbPri
     }
     for (let i = 0; i < bundleAuctions.length; i++) {
         const auction = bundleAuctions[i];
-        // example bundleAuction
-        // {
-        //     "id": "bnb_0xC0DC6D8c154e55c4326C4436f14e97989BB6B152_0",
-        //     "chain": "bnb",
-        //     "auctor": "0xC0DC6D8c154e55c4326C4436f14e97989BB6B152",
-        //     "startPrice": 11000000000,
-        //     "endPrice": 11450000000,
-        //     "durationDays": 2,
-        //     "index": 0,
-        //     "ids": ["34039", "34016", "31017", "33052", "23052", "13052"],
-        //     "amounts": ["1", "1", "1", "1", "1", "1"],
-        //     "tokenId": 0,
-        //     "uptime": 1728587071,
-        //     "prototype": 34039,
-        //     "hashrate": 3,
-        //     "lvHashrate": 3,
-        //     "level": 1,
-        //     "specialty": 0,
-        //     "category": 0,
-        //     "quality": 0,
-        //     "tx": "0x402a863d0d59687159bc451c8f1379179aec49e74b7711db349fcd0e44eeacb7",
-        //     "deleted": null,
-        //     "nowPrice": 11000000000
-        // }
         let profit = 0;
         let minProfit = 0;
         let minValueAuction = 0;
@@ -91,12 +76,15 @@ export const checkProfit = (auctions: AuctionDto[], priceMins: TierValue, bnbPri
         }
         console.log(minValueAuction);
         profit = minValueAuction * 0.95 - feeBundle(bnbPrice) - auction?.nowPrice * 10 ** -9;
-        console.log('fee', feeBundle(bnbPrice));
-        console.log(profit);
-        console.log(minProfit);
-        // if (profit > 0) {
+        console.log("pricePack", auction?.nowPrice * 10 ** -9);
+        console.log("fee", feeBundle(bnbPrice));
+        console.log("profit", profit);
+        console.log("minProfit", minProfit);
+        // if (profit > minProfit) {
+        //     auctionsProfit.push(auction);
+        // }
     }
-    return [];
+    // return;
 };
 
 const exampleAuctionBundle = [

@@ -1,6 +1,7 @@
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierValue } from "../../types/dtos/TierValue.dto";
 import { config } from "../../config/config";
+import fs from "fs";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -27,4 +28,18 @@ export const getMinValueType = (
 
 export const feeBundle = (bnbPrice: number): number => {
     return config.gasPrices.bundleAuction * bnbPrice * 10 ** -9;
+};
+
+export const saveAuctionsProfit = (auctions: AuctionDto[]) => {
+    //read cache auctionsProfit in waitbid.json
+    let auctionsProfit: AuctionDto[] = JSON.parse(fs.readFileSync("waitBid.json", "utf8")).data;
+    if (!auctionsProfit) {
+        auctionsProfit = [];
+    }
+    auctionsProfit.push(...auctions);
+    //sort by uptime
+    fs.writeFileSync(
+        "waitBid.json",
+        JSON.stringify({ data: auctionsProfit})
+    );
 };
