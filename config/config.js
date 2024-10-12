@@ -87,7 +87,7 @@ const config = {
     },
     limitBlockUpdate: 5000,
     timeBid: 131.0,
-    accBuy: "0x838e781DC9F070922F66f0BE415d15168bB04825"
+    accBuy: "0xb8C5744D347A74484925E19F588719C846616405"
 };
 
 module.exports = config;
