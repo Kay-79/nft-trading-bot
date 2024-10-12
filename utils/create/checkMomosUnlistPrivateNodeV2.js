@@ -72,9 +72,12 @@ const syncInventory = async (endBlock, nowBlock) => {
                                     Number(decodedData.amounts[k]);
                             }
                             console.log(
-                                `🛒 Success bid: ${decodedData.ids} price: $${
-                                    decodedData.bidPrice / 10 ** 18
-                                } ${((nowBlock - data[i].blockNumber) / 1200).toFixed(2)} hours ago`
+                                `🛒 Success bid: ${decodedData.ids} x${
+                                    decodedData.amounts
+                                } price: $${decodedData.bidPrice / 10 ** 18} ${(
+                                    (nowBlock - data[i].blockNumber) /
+                                    1200
+                                ).toFixed(2)} hours ago`
                             );
                             // momoStorage.syncedBlock = data[i].blockNumber;
                         } else if (HEX_ADDRESSES.includes(data[i].topics[1])) {
