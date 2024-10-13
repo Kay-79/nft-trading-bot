@@ -1,7 +1,7 @@
-import { TierValue } from "../types/dtos/TierValue.dto";
+import { TierPrice } from "../types/dtos/TierPrice.dto";
 import { GasPrices } from "../types/gas/GasPrices";
 
-export const config: { profirPerTier: TierValue; gasPrices: GasPrices; apiDomain: string } = {
+export const config: { profirPerTier: TierPrice; gasPrices: GasPrices; apiDomain: string } = {
     profirPerTier: {
         1: 0.1,
         2: 0.2,

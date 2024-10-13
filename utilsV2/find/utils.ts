@@ -1,5 +1,5 @@
 import { AuctionDto } from "../../types/dtos/Auction.dto";
-import { TierValue } from "../../types/dtos/TierValue.dto";
+import { TierPrice } from "../../types/dtos/TierPrice.dto";
 import { config } from "../../config/config";
 import fs from "fs";
 
@@ -18,11 +18,11 @@ export const isNormalAuction = (auction: AuctionDto): boolean => {
 export const getMinValueType = (
     prototype: string,
     amount: number,
-    minPrices: TierValue
+    minPrices: TierPrice
 ): number[] => {
     const prototypeIndex = Number(prototype.slice(0, 1));
-    const minV = (minPrices[prototypeIndex as keyof TierValue] ?? NaN) * amount;
-    const minP = (config.profirPerTier[prototypeIndex as keyof TierValue] ?? NaN) * amount;
+    const minV = (minPrices[prototypeIndex as keyof TierPrice] ?? NaN) * amount;
+    const minP = (config.profirPerTier[prototypeIndex as keyof TierPrice] ?? NaN) * amount;
     return [minV, minP];
 };
 
@@ -38,8 +38,5 @@ export const saveAuctionsProfit = (auctions: AuctionDto[]) => {
     }
     auctionsProfit.push(...auctions);
     //sort by uptime
-    fs.writeFileSync(
-        "waitBid.json",
-        JSON.stringify({ data: auctionsProfit})
-    );
+    fs.writeFileSync("waitBid.json", JSON.stringify({ data: auctionsProfit }));
 };

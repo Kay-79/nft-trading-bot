@@ -1,6 +1,6 @@
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
-import { TierValue } from "../../types/dtos/TierValue.dto";
+import { TierPrice } from "../../types/dtos/TierPrice.dto";
 import {
     isBundleAuction,
     isProAuction,
@@ -12,9 +12,9 @@ import fs from "fs";
 
 export const checkProfit = (
     auctions: AuctionDto[],
-    priceMins: TierValue,
+    priceMins: TierPrice,
     bnbPrice: number
-): BidAuction => {
+): BidAuction[] => {
     // let auctionsProfit: BidAuction[] = JSON.parse(fs.readFileSync("waitBid.json", "utf8")).data;
     // if (!auctionsProfit) {
     //     auctionsProfit = [];
@@ -84,7 +84,7 @@ export const checkProfit = (
         //     auctionsProfit.push(auction);
         // }
     }
-    // return;
+    return [];
 };
 
 const exampleAuctionBundle = [
@@ -113,7 +113,7 @@ const exampleAuctionBundle = [
     }
 ];
 
-const examplePriceMins: TierValue = {
+const examplePriceMins: TierPrice = {
     1: 1.5,
     2: 0.82,
     3: 0.58,
