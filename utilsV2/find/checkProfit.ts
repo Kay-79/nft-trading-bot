@@ -15,20 +15,11 @@ export const checkProfit = (
     priceMins: TierPrice,
     bnbPrice: number
 ): BidAuction[] => {
-    // let auctionsProfit: BidAuction[] = JSON.parse(fs.readFileSync("waitBid.json", "utf8")).data;
-    // if (!auctionsProfit) {
-    //     auctionsProfit = [];
-    // }
-    // console.log(auctionsProfit);
     let normalAuctions: AuctionDto[] = [];
     let proAuctions: AuctionDto[] = [];
     let bundleAuctions: AuctionDto[] = [];
     for (let i = 0; i < auctions.length; i++) {
         const auction = auctions[i];
-        //check same auction in cache
-        // if (auctionsProfit.find((a: BidAuction) => a.id === auction.id)) {
-        //     continue;
-        // }
         if (isProAuction(auction)) {
             proAuctions.push(auction);
         } else if (isBundleAuction(auction)) {
@@ -80,9 +71,6 @@ export const checkProfit = (
         console.log("fee", feeBundle(bnbPrice));
         console.log("profit", profit);
         console.log("minProfit", minProfit);
-        // if (profit > minProfit) {
-        //     auctionsProfit.push(auction);
-        // }
     }
     return [];
 };
