@@ -15,13 +15,12 @@ const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep } = require("../common/sleep");
 let momoStorage = require("../../data/inventory.json");
 const HEX_ADDRESSES = momoStorage.contracts.map(item => item.hexAddress);
-const TOPICS = [
-    process.env.TOPIC_BID,
-    process.env.TOPIC_CREATE,
-    process.env.TOPIC_CANCEL,
-    process.env.TOPIC_CHANGE,
-    process.env.TOPIC_HASH
-];
+const TOPICS = require("../../config/constans.js");
+
+if (TOPICS.includes(null)) {
+    console.warn("TOPIC is null, exit");
+    exit();
+}
 
 const syncInventory = async (endBlock, nowBlock) => {
     if (endBlock > nowBlock) {
