@@ -1,12 +1,10 @@
 import axios from "axios";
-import { config } from "../../config/config";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
+import { API_DOMAIN } from "../../config/constans";
 
 export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDto[], string[]]> => {
     const data = await axios.get(
-        `${
-            config.apiDomain
-        }/auction/search_v2/BNB?page=1&limit=${25}&category=&vType=&sort=-time&pType=`
+        `${API_DOMAIN}/auction/search_v2/BNB?page=1&limit=${25}&category=&vType=&sort=-time&pType=`
     );
     let newAuctions: AuctionDto[] = [];
     data.data.list.forEach((auction: AuctionDto) => {

@@ -1,7 +1,8 @@
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierPrice } from "../../types/dtos/TierPrice.dto";
-import { config } from "../../config/config";
+import { profitPerTier } from "../../config/config";
 import fs from "fs";
+import { GAS_PRICES } from "../../config/constans";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -22,12 +23,12 @@ export const getMinValueType = (
 ): number[] => {
     const prototypeIndex = Number(prototype.slice(0, 1));
     const minV = (minPrices[prototypeIndex as keyof TierPrice] ?? NaN) * amount;
-    const minP = (config.profirPerTier[prototypeIndex as keyof TierPrice] ?? NaN) * amount;
+    const minP = (profitPerTier[prototypeIndex as keyof TierPrice] ?? NaN) * amount;
     return [minV, minP];
 };
 
 export const feeBundle = (bnbPrice: number): number => {
-    return config.gasPrices.bundleAuction * bnbPrice * 10 ** -9;
+    return GAS_PRICES.bundleAuction * bnbPrice * 10 ** -9;
 };
 
 export const saveAuctionsProfit = (auctions: AuctionDto[]) => {

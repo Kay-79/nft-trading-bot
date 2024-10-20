@@ -25,6 +25,7 @@
         "node": "node ./tools/hostNode",
         "latency": "node ./tools/latency",
         "find": "node ./tools/find",
+        "findV2": "bun ./tools/findV2",
         "bid": "node ./tools/bid",
         "create": "node ./tools/create",
         "change": "node ./tools/change",

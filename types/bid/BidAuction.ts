@@ -2,11 +2,12 @@ import { AuctionDto } from "../dtos/Auction.dto";
 import { TierPrice } from "../dtos/TierPrice.dto";
 
 export class BidAuction {
-    id?: string; //type_seller_nowPrice_uptime
+    id?: string;
     uptime?: number;
     profit?: number;
     minProfit?: number;
     buyer?: string;
+    contractAddress?: string;
     nowPrice?: number;
     isBatch?: boolean;
     minPrice?: TierPrice;

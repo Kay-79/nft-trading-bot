@@ -8,13 +8,13 @@ import {
     getMinValueType,
     feeBundle
 } from "./utils";
-import fs from "fs";
 
 export const checkProfit = (
     auctions: AuctionDto[],
     priceMins: TierPrice,
     bnbPrice: number
 ): BidAuction[] => {
+    let profitableAuctions: BidAuction[] = [];
     let normalAuctions: AuctionDto[] = [];
     let proAuctions: AuctionDto[] = [];
     let bundleAuctions: AuctionDto[] = [];
@@ -67,12 +67,27 @@ export const checkProfit = (
         }
         console.log(minValueAuction);
         profit = minValueAuction * 0.95 - feeBundle(bnbPrice) - auction?.nowPrice * 10 ** -9;
-        console.log("pricePack", auction?.nowPrice * 10 ** -9);
-        console.log("fee", feeBundle(bnbPrice));
-        console.log("profit", profit);
-        console.log("minProfit", minProfit);
+        // console.log("pricePack", auction?.nowPrice * 10 ** -9);
+        // console.log("fee", feeBundle(bnbPrice));
+        // console.log("profit", profit);
+        // console.log("minProfit", minProfit);
+        if (true || profit >= minProfit) {
+            profitableAuctions.push({
+                id: auction?.id,
+                uptime: auction?.uptime,
+                profit: profit,
+                minProfit: minProfit,
+                buyer: "mock",
+                contractAddress: "mock",
+                nowPrice: auction?.nowPrice,
+                isBatch: false,
+                minPrice: priceMins,
+                auctions: [auction]
+            });
+        }
+        console.log(profitableAuctions);
     }
-    return [];
+    return profitableAuctions;
 };
 
 const exampleAuctionBundle = [
@@ -102,9 +117,9 @@ const exampleAuctionBundle = [
 ];
 
 const examplePriceMins: TierPrice = {
-    1: 1.5,
+    1: 1.42,
     2: 0.82,
-    3: 0.58,
+    3: 0.65,
     4: 8,
     5: 40,
     6: 4111
