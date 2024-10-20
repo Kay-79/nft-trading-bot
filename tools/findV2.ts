@@ -4,7 +4,7 @@ import { ranSleep } from "../utilsV2/common/sleep";
 import { AuctionDto } from "../types/dtos/Auction.dto";
 import { checkProfit } from "../utilsV2/find/checkProfit";
 import { TierPrice } from "../types/dtos/TierPrice.dto";
-import { updateWaitBid } from "../utilsV2/find/updateWaitBid";
+import { updateWaitBid } from "../utilsV2/find/utils";
 
 let cacheIds: string[] = [];
 
@@ -43,7 +43,7 @@ const exampleAuctionBundle = [
         endPrice: 11450000000,
         durationDays: 2,
         index: 0,
-        ids: ["34039", "34016", "31017", "33052", "23052", "13052"],
+        ids: ["34039", "34016", "31017", "33052", "33052", "33052"],
         amounts: ["1", "1", "1", "1", "1", "1"],
         tokenId: 0,
         uptime: 1728587071,
@@ -56,7 +56,7 @@ const exampleAuctionBundle = [
         quality: 0,
         tx: "0x402a863d0d59687159bc451c8f1379179aec49e74b7711db349fcd0e44eeacb7",
         deleted: null,
-        nowPrice: 11000000000
+        nowPrice: 3000000000
     }
 ];
 

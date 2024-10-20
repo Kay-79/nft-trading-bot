@@ -1,3 +1,4 @@
+import { MP_ADDRESS, NORMAL_BUYER } from "../../config/constans";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierPrice } from "../../types/dtos/TierPrice.dto";
@@ -6,7 +7,8 @@ import {
     isProAuction,
     isNormalAuction,
     getMinValueType,
-    feeBundle
+    feeBundle,
+    setupBidAuction
 } from "./utils";
 
 export const checkProfit = (
@@ -66,19 +68,10 @@ export const checkProfit = (
             continue;
         }
         profit = minValueAuction * 0.95 - feeBundle(bnbPrice) - auction?.nowPrice * 10 ** -9;
-        if (true || profit >= minProfit) {
-            profitableAuctions.push({
-                id: auction?.id,
-                uptime: auction?.uptime,
-                profit: profit,
-                minProfit: minProfit,
-                buyer: "mock",
-                contractAddress: "mock",
-                nowPrice: auction?.nowPrice,
-                isBatch: false,
-                minPrice: priceMins,
-                auctions: [auction]
-            });
+        if (profit >= minProfit) {
+            profitableAuctions.push(
+                setupBidAuction(auction, profit, minProfit, priceMins, bnbPrice, "PRO")
+            );
         }
     }
     return profitableAuctions;

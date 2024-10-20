@@ -9,7 +9,7 @@ export class BidAuction {
     buyer?: string;
     contractAddress?: string;
     nowPrice?: number;
-    isBatch?: boolean;
     minPrice?: TierPrice;
+    fee?: number;
     auctions?: AuctionDto[];
 }

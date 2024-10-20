@@ -17,3 +17,7 @@ export const GAS_PRICES: GasPrices = {
 };
 
 export const MP_ADDRESS = process.env.ADDRESS_MP || "0x";
+
+export const NORMAL_BUYER = process.env.NORMAL_BUYER || "0x";
+
+export const PRO_BUYER = process.env.PRO_BUYER || "0x";
