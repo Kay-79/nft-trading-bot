@@ -18,8 +18,8 @@ const findV2 = async () => {
         }); */
         // checkProfit(newAuctions, examplePriceMins, exampleBnbPrice);
 
-        console.log(checkProfit(exampleAuctionBundle, examplePriceMins, exampleBnbPrice));
-        updateWaitBid(checkProfit(exampleAuctionBundle, examplePriceMins, exampleBnbPrice));
+        console.log(checkProfit(exampleAuctionPro, examplePriceMins, exampleBnbPrice));
+        updateWaitBid(checkProfit(exampleAuctionPro, examplePriceMins, exampleBnbPrice));
         exit();
 
         await ranSleep(20, 30);
@@ -56,7 +56,33 @@ const exampleAuctionBundle = [
         quality: 0,
         tx: "0x402a863d0d59687159bc451c8f1379179aec49e74b7711db349fcd0e44eeacb7",
         deleted: null,
-        nowPrice: 3000000000
+        nowPrice: 7000000000
+    }
+];
+
+const exampleAuctionPro = [
+    {
+        id: "bnb_0xaB526654e3388543AE83079EdDB4393dBC5A824D_9",
+        chain: "bnb",
+        auctor: "0xaB526654e3388543AE83079EdDB4393dBC5A824D",
+        startPrice: 3000000000,
+        endPrice: 3000000000,
+        durationDays: 2,
+        index: 9,
+        ids: [],
+        amounts: [],
+        tokenId: 33437,
+        uptime: 1729532047,
+        prototype: 42036,
+        hashrate: 390,
+        lvHashrate: 6060,
+        level: 25,
+        specialty: 1,
+        category: 2,
+        quality: 6,
+        tx: "0xddef52136fd8d6352ec0bfe6dc9666b3347aaacc99f251a9e8a4300539d4fd9e",
+        deleted: null,
+        nowPrice: 6000000000
     }
 ];
 

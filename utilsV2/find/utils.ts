@@ -29,8 +29,19 @@ export const getMinValueType = (
     return [minV, minP];
 };
 
+export const getMinValueTypePro = (prototype: number, minPrices: TierPrice): number[] => {
+    const prototypeIndex = Number(prototype.toString().slice(0, 1));
+    const minV = minPrices[prototypeIndex as keyof TierPrice] ?? NaN;
+    const minP = profitPerTier[prototypeIndex as keyof TierPrice] ?? NaN;
+    return [minV, minP];
+};
+
 export const feeBundle = (bnbPrice: number): number => {
     return GAS_PRICES.bundleAuction * bnbPrice * 10 ** -9;
+};
+
+export const feePro = (bnbPrice: number): number => {
+    return GAS_PRICES.proAuction * bnbPrice * 10 ** -9;
 };
 
 export const setupBidAuction = (
@@ -43,18 +54,22 @@ export const setupBidAuction = (
 ): BidAuction => {
     let buyer = "";
     let contractAddress = "";
+    let fee = 0;
     switch (auctionType) {
         case AuctionType.NORMAL:
             buyer = NORMAL_BUYER;
             contractAddress = bidContract;
+            fee = 0;
             break;
         case AuctionType.BUNDLE:
             buyer = NORMAL_BUYER;
             contractAddress = bidContract;
+            fee = feeBundle(bnbPrice);
             break;
         case AuctionType.PRO:
             buyer = PRO_BUYER;
             contractAddress = MP_ADDRESS;
+            fee = feePro(bnbPrice);
             break;
         default:
             break;
@@ -68,12 +83,15 @@ export const setupBidAuction = (
         contractAddress: contractAddress,
         nowPrice: auction?.nowPrice,
         minPrice: priceMins,
-        fee: feeBundle(bnbPrice),
+        fee: fee,
         auctions: [auction]
     };
 };
 
 export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
+    if (!profitableAuctions || profitableAuctions.length == 0) {
+        return;
+    }
     let waitBid = [];
     try {
         waitBid = JSON.parse(fs.readFileSync("waitBid.json", "utf8")).data;
