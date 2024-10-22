@@ -45,11 +45,12 @@ export const feePro = (bnbPrice: number): number => {
 };
 
 export const setupBidAuction = (
-    auction: AuctionDto,
+    auctions: AuctionDto[],
     profit: number,
     minProfit: number,
     priceMins: TierPrice,
     bnbPrice: number,
+    totalFee: number,
     auctionType: string
 ): BidAuction => {
     let buyer = "";
@@ -59,7 +60,7 @@ export const setupBidAuction = (
         case AuctionType.NORMAL:
             buyer = NORMAL_BUYER;
             contractAddress = bidContract;
-            fee = 0;
+            fee = totalFee;
             break;
         case AuctionType.BUNDLE:
             buyer = NORMAL_BUYER;
@@ -75,16 +76,17 @@ export const setupBidAuction = (
             break;
     }
     return {
-        id: auction?.id,
-        uptime: auction?.uptime,
+        id: auctions[0]?.id,
+        uptime: auctions[0]?.uptime,
         profit: profit,
         minProfit: minProfit,
         buyer: buyer,
         contractAddress: contractAddress,
-        nowPrice: auction?.nowPrice,
+        nowPrice: auctions[0]?.nowPrice,
         minPrice: priceMins,
         fee: fee,
-        auctions: [auction]
+        type: auctionType,
+        auctions: auctions
     };
 };
 
@@ -103,4 +105,74 @@ export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
     }
     waitBid.push(...profitableAuctions);
     fs.writeFileSync("waitBid.json", JSON.stringify({ data: waitBid }));
+};
+
+export const getProfitableBidAuctionsNormal = (
+    normalAuctions: AuctionDto[],
+    priceMins: TierPrice,
+    bnbPrice: number
+): BidAuction[] => {
+    let profitableAuctions: AuctionDto[] = [];
+    let profitableBidAuctions: BidAuction[] = [];
+    let totalProfit = 0;
+    let totalMinProfit = 0;
+    let totalFee = 0;
+    for (let i = 0; i < normalAuctions.length; i++) {
+        const auction = normalAuctions[i];
+        let profit = 0;
+        let minProfit = 0;
+        let minValueAuction = 0;
+        if (auction?.ids === undefined || auction?.amounts === undefined) {
+            continue;
+        }
+        minValueAuction += getMinValueType(auction?.ids[0], 1, priceMins)[0];
+        minProfit += getMinValueType(auction?.ids[0], 1, priceMins)[1];
+        if (auction?.nowPrice === undefined) {
+            continue;
+        }
+        totalFee += feeBundle(bnbPrice);
+        profit = minValueAuction * 0.95 - feePro(bnbPrice) - auction?.nowPrice * 10 ** -9;
+        totalProfit += profit;
+        totalMinProfit += minProfit;
+        if (profit >= minProfit) {
+            try {
+                if (
+                    profitableAuctions.length < 6 &&
+                    auction?.uptime === profitableAuctions[profitableAuctions.length - 1]?.uptime
+                ) {
+                    profitableAuctions.push(auction);
+                }
+            } catch (error) {
+                console.log(error);
+                profitableBidAuctions.push(
+                    setupBidAuction(
+                        profitableAuctions,
+                        totalProfit,
+                        totalMinProfit,
+                        priceMins,
+                        bnbPrice,
+                        totalFee,
+                        AuctionType.NORMAL
+                    )
+                );
+                totalFee = 0;
+                totalMinProfit = 0;
+                totalProfit = 0;
+                profitableAuctions = [];
+                profitableAuctions.push(auction);
+            }
+        }
+    }
+    profitableBidAuctions.push(
+        setupBidAuction(
+            profitableAuctions,
+            totalProfit,
+            totalMinProfit,
+            priceMins,
+            bnbPrice,
+            totalFee,
+            AuctionType.NORMAL
+        )
+    );
+    return profitableBidAuctions;
 };

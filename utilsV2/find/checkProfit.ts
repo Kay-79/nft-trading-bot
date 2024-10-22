@@ -11,7 +11,8 @@ import {
     feeBundle,
     setupBidAuction,
     getMinValueTypePro,
-    feePro
+    feePro,
+    getProfitableBidAuctionsNormal
 } from "./utils";
 
 export const checkProfit = (
@@ -22,7 +23,7 @@ export const checkProfit = (
     if (!auctions || auctions.length == 0) {
         return [];
     }
-    let profitableAuctions: BidAuction[] = [];
+    let profitableBidAuctions: BidAuction[] = [];
     let normalAuctions: AuctionDto[] = [];
     let proAuctions: AuctionDto[] = [];
     let bundleAuctions: AuctionDto[] = [];
@@ -36,17 +37,9 @@ export const checkProfit = (
             normalAuctions.push(auction);
         }
     }
-    for (let i = 0; i < normalAuctions.length; i++) {
-        const auction = normalAuctions[i];
-        switch (auction?.prototype) {
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-        }
-    }
+    profitableBidAuctions.push(
+        ...getProfitableBidAuctionsNormal(normalAuctions, priceMins, bnbPrice)
+    );
     for (let i = 0; i < proAuctions.length; i++) {
         const auction = proAuctions[i];
         let profit = 0;
@@ -62,8 +55,16 @@ export const checkProfit = (
         }
         profit = minValueAuction * 0.95 - feePro(bnbPrice) - auction?.nowPrice * 10 ** -9;
         if (profit >= minProfit) {
-            profitableAuctions.push(
-                setupBidAuction(auction, profit, minProfit, priceMins, bnbPrice, AuctionType.PRO)
+            profitableBidAuctions.push(
+                setupBidAuction(
+                    [auction],
+                    profit,
+                    minProfit,
+                    priceMins,
+                    bnbPrice,
+                    feePro(bnbPrice),
+                    AuctionType.PRO
+                )
             );
         }
     }
@@ -92,10 +93,18 @@ export const checkProfit = (
         }
         profit = minValueAuction * 0.95 - feeBundle(bnbPrice) - auction?.nowPrice * 10 ** -9;
         if (profit >= minProfit) {
-            profitableAuctions.push(
-                setupBidAuction(auction, profit, minProfit, priceMins, bnbPrice, AuctionType.BUNDLE)
+            profitableBidAuctions.push(
+                setupBidAuction(
+                    [auction],
+                    profit,
+                    minProfit,
+                    priceMins,
+                    bnbPrice,
+                    feeBundle(bnbPrice),
+                    AuctionType.BUNDLE
+                )
             );
         }
     }
-    return profitableAuctions;
+    return profitableBidAuctions;
 };

@@ -16,8 +16,8 @@ export const GAS_PRICES: GasPrices = {
     normalAuction: { 1: 250000, 2: 300000, 3: 325000, 4: 350000, 5: 450000, 6: 500000 }
 };
 
-export const MP_ADDRESS = process.env.ADDRESS_MP || "0x";
+export const MP_ADDRESS = process.env.ADDRESS_MP || "0xADDRESS_MP";
 
-export const NORMAL_BUYER = process.env.NORMAL_BUYER || "0x";
+export const NORMAL_BUYER = process.env.NORMAL_BUYER || "0xNORMAL_BUYER";
 
-export const PRO_BUYER = process.env.PRO_BUYER || "0x";
+export const PRO_BUYER = process.env.PRO_BUYER || "0xPRO_BUYER";

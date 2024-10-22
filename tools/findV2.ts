@@ -18,8 +18,7 @@ const findV2 = async () => {
         }); */
         // checkProfit(newAuctions, examplePriceMins, exampleBnbPrice);
 
-        console.log(checkProfit(exampleAuctionPro, examplePriceMins, exampleBnbPrice));
-        updateWaitBid(checkProfit(exampleAuctionPro, examplePriceMins, exampleBnbPrice));
+        updateWaitBid(checkProfit(exampleAuctionNormal, examplePriceMins, exampleBnbPrice));
         exit();
 
         await ranSleep(20, 30);
@@ -83,6 +82,101 @@ const exampleAuctionPro = [
         tx: "0xddef52136fd8d6352ec0bfe6dc9666b3347aaacc99f251a9e8a4300539d4fd9e",
         deleted: null,
         nowPrice: 6000000000
+    }
+];
+
+const exampleAuctionNormal = [
+    {
+        id: "bnb_0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D_122",
+        chain: "bnb",
+        auctor: "0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D",
+        startPrice: 2247000000,
+        endPrice: 2247000000,
+        durationDays: 2,
+        index: 122,
+        ids: ["12054"],
+        amounts: ["1"],
+        tokenId: 0,
+        uptime: 1729578307,
+        prototype: 12054,
+        hashrate: 1,
+        lvHashrate: 1,
+        level: 1,
+        specialty: 0,
+        category: 0,
+        quality: 0,
+        tx: "0xff6449a7b1539889bfadcdf4ceac30b10581068274af4213551875d766d99160",
+        deleted: null,
+        nowPrice: 1000000000
+    },
+    {
+        id: "bnb_0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D_2",
+        chain: "bnb",
+        auctor: "0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D",
+        startPrice: 2357000000,
+        endPrice: 2357000000,
+        durationDays: 2,
+        index: 2,
+        ids: ["11053"],
+        amounts: ["1"],
+        tokenId: 0,
+        uptime: 1729578307,
+        prototype: 11053,
+        hashrate: 1,
+        lvHashrate: 1,
+        level: 1,
+        specialty: 0,
+        category: 0,
+        quality: 0,
+        tx: "0xff6449a7b1539889bfadcdf4ceac30b10581068274af4213551875d766d99160",
+        deleted: null,
+        nowPrice: 1000000000
+    },
+    {
+        id: "bnb_0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D_123",
+        chain: "bnb",
+        auctor: "0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D",
+        startPrice: 2577000000,
+        endPrice: 2577000000,
+        durationDays: 2,
+        index: 123,
+        ids: ["12052"],
+        amounts: ["1"],
+        tokenId: 0,
+        uptime: 1729578307,
+        prototype: 12052,
+        hashrate: 1,
+        lvHashrate: 1,
+        level: 1,
+        specialty: 0,
+        category: 0,
+        quality: 0,
+        tx: "0xff6449a7b1539889bfadcdf4ceac30b10581068274af4213551875d766d99160",
+        deleted: null,
+        nowPrice: 1000000000
+    },
+    {
+        id: "bnb_0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D_119",
+        chain: "bnb",
+        auctor: "0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D",
+        startPrice: 2987000000,
+        endPrice: 2987000000,
+        durationDays: 2,
+        index: 119,
+        ids: ["12044"],
+        amounts: ["1"],
+        tokenId: 0,
+        uptime: 1729578307,
+        prototype: 12044,
+        hashrate: 1,
+        lvHashrate: 1,
+        level: 1,
+        specialty: 0,
+        category: 0,
+        quality: 0,
+        tx: "0xff6449a7b1539889bfadcdf4ceac30b10581068274af4213551875d766d99160",
+        deleted: null,
+        nowPrice: 1000000000
     }
 ];
 
