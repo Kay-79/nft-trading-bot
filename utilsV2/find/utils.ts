@@ -112,6 +112,7 @@ export const getProfitableBidAuctionsNormal = (
     priceMins: TierPrice,
     bnbPrice: number
 ): BidAuction[] => {
+    normalAuctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableAuctions: AuctionDto[] = [];
     let profitableBidAuctions: BidAuction[] = [];
     let totalProfit = 0;
@@ -130,20 +131,18 @@ export const getProfitableBidAuctionsNormal = (
         if (auction?.nowPrice === undefined) {
             continue;
         }
-        totalFee += feeBundle(bnbPrice);
+        totalFee += feePro(bnbPrice);
         profit = minValueAuction * 0.95 - feePro(bnbPrice) - auction?.nowPrice * 10 ** -9;
         totalProfit += profit;
         totalMinProfit += minProfit;
         if (profit >= minProfit) {
-            try {
-                if (
-                    profitableAuctions.length < 6 &&
-                    auction?.uptime === profitableAuctions[profitableAuctions.length - 1]?.uptime
-                ) {
-                    profitableAuctions.push(auction);
-                }
-            } catch (error) {
-                console.log(error);
+            if (
+                profitableAuctions.length < 6 && profitableAuctions.length > 0
+                    ? auction?.uptime === profitableAuctions[0]?.uptime
+                    : true
+            ) {
+                profitableAuctions.push(auction);
+            } else {
                 profitableBidAuctions.push(
                     setupBidAuction(
                         profitableAuctions,
@@ -155,11 +154,10 @@ export const getProfitableBidAuctionsNormal = (
                         AuctionType.NORMAL
                     )
                 );
-                totalFee = 0;
-                totalMinProfit = 0;
-                totalProfit = 0;
-                profitableAuctions = [];
-                profitableAuctions.push(auction);
+                profitableAuctions = [auction];
+                totalProfit = profit;
+                totalMinProfit = minProfit;
+                totalFee = feePro(bnbPrice);
             }
         }
     }
@@ -174,5 +172,6 @@ export const getProfitableBidAuctionsNormal = (
             AuctionType.NORMAL
         )
     );
+    console.log("profitableBidAuctions", profitableAuctions);
     return profitableBidAuctions;
 };
