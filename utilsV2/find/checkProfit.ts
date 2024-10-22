@@ -82,7 +82,8 @@ export const checkProfit = (
                     bnbPrice,
                     feeBundle(bnbPrice),
                     AuctionType.BUNDLE,
-                    amount
+                    amount,
+                    auction?.nowPrice
                 )
             );
         }

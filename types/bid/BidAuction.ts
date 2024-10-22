@@ -8,7 +8,7 @@ export class BidAuction {
     minProfit?: number;
     buyer?: string;
     contractAddress?: string;
-    nowPrice?: number;
+    totalPrice?: number;
     minPrice?: TierPrice;
     fee?: number;
     type?: string;
