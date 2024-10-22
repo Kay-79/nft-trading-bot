@@ -12,7 +12,8 @@ import {
     setupBidAuction,
     getMinValueTypePro,
     feePro,
-    getProfitableBidAuctionsNormal
+    getProfitableBidAuctionsNormal,
+    getProfitableBidAuctionsPro
 } from "./utils";
 
 export const checkProfit = (
@@ -40,34 +41,7 @@ export const checkProfit = (
     profitableBidAuctions.push(
         ...getProfitableBidAuctionsNormal(normalAuctions, priceMins, bnbPrice)
     );
-    for (let i = 0; i < proAuctions.length; i++) {
-        const auction = proAuctions[i];
-        let profit = 0;
-        let minProfit = 0;
-        let minValueAuction = 0;
-        if (auction?.prototype === undefined) {
-            continue;
-        }
-        minValueAuction += getMinValueTypePro(auction?.prototype, priceMins)[0];
-        minProfit += getMinValueTypePro(auction?.prototype, priceMins)[1];
-        if (auction?.nowPrice === undefined) {
-            continue;
-        }
-        profit = minValueAuction * 0.95 - feePro(bnbPrice) - auction?.nowPrice * 10 ** -9;
-        if (profit >= minProfit) {
-            profitableBidAuctions.push(
-                setupBidAuction(
-                    [auction],
-                    profit,
-                    minProfit,
-                    priceMins,
-                    bnbPrice,
-                    feePro(bnbPrice),
-                    AuctionType.PRO
-                )
-            );
-        }
-    }
+    profitableBidAuctions.push(...getProfitableBidAuctionsPro(proAuctions, priceMins, bnbPrice));
     for (let i = 0; i < bundleAuctions.length; i++) {
         const auction = bundleAuctions[i];
         let profit = 0;
@@ -92,7 +66,7 @@ export const checkProfit = (
             continue;
         }
         profit = minValueAuction * 0.95 - feeBundle(bnbPrice) - auction?.nowPrice * 10 ** -9;
-        if (profit >= minProfit) {
+        if (profit > minProfit) {
             profitableBidAuctions.push(
                 setupBidAuction(
                     [auction],
