@@ -1,4 +1,4 @@
-import { MP_ADDRESS, NORMAL_BUYER } from "../../config/constans";
+import { MP_ADDRESS, NORMAL_BUYER, RATE_FEE_MARKET } from "../../config/constans";
 import { AuctionType } from "../../config/enum";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
@@ -13,7 +13,8 @@ import {
     getMinValueTypePro,
     feePro,
     getProfitableBidAuctionsNormal,
-    getProfitableBidAuctionsPro
+    getProfitableBidAuctionsPro,
+    isProfitable
 } from "./utils";
 
 export const checkProfit = (
@@ -50,6 +51,7 @@ export const checkProfit = (
         if (auction?.ids === undefined || auction?.amounts === undefined) {
             continue;
         }
+        let amount = 0;
         for (let j = 0; j < (auction?.ids ?? []).length; j++) {
             minValueAuction += getMinValueType(
                 auction?.ids[j],
@@ -61,12 +63,16 @@ export const checkProfit = (
                 Number(auction?.amounts[j]),
                 priceMins
             )[1];
+            amount += Number(auction?.amounts[j]);
         }
         if (auction?.nowPrice === undefined) {
             continue;
         }
-        profit = minValueAuction * 0.95 - feeBundle(bnbPrice) - auction?.nowPrice * 10 ** -9;
-        if (profit > minProfit) {
+        profit =
+            minValueAuction * (1 - RATE_FEE_MARKET) -
+            feeBundle(bnbPrice) -
+            auction?.nowPrice * 10 ** -9;
+        if (isProfitable(profit, minProfit)) {
             profitableBidAuctions.push(
                 setupBidAuction(
                     [auction],
@@ -75,7 +81,8 @@ export const checkProfit = (
                     priceMins,
                     bnbPrice,
                     feeBundle(bnbPrice),
-                    AuctionType.BUNDLE
+                    AuctionType.BUNDLE,
+                    amount
                 )
             );
         }

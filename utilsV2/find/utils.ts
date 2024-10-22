@@ -2,7 +2,13 @@ import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierPrice } from "../../types/dtos/TierPrice.dto";
 import { bidContract, profitPerTier } from "../../config/config";
 import fs from "fs";
-import { GAS_PRICES, MP_ADDRESS, NORMAL_BUYER, PRO_BUYER } from "../../config/constans";
+import {
+    GAS_PRICES,
+    MP_ADDRESS,
+    NORMAL_BUYER,
+    PRO_BUYER,
+    RATE_FEE_MARKET
+} from "../../config/constans";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionType } from "../../config/enum";
 
@@ -51,7 +57,8 @@ export const setupBidAuction = (
     priceMins: TierPrice,
     bnbPrice: number,
     totalFee: number,
-    auctionType: string
+    auctionType: string,
+    amount: number
 ): BidAuction => {
     let buyer = "";
     let contractAddress = "";
@@ -86,6 +93,7 @@ export const setupBidAuction = (
         minPrice: priceMins,
         fee: fee,
         type: auctionType,
+        amount: amount,
         auctions: auctions
     };
 };
@@ -117,6 +125,10 @@ export const isBreakBatch = (auctions: AuctionDto[], auction: AuctionDto): boole
     return auction?.uptime !== auctions[0]?.uptime;
 };
 
+export const isProfitable = (profit: number, minProfit: number): boolean => {
+    return profit < minProfit;
+};
+
 export const getProfitableBidAuctionsNormal = (
     normalAuctions: AuctionDto[],
     priceMins: TierPrice,
@@ -133,19 +145,19 @@ export const getProfitableBidAuctionsNormal = (
         let profit = 0;
         let minProfit = 0;
         let minValueAuction = 0;
-        if (!auction?.ids) {
+        if (!auction?.ids || !auction?.nowPrice) {
             continue;
         }
         minValueAuction += getMinValueType(auction?.ids[0], 1, priceMins)[0];
         minProfit += getMinValueType(auction?.ids[0], 1, priceMins)[1];
-        if (auction?.nowPrice === undefined) {
-            continue;
-        }
+        profit =
+            minValueAuction * (1 - RATE_FEE_MARKET) -
+            feePro(bnbPrice) -
+            auction?.nowPrice * 10 ** -9;
         totalFee += feePro(bnbPrice);
-        profit = minValueAuction * 0.95 - feePro(bnbPrice) - auction?.nowPrice * 10 ** -9;
         totalProfit += profit;
         totalMinProfit += minProfit;
-        if (profit >= minProfit) {
+        if (isProfitable(totalProfit, totalMinProfit)) {
             if (isBreakBatch(profitableAuctions, auction)) {
                 profitableBidAuctions.push(
                     setupBidAuction(
@@ -155,7 +167,8 @@ export const getProfitableBidAuctionsNormal = (
                         priceMins,
                         bnbPrice,
                         totalFee,
-                        AuctionType.NORMAL
+                        AuctionType.NORMAL,
+                        profitableAuctions.length
                     )
                 );
                 profitableAuctions = [auction];
@@ -165,6 +178,10 @@ export const getProfitableBidAuctionsNormal = (
             } else {
                 profitableAuctions.push(auction);
             }
+        } else {
+            totalProfit -= profit;
+            totalMinProfit -= minProfit;
+            totalFee -= feePro(bnbPrice);
         }
     }
     if (profitableAuctions.length > 0) {
@@ -176,7 +193,8 @@ export const getProfitableBidAuctionsNormal = (
                 priceMins,
                 bnbPrice,
                 totalFee,
-                AuctionType.NORMAL
+                AuctionType.NORMAL,
+                profitableAuctions.length
             )
         );
     }
@@ -207,14 +225,15 @@ export const getProfitableBidAuctionsPro = (
         if (auction?.nowPrice === undefined) {
             continue;
         }
+        profit =
+            minValueAuction * (1 - RATE_FEE_MARKET) -
+            feePro(bnbPrice) -
+            auction?.nowPrice * 10 ** -9;
         totalFee += feePro(bnbPrice);
-        profit = minValueAuction * 0.95 - feePro(bnbPrice) - auction?.nowPrice * 10 ** -9;
         totalProfit += profit;
         totalMinProfit += minProfit;
-        if (profit >= minProfit) {
+        if (isProfitable(totalProfit, totalMinProfit)) {
             if (isBreakBatch(profitableAuctions, auction)) {
-                profitableAuctions.push(auction);
-            } else {
                 profitableBidAuctions.push(
                     setupBidAuction(
                         profitableAuctions,
@@ -223,14 +242,21 @@ export const getProfitableBidAuctionsPro = (
                         priceMins,
                         bnbPrice,
                         totalFee,
-                        AuctionType.PRO
+                        AuctionType.PRO,
+                        profitableAuctions.length
                     )
                 );
                 profitableAuctions = [auction];
                 totalProfit = profit;
                 totalMinProfit = minProfit;
                 totalFee = feePro(bnbPrice);
+            } else {
+                profitableAuctions.push(auction);
             }
+        } else {
+            totalProfit -= profit;
+            totalMinProfit -= minProfit;
+            totalFee -= feePro(bnbPrice);
         }
     }
     if (profitableAuctions.length > 0) {
@@ -242,7 +268,8 @@ export const getProfitableBidAuctionsPro = (
                 priceMins,
                 bnbPrice,
                 totalFee,
-                AuctionType.PRO
+                AuctionType.PRO,
+                profitableAuctions.length
             )
         );
     }

@@ -12,5 +12,6 @@ export class BidAuction {
     minPrice?: TierPrice;
     fee?: number;
     type?: string;
+    amount?: number;
     auctions?: AuctionDto[];
 }
