@@ -20,8 +20,7 @@ const findV2 = async () => {
         isHasProfit
             ? updateWaitBid(checkProfit(newAuctions, examplePriceMins, exampleBnbPrice))
             : {};
-        // exit();
-        console.log(cacheIds.length);
+        exit();
 
         await ranSleep(20, 30);
     }

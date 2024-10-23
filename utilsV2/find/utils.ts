@@ -117,7 +117,7 @@ export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
     if (!profitableAuctions || profitableAuctions.length == 0) {
         return;
     }
-    let waitBid = [];
+    let waitBid: BidAuction[] = [];
     try {
         waitBid = JSON.parse(fs.readFileSync("waitBid.json", "utf8")).data;
     } catch (error) {
@@ -127,6 +127,7 @@ export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
         waitBid = [];
     }
     waitBid.push(...profitableAuctions);
+    waitBid.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     fs.writeFileSync("waitBid.json", JSON.stringify({ data: waitBid }));
 };
 
