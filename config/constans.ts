@@ -10,11 +10,13 @@ export const TOPPICS: string[] = [
 
 export const API_DOMAIN = process.env.API_DOMAIN || "https://nftapi.mobox.io";
 
-export const GAS_PRICES: GasPrices = {
+export const GAS_PRICES_BID: GasPrices = {
     proAuction: 250000,
     bundleAuction: 350000,
     normalAuction: { 1: 250000, 2: 300000, 3: 325000, 4: 350000, 5: 450000, 6: 500000 }
 };
+
+export const GAS_PRICE_LIST = 325000 / 6;
 
 export const RATE_FEE_MARKET = 0.05;
 

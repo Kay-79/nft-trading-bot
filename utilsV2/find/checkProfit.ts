@@ -12,8 +12,7 @@ import {
     setupBidAuction,
     getMinValueTypePro,
     feePro,
-    getProfitableBidAuctionsNormal,
-    getProfitableBidAuctionsPro,
+    getProfitableBidAuctionsNormalVsPro,
     isProfitable
 } from "./utils";
 
@@ -40,9 +39,16 @@ export const checkProfit = (
         }
     }
     profitableBidAuctions.push(
-        ...getProfitableBidAuctionsNormal(normalAuctions, priceMins, bnbPrice)
+        ...getProfitableBidAuctionsNormalVsPro(
+            normalAuctions,
+            priceMins,
+            bnbPrice,
+            AuctionType.NORMAL
+        )
     );
-    profitableBidAuctions.push(...getProfitableBidAuctionsPro(proAuctions, priceMins, bnbPrice));
+    profitableBidAuctions.push(
+        ...getProfitableBidAuctionsNormalVsPro(proAuctions, priceMins, bnbPrice, AuctionType.PRO)
+    );
     for (let i = 0; i < bundleAuctions.length; i++) {
         const auction = bundleAuctions[i];
         let profit = 0;

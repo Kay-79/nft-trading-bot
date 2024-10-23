@@ -20,14 +20,15 @@ const findV2 = async () => {
         isHasProfit
             ? updateWaitBid(checkProfit(newAuctions, examplePriceMins, exampleBnbPrice))
             : {};
-        exit();
+        // exit();
+        console.log(cacheIds.length);
 
         await ranSleep(20, 30);
     }
 };
 
 const examplePriceMins: TierPrice = {
-    1: 1.42,
+    1: 1.45,
     2: 0.82,
     3: 0.65,
     4: 8,
