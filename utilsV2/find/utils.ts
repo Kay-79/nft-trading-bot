@@ -3,6 +3,8 @@ import { TierPrice } from "../../types/dtos/TierPrice.dto";
 import { bidContract, profitPerTier } from "../../config/config";
 import fs from "fs";
 import {
+    API_BNB_PRICE_COIGEKO,
+    API_BNB_PRICE_MOBOX,
     GAS_PRICE_LIST,
     GAS_PRICES_BID,
     MP_ADDRESS,
@@ -12,6 +14,7 @@ import {
 } from "../../config/constans";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionType } from "../../config/enum";
+import axios from "axios";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -175,9 +178,6 @@ export const getProfitableBidAuctionsNormalVsPro = (
             minProfit += getMinValueType(auction?.ids[0], 1, priceMins)[1];
         }
         profit = calculateProfit(minValueAuction, fee, auction, bnbPrice);
-        // profit =
-        //     minValueAuction -
-        //     (fee + auction?.nowPrice * 10 ** -9) - GAS_PRICE_LIST * bnbPrice * 10 ** -9;
         if (isProfitable(profit, minProfit)) {
             if (isBreakBatch(profitableAuctions, auction)) {
                 profitableBidAuctions.push(
@@ -228,4 +228,26 @@ export const getProfitableBidAuctionsNormalVsPro = (
         );
     }
     return profitableBidAuctions;
+};
+
+export const getBnbPrice = async (cacheBnbPrice: number): Promise<number> => {
+    let bnbPrice = cacheBnbPrice;
+    try {
+        const res = await axios.get(
+            API_BNB_PRICE_COIGEKO
+        );
+        bnbPrice = res.data.binancecoin.usd;
+        return bnbPrice;
+    } catch (error) {
+        console.log(error);
+    }
+    try {
+        const res = await axios.get(API_BNB_PRICE_MOBOX);
+        bnbPrice = res.data.data.bnb.price;
+        return bnbPrice;
+    } catch (error) {
+        console.log(error);
+    }
+    console.warn("Warning: Apis not work!");
+    return bnbPrice;
 };

@@ -25,3 +25,10 @@ export const MP_ADDRESS = process.env.ADDRESS_MP || "0xADDRESS_MP";
 export const NORMAL_BUYER = process.env.NORMAL_BUYER || "0xNORMAL_BUYER";
 
 export const PRO_BUYER = process.env.PRO_BUYER || "0xPRO_BUYER";
+
+export const CACHE_BNB_PRICE = 600;
+
+export const API_BNB_PRICE_COIGEKO =
+    "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd";
+
+export const API_BNB_PRICE_MOBOX = "https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]";
