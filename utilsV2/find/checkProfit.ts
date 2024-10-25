@@ -59,16 +59,13 @@ export const checkProfit = (
         }
         let amount = 0;
         for (let j = 0; j < (auction?.ids ?? []).length; j++) {
-            minValueAuction += getMinValueType(
+            const minValueType = getMinValueType(
                 auction?.ids[j],
                 Number(auction?.amounts[j]),
                 priceMins
-            )[0];
-            minProfit += getMinValueType(
-                auction?.ids[j],
-                Number(auction?.amounts[j]),
-                priceMins
-            )[1];
+            );
+            minValueAuction += minValueType[0];
+            minProfit += minValueType[1];
             amount += Number(auction?.amounts[j]);
         }
         if (auction?.nowPrice === undefined) {

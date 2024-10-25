@@ -11,8 +11,7 @@ const findV2 = async () => {
     console.log("Starting findV2...");
     let cacheIds: string[] = [];
     let bnbPrice = await getBnbPrice(CACHE_BNB_PRICE);
-    let delaySetup = Date.now() / 1000;
-    exit();
+    let timeLastSetup = Date.now() / 1000;
     while (true) {
         let newAuctions: AuctionDto[] = [];
         await getNewAutions(cacheIds).then(async ([auctions, ids]) => {
@@ -22,9 +21,10 @@ const findV2 = async () => {
         const isHasProfit = checkProfit(newAuctions, examplePriceMins, bnbPrice).length > 0;
         isHasProfit ? updateWaitBid(checkProfit(newAuctions, examplePriceMins, bnbPrice)) : {};
         exit();
-        if (Date.now() / 1000 - delaySetup > TIME_DELAY_SETUP_FIND) {
+        if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
+            //setup
             bnbPrice = await getBnbPrice(bnbPrice);
-            delaySetup = Date.now() / 1000;
+            timeLastSetup = Date.now() / 1000;
         }
         await ranSleep(20, 30);
     }

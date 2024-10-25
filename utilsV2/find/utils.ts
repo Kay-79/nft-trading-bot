@@ -171,11 +171,13 @@ export const getProfitableBidAuctionsNormalVsPro = (
             continue;
         }
         if (type === AuctionType.PRO) {
-            minValueAuction += getMinValueType(auction?.prototype.toString(), 1, priceMins)[0];
-            minProfit += getMinValueType(auction?.prototype.toString(), 1, priceMins)[1];
+            const minValueType = getMinValueType(auction?.prototype.toString(), 1, priceMins);
+            minValueAuction += minValueType[0];
+            minProfit += minValueType[1];
         } else {
-            minValueAuction += getMinValueType(auction?.ids[0], 1, priceMins)[0];
-            minProfit += getMinValueType(auction?.ids[0], 1, priceMins)[1];
+            const minValueType = getMinValueType(auction?.ids[0], 1, priceMins);
+            minValueAuction += minValueType[0];
+            minProfit += minValueType[1];
         }
         profit = calculateProfit(minValueAuction, fee, auction, bnbPrice);
         if (isProfitable(profit, minProfit)) {
@@ -230,12 +232,14 @@ export const getProfitableBidAuctionsNormalVsPro = (
     return profitableBidAuctions;
 };
 
+/**
+ * @param {number} cacheBnbPrice - A fallback BNB price value that will be used if both API calls fail.
+ * @returns {Promise<number>} The current BNB price in USD as retrieved from the APIs or, in case of failure, the provided cached price.
+ */
 export const getBnbPrice = async (cacheBnbPrice: number): Promise<number> => {
     let bnbPrice = cacheBnbPrice;
     try {
-        const res = await axios.get(
-            API_BNB_PRICE_COIGEKO
-        );
+        const res = await axios.get(API_BNB_PRICE_COIGEKO);
         bnbPrice = res.data.binancecoin.usd;
         return bnbPrice;
     } catch (error) {
