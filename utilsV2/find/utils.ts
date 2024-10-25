@@ -8,6 +8,7 @@ import {
     API_DOMAIN,
     GAS_PRICE_LIST,
     GAS_PRICES_BID,
+    MIN_GAS_PRICE,
     MIN_TIME_GET_PRICE,
     MP_ADDRESS,
     NORMAL_BUYER,
@@ -76,13 +77,14 @@ export const setupBidAuction = (
     priceMins: TierPrice,
     bnbPrice: number,
     totalFee: number,
-    auctionType: string,
+    auctionType: AuctionType,
     amount: number,
     totalPrice: number
 ): BidAuction => {
     let buyer = "";
     let contractAddress = "";
     let fee = 0;
+    let maxGasPrice = MIN_GAS_PRICE;
     switch (auctionType) {
         case AuctionType.NORMAL:
             buyer = NORMAL_BUYER;
@@ -114,7 +116,9 @@ export const setupBidAuction = (
         fee: fee,
         type: auctionType,
         amount: amount,
-        auctions: auctions
+        auctions: auctions,
+        minGasPrice: MIN_GAS_PRICE,
+        maxGasPrice: maxGasPrice
     };
 };
 

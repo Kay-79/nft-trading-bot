@@ -46,3 +46,5 @@ export const CACHE_TIER_PRICE: TierPrice = {
     5: 0,
     6: 0
 };
+
+export const MIN_GAS_PRICE = 1.001;

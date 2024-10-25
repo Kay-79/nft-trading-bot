@@ -9,9 +9,9 @@ export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDt
             `${API_DOMAIN}/auction/search_v2/BNB?page=1&limit=${25}&category=&vType=&sort=-time&pType=`
         );
         data.data.list.forEach((auction: AuctionDto) => {
-            if (auction.id && !cacheIdsCheck.includes(auction.id)) {
+            if (auction.id && !cacheIdsCheck.includes(auction.id + auction.uptime)) {
                 newAuctions.push(auction);
-                cacheIdsCheck.push(auction.id);
+                cacheIdsCheck.push(auction.id + auction.uptime);
             }
         });
     } catch (error) {

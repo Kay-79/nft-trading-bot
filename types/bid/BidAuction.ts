@@ -14,4 +14,6 @@ export class BidAuction {
     type?: string;
     amount?: number;
     auctions?: AuctionDto[];
+    minGasPrice?: number;
+    maxGasPrice?: number;
 }
