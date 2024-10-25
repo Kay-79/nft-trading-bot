@@ -5,12 +5,13 @@ import { AuctionDto } from "../types/dtos/Auction.dto";
 import { checkProfit } from "../utilsV2/find/checkProfit";
 import { TierPrice } from "../types/dtos/TierPrice.dto";
 import { getBnbPrice, updateWaitBid } from "../utilsV2/find/utils";
-import { CACHE_BNB_PRICE } from "../config/constans";
+import { CACHE_BNB_PRICE, TIME_DELAY_SETUP_FIND } from "../config/constans";
 
 const findV2 = async () => {
     console.log("Starting findV2...");
     let cacheIds: string[] = [];
     let bnbPrice = await getBnbPrice(CACHE_BNB_PRICE);
+    let delaySetup = Date.now() / 1000;
     exit();
     while (true) {
         let newAuctions: AuctionDto[] = [];
@@ -18,12 +19,13 @@ const findV2 = async () => {
             newAuctions = auctions;
             cacheIds = ids;
         });
-        const isHasProfit = checkProfit(newAuctions, examplePriceMins, exampleBnbPrice).length > 0;
-        isHasProfit
-            ? updateWaitBid(checkProfit(newAuctions, examplePriceMins, exampleBnbPrice))
-            : {};
+        const isHasProfit = checkProfit(newAuctions, examplePriceMins, bnbPrice).length > 0;
+        isHasProfit ? updateWaitBid(checkProfit(newAuctions, examplePriceMins, bnbPrice)) : {};
         exit();
-
+        if (Date.now() / 1000 - delaySetup > TIME_DELAY_SETUP_FIND) {
+            bnbPrice = await getBnbPrice(bnbPrice);
+            delaySetup = Date.now() / 1000;
+        }
         await ranSleep(20, 30);
     }
 };

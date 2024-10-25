@@ -32,3 +32,5 @@ export const API_BNB_PRICE_COIGEKO =
     "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd";
 
 export const API_BNB_PRICE_MOBOX = "https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]";
+
+export const TIME_DELAY_SETUP_FIND = 3600;
