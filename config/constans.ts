@@ -1,3 +1,4 @@
+import { TierPrice } from "../types/dtos/TierPrice.dto";
 import { GasPrices } from "../types/gas/GasPrices";
 
 export const TOPPICS: string[] = [
@@ -33,4 +34,15 @@ export const API_BNB_PRICE_COIGEKO =
 
 export const API_BNB_PRICE_MOBOX = "https://priceapi.mobox.io/kline/usdt?coins=[%22bnb%22]";
 
-export const TIME_DELAY_SETUP_FIND = 3600;
+export const TIME_DELAY_SETUP_FIND = 1800; //30mins
+
+export const MIN_TIME_GET_PRICE = 600; //10mins
+
+export const CACHE_TIER_PRICE: TierPrice = {
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 0,
+    5: 0,
+    6: 0
+};

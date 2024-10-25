@@ -6,40 +6,40 @@ import { checkProfit } from "../utilsV2/find/checkProfit";
 import { TierPrice } from "../types/dtos/TierPrice.dto";
 import { getBnbPrice, updateWaitBid } from "../utilsV2/find/utils";
 import { CACHE_BNB_PRICE, TIME_DELAY_SETUP_FIND } from "../config/constans";
+import { setup } from "../utilsV2/find/setup";
+import { SetupFind } from "../types/find/SetupFind";
 
 const findV2 = async () => {
     console.log("Starting findV2...");
     let cacheIds: string[] = [];
-    let bnbPrice = await getBnbPrice(CACHE_BNB_PRICE);
-    let timeLastSetup = Date.now() / 1000;
+    let initSetup: SetupFind = await setup(CACHE_BNB_PRICE);
+    let { bnbPrice, isFrontRunNormal, isFrontRunPro, isFrontRunProHash, priceMins, timeLastSetup } =
+        initSetup;
     while (true) {
         let newAuctions: AuctionDto[] = [];
         await getNewAutions(cacheIds).then(async ([auctions, ids]) => {
             newAuctions = auctions;
             cacheIds = ids;
         });
-        const isHasProfit = checkProfit(newAuctions, examplePriceMins, bnbPrice).length > 0;
-        isHasProfit ? updateWaitBid(checkProfit(newAuctions, examplePriceMins, bnbPrice)) : {};
-        exit();
+        if (bnbPrice === undefined || priceMins === undefined || timeLastSetup === undefined)
+            continue;
+        const isHasProfit = checkProfit(newAuctions, priceMins, bnbPrice).length > 0;
+        isHasProfit ? updateWaitBid(checkProfit(newAuctions, priceMins, bnbPrice)) : {};
         if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
-            //setup
-            bnbPrice = await getBnbPrice(bnbPrice);
-            timeLastSetup = Date.now() / 1000;
+            initSetup = await setup(bnbPrice);
+            ({
+                bnbPrice,
+                isFrontRunNormal,
+                isFrontRunPro,
+                isFrontRunProHash,
+                priceMins,
+                timeLastSetup
+            } = initSetup);
         }
         await ranSleep(20, 30);
     }
 };
 
-const examplePriceMins: TierPrice = {
-    1: 1.45,
-    2: 0.82,
-    3: 0.65,
-    4: 8,
-    5: 40,
-    6: 4111
-};
-
-const exampleBnbPrice = 600;
 findV2();
 function exit() {
     throw new Error("Processing exit");

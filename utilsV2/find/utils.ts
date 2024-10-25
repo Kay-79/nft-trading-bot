@@ -5,8 +5,10 @@ import fs from "fs";
 import {
     API_BNB_PRICE_COIGEKO,
     API_BNB_PRICE_MOBOX,
+    API_DOMAIN,
     GAS_PRICE_LIST,
     GAS_PRICES_BID,
+    MIN_TIME_GET_PRICE,
     MP_ADDRESS,
     NORMAL_BUYER,
     PRO_BUYER,
@@ -254,4 +256,56 @@ export const getBnbPrice = async (cacheBnbPrice: number): Promise<number> => {
     }
     console.warn("Warning: Apis not work!");
     return bnbPrice;
+};
+
+export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice> => {
+    let priceMins = cacheTierPrice;
+    const getPrice = async (prototype: number, amountCheck: number): Promise<number> => {
+        try {
+            const res = await axios.get(`${API_DOMAIN}/auction/search_v2/BNB`, {
+                params: {
+                    page: 1,
+                    limit: amountCheck,
+                    vType: prototype,
+                    sort: "price"
+                }
+            });
+            const lists: AuctionDto[] = res.data.list;
+            if (lists.length > 0) {
+                let sumPrice = 0;
+                let amount = 0;
+                for (let i = 0; i < lists.length; i++) {
+                    const auction = lists[i];
+                    if (
+                        !auction?.uptime ||
+                        !auction?.nowPrice ||
+                        Date.now() / 1000 - auction?.uptime < MIN_TIME_GET_PRICE
+                    ) {
+                        continue;
+                    }
+                    sumPrice += auction.nowPrice / 10 ** 9;
+                    amount++;
+                }
+                return sumPrice / amount;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        return priceMins[prototype as keyof TierPrice] ?? 0;
+    };
+
+    const priceConfigs = [
+        { tier: 1, amount: 15 },
+        { tier: 2, amount: 15 },
+        { tier: 3, amount: 15 },
+        { tier: 4, amount: 8 },
+        { tier: 5, amount: 5 },
+        { tier: 6, amount: 3 }
+    ];
+
+    for (const { tier, amount } of priceConfigs) {
+        priceMins[tier as keyof TierPrice] = await getPrice(tier, amount);
+    }
+
+    return priceMins;
 };

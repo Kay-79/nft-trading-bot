@@ -6,4 +6,5 @@ export interface SetupFind {
     isFrontRunPro?: boolean;
     isFrontRunProHash?: boolean;
     priceMins?: TierPrice;
+    timeLastSetup?: number;
 }
