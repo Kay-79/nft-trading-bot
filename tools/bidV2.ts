@@ -1,6 +1,7 @@
 import { BidAuction } from "../types/bid/BidAuction";
 import fs from "fs";
-import { ranSleep } from "../utilsV2/common/sleep";
+import { ranSleep, sleep } from "../utilsV2/common/sleep";
+import { bidAuction } from "../utilsV2/bid/bidAuction";
 const bidV2 = async () => {
     while (true) {
         let bidAuctions: BidAuction[] = [];
@@ -13,16 +14,16 @@ const bidV2 = async () => {
             bidAuctions = [];
         }
         if (bidAuctions.length == 0) {
-            ranSleep(5, 10);
+            sleep(5);
             continue;
         }
         bidAuctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
-        const bidAuction: BidAuction | undefined = bidAuctions.shift();
-        if (!bidAuction) {
+        const currentBidAuction: BidAuction | undefined = bidAuctions.shift();
+        if (!currentBidAuction) {
             continue;
         }
         fs.writeFileSync("waitBid.json", JSON.stringify({ data: bidAuctions }));
-        exit();
+        await bidAuction(currentBidAuction);
     }
 };
 
