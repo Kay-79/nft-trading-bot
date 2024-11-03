@@ -50,3 +50,5 @@ export const CACHE_TIER_PRICE: TierPrice = {
 export const MIN_GAS_PRICE = 1.001;
 
 export const TIME_DELAY_BLOCK_BID = 60; //1min
+
+export const IS_FRONT_RUNNING = false;
