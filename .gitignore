@@ -15,3 +15,4 @@ test*.*
 data/*.json
 .vscode
 nohup.out
+dist

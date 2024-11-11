@@ -26,7 +26,7 @@
         "latency": "node ./tools/latency",
         "find": "node ./tools/find",
         "findV2": "bun ./tools/findV2",
-        "bidV2": "bun ./tools/bidV2",
+        "bidV2": "bun ./tools/bidV2.ts",
         "bid": "node ./tools/bid",
         "create": "node ./tools/create",
         "change": "node ./tools/change",
