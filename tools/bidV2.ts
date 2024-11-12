@@ -29,7 +29,9 @@ const bidV2 = async () => {
         }
         if (IS_FRONT_RUNNING) {
             await frontRunBidAuction(currentBidAuction); // Comming soon
-        } else await bidAuction(currentBidAuction);
+        } else {
+            await bidAuction(currentBidAuction);
+        }
         console.log("Testing...");
         await ranSleep(5, 6);
     }
@@ -39,7 +41,3 @@ bidV2();
 function exit() {
     throw new Error("Processing exit");
 }
-process.on("SIGINT", () => {
-    console.log("Process exiting...");
-    process.exit(0);
-});
