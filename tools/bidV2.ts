@@ -30,10 +30,18 @@ const bidV2 = async () => {
         }
         if (IS_FRONT_RUNNING) {
             await frontRunBidAuction(currentBidAuction); // Comming soon
-        } else await bidAuction(currentBidAuction);
+        } else {
+            await bidAuction(currentBidAuction);
+        }
         console.log("Testing...");
         await ranSleep(5, 6);
     }
 };
 
 bidV2();
+<<<<<<< HEAD
+=======
+function exit() {
+    throw new Error("Processing exit");
+}
+>>>>>>> e12ec24c32a66d04d80a958a72dc86c31aec40a6
