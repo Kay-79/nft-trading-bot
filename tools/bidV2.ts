@@ -34,6 +34,7 @@ const bidV2 = async () => {
             await bidAuction(currentBidAuction);
         }
         console.log("Testing...");
+        exit();
         await ranSleep(5, 6);
     }
 };
