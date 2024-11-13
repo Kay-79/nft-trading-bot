@@ -6,6 +6,7 @@ import { frontRunBidAuction } from "../utilsV2/bid/frontRunBidAuction";
 import { getBidAuctions, saveBidAuctions } from "../utilsV2/bid/utils";
 
 const bidV2 = async () => {
+    console.log("Start bidV2");
     while (true) {
         let bidAuctions: BidAuction[] = [];
         try {
@@ -36,10 +37,3 @@ const bidV2 = async () => {
 };
 
 bidV2();
-function exit() {
-    throw new Error("Processing exit");
-}
-process.on("SIGINT", () => {
-    console.log("Process exiting...");
-    process.exit(0);
-});
