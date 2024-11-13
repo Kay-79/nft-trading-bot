@@ -10,7 +10,6 @@ const { abiAmount } = require("../abi/abiCheckLogs");
 const getMinPrice = require("../utils/common/getMinPrice");
 const { updateInventory } = require("../utils/create/checkMomosUnlistPrivateNodeV2");
 const prepareBatch = require("../utils/create/prepareBatch");
-const { id } = require("ethers/lib/utils");
 
 minCM = configJson.minPrice.minCommon;
 minUCM = configJson.minPrice.minUncommon;
