@@ -39,9 +39,6 @@ const bidV2 = async () => {
 };
 
 bidV2();
-<<<<<<< HEAD
-=======
 function exit() {
     throw new Error("Processing exit");
 }
->>>>>>> e12ec24c32a66d04d80a958a72dc86c31aec40a6
