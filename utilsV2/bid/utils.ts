@@ -11,7 +11,7 @@ export const getBidAuctions = async (): Promise<BidAuction[]> => {
 };
 
 export const saveBidAuctions = async (bidAuctions: BidAuction[]) => {
-    if (!bidAuctions || bidAuctions.length == 0) {
+    if (!bidAuctions) {
         return;
     }
     try {

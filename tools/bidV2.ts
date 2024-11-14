@@ -21,6 +21,7 @@ const bidV2 = async () => {
         const currentBidAuction: BidAuction | undefined = bidAuctions.shift();
         if (!currentBidAuction) {
             console.log("No bid auction found");
+            await sleep(5);
             continue;
         }
         try {
@@ -32,9 +33,9 @@ const bidV2 = async () => {
             await frontRunBidAuction(currentBidAuction); // Comming soon
         } else {
             await bidAuction(currentBidAuction);
+            console.log("Bid done");
         }
         console.log("Testing...");
-        exit();
         await ranSleep(5, 6);
     }
 };

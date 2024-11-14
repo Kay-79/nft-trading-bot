@@ -3,3 +3,8 @@ export enum AuctionType {
     BUNDLE = "BUNDLE",
     PRO = "PRO"
 }
+
+export enum Enviroment {
+    TESTNET = "TESTNET",
+    MAINNET = "MAINNET"
+}
