@@ -254,13 +254,6 @@
     crc-32 "^1.2.0"
     ethereumjs-util "^7.1.5"
 
-"@ethereumjs/common@^4.4.0":
-  version "4.4.0"
-  resolved "https://registry.npmjs.org/@ethereumjs/common/-/common-4.4.0.tgz"
-  integrity sha512-Fy5hMqF6GsE6DpYTyqdDIJPJgUtDn4dL120zKw+Pswuo+iLyBsEYuSyzMw6NVzD2vDzcBG9fE4+qX4X2bPc97w==
-  dependencies:
-    "@ethereumjs/util" "^9.1.0"
-
 "@ethereumjs/common@2.5.0":
   version "2.5.0"
   resolved "https://registry.npmjs.org/@ethereumjs/common/-/common-2.5.0.tgz"
