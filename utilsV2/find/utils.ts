@@ -87,18 +87,18 @@ export const setupBidAuction = (
     let maxGasPrice = MIN_GAS_PRICE;
     switch (auctionType) {
         case AuctionType.NORMAL:
-            buyer = NORMAL_BUYER_MAINNET;
+            buyer = NORMAL_BUYER_MAINNET ?? "";
             contractAddress = bidContract;
             fee = totalFee;
             break;
         case AuctionType.BUNDLE:
-            buyer = NORMAL_BUYER_MAINNET;
+            buyer = NORMAL_BUYER_MAINNET ?? "";
             contractAddress = bidContract;
             fee = feeBundle(bnbPrice);
             break;
         case AuctionType.PRO:
-            buyer = PRO_BUYER_MAINNET;
-            contractAddress = MP_ADDRESS;
+            buyer = PRO_BUYER_MAINNET ?? "";
+            contractAddress = MP_ADDRESS ?? "";
             fee = feePro(bnbPrice);
             break;
         default:
@@ -116,9 +116,9 @@ export const setupBidAuction = (
         fee: fee,
         type: auctionType,
         amount: amount,
-        auctions: auctions,
         minGasPrice: MIN_GAS_PRICE,
-        maxGasPrice: maxGasPrice
+        maxGasPrice: maxGasPrice,
+        auctions: auctions
     };
 };
 

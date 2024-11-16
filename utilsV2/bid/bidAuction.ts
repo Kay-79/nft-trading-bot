@@ -42,7 +42,9 @@ export const bidAuction = async (bidAuction: BidAuction) => {
         !bidAuction.buyer ||
         !bidAuction.auctions ||
         !bidAuction.contractAddress ||
-        !bidAuction.type
+        !bidAuction.type ||
+        !bidAuction.minGasPrice ||
+        !bidAuction.auctions.length
     )
         return;
     const nowTime = Math.round(Date.now() / 1000);
@@ -65,19 +67,20 @@ export const bidAuction = async (bidAuction: BidAuction) => {
         );
     else
         txData = contractProvider.interface.encodeFunctionData(
-            "bid(address,uint256,uint256,uint256)",
+            "bid(address[],uint256[],uint256[],uint256[],bool)",
             [
                 bidAuction.auctions.map((auction: AuctionDto) => auction.auctor),
                 bidAuction.auctions.map((auction: AuctionDto) => auction.index),
                 bidAuction.auctions.map((auction: AuctionDto) => auction.uptime),
-                bidAuction.auctions.map((auction: AuctionDto) => auction.nowPrice)
+                bidAuction.auctions.map((auction: AuctionDto) => auction.nowPrice),
+                true
             ]
         );
     console.log("txData:", txData);
     const txParams = {
         from: bidAuction.buyer,
         gas: "0x" + (1000000).toString(16),
-        gasPrice: "0x" + (10000000000).toString(16),
+        gasPrice: "0x" + (bidAuction.minGasPrice * 10 ** 9).toString(16),
         nonce: "0x" + nonce.toString(16),
         gasLimit: "0x" + (1000000).toString(16),
         to: bidAuction.contractAddress,

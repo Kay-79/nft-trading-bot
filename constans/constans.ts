@@ -23,12 +23,22 @@ export const GAS_PRICE_LIST = 325000 / 6;
 
 export const RATE_FEE_MARKET = 0.05;
 
+export const MIN_GAS_PRICE = ENVIROMENT === Enviroment.MAINNET ? 1.0001 : 10;
+
 export const MP_ADDRESS =
-    ENVIROMENT === Enviroment.MAINNET ? process.env.ADDRESS_MP_MAINNET : "0xADDRESS_MP";
+    ENVIROMENT === Enviroment.MAINNET
+        ? process.env.ADDRESS_MP_MAINNET
+        : process.env.ADDRESS_MP_TESTNET;
 
-export const NORMAL_BUYER_MAINNET = process.env.NORMAL_BUYER_MAINNET || "0xNORMAL_BUYER";
+export const NORMAL_BUYER_MAINNET =
+    ENVIROMENT === Enviroment.MAINNET
+        ? process.env.NORMAL_BUYER_MAINNET
+        : process.env.NORMAL_BUYER_TESTNET;
 
-export const PRO_BUYER_MAINNET = process.env.PRO_BUYER_MAINNET || "0xPRO_BUYER";
+export const PRO_BUYER_MAINNET =
+    ENVIROMENT === Enviroment.MAINNET
+        ? process.env.PRO_BUYER_MAINNET
+        : process.env.PRO_BUYER_TESTNET;
 
 export const CACHE_BNB_PRICE = 600;
 
@@ -50,8 +60,6 @@ export const CACHE_TIER_PRICE: TierPrice = {
     6: 0
 };
 
-export const MIN_GAS_PRICE = 1.001;
-
-export const TIME_DELAY_BLOCK_BID = 600; //1min
+export const TIME_DELAY_BLOCK_BID = 6000; //per second
 
 export const IS_FRONT_RUNNING = false;
