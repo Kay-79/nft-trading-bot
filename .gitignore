@@ -5,7 +5,10 @@ waitBid.json
 test*.*
 .ds_store
 src/data/inventory.json
+src/data/momoStorage.json
 src/data/waitBid.json
+src/data/*.csv
+src/data/*.txt
 .vscode
 nohup.out
 dist
