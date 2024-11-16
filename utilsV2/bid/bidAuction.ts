@@ -1,21 +1,12 @@
 import { TIME_DELAY_BLOCK_BID } from "../../constans/constans";
 import { contractProvider } from "../../providers/contractProvider";
-import { ethersProvider } from "../../providers/ethersProvider";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
-import { sleep } from "../common/sleep";
 import { Transaction } from "ethereumjs-tx";
 import common from "ethereumjs-common";
 import { ENVIROMENT } from "../../config/config";
-import { Enviroment } from "../../enum/enum";
-import { getRawTx } from "./utils";
-const privateKey = (type: string): Buffer => {
-    if (type === "NORMAL" && process.env.PRIVATE_KEY_BID_MAINNET)
-        return Buffer.from(process.env.PRIVATE_KEY_BID_MAINNET, "hex");
-    if (type === "PRO" && process.env.PRIVATE_KEY_BID_PRO_MAINNET)
-        return Buffer.from(process.env.PRIVATE_KEY_BID_PRO_MAINNET, "hex");
-    throw new Error(`Invalid private key type: ${type}`);
-};
+import { Enviroment, FunctionFragment } from "../../enum/enum";
+import { getRawTx, getTxData, privateKey, sendTransaction } from "./utils";
 
 const chainInfor = common.forCustomChain(
     "mainnet",
@@ -44,50 +35,13 @@ export const bidAuction = async (bidAuction: BidAuction) => {
     console.log("Now time:", nowTime);
     if (bidAuction.profit < 0 || nowTime - bidAuction.uptime > TIME_DELAY_BLOCK_BID) return;
     if (!bidAuction.contractAddress || !bidAuction.buyer) return;
-    console.log(bidAuction.auctions.map((auction: AuctionDto) => auction.auctor).join(","));
-    let txData = "";
-    if (bidAuction.auctions.length === 1)
-        txData = contractProvider.interface.encodeFunctionData(
-            "bid(address,uint256,uint256,uint256)",
-            [
-                bidAuction.auctions[0].auctor,
-                bidAuction.auctions[0].index,
-                bidAuction.auctions[0].uptime,
-                bidAuction.auctions[0].nowPrice
-            ]
-        );
-    else
-        txData = contractProvider.interface.encodeFunctionData(
-            "bid(address[],uint256[],uint256[],uint256[],bool)",
-            [
-                bidAuction.auctions.map((auction: AuctionDto) => auction.auctor),
-                bidAuction.auctions.map((auction: AuctionDto) => auction.index),
-                bidAuction.auctions.map((auction: AuctionDto) => auction.uptime),
-                bidAuction.auctions.map((auction: AuctionDto) => auction.nowPrice),
-                true
-            ]
-        );
+    const txData = getTxData(bidAuction);
     const rawTx = await getRawTx(bidAuction, txData);
     const tx = new Transaction(rawTx, { common: chainInfor });
     tx.sign(privateKey(bidAuction.type));
     const serializedTx = tx.serialize();
-
-    console.log("Serialized tx:", serializedTx.toString("hex"));
-    const sendTransaction = async () => {
-        try {
-            const txResponse = await ethersProvider.send("eth_sendRawTransaction", [
-                "0x" + serializedTx.toString("hex")
-            ]);
-            console.log("Transaction hash:", txResponse.hash);
-        } catch (error) {
-            console.error("Error sending transaction:", error);
-        }
-    };
-
-    await sendTransaction();
-    await sleep(5);
-
-    exit();
+    
+    await sendTransaction(serializedTx);
 };
 function exit() {
     throw new Error("Processing exit");

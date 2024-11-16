@@ -48,4 +48,4 @@ make allWin
 
 ## Contributions
 
-If you have suggestions or would like to discuss solutions, feel free to open an "Issue" or "Pull Request"!
+If you have suggestions or would like to discuss, feel free to open an "Issue" or "Pull Request"!

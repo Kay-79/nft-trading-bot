@@ -19,9 +19,16 @@ export const GAS_PRICES_BID: GasPrices = {
     normalAuction: { 1: 250000, 2: 300000, 3: 325000, 4: 350000, 5: 450000, 6: 500000 }
 };
 
+export const GAS_PRICE_BID = 1000000;
+
 export const GAS_PRICE_LIST = 325000 / 6;
 
 export const RATE_FEE_MARKET = 0.05;
+
+export const RPC_URL =
+    process.env.ENVIRONMENT === Enviroment.MAINNET
+        ? "https://bsc-dataseed.binance.org/"
+        : "https://data-seed-prebsc-1-s1.binance.org:8545/";
 
 export const MIN_GAS_PRICE = ENVIROMENT === Enviroment.MAINNET ? 1.0001 : 10;
 
@@ -30,12 +37,22 @@ export const MP_ADDRESS =
         ? process.env.ADDRESS_MP_MAINNET
         : process.env.ADDRESS_MP_TESTNET;
 
-export const NORMAL_BUYER_MAINNET =
+export const NORMAL_BUYER =
     ENVIROMENT === Enviroment.MAINNET
         ? process.env.NORMAL_BUYER_MAINNET
         : process.env.NORMAL_BUYER_TESTNET;
 
-export const PRO_BUYER_MAINNET =
+export const PRIVATE_KEY_BID =
+    ENVIROMENT === Enviroment.MAINNET
+        ? process.env.PRIVATE_KEY_BID_MAINNET
+        : process.env.PRIVATE_KEY_BID_TESTNET;
+
+export const PRIVATE_KEY_BID_PRO =
+    ENVIROMENT === Enviroment.MAINNET
+        ? process.env.PRIVATE_KEY_BID_PRO_MAINNET
+        : process.env.PRIVATE_KEY_BID_PRO_TESTNET;
+
+export const PRO_BUYER =
     ENVIROMENT === Enviroment.MAINNET
         ? process.env.PRO_BUYER_MAINNET
         : process.env.PRO_BUYER_TESTNET;

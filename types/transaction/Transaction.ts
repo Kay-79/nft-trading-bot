@@ -1,8 +1,7 @@
 export interface RawTransaction {
     nonce: string;
     gasPrice: string;
-    gasLimit: string;
+    gas: string;
     to: string;
-    value: string;
     data: string;
 }

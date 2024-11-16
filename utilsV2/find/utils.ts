@@ -11,8 +11,8 @@ import {
     MIN_GAS_PRICE,
     MIN_TIME_GET_PRICE,
     MP_ADDRESS,
-    NORMAL_BUYER_MAINNET,
-    PRO_BUYER_MAINNET,
+    NORMAL_BUYER,
+    PRO_BUYER,
     RATE_FEE_MARKET
 } from "../../constans/constans";
 import { BidAuction } from "../../types/bid/BidAuction";
@@ -87,17 +87,17 @@ export const setupBidAuction = (
     let maxGasPrice = MIN_GAS_PRICE;
     switch (auctionType) {
         case AuctionType.NORMAL:
-            buyer = NORMAL_BUYER_MAINNET ?? "";
+            buyer = NORMAL_BUYER ?? "";
             contractAddress = bidContract;
             fee = totalFee;
             break;
         case AuctionType.BUNDLE:
-            buyer = NORMAL_BUYER_MAINNET ?? "";
+            buyer = NORMAL_BUYER ?? "";
             contractAddress = bidContract;
             fee = feeBundle(bnbPrice);
             break;
         case AuctionType.PRO:
-            buyer = PRO_BUYER_MAINNET ?? "";
+            buyer = PRO_BUYER ?? "";
             contractAddress = MP_ADDRESS ?? "";
             fee = feePro(bnbPrice);
             break;
