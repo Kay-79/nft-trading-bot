@@ -1,4 +1,4 @@
-import { TIME_DELAY_BLOCK_BID } from "../../config/constans";
+import { TIME_DELAY_BLOCK_BID } from "../../constans/constans";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 

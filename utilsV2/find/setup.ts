@@ -1,4 +1,4 @@
-import { CACHE_TIER_PRICE } from "../../config/constans";
+import { CACHE_TIER_PRICE } from "../../constans/constans";
 import { SetupFind } from "../../types/find/SetupFind";
 import { getBnbPrice, getTierPrice } from "./utils";
 

@@ -1,4 +1,4 @@
-import { TIME_DELAY_BLOCK_BID } from "../../config/constans";
+import { TIME_DELAY_BLOCK_BID } from "../../constans/constans";
 import { contractProvider } from "../../providers/contractProvider";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { BidAuction } from "../../types/bid/BidAuction";
@@ -7,7 +7,7 @@ import { sleep } from "../common/sleep";
 import { Transaction } from "ethereumjs-tx";
 import common from "ethereumjs-common";
 import { ENVIROMENT } from "../../config/config";
-import { Enviroment } from "../../config/enum";
+import { Enviroment } from "../../enum/enum";
 // const privateKey = Buffer.from(process.env.PRIVATE_KEY || "", "hex");
 const privateKey = (type: string): Buffer => {
     if (type === "NORMAL" && process.env.PRIVATE_KEY_BID)

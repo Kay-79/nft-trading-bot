@@ -1,5 +1,5 @@
-import { MP_ADDRESS, NORMAL_BUYER, RATE_FEE_MARKET } from "../../config/constans";
-import { AuctionType } from "../../config/enum";
+import { MP_ADDRESS, NORMAL_BUYER, RATE_FEE_MARKET } from "../../constans/constans";
+import { AuctionType } from "../../enum/enum";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierPrice } from "../../types/dtos/TierPrice.dto";

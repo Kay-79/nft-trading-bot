@@ -15,7 +15,7 @@ const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep } = require("../common/sleep");
 let momoStorage = require("../../data/inventory.json");
 const HEX_ADDRESSES = momoStorage.contracts.map(item => item.hexAddress);
-const TOPICS = require("../../config/constans.js");
+const TOPICS = require("../../constans/constans.js");
 
 if (TOPICS.includes(null)) {
     console.warn("TOPIC is null, exit");

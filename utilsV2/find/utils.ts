@@ -14,9 +14,9 @@ import {
     NORMAL_BUYER,
     PRO_BUYER,
     RATE_FEE_MARKET
-} from "../../config/constans";
+} from "../../constans/constans";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { AuctionType } from "../../config/enum";
+import { AuctionType } from "../../enum/enum";
 import axios from "axios";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
