@@ -84,7 +84,7 @@ async function scanPrice() {
                     );
                 }
             }
-            fs.writeFile("./data/dataMomo.txt", arrayID.toString().replaceAll(",", ""), err => {
+            fs.writeFile("./src/data/dataMomo.txt", arrayID.toString().replaceAll(",", ""), err => {
                 if (err) {
                     console.error(err);
                 }
@@ -108,7 +108,7 @@ async function scanPrice() {
             arrayID.push(idMomo[index] + "\n" + nameMomo[index] + "\n" + priceMomo[index] + "\n");
         }
     }
-    fs.writeFile("./data/dataMomo.txt", arrayID.toString().replaceAll(",", ""), err => {
+    fs.writeFile("./src/data/dataMomo.txt", arrayID.toString().replaceAll(",", ""), err => {
         if (err) {
             console.error(err);
         }

@@ -11,7 +11,7 @@ async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_) {
     const web3 = new Web3(new Web3.providers.HttpProvider("https://bsc-dataseed1.bnbchain.org"));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
-    const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
+    const abi = JSON.parse(fs.readFileSync("./src/abi/abiMobox.json"));
     const contract = new web3.eth.Contract(abi, consractAddress);
     // console.log(contract)
     emptyVar = [];

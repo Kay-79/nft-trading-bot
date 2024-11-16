@@ -250,7 +250,7 @@ const saveInventory = async () => {
             }
         }
     }
-    fs.writeFileSync("./data/inventory.json", JSON.stringify(momoStorage));
+    fs.writeFileSync("./src/data/inventory.json", JSON.stringify(momoStorage));
     await sleep(1000);
 };
 

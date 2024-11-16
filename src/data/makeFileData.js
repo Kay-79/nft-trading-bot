@@ -1,10 +1,4 @@
-const { arrayify } = require("ethers/lib/utils");
 const fs = require("fs");
-function sleep(ms) {
-    return new Promise(resolve => {
-        setTimeout(resolve, ms);
-    });
-}
 
 async function makeFile() {
     await makeArray();
@@ -30,7 +24,7 @@ async function makeFile() {
         }
         arrayID[index] = arrayID[index] + "\n" + "No Name" + "\n" + "99999" + "\n";
     }
-    fs.writeFile("./data/dataMomo.txt", arrayID.toString().replaceAll(",", ""), err => {
+    fs.writeFile("./src/data/dataMomo.txt", arrayID.toString().replaceAll(",", ""), err => {
         if (err) {
             console.error(err);
         }
@@ -81,7 +75,7 @@ async function makeArray() {
 }
 
 async function getOldData() {
-    oldData = fs.readFileSync("./data/dataMomo.csv", "utf8");
+    oldData = fs.readFileSync("./src/data/dataMomo.csv", "utf8");
     oldData = oldData.split("\n");
     // console.log(oldData)
 }

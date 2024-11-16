@@ -12,7 +12,7 @@ const contract = new web3.eth.Contract(abiBUSD, addressToken);
 const { sleep, ranSleep } = require("../utils/common/sleep");
 const getBnbPrice = require("../utils/common/getBnbPrice");
 const getMinPrice = require("../utils/common/getMinPrice");
-const linkSave = "./waitBid.txt";
+const linkSave = "./src/waitBid.txt";
 
 async function getMpListed(amountMomo) {
     auctors_ = [];

@@ -22,8 +22,8 @@ nameMomo = [];
 timeChange = [];
 flagID = false;
 flagCountMomo = 0;
-const logsPath = "./data/logsBalance.csv";
-const listPath = "./data/listed.csv";
+const logsPath = "./src/data/logsBalance.csv";
+const listPath = "./src/data/listed.csv";
 async function checkListed(address) {
     idMomo = [];
     indexMomo = [];

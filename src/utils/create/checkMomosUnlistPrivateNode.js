@@ -182,7 +182,7 @@ const checkMomosUnlistPrivateNode = async (addressCheck, boolSaveInventory) => {
     momoStorage[addressCheck]["amount"] = amountMomos;
     nowBlock = await getBlockByTime(web3, (Date.now() / 1000 - 10).toFixed(0), 1);
     if (boolSaveInventory) {
-        fs.writeFileSync("./data/momoStorage.json", JSON.stringify(momoStorage));
+        fs.writeFileSync("./src/data/momoStorage.json", JSON.stringify(momoStorage));
     }
     await sleep(1000);
     return momoUnlist;
