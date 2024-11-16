@@ -80,3 +80,5 @@ export const CACHE_TIER_PRICE: TierPrice = {
 export const TIME_DELAY_BLOCK_BID = 6000; //per second
 
 export const IS_FRONT_RUNNING = false;
+
+export const WAIT_BID_PATH = "./src/data/waitBid.json"

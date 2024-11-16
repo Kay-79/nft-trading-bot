@@ -13,7 +13,8 @@ import {
     MP_ADDRESS,
     NORMAL_BUYER,
     PRO_BUYER,
-    RATE_FEE_MARKET
+    RATE_FEE_MARKET,
+    WAIT_BID_PATH
 } from "../../constans/constans";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionType } from "../../enum/enum";
@@ -128,7 +129,7 @@ export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
     }
     let waitBid: BidAuction[] = [];
     try {
-        waitBid = JSON.parse(fs.readFileSync("waitBid.json", "utf8")).data;
+        waitBid = JSON.parse(fs.readFileSync(WAIT_BID_PATH, "utf8")).data;
     } catch (error) {
         waitBid = [];
     }
@@ -137,7 +138,7 @@ export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
     }
     waitBid.push(...profitableAuctions);
     waitBid.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
-    fs.writeFileSync("waitBid.json", JSON.stringify({ data: waitBid }));
+    fs.writeFileSync(WAIT_BID_PATH, JSON.stringify({ data: waitBid }));
 };
 
 export const isBreakBatch = (auctions: AuctionDto[], auction: AuctionDto): boolean => {

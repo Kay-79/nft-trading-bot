@@ -4,14 +4,14 @@ import { ethersProvider } from "../../providers/ethersProvider";
 import { RawTransaction } from "../../types/transaction/Transaction";
 import { contractProvider } from "../../providers/contractProvider";
 import { AuctionType, FunctionFragment } from "../../enum/enum";
-import { GAS_PRICE_BID, PRIVATE_KEY_BID, PRIVATE_KEY_BID_PRO } from "../../constans/constans";
+import { GAS_PRICE_BID, PRIVATE_KEY_BID, PRIVATE_KEY_BID_PRO, WAIT_BID_PATH } from "../../constans/constans";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { Block } from "ethers";
 import { sleep } from "../common/sleep";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
-        const bidAuctions = JSON.parse(fs.readFileSync("waitBid.json", "utf8")).data;
+        const bidAuctions = JSON.parse(fs.readFileSync(WAIT_BID_PATH, "utf8")).data;
         return bidAuctions;
     } catch (error) {
         return [];
@@ -23,7 +23,7 @@ export const saveBidAuctions = async (bidAuctions: BidAuction[]) => {
         return;
     }
     try {
-        fs.writeFileSync("waitBid.json", JSON.stringify({ data: bidAuctions }));
+        fs.writeFileSync(WAIT_BID_PATH, JSON.stringify({ data: bidAuctions }));
     } catch (error) {
         console.error("Error saving bid auctions:", error);
     }
