@@ -1,3 +1,5 @@
+import { ENVIROMENT } from "../config/config";
+import { Enviroment } from "../enum/enum";
 import { TierPrice } from "../types/dtos/TierPrice.dto";
 import { GasPrices } from "../types/gas/GasPrices";
 
@@ -21,11 +23,12 @@ export const GAS_PRICE_LIST = 325000 / 6;
 
 export const RATE_FEE_MARKET = 0.05;
 
-export const MP_ADDRESS = process.env.ADDRESS_MP || "0xADDRESS_MP";
+export const MP_ADDRESS =
+    ENVIROMENT === Enviroment.MAINNET ? process.env.ADDRESS_MP_MAINNET : "0xADDRESS_MP";
 
-export const NORMAL_BUYER = process.env.NORMAL_BUYER || "0xNORMAL_BUYER";
+export const NORMAL_BUYER_MAINNET = process.env.NORMAL_BUYER_MAINNET || "0xNORMAL_BUYER";
 
-export const PRO_BUYER = process.env.PRO_BUYER || "0xPRO_BUYER";
+export const PRO_BUYER_MAINNET = process.env.PRO_BUYER_MAINNET || "0xPRO_BUYER";
 
 export const CACHE_BNB_PRICE = 600;
 

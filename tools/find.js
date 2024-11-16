@@ -494,8 +494,8 @@ const gasPriceMin = configJson.gasPrices.minBid;
 const gasPriceMax = 50;
 const rateFeePerProfit = configJson.rateFee;
 let accCheck = configJson.accBuy;
-const apiTele = process.env.api_telegram;
-const chatId = process.env.chatId_mobox;
+const apiTele = process.env.API_TELEGRAM;
+const chatId = process.env.CHATID_MOBOX;
 const delayGetMp = 12000 + 10000 * Math.random(); // not use, around 17s per rq
 // now is save batch, config in bid.js
 const maxMomoPrice = 15;

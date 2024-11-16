@@ -24,8 +24,8 @@ process.on("unhandledRejection", err => {
 });
 let maxGasPiceEnemy = "";
 let bnbPrice = 0;
-const apiTele = process.env.api_telegram;
-const chatId = process.env.chatId_mobox;
+const apiTele = process.env.API_TELEGRAM;
+const chatId = process.env.CHATID_MOBOX;
 const abi = JSON.parse(fs.readFileSync("./abi/abiMobox.json"));
 const contractAddress = configJson.accBuy;
 const contract = new web3rpc.eth.Contract(abi, contractAddress);
@@ -35,7 +35,7 @@ const minGasPrice = configJson.gasPrices.minBid;
 let timeSendTx = configJson.timeBid;
 const emoji = configJson.emojiURL;
 const Tx = require("ethereumjs-tx").Transaction;
-const privateKey = Buffer.from(process.env.PRIVATE_KEY_BID_BUFFER, "hex");
+const privateKey = Buffer.from(process.env.PRIVATE_KEY_BID_MAINNET, "hex");
 const common = require("ethereumjs-common");
 const getBlockByTime = require("../utils/bid/getBlockByTime");
 let isFrontRun = false;
@@ -469,7 +469,7 @@ const resendTxNewGasPrice = async newGasPriceSend => {
     }
 };
 async function bid() {
-    const Private_Key = process.env.PRIVATE_KEY_BID;
+    const Private_Key = process.env.PRIVATE_KEY_BID_MAINNET;
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     console.log(acc.address);
     let hourCache = new Date().getHours() - 4;

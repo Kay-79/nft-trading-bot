@@ -9,7 +9,7 @@ const abiBUSD = require("../abi/abiERC20");
 const sortPerBudget = require("../utils/common/sortPerBudget");
 const addressToken = configJson.addressToken;
 let myAcc = configJson.myAcc;
-const Private_Key = process.env.PRIVATE_KEY_BID;
+const Private_Key = process.env.PRIVATE_KEY_BID_MAINNET;
 const walletAddress = configJson.wallet.address;
 let web3;
 try {

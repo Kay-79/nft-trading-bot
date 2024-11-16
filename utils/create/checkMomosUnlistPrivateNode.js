@@ -24,7 +24,7 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
         try {
             let toBlockNew = endBlock + configJson.limitBlockUpdate;
             data = await web3.eth.getPastLogs({
-                address: process.env.ADDRESS_MP,
+                address: process.env.ADDRESS_MP_MAINNET,
                 fromBlock: endBlock,
                 toBlock: toBlockNew,
                 topics: [process.env.TOPIC_BID] // the second parameter is variable c
@@ -85,7 +85,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
         try {
             let toBlockNew = endBlock + configJson.limitBlockUpdate;
             data = await web3.eth.getPastLogs({
-                address: process.env.ADDRESS_MP,
+                address: process.env.ADDRESS_MP_MAINNET,
                 fromBlock: endBlock,
                 toBlock: toBlockNew,
                 topics: [process.env.TOPIC_CREATE] // the second parameter is variable c

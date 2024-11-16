@@ -17,7 +17,7 @@ try {
 }
 const contractToken = new web3.eth.Contract(abiBUSD, addressToken);
 let myAcc = configJson.myAcc;
-const Private_Key = process.env.PRIVATE_KEY_BID;
+const Private_Key = process.env.PRIVATE_KEY_BID_MAINNET;
 
 async function transfer(address_) {
     myAcc = await sortPerBudget(myAcc, contractToken);

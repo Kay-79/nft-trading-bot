@@ -2,7 +2,7 @@ const TelegramBot = require("node-telegram-bot-api");
 const Web3 = require("web3");
 const config = require("../config/config");
 require("dotenv").config();
-const token = process.env.api_telegram.replace("bot", "");
+const token = process.env.API_TELEGRAM.replace("bot", "");
 const bot = new TelegramBot(token, {
     polling: {
         interval: 60000,

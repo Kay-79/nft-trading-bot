@@ -14,7 +14,7 @@ const getMomosBided = async (endBlock, nowBlock, addressCheck) => {
         let mpListed = null;
         try {
             mpListed = await axios.get(
-                `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_BID}&apikey=${process.env.BSC_API_KEY}`
+                `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP_MAINNET}&topic0=${process.env.TOPIC_BID}&apikey=${process.env.BSC_API_KEY}`
             );
         } catch (err) {
             console.log("Recurse for error");
@@ -52,7 +52,7 @@ const getMomosListed = async (endBlock, nowBlock, addressCheck) => {
         let mpListed = "";
         try {
             mpListed = await axios.get(
-                `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP}&topic0=${process.env.TOPIC_CREATE}&apikey=${process.env.BSC_API_KEY}`
+                `https://api.bscscan.com/api?module=logs&action=getLogs&fromBlock=${endBlock}&toBlock=99999999&address=${process.env.ADDRESS_MP_MAINNET}&topic0=${process.env.TOPIC_CREATE}&apikey=${process.env.BSC_API_KEY}`
             );
         } catch (error) {
             console.log("Recurse for error");

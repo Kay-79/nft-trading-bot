@@ -17,8 +17,8 @@ let momoStorage = require("../../data/inventory.json");
 const HEX_ADDRESSES = momoStorage.contracts.map(item => item.hexAddress);
 const TOPICS = require("../../constans/constans.js");
 
-if (TOPICS.includes(null)) {
-    console.warn("TOPIC is null, exit");
+if (TOPICS.includes(null) || process.env.ENVIRONMENT === "TESTNET") {
+    console.warn("Please check your environment or constans.js file");
     exit();
 }
 
@@ -35,7 +35,7 @@ const syncInventory = async (endBlock, nowBlock) => {
         try {
             let toBlockNew = endBlock + configJson.limitBlockUpdate;
             data = await web3.eth.getPastLogs({
-                address: [process.env.ADDRESS_MP, process.env.ADDRESS_MOMO],
+                address: [process.env.ADDRESS_MP_MAINNET, process.env.ADDRESS_MOMO_MAINNET],
                 fromBlock: endBlock,
                 toBlock: toBlockNew
             });

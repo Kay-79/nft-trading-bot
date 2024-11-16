@@ -26,7 +26,7 @@ const withdraw = async () => {
         gas: 100000,
         gasPrice: 1000100000
     };
-    const signed = await web3.eth.accounts.signTransaction(tx, process.env.PRIVATE_KEY_BID);
+    const signed = await web3.eth.accounts.signTransaction(tx, process.env.PRIVATE_KEY_BID_MAINNET);
     if (config.wallet.owner != "0x55555D4de8df0c455C2Ff368253388FE669a8888") {
         console.warn("Please check wallet address");
         exit();

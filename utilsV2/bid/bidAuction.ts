@@ -8,12 +8,11 @@ import { Transaction } from "ethereumjs-tx";
 import common from "ethereumjs-common";
 import { ENVIROMENT } from "../../config/config";
 import { Enviroment } from "../../enum/enum";
-// const privateKey = Buffer.from(process.env.PRIVATE_KEY || "", "hex");
 const privateKey = (type: string): Buffer => {
-    if (type === "NORMAL" && process.env.PRIVATE_KEY_BID)
-        return Buffer.from(process.env.PRIVATE_KEY_BID, "hex");
-    if (type === "PRO" && process.env.PRIVATE_KEY_BID_PRO)
-        return Buffer.from(process.env.PRIVATE_KEY_BID_PRO, "hex");
+    if (type === "NORMAL" && process.env.PRIVATE_KEY_BID_MAINNET)
+        return Buffer.from(process.env.PRIVATE_KEY_BID_MAINNET, "hex");
+    if (type === "PRO" && process.env.PRIVATE_KEY_BID_PRO_MAINNET)
+        return Buffer.from(process.env.PRIVATE_KEY_BID_PRO_MAINNET, "hex");
     throw new Error(`Invalid private key type: ${type}`);
 };
 interface RawTransaction {

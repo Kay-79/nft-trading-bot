@@ -12,8 +12,8 @@ process.on("unhandledRejection", err => {
     console.error("Unhandled Promise Rejection:", err);
 });
 const changer = configJson.changer;
-const apiTele = process.env.api_telegram;
-const chatId = process.env.chatId_mobox;
+const apiTele = process.env.API_TELEGRAM;
+const chatId = process.env.CHATID_MOBOX;
 const shuffleArray = require("../utils/change/shuffleArray");
 const checkReject = require("../utils/change/checkEnemyToReject");
 let web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.change));
