@@ -267,7 +267,22 @@ async function main(address, nameFile_, rate_) {
         }
         let isContract = await web3.eth.getStorageAt(address);
         if (Number(isContract)) {
-            let amountUnList = inventory.contracts.find(e => e.contractAddress === address).amount;
+            let amountUnList = 0;
+            try {
+                amountUnList = inventory.contracts.find(e => e.contractAddress === address).amount;
+            } catch (error) {
+                inventory.contracts.push({
+                    contractAddress: address,
+                    hash: 0,
+                    amount: 0,
+                    amountList: 0,
+                    latestZeroHashBlock: 0,
+                    momo: {},
+                    list: {},
+                    hexAddress: `0x000000000000000000000000${address.slice(2)}`
+                });
+                amountUnList = inventory.contracts.find(e => e.contractAddress === address).amount;
+            }
             momoUnlist += Number(amountUnList);
             let momo_UL = inventory.contracts.find(e => e.contractAddress === address).momo;
             for (let index_UL = 0; index_UL < 70000; index_UL++) {
