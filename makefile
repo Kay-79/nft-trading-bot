@@ -31,3 +31,6 @@ killAll:
 
 temp:
 	cat /sys/class/thermal/thermal_zone0/temp
+
+deploy:
+	npx hardhat run scripts/deploy.ts --network bsc

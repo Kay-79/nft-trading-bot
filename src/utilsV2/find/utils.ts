@@ -15,7 +15,7 @@ import {
     PRO_BUYER,
     RATE_FEE_MARKET,
     WAIT_BID_PATH
-} from "../../constans/constans";
+} from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionType } from "../../enum/enum";
 import axios from "axios";
@@ -152,7 +152,7 @@ export const isBreakBatch = (auctions: AuctionDto[], auction: AuctionDto): boole
 };
 
 export const isProfitable = (profit: number, minProfit: number): boolean => {
-    return profit >= minProfit;
+    return profit < minProfit;
 };
 
 export const getProfitableBidAuctionsNormalVsPro = (

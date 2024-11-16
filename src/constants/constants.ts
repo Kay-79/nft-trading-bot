@@ -37,6 +37,11 @@ export const MP_ADDRESS =
         ? process.env.ADDRESS_MP_MAINNET
         : process.env.ADDRESS_MP_TESTNET;
 
+export const USDT_ADDRESS =
+    ENVIROMENT === Enviroment.MAINNET
+        ? "0x55d398326f99059fF775485246999027B3197955"
+        : "0x221c5B1a293aAc1187ED3a7D7d2d9aD7fE1F3FB0";
+
 export const NORMAL_BUYER =
     ENVIROMENT === Enviroment.MAINNET
         ? process.env.NORMAL_BUYER_MAINNET
@@ -81,4 +86,4 @@ export const TIME_DELAY_BLOCK_BID = 6000; //per second
 
 export const IS_FRONT_RUNNING = false;
 
-export const WAIT_BID_PATH = "./src/data/waitBid.json"
+export const WAIT_BID_PATH = "./src/data/waitBid.json";

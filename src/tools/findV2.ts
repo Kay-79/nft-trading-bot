@@ -6,7 +6,7 @@ import { ranSleep } from "../utilsV2/common/sleep";
 import { AuctionDto } from "../types/dtos/Auction.dto";
 import { checkProfit } from "../utilsV2/find/checkProfit";
 import { updateWaitBid } from "../utilsV2/find/utils";
-import { CACHE_BNB_PRICE, TIME_DELAY_SETUP_FIND } from "../constans/constans";
+import { CACHE_BNB_PRICE, TIME_DELAY_SETUP_FIND } from "../constants/constants";
 import { setup } from "../utilsV2/find/setup";
 import { SetupFind } from "../types/find/SetupFind";
 

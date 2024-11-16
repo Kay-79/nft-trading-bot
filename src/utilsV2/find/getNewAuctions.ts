@@ -1,6 +1,6 @@
 import axios from "axios";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
-import { API_DOMAIN } from "../../constans/constans";
+import { API_DOMAIN } from "../../constants/constants";
 
 export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDto[], string[]]> => {
     let newAuctions: AuctionDto[] = [];

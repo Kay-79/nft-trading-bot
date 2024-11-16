@@ -1,4 +1,4 @@
-import { MP_ADDRESS, NORMAL_BUYER_MAINNET, RATE_FEE_MARKET } from "../../constans/constans";
+import { MP_ADDRESS, NORMAL_BUYER_MAINNET, RATE_FEE_MARKET } from "../../constants/constants";
 import { AuctionType } from "../../enum/enum";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";

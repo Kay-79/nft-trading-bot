@@ -1,4 +1,4 @@
-import { TIME_DELAY_BLOCK_BID } from "../../constans/constans";
+import { TIME_DELAY_BLOCK_BID } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { Transaction } from "ethereumjs-tx";
 import common from "ethereumjs-common";

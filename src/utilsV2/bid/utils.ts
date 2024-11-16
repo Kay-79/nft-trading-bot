@@ -4,7 +4,12 @@ import { ethersProvider } from "../../providers/ethersProvider";
 import { RawTransaction } from "../../types/transaction/Transaction";
 import { contractProvider } from "../../providers/contractProvider";
 import { AuctionType, FunctionFragment } from "../../enum/enum";
-import { GAS_PRICE_BID, PRIVATE_KEY_BID, PRIVATE_KEY_BID_PRO, WAIT_BID_PATH } from "../../constans/constans";
+import {
+    GAS_PRICE_BID,
+    PRIVATE_KEY_BID,
+    PRIVATE_KEY_BID_PRO,
+    WAIT_BID_PATH
+} from "../../constants/constants";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { Block } from "ethers";
 import { sleep } from "../common/sleep";

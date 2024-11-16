@@ -15,10 +15,10 @@ const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep } = require("../common/sleep");
 let momoStorage = require("../../data/inventory.json");
 const HEX_ADDRESSES = momoStorage.contracts.map(item => item.hexAddress);
-const TOPICS = require("../../constans/constans.js");
+const TOPICS = require("../../constants/constants.js");
 
 if (TOPICS.includes(null) || process.env.ENVIRONMENT === "TESTNET") {
-    console.warn("Please check your environment or constans.js file");
+    console.warn("Please check your environment or constants.js file");
     exit();
 }
 

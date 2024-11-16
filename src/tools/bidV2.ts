@@ -1,7 +1,7 @@
 import { BidAuction } from "../types/bid/BidAuction";
 import { ranSleep, sleep } from "../utilsV2/common/sleep";
 import { bidAuction } from "../utilsV2/bid/bidAuction";
-import { IS_FRONT_RUNNING } from "../constans/constans";
+import { IS_FRONT_RUNNING } from "../constants/constants";
 import { frontRunBidAuction } from "../utilsV2/bid/frontRunBidAuction";
 import { getBidAuctions, saveBidAuctions } from "../utilsV2/bid/utils";
 

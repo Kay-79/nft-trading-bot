@@ -1,10 +1,11 @@
 {
     "dependencies": {
         "@changesets/cli": "^2.27.8",
-        "@openzeppelin/contracts": "^5.0.0",
-        "@openzeppelin/contracts-upgradeable": "^5.0.0",
+        "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+        "@openzeppelin/contracts": "^5.1.0",
+        "@openzeppelin/contracts-upgradeable": "^5.1.0",
         "axios": "^1.4.0",
-        "dotenv": "^16.3.1",
+        "dotenv": "^16.4.5",
         "ethereumjs-tx": "^2.1.2",
         "ethers": "^6.13.4",
         "node-telegram-bot-api": "^0.65.1",
@@ -13,7 +14,8 @@
         "web3": "^1.10.0"
     },
     "devDependencies": {
-        "concurrently": "^8.2.2"
+        "concurrently": "^8.2.2",
+        "hardhat": "^2.22.15"
     },
     "name": "be-mobox-front-run",
     "description": "bot front run",
