@@ -49,7 +49,8 @@ const config = {
         ["0xb8C5744D347A74484925E19F588719C846616405", "_b_8_C", true],
         ["0x838e781DC9F070922F66f0BE415d15168bB04825", "_8_3_8", true],
         ["0x79791a6D45C4bCcaBf56dF64403d84EEFc4065EC", "_7_9_7", true],
-        ["0x3A2887CEE9096cc90A00619F5fAFA5eeE8FC0e32", "_3_A_2", true]
+        ["0x3A2887CEE9096cc90A00619F5fAFA5eeE8FC0e32", "_3_A_2", true],
+        ["0x2D02D9fa00eFE096068c733e925035aBB9661e98", "_2_D_0", true] // version 3
     ],
     timeDelays: {
         //in hours
@@ -87,7 +88,7 @@ const config = {
     },
     limitBlockUpdate: 5000,
     timeBid: 131.0,
-    accBuy: "0xb8C5744D347A74484925E19F588719C846616405"
+    accBuy: "0x2D02D9fa00eFE096068c733e925035aBB9661e98"
 };
 
 module.exports = config;

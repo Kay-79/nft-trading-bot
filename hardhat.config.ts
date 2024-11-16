@@ -1,24 +1,23 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import * as dotenv from "dotenv";
-import { ENVIROMENT } from "./src/config/config";
 import { Enviroment } from "./src/enum/enum";
 
 dotenv.config();
 
 const PRIVATE_KEY =
-    ENVIROMENT === Enviroment.MAINNET
+    process.env.ENVIRONMENT === Enviroment.MAINNET
         ? process.env.PRIVATE_KEY_BID_MAINNET
         : process.env.PRIVATE_KEY_BID_TESTNET;
 
-const GAS_PRICE_DEPLOY = ENVIROMENT === Enviroment.MAINNET ? 1 : 6;
+const GAS_PRICE_DEPLOY = process.env.ENVIRONMENT === Enviroment.MAINNET ? 1 : 6;
 
 const RPC_URL =
     process.env.ENVIRONMENT === Enviroment.MAINNET
         ? "https://bsc-dataseed.binance.org/"
         : "https://data-seed-prebsc-1-s1.binance.org:8545/";
 
-const chainId = ENVIROMENT === Enviroment.MAINNET ? 56 : 97;
+const chainId = process.env.ENVIRONMENT === Enviroment.MAINNET ? 56 : 97;
 
 const config: HardhatUserConfig = {
     solidity: "0.8.28",
