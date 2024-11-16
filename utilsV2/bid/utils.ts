@@ -6,6 +6,8 @@ import { contractProvider } from "../../providers/contractProvider";
 import { AuctionType, FunctionFragment } from "../../enum/enum";
 import { GAS_PRICE_BID, PRIVATE_KEY_BID, PRIVATE_KEY_BID_PRO } from "../../constans/constans";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
+import { Block } from "ethers";
+import { sleep } from "../common/sleep";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
@@ -47,7 +49,6 @@ export const getRawTx = async (bidAuction: BidAuction, txData: string): Promise<
         to: txParams.to,
         data: txParams.data
     };
-    console.log("Raw transaction:", rawTx);
     return rawTx;
 };
 
@@ -87,4 +88,68 @@ export const getTxData = (bidAuction: BidAuction): string => {
             bidAuction.auctions.map((auction: AuctionDto) => auction.nowPrice),
             true
         ]);
+};
+
+export const getBlockByTimestamp = async (timestamp: number): Promise<number> => {
+    const latestBlockNumber = await ethersProvider.getBlockNumber();
+    const latestBlock = await ethersProvider.getBlock(latestBlockNumber);
+    if (!latestBlock) {
+        throw new Error("Unable to fetch latest block data.");
+    }
+    if (timestamp > latestBlock.timestamp) {
+        throw new Error("Timestamp is in the future.");
+    }
+    let startBlockNumber = latestBlockNumber;
+    while (startBlockNumber > 1) {
+        const block = await ethersProvider.getBlock(startBlockNumber);
+        if (!block) {
+            throw new Error(`Unable to fetch block data for block ${startBlockNumber}`);
+        }
+        if (block.timestamp < timestamp) {
+            break;
+        }
+        startBlockNumber -= 50;
+    }
+    startBlockNumber = Math.max(startBlockNumber, 1);
+    let endBlockNumber = latestBlockNumber;
+    while (startBlockNumber <= endBlockNumber) {
+        const midBlockNumber = Math.floor((startBlockNumber + endBlockNumber) / 2);
+        const midBlock = await ethersProvider.getBlock(midBlockNumber);
+        if (!midBlock) {
+            throw new Error("Unable to fetch block data.");
+        }
+        if (midBlock.timestamp === timestamp) {
+            return midBlock.number;
+        }
+        if (midBlock.timestamp < timestamp) {
+            startBlockNumber = midBlockNumber + 1;
+        } else {
+            endBlockNumber = midBlockNumber - 1;
+        }
+    }
+    const resultBlock = await ethersProvider.getBlock(startBlockNumber);
+    if (resultBlock && resultBlock.timestamp >= timestamp) {
+        return resultBlock.number;
+    }
+    throw new Error("No block found with the given timestamp.");
+};
+
+export const getNowBlock = async (): Promise<number> => {
+    const latestBlockNumber = await ethersProvider.getBlockNumber();
+    return latestBlockNumber;
+};
+
+export const delay40Blocks = async (uptime: number) => {
+    const createdBlock = await getBlockByTimestamp(uptime);
+    const warningBlock = createdBlock + 39;
+    while (true) {
+        const nowBlock = await getNowBlock();
+        if (nowBlock >= warningBlock) {
+            break;
+        }
+        const blocksRemaining = warningBlock - nowBlock;
+        const estimatedDelay = blocksRemaining * 3;
+        const checkInterval = Math.max(estimatedDelay / 2, 3);
+        await sleep(checkInterval);
+    }
 };
