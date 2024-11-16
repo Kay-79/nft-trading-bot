@@ -234,7 +234,7 @@ async function checkIndex(address) {
 }
 
 async function sendTxt(gasPrice_, gasLimit_, index_, ids_, prices_, hexData_, nameFile_) {
-    const Private_Key = process.env.PRIVATE_KEY_CHANGE;
+    const Private_Key = process.env.PRIVATE_KEY_CHANGE_MAINNET;
     const web3 = new Web3(new Web3.providers.HttpProvider(configJson.rpcs.create));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
     const abi = [

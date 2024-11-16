@@ -4,7 +4,7 @@ const axios = require("axios");
 const { exit } = require("process");
 const config = require("../config/config");
 async function sendTxt(addressSC, gasPrice_, gasLimit_, index_, prices_) {
-    const Private_Key = process.env.PRIVATE_KEY_CHANGE;
+    const Private_Key = process.env.PRIVATE_KEY_CHANGE_MAINNET;
     const Web3 = require("web3");
     const web3 = new Web3(new Web3.providers.HttpProvider(config.rpcs.check));
     acc = web3.eth.accounts.privateKeyToAccount(Private_Key);
