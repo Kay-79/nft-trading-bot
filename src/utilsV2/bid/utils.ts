@@ -11,7 +11,6 @@ import {
     WAIT_BID_PATH
 } from "../../constants/constants";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
-import { Block } from "ethers";
 import { sleep } from "../common/sleep";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
@@ -154,7 +153,7 @@ export const delay40Blocks = async (uptime: number) => {
         }
         const blocksRemaining = warningBlock - nowBlock;
         const estimatedDelay = blocksRemaining * 3;
-        const checkInterval = Math.max(estimatedDelay / 2, 3);
+        const checkInterval = Math.max((estimatedDelay / 3) * 2, 3);
         await sleep(checkInterval);
     }
 };
