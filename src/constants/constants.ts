@@ -13,6 +13,8 @@ export const TOPPICS: string[] = [
 
 export const API_DOMAIN = process.env.API_DOMAIN || "https://nftapi.mobox.io";
 
+export const EXPLORER_URL = "https://bscscan.com/tx/";
+
 export const API_TELEGRAM = process.env.API_TELEGRAM || "default_api";
 
 export const CHATID_MOBOX = process.env.CHATID_MOBOX || "default_chatid";

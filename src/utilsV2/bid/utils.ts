@@ -56,17 +56,6 @@ export const getRawTx = async (bidAuction: BidAuction, txData: string): Promise<
     return rawTx;
 };
 
-export const sendTransaction = async (serializedTx: Buffer) => {
-    try {
-        const txResponse = await ethersProvider.send("eth_sendRawTransaction", [
-            "0x" + serializedTx.toString("hex")
-        ]);
-        console.log("Transaction hash:", txResponse);
-    } catch (error) {
-        console.error("Error sending transaction:", error);
-    }
-};
-
 export const privateKey = (type: string): Buffer => {
     if (type === AuctionType.NORMAL && PRIVATE_KEY_BID) return Buffer.from(PRIVATE_KEY_BID, "hex");
     if (type === AuctionType.PRO && PRIVATE_KEY_BID_PRO)

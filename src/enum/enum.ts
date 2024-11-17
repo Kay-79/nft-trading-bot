@@ -16,5 +16,5 @@ export enum FunctionFragment {
 
 export enum AuctionStatus {
     SUCCESS = "✅",
-    FAIL = "❌"
+    FAILED = "❌"
 }

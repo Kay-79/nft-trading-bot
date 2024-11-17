@@ -4,7 +4,8 @@ import { Transaction } from "ethereumjs-tx";
 import common from "ethereumjs-common";
 import { ENVIROMENT } from "../../config/config";
 import { Enviroment } from "../../enum/enum";
-import { delay40Blocks, getRawTx, getTxData, privateKey, sendTransaction } from "./utils";
+import { delay40Blocks, getRawTx, getTxData, privateKey } from "./utils";
+import { sendTransaction } from "./sendTransactionNormal";
 
 const chainInfor = common.forCustomChain(
     "mainnet",
@@ -16,7 +17,7 @@ const chainInfor = common.forCustomChain(
     "petersburg"
 );
 
-export const bidAuction = async (bidAuction: BidAuction) => {
+export const normalBidAuction = async (bidAuction: BidAuction) => {
     console.log("Start bidAuction");
     if (
         !bidAuction ||
@@ -39,7 +40,7 @@ export const bidAuction = async (bidAuction: BidAuction) => {
     tx.sign(privateKey(bidAuction.type));
     const serializedTx = tx.serialize();
     await delay40Blocks(bidAuction.uptime);
-    await sendTransaction(serializedTx);
+    await sendTransaction(serializedTx, bidAuction);
 };
 function exit() {
     throw new Error("Processing exit");

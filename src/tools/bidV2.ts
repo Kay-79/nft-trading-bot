@@ -1,6 +1,6 @@
 import { BidAuction } from "../types/bid/BidAuction";
 import { ranSleep, sleep } from "../utilsV2/common/sleep";
-import { bidAuction } from "../utilsV2/bid/bidAuction";
+import { normalBidAuction } from "../utilsV2/bid/normalBidAuction";
 import { IS_FRONT_RUNNING } from "../constants/constants";
 import { frontRunBidAuction } from "../utilsV2/bid/frontRunBidAuction";
 import { getBidAuctions, saveBidAuctions } from "../utilsV2/bid/utils";
@@ -32,7 +32,7 @@ const bidV2 = async () => {
         if (IS_FRONT_RUNNING) {
             await frontRunBidAuction(currentBidAuction); // Comming soon
         } else {
-            await bidAuction(currentBidAuction);
+            await normalBidAuction(currentBidAuction);
             console.log("Bid done");
         }
         console.log("Testing...");
