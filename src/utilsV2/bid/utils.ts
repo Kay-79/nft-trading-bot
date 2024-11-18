@@ -56,8 +56,9 @@ export const getRawTx = async (bidAuction: BidAuction, txData: string): Promise<
     return rawTx;
 };
 
-export const privateKey = (type: string): Buffer => {
-    if (type === AuctionType.NORMAL && PRIVATE_KEY_BID) return Buffer.from(PRIVATE_KEY_BID, "hex");
+export const privateKey = (type: AuctionType): Buffer => {
+    if ((type === AuctionType.NORMAL || type === AuctionType.BUNDLE) && PRIVATE_KEY_BID)
+        return Buffer.from(PRIVATE_KEY_BID, "hex");
     if (type === AuctionType.PRO && PRIVATE_KEY_BID_PRO)
         return Buffer.from(PRIVATE_KEY_BID_PRO, "hex");
     throw new Error(`Invalid private key type: ${type}`);
@@ -142,7 +143,12 @@ export const delay40Blocks = async (uptime: number) => {
         }
         const blocksRemaining = warningBlock - nowBlock;
         const estimatedDelay = blocksRemaining * 3;
-        const checkInterval = Math.max((estimatedDelay / 3) * 2, 3);
+        let checkInterval = Math.max(estimatedDelay / 2, 3);
+        console.log(`Taget block: ${warningBlock + 1}, now block: ${nowBlock}`);
+        if (checkInterval > 10) {
+            checkInterval = checkInterval * 1.5;
+        }
+        console.log(`Next check in ${checkInterval}s`);
         await sleep(checkInterval);
     }
 };

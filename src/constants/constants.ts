@@ -37,7 +37,7 @@ export const RPC_URL =
         ? "https://bsc-dataseed.binance.org/"
         : "https://data-seed-prebsc-1-s1.binance.org:8545/";
 
-export const MIN_GAS_PRICE = ENV === Environment.MAINNET ? 1.0001 : 10;
+export const MIN_GAS_PRICE = ENV === Environment.MAINNET ? 1.0001 : 6;
 
 export const MP_ADDRESS =
     ENV === Environment.MAINNET

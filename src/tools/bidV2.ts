@@ -18,8 +18,11 @@ const bidV2 = async () => {
             bidAuctions = [];
         }
         bidAuctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
-        const currentBidAuction: BidAuction | undefined = bidAuctions.shift();
-        if (!currentBidAuction) {
+        const uptime = bidAuctions[0]?.uptime;
+        const sameUpTimeAuctions = bidAuctions.filter(item => item.uptime === uptime);
+        bidAuctions = bidAuctions.filter(item => item.uptime !== uptime);
+
+        if (!sameUpTimeAuctions || sameUpTimeAuctions.length === 0) {
             console.log("No bid auction found");
             await sleep(5);
             continue;
@@ -30,12 +33,11 @@ const bidV2 = async () => {
             console.error("Error saving bid auctions:", error);
         }
         if (IS_FRONT_RUNNING) {
-            await frontRunBidAuction(currentBidAuction); // Comming soon
+            await frontRunBidAuction(sameUpTimeAuctions); // Comming soon
         } else {
-            await normalBidAuction(currentBidAuction);
+            await normalBidAuction(sameUpTimeAuctions);
             console.log("Bid done");
         }
-        console.log("Testing...");
         await ranSleep(5, 6);
     }
 };

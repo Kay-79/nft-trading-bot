@@ -16,30 +16,42 @@ const chainInfor = common.forCustomChain(
     "petersburg"
 );
 
-export const normalBidAuction = async (bidAuction: BidAuction) => {
+export const normalBidAuction = async (bidAuctions: BidAuction[]) => {
     console.log("Start bidAuction");
-    if (
-        !bidAuction ||
-        !bidAuction.profit ||
-        !bidAuction.uptime ||
-        !bidAuction.buyer ||
-        !bidAuction.auctions ||
-        !bidAuction.contractAddress ||
-        !bidAuction.type ||
-        !bidAuction.minGasPrice ||
-        !bidAuction.auctions.length
-    )
-        return;
-    const nowTime = Math.round(Date.now() / 1000);
-    if (bidAuction.profit < 0 || nowTime - bidAuction.uptime > TIME_DELAY_BLOCK_BID) return;
-    if (!bidAuction.contractAddress || !bidAuction.buyer) return;
-    const txData = getTxData(bidAuction);
-    const rawTx = await getRawTx(bidAuction, txData);
-    const tx = new Transaction(rawTx, { common: chainInfor });
-    tx.sign(privateKey(bidAuction.type));
-    const serializedTx = tx.serialize();
-    await delay40Blocks(bidAuction.uptime);
-    await sendTransaction(serializedTx, bidAuction);
+    const serializedTxs: Buffer[] = [];
+    for (const bidAuction of bidAuctions) {
+        if (
+            !bidAuction ||
+            !bidAuction.profit ||
+            !bidAuction.uptime ||
+            !bidAuction.buyer ||
+            !bidAuction.auctions ||
+            !bidAuction.contractAddress ||
+            !bidAuction.type ||
+            !bidAuction.minGasPrice ||
+            !bidAuction.auctions.length
+        )
+            return;
+        const nowTime = Math.round(Date.now() / 1000);
+        if (bidAuction.profit < 0 || nowTime - bidAuction.uptime > TIME_DELAY_BLOCK_BID) {
+            console.log("Over time or profit < 0", nowTime);
+            return;
+        }
+        if (!bidAuction.contractAddress || !bidAuction.buyer) return;
+        const txData = getTxData(bidAuction);
+        const rawTx = await getRawTx(bidAuction, txData); // await to get nonce
+        const tx = new Transaction(rawTx, { common: chainInfor });
+        tx.sign(privateKey(bidAuction.type));
+        serializedTxs.push(tx.serialize());
+    }
+    await delay40Blocks(bidAuctions[0].uptime ?? 0);
+    for (let i = 0; i < serializedTxs.length; i++) {
+        if (i === serializedTxs.length - 1) {
+            await sendTransaction(serializedTxs[i], bidAuctions[i]);
+        } else {
+            sendTransaction(serializedTxs[i], bidAuctions[i]);
+        }
+    }
 };
 function exit() {
     throw new Error("Processing exit");
