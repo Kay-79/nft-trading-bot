@@ -44,7 +44,6 @@ const findV2 = async () => {
                 timeLastSetup
             } = initSetup);
         }
-        console.log(`cacheIds: ${cacheIds.length}`);
         await ranSleep(20, 30);
     }
 };

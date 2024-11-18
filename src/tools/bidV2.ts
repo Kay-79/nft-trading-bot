@@ -1,5 +1,5 @@
 import { BidAuction } from "../types/bid/BidAuction";
-import { ranSleep, sleep } from "../utilsV2/common/sleep";
+import { ranSleep } from "../utilsV2/common/sleep";
 import { normalBidAuction } from "../utilsV2/bid/normalBidAuction";
 import { IS_FRONT_RUNNING } from "../constants/constants";
 import { frontRunBidAuction } from "../utilsV2/bid/frontRunBidAuction";
@@ -23,8 +23,7 @@ const bidV2 = async () => {
         bidAuctions = bidAuctions.filter(item => item.uptime !== uptime);
 
         if (!sameUpTimeAuctions || sameUpTimeAuctions.length === 0) {
-            console.log("No bid auction found");
-            await sleep(5);
+            await ranSleep(5, 6);
             continue;
         }
         try {

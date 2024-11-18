@@ -144,11 +144,9 @@ export const delay40Blocks = async (uptime: number) => {
         const blocksRemaining = warningBlock - nowBlock;
         const estimatedDelay = blocksRemaining * 3;
         let checkInterval = Math.max(estimatedDelay / 2, 3);
-        console.log(`Taget block: ${warningBlock + 1}, now block: ${nowBlock}`);
         if (checkInterval > 10) {
             checkInterval = checkInterval * 1.5;
         }
-        console.log(`Next check in ${checkInterval}s`);
         await sleep(checkInterval);
     }
 };

@@ -14,7 +14,8 @@ export const TOPPICS: string[] = [
 
 export const API_DOMAIN = process.env.API_DOMAIN || "https://nftapi.mobox.io";
 
-export const EXPLORER_URL = "https://bscscan.com/tx/";
+export const EXPLORER_URL =
+    ENV === Environment.MAINNET ? "https://bscscan.com/tx/" : "https://testnet.bscscan.com/tx/";
 
 export const API_TELEGRAM = process.env.API_TELEGRAM || "default_api";
 

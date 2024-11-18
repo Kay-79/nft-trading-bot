@@ -1,4 +1,4 @@
-import { MP_ADDRESS, NORMAL_BUYER_MAINNET, RATE_FEE_MARKET } from "../../constants/constants";
+import { RATE_FEE_MARKET } from "../../constants/constants";
 import { AuctionType } from "../../enum/enum";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
@@ -6,12 +6,9 @@ import { TierPrice } from "../../types/dtos/TierPrice.dto";
 import {
     isBundleAuction,
     isProAuction,
-    isNormalAuction,
     getMinValueType,
     feeBundle,
     setupBidAuction,
-    getMinValueTypePro,
-    feePro,
     getProfitableBidAuctionsNormalVsPro,
     isProfitable
 } from "./utils";
