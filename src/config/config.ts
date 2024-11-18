@@ -1,6 +1,6 @@
 import { TierPrice } from "../types/dtos/TierPrice.dto";
 
-export const ENVIROMENT = process.env.ENVIROMENT;
+export const ENVIRONMENT = process.env.ENVIRONMENT;
 
 export const profitPerTier: TierPrice = {
     1: 0.01,

@@ -4,7 +4,7 @@ export enum AuctionType {
     PRO = "PRO"
 }
 
-export enum Enviroment {
+export enum Environment {
     TESTNET = "TESTNET",
     MAINNET = "MAINNET"
 }

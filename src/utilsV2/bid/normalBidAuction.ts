@@ -2,8 +2,8 @@ import { TIME_DELAY_BLOCK_BID } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { Transaction } from "ethereumjs-tx";
 import common from "ethereumjs-common";
-import { ENVIROMENT } from "../../config/config";
-import { Enviroment } from "../../enum/enum";
+import { ENVIRONMENT } from "../../config/config";
+import { Environment } from "../../enum/enum";
 import { delay40Blocks, getRawTx, getTxData, privateKey } from "./utils";
 import { sendTransaction } from "./sendTransactionNormal";
 
@@ -11,8 +11,8 @@ const chainInfor = common.forCustomChain(
     "mainnet",
     {
         name: "bnb",
-        networkId: ENVIROMENT === Enviroment.MAINNET ? 56 : 97,
-        chainId: ENVIROMENT === Enviroment.MAINNET ? 56 : 97
+        networkId: ENVIRONMENT === Environment.MAINNET ? 56 : 97,
+        chainId: ENVIRONMENT === Environment.MAINNET ? 56 : 97
     },
     "petersburg"
 );

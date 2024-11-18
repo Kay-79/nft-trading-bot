@@ -1,5 +1,5 @@
-import { ENVIROMENT } from "../config/config";
-import { Enviroment } from "../enum/enum";
+import { ENVIRONMENT } from "../config/config";
+import { Environment } from "../enum/enum";
 import { TierPrice } from "../types/dtos/TierPrice.dto";
 import { GasPrices } from "../types/gas/GasPrices";
 
@@ -32,39 +32,39 @@ export const GAS_PRICE_LIST = 325000 / 6;
 export const RATE_FEE_MARKET = 0.05;
 
 export const RPC_URL =
-    process.env.ENVIRONMENT === Enviroment.MAINNET
+    process.env.ENVIRONMENT === Environment.MAINNET
         ? "https://bsc-dataseed.binance.org/"
         : "https://data-seed-prebsc-1-s1.binance.org:8545/";
 
-export const MIN_GAS_PRICE = ENVIROMENT === Enviroment.MAINNET ? 1.0001 : 10;
+export const MIN_GAS_PRICE = ENVIRONMENT === Environment.MAINNET ? 1.0001 : 10;
 
 export const MP_ADDRESS =
-    ENVIROMENT === Enviroment.MAINNET
+    ENVIRONMENT === Environment.MAINNET
         ? process.env.ADDRESS_MP_MAINNET
         : process.env.ADDRESS_MP_TESTNET;
 
 export const USDT_ADDRESS =
-    ENVIROMENT === Enviroment.MAINNET
+    ENVIRONMENT === Environment.MAINNET
         ? "0x55d398326f99059fF775485246999027B3197955"
         : "0x221c5B1a293aAc1187ED3a7D7d2d9aD7fE1F3FB0";
 
 export const NORMAL_BUYER =
-    ENVIROMENT === Enviroment.MAINNET
+    ENVIRONMENT === Environment.MAINNET
         ? process.env.NORMAL_BUYER_MAINNET
         : process.env.NORMAL_BUYER_TESTNET;
 
 export const PRIVATE_KEY_BID =
-    ENVIROMENT === Enviroment.MAINNET
+    ENVIRONMENT === Environment.MAINNET
         ? process.env.PRIVATE_KEY_BID_MAINNET
         : process.env.PRIVATE_KEY_BID_TESTNET;
 
 export const PRIVATE_KEY_BID_PRO =
-    ENVIROMENT === Enviroment.MAINNET
+    ENVIRONMENT === Environment.MAINNET
         ? process.env.PRIVATE_KEY_BID_PRO_MAINNET
         : process.env.PRIVATE_KEY_BID_PRO_TESTNET;
 
 export const PRO_BUYER =
-    ENVIROMENT === Enviroment.MAINNET
+    ENVIRONMENT === Environment.MAINNET
         ? process.env.PRO_BUYER_MAINNET
         : process.env.PRO_BUYER_TESTNET;
 
