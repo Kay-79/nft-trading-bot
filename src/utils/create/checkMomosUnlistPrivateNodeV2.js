@@ -17,7 +17,7 @@ let momoStorage = require("../../data/inventory.json");
 const HEX_ADDRESSES = momoStorage.contracts.map(item => item.hexAddress);
 const TOPICS = require("../../constants/constants.js");
 
-if (TOPICS.includes(null) || process.env.ENVIRONMENT === "TESTNET") {
+if (TOPICS.includes(null) || process.env.ENV === "TESTNET") {
     console.warn("Please check your environment or constants.js file");
     exit();
 }

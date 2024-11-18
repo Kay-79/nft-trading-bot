@@ -12,6 +12,7 @@ src/data/*.txt
 .vscode
 nohup.out
 dist
+src/env/.env
 
 # Hardhat files
 /cache

@@ -2,8 +2,9 @@ import { ethers } from "hardhat";
 import { sleep } from "../src/utilsV2/common/sleep";
 
 async function main() {
-    const MyContract = await ethers.getContractFactory("Bid");
-    const BID = await MyContract.deploy();
+    const BidContract = await ethers.getContractFactory("Bid");
+    console.log("=====Deploying BID=====");
+    const BID = await BidContract.deploy();
     console.log("BID deployed to:", BID.target);
     console.log("=====Initializing BID=====");
     await sleep(10);
@@ -12,8 +13,8 @@ async function main() {
     console.log("=====Approving BID=====");
     await sleep(10);
     await BID.approve(
-        "0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2",
-        "0x55d398326f99059fF775485246999027B3197955"
+        "0x5555e5DC401AB6E86a240C7C3f3F86dE88E05Ee8",
+        "0x221c5B1a293aAc1187ED3a7D7d2d9aD7fE1F3FB0"
     );
     console.log("BID approved");
 }
