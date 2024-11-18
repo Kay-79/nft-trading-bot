@@ -43,6 +43,7 @@ const config = {
     myAcc: [
         ["0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000", "_1_0_1", true],
         ["0x55555D4de8df0c455C2Ff368253388FE669a8888", "_5_8_1", true],
+        ["0x0E9BC747335a4b01A6194A6c1bB1De54a0a5355c", "_0_E_9", true],
         ["0x179815260f9265950286918fa34b624071E09D68", "_1_7_9", true], // getReward()
         ["0xfa11AA3953B46c12dC1fB5c880912A80BF52203A", "_f_a_1", true],
         ["0x891016f99BA622F8556bE12B4EA336157aA6cb20", "_8_9_1", true],

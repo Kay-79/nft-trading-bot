@@ -377,7 +377,7 @@ const create = async () => {
     console.log(minPrices);
     for (let i = 0; i < myAcc.length; i++) {
         console.log(myAcc[i][1]);
-        if (myAcc[i][1] == "_1_0_1" || myAcc[i][1] === "_5_8_1") {
+        if (myAcc[i][1] == "_1_0_1" || myAcc[i][1] === "_5_8_1" || myAcc[i][1] === "_0_E_9") {
             continue;
         }
         await createBatch(configJson.gasPrices.create, 1000000, "", myAcc[i][1]);

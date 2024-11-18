@@ -402,6 +402,9 @@ async function checkListedAll(rate_) {
             if (myAcc[index][1] == "_5_8_1") {
                 console.log("Bidder : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
             }
+            if (myAcc[index][1] == "_0_E_9") {
+                console.log("Pro : " + balance.toFixed(4), "BNB\t" + budget.toFixed(4), "USDT");
+            }
         }
     }
     console.log("BNB Price:", bnbPrice);
