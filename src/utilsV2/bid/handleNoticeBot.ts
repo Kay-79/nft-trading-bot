@@ -4,6 +4,7 @@ import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionStatus, AuctionType } from "../../enum/enum";
 import { bidContract } from "../../config/config";
 import { shortenAddress } from "../common/utils";
+import { sleep } from "../common/sleep";
 
 const noticeBot = async (message: string) => {
     try {
@@ -53,6 +54,16 @@ export const noticeBotBid = async (): Promise<number> => {
     const status = "Status: 🆗";
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
     const message = `${status}${contract}`;
+    await noticeBot(message);
+    const now = new Date();
+    const currentHour = now.getHours();
+    return currentHour;
+};
+
+export const noticeBotFind = async (): Promise<number> => {
+    const status = "Status: 🔎🧐";
+    const message = `${status}`;
+    await sleep(10);
     await noticeBot(message);
     const now = new Date();
     const currentHour = now.getHours();
