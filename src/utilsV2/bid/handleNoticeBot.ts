@@ -2,6 +2,8 @@ import axios from "axios";
 import { API_TELEGRAM, CHATID_MOBOX, EXPLORER_URL } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionStatus, AuctionType } from "../../enum/enum";
+import { bidContract } from "../../config/config";
+import { shortenAddress } from "../common/utils";
 
 const noticeBot = async (message: string) => {
     try {
@@ -45,4 +47,14 @@ export const noticeProfitAuction = async (
     const txInfo = txHash ? `\nTx info: [here](${EXPLORER_URL}${txHash})` : "";
     const message = `${status}${profit}${bidType}${totalPrice}${amounts}${amount}${ids}${tokenId}${txInfo}`;
     await noticeBot(message);
+};
+
+export const noticeBotBid = async (): Promise<number> => {
+    const status = "Status: 🆗";
+    const contract = `\nContract: ${shortenAddress(bidContract)}`;
+    const message = `${status}${contract}`;
+    await noticeBot(message);
+    const now = new Date();
+    const currentHour = now.getHours();
+    return currentHour;
 };

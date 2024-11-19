@@ -4,9 +4,10 @@ import { normalBidAuction } from "../utilsV2/bid/normalBidAuction";
 import { IS_FRONT_RUNNING } from "../constants/constants";
 import { frontRunBidAuction } from "../utilsV2/bid/frontRunBidAuction";
 import { getBidAuctions, saveBidAuctions } from "../utilsV2/bid/utils";
+import { noticeBotBid } from "../utilsV2/bid/handleNoticeBot";
 
 const bidV2 = async () => {
-    console.log("Start bidV2");
+    let latestNotice = await noticeBotBid();
     while (true) {
         let bidAuctions: BidAuction[] = [];
         try {
@@ -37,11 +38,13 @@ const bidV2 = async () => {
             await normalBidAuction(sameUpTimeAuctions);
             console.log("Bid done");
         }
+        const now = new Date();
+        const currentHour = now.getHours();
+        if (Math.abs(currentHour - latestNotice) > 4) {
+            latestNotice = await noticeBotBid();
+        }
         await ranSleep(5, 6);
     }
 };
 
 bidV2();
-function exit() {
-    throw new Error("Processing exit");
-}
