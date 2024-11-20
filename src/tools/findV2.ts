@@ -6,13 +6,13 @@ import { ranSleep } from "../utilsV2/common/sleep";
 import { AuctionDto } from "../types/dtos/Auction.dto";
 import { checkProfit } from "../utilsV2/find/checkProfit";
 import { updateWaitBid } from "../utilsV2/find/utils";
-import { CACHE_BNB_PRICE, TIME_DELAY_SETUP_FIND } from "../constants/constants";
+import { CACHE_BNB_PRICE, ENV, TIME_DELAY_SETUP_FIND } from "../constants/constants";
 import { setup } from "../utilsV2/find/setup";
 import { SetupFind } from "../types/find/SetupFind";
 import { noticeBotFind } from "../utilsV2/bid/handleNoticeBot";
 
 const findV2 = async () => {
-    console.log("Starting findV2...");
+    console.log("Starting findV2...", ENV);
     let cacheIds: string[] = [];
     let initSetup: SetupFind = await setup(CACHE_BNB_PRICE);
     let { bnbPrice, isFrontRunNormal, isFrontRunPro, isFrontRunProHash, priceMins, timeLastSetup } =

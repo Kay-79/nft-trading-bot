@@ -77,3 +77,10 @@ export const noticeBotFind = async (latestNotice: number): Promise<number> => {
     const currentHour = now.getHours();
     return currentHour;
 };
+
+export const noticeBotDetectProfit = async (profitableAuctions: BidAuction[]) => {
+    if (!profitableAuctions.length) return;
+    const status = "Status: 💰💰";
+    const message = `${status}`;
+    await noticeBot(message);
+};

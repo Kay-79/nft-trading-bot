@@ -19,6 +19,7 @@ import {
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionType } from "../../enum/enum";
 import axios from "axios";
+import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -139,6 +140,7 @@ export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
     waitBid.push(...profitableAuctions);
     waitBid.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     fs.writeFileSync(WAIT_BID_PATH, JSON.stringify({ data: waitBid }));
+    await noticeBotDetectProfit(profitableAuctions);
 };
 
 export const isBreakBatch = (auctions: AuctionDto[], auction: AuctionDto): boolean => {
@@ -152,7 +154,7 @@ export const isBreakBatch = (auctions: AuctionDto[], auction: AuctionDto): boole
 };
 
 export const isProfitable = (profit: number, minProfit: number): boolean => {
-    return profit < minProfit;
+    return profit >= minProfit;
 };
 
 export const getProfitableBidAuctionsNormalVsPro = (
