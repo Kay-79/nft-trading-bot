@@ -17,7 +17,8 @@ const findV2 = async () => {
     let initSetup: SetupFind = await setup(CACHE_BNB_PRICE);
     let { bnbPrice, isFrontRunNormal, isFrontRunPro, isFrontRunProHash, priceMins, timeLastSetup } =
         initSetup;
-    let latestNotice = await noticeBotFind();
+    let latestNotice = 0;
+    latestNotice = await noticeBotFind(latestNotice);
     while (true) {
         let newAuctions: AuctionDto[] = [];
         await getNewAutions(cacheIds).then(async ([auctions, ids]) => {
@@ -48,8 +49,9 @@ const findV2 = async () => {
         }
         const now = new Date();
         const currentHour = now.getHours();
-        if (Math.abs(currentHour - latestNotice) >= 4) {
-            latestNotice = await noticeBotFind();
+        if (Math.abs(currentHour - latestNotice) > 4) {
+            console.log("Notice bot find");
+            latestNotice = await noticeBotFind(latestNotice);
         }
         await ranSleep(20, 30);
     }
