@@ -67,19 +67,21 @@ export const privateKey = (type: AuctionType): Buffer => {
 export const getTxData = (bidAuction: BidAuction): string => {
     if (!bidAuction || !bidAuction.auctions || !bidAuction.auctions.length) return "";
     const isBatch = bidAuction.auctions.length > 1;
-    if (isBatch)
+    if (!isBatch)
         return contractProvider.interface.encodeFunctionData(FunctionFragment.BID, [
             bidAuction.auctions[0].auctor,
             bidAuction.auctions[0].index,
             bidAuction.auctions[0].uptime,
-            bidAuction.auctions[0].nowPrice
+            ((bidAuction.auctions[0]?.nowPrice ?? 0) + 10 ** 5).toString() + "000000000"
         ]);
     else
         return contractProvider.interface.encodeFunctionData(FunctionFragment.BID_BATCH, [
             bidAuction.auctions.map((auction: AuctionDto) => auction.auctor),
             bidAuction.auctions.map((auction: AuctionDto) => auction.index),
             bidAuction.auctions.map((auction: AuctionDto) => auction.uptime),
-            bidAuction.auctions.map((auction: AuctionDto) => auction.nowPrice),
+            bidAuction.auctions.map(
+                (auction: AuctionDto) => (auction.nowPrice ?? 0 + 10 ** 5).toString() + "000000000"
+            ),
             true
         ]);
 };
