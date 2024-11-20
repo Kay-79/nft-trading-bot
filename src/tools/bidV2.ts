@@ -7,7 +7,9 @@ import { getBidAuctions, saveBidAuctions } from "../utilsV2/bid/utils";
 import { noticeBotBid } from "../utilsV2/bid/handleNoticeBot";
 
 const bidV2 = async () => {
-    let latestNotice = await noticeBotBid();
+    console.log("Starting bidV2...");
+    let latestNotice = 0;
+    latestNotice = await noticeBotBid(latestNotice);
     while (true) {
         let bidAuctions: BidAuction[] = [];
         try {
@@ -41,7 +43,8 @@ const bidV2 = async () => {
         const now = new Date();
         const currentHour = now.getHours();
         if (Math.abs(currentHour - latestNotice) > 4) {
-            latestNotice = await noticeBotBid();
+            console.log("Notice bot bid");
+            latestNotice = await noticeBotBid(latestNotice);
         }
         await ranSleep(5, 6);
     }
