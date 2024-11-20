@@ -40,7 +40,7 @@ const bidV2 = async () => {
         }
         const now = new Date();
         const currentHour = now.getHours();
-        if (Math.abs(currentHour - latestNotice) > 4) {
+        if (Math.abs(currentHour - latestNotice) >= 4) {
             latestNotice = await noticeBotBid();
         }
         await ranSleep(5, 6);
