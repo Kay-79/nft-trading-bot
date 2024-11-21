@@ -226,7 +226,7 @@ export const getProfitableBidAuctionsNormalVsPro = (
             totalPrice -= auction?.nowPrice;
         }
     }
-    if (profitableAuctions.length > 0) {
+    if (profitableAuctions.length > 0 && profitableAuctions.length <= 5) {
         profitableBidAuctions.push(
             setupBidAuction(
                 profitableAuctions,
@@ -240,6 +240,8 @@ export const getProfitableBidAuctionsNormalVsPro = (
                 totalPrice
             )
         );
+    } else {
+        console.log("Profitable auctions length is too long");
     }
     return profitableBidAuctions;
 };
