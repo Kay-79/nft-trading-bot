@@ -8,9 +8,15 @@ import { noticeBotBid } from "../utilsV2/bid/handleNoticeBot";
 
 const bidV2 = async () => {
     console.log("Starting bidV2...", ENV);
-    let latestNotice = 0;
+    let latestNotice = new Date().getHours();
     latestNotice = await noticeBotBid(latestNotice);
     while (true) {
+        const now = new Date();
+        const currentHour = now.getHours();
+        if (Math.abs(currentHour - latestNotice) >= 4) {
+            console.log("Notice bot bid");
+            latestNotice = await noticeBotBid(latestNotice);
+        }
         let bidAuctions: BidAuction[] = [];
         try {
             bidAuctions = await getBidAuctions();
@@ -24,7 +30,6 @@ const bidV2 = async () => {
         const uptime = bidAuctions[0]?.uptime;
         const sameUpTimeAuctions = bidAuctions.filter(item => item.uptime === uptime);
         bidAuctions = bidAuctions.filter(item => item.uptime !== uptime);
-
         if (!sameUpTimeAuctions || sameUpTimeAuctions.length === 0) {
             await ranSleep(5, 6);
             continue;
@@ -39,12 +44,6 @@ const bidV2 = async () => {
         } else {
             await normalBidAuction(sameUpTimeAuctions);
             console.log("Bid done");
-        }
-        const now = new Date();
-        const currentHour = now.getHours();
-        if (Math.abs(currentHour - latestNotice) >= 4) {
-            console.log("Notice bot bid");
-            latestNotice = await noticeBotBid(latestNotice);
         }
         await ranSleep(5, 6);
     }

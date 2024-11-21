@@ -51,7 +51,7 @@ export const noticeProfitAuction = async (
 };
 
 export const noticeBotBid = async (latestNotice: number): Promise<number> => {
-    const status = "Status: 🆗";
+    const status = "Status: 🛒";
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
     const message = `${status}${contract}`;
     try {
@@ -65,7 +65,7 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
 };
 
 export const noticeBotFind = async (latestNotice: number): Promise<number> => {
-    const status = "Status: 🔎🧐";
+    const status = "Status: 🔎";
     const message = `${status}`;
     await sleep(10);
     try {
