@@ -44,13 +44,6 @@ export const getMinValueType = (
     return [minV, minP];
 };
 
-export const getMinValueTypePro = (prototype: number, minPrices: TierPrice): number[] => {
-    const prototypeIndex = Number(prototype.toString().slice(0, 1));
-    const minV = minPrices[prototypeIndex as keyof TierPrice] ?? NaN;
-    const minP = profitPerTier[prototypeIndex as keyof TierPrice] ?? NaN;
-    return [minV, minP];
-};
-
 export const feeBundle = (bnbPrice: number): number => {
     return GAS_PRICES_BID.bundleAuction * bnbPrice * 10 ** -9;
 };
@@ -143,14 +136,14 @@ export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
     await noticeBotDetectProfit(profitableAuctions);
 };
 
-export const isBreakBatch = (auctions: AuctionDto[], auction: AuctionDto): boolean => {
-    if (auctions.length > 5) {
+export const isBreakBatch = (profitAuctions: AuctionDto[], auction: AuctionDto): boolean => {
+    if (profitAuctions.length > 5) {
         return true;
     }
-    if (auctions.length === 0) {
+    if (profitAuctions.length === 0) {
         return false;
     }
-    return auction?.uptime !== auctions[0]?.uptime;
+    return auction?.uptime !== profitAuctions[0]?.uptime;
 };
 
 export const isProfitable = (profit: number, minProfit: number): boolean => {
@@ -158,12 +151,12 @@ export const isProfitable = (profit: number, minProfit: number): boolean => {
 };
 
 export const getProfitableBidAuctionsNormalVsPro = (
-    normalAuctions: AuctionDto[],
+    normalVsProAuctions: AuctionDto[],
     priceMins: TierPrice,
     bnbPrice: number,
     type: AuctionType
 ): BidAuction[] => {
-    normalAuctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
+    normalVsProAuctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableAuctions: AuctionDto[] = [];
     let profitableBidAuctions: BidAuction[] = [];
     let totalProfit = 0;
@@ -171,24 +164,39 @@ export const getProfitableBidAuctionsNormalVsPro = (
     let totalFee = 0;
     let totalPrice = 0;
     const fee = type === AuctionType.PRO ? feePro(bnbPrice) : feePro(bnbPrice);
-    for (let i = 0; i < normalAuctions.length; i++) {
-        const auction = normalAuctions[i];
+    for (let i = 0; i < normalVsProAuctions.length; i++) {
+        const auction = normalVsProAuctions[i];
+        if (!auction?.nowPrice) {
+            continue;
+        }
+        if (
+            (type === AuctionType.NORMAL && isProAuction(auction)) ||
+            (type === AuctionType.PRO && !isProAuction(auction))
+        ) {
+            continue;
+        }
         let profit = 0;
         let minProfit = 0;
         let minValueAuction = 0;
-        if (!auction?.ids || !auction?.nowPrice || !auction?.prototype) {
-            continue;
-        }
         if (type === AuctionType.PRO) {
-            const minValueType = getMinValueType(auction?.prototype.toString(), 1, priceMins);
+            const minValueType = getMinValueType(
+                (auction?.prototype ?? "").toString(),
+                1,
+                priceMins
+            );
             minValueAuction += minValueType[0];
             minProfit += minValueType[1];
         } else {
-            const minValueType = getMinValueType(auction?.ids[0], 1, priceMins);
+            const minValueType = getMinValueType(auction?.ids?.[0] ?? "", 1, priceMins);
             minValueAuction += minValueType[0];
             minProfit += minValueType[1];
         }
         profit = calculateProfit(minValueAuction, fee, auction, bnbPrice);
+        profitableAuctions.push(auction);
+        totalFee += fee;
+        totalProfit += profit;
+        totalMinProfit += minProfit;
+        totalPrice += auction?.nowPrice;
         if (isProfitable(profit, minProfit)) {
             if (isBreakBatch(profitableAuctions, auction)) {
                 profitableBidAuctions.push(
@@ -209,14 +217,9 @@ export const getProfitableBidAuctionsNormalVsPro = (
                 totalMinProfit = minProfit;
                 totalFee = fee;
                 totalPrice = auction?.nowPrice;
-            } else {
-                profitableAuctions.push(auction);
-                totalFee += fee;
-                totalProfit += profit;
-                totalMinProfit += minProfit;
-                totalPrice += auction?.nowPrice;
             }
         } else {
+            profitableAuctions = profitableAuctions.filter(a => a !== auction);
             totalProfit -= profit;
             totalMinProfit -= minProfit;
             totalFee -= fee;

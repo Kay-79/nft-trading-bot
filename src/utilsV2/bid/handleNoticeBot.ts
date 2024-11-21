@@ -81,7 +81,9 @@ export const noticeBotFind = async (latestNotice: number): Promise<number> => {
 export const noticeBotDetectProfit = async (profitableAuctions: BidAuction[]) => {
     if (!profitableAuctions.length) return;
     const status = "Detected: 💰";
-    const profit = `\nProfit: $${profitableAuctions.map(auction => auction.profit).join(", ")}`;
+    const profit = `\nProfit: $${profitableAuctions
+        .map(auction => auction.profit?.toFixed(3))
+        .join(", $")}`;
     const message = `${status}${profit}`;
     await noticeBot(message);
 };
