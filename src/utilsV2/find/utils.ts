@@ -69,7 +69,7 @@ export const setupBidAuction = (
     auctions: AuctionDto[],
     profit: number,
     minProfit: number,
-    priceMins: TierPrice,
+    floorPrices: TierPrice,
     bnbPrice: number,
     totalFee: number,
     auctionType: AuctionType,
@@ -107,7 +107,7 @@ export const setupBidAuction = (
         buyer: buyer,
         contractAddress: contractAddress,
         totalPrice: totalPrice,
-        minPrice: priceMins,
+        minPrice: floorPrices,
         fee: fee,
         type: auctionType,
         amount: amount,
@@ -152,7 +152,7 @@ export const isProfitable = (profit: number, minProfit: number): boolean => {
 
 export const getProfitableBidAuctionsNormalVsPro = (
     normalVsProAuctions: AuctionDto[],
-    priceMins: TierPrice,
+    floorPrices: TierPrice,
     bnbPrice: number,
     type: AuctionType
 ): BidAuction[] => {
@@ -182,12 +182,12 @@ export const getProfitableBidAuctionsNormalVsPro = (
             const minValueType = getMinValueType(
                 (auction?.prototype ?? "").toString(),
                 1,
-                priceMins
+                floorPrices
             );
             minValueAuction += minValueType[0];
             minProfit += minValueType[1];
         } else {
-            const minValueType = getMinValueType(auction?.ids?.[0] ?? "", 1, priceMins);
+            const minValueType = getMinValueType(auction?.ids?.[0] ?? "", 1, floorPrices);
             minValueAuction += minValueType[0];
             minProfit += minValueType[1];
         }
@@ -204,7 +204,7 @@ export const getProfitableBidAuctionsNormalVsPro = (
                         profitableAuctions,
                         totalProfit,
                         totalMinProfit,
-                        priceMins,
+                        floorPrices,
                         bnbPrice,
                         totalFee,
                         type,
@@ -232,7 +232,7 @@ export const getProfitableBidAuctionsNormalVsPro = (
                 profitableAuctions,
                 totalProfit,
                 totalMinProfit,
-                priceMins,
+                floorPrices,
                 bnbPrice,
                 totalFee,
                 type,
@@ -271,7 +271,7 @@ export const getBnbPrice = async (cacheBnbPrice: number): Promise<number> => {
 };
 
 export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice> => {
-    let priceMins = cacheTierPrice;
+    let floorPrices = cacheTierPrice;
     const getPrice = async (prototype: number, amountCheck: number): Promise<number> => {
         try {
             const res = await axios.get(`${API_DOMAIN}/auction/search_v2/BNB`, {
@@ -303,7 +303,7 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
         } catch (error) {
             console.log(error);
         }
-        return priceMins[prototype as keyof TierPrice] ?? 0;
+        return floorPrices[prototype as keyof TierPrice] ?? 0;
     };
 
     const priceConfigs = [
@@ -316,8 +316,8 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
     ];
 
     for (const { tier, amount } of priceConfigs) {
-        priceMins[tier as keyof TierPrice] = await getPrice(tier, amount);
+        floorPrices[tier as keyof TierPrice] = await getPrice(tier, amount);
     }
 
-    return priceMins;
+    return floorPrices;
 };

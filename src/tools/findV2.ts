@@ -17,8 +17,14 @@ const findV2 = async () => {
     latestNotice = await noticeBotFind(latestNotice);
     let cacheIds: string[] = [];
     let initSetup: SetupFind = await setup(CACHE_BNB_PRICE);
-    let { bnbPrice, isFrontRunNormal, isFrontRunPro, isFrontRunProHash, priceMins, timeLastSetup } =
-        initSetup;
+    let {
+        bnbPrice,
+        isFrontRunNormal,
+        isFrontRunPro,
+        isFrontRunProHash,
+        floorPrices,
+        timeLastSetup
+    } = initSetup;
     while (true) {
         const now = new Date();
         const currentHour = now.getHours();
@@ -36,12 +42,12 @@ const findV2 = async () => {
             !isFrontRunNormal ||
             !isFrontRunPro ||
             !isFrontRunProHash ||
-            !priceMins ||
+            !floorPrices ||
             !timeLastSetup
         )
             continue;
-        const isHasProfit = checkProfit(newAuctions, priceMins, bnbPrice).length > 0;
-        isHasProfit ? updateWaitBid(checkProfit(newAuctions, priceMins, bnbPrice)) : {};
+        const isHasProfit = checkProfit(newAuctions, floorPrices, bnbPrice).length > 0;
+        isHasProfit ? updateWaitBid(checkProfit(newAuctions, floorPrices, bnbPrice)) : {};
         if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
             initSetup = await setup(bnbPrice);
             ({
@@ -49,7 +55,7 @@ const findV2 = async () => {
                 isFrontRunNormal,
                 isFrontRunPro,
                 isFrontRunProHash,
-                priceMins,
+                floorPrices,
                 timeLastSetup
             } = initSetup);
         }

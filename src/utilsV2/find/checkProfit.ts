@@ -15,7 +15,7 @@ import {
 
 export const checkProfit = (
     auctions: AuctionDto[],
-    priceMins: TierPrice,
+    floorPrices: TierPrice,
     bnbPrice: number
 ): BidAuction[] => {
     if (!auctions || auctions.length == 0) {
@@ -38,13 +38,13 @@ export const checkProfit = (
     profitableBidAuctions.push(
         ...getProfitableBidAuctionsNormalVsPro(
             normalAuctions,
-            priceMins,
+            floorPrices,
             bnbPrice,
             AuctionType.NORMAL
         )
     );
     profitableBidAuctions.push(
-        ...getProfitableBidAuctionsNormalVsPro(proAuctions, priceMins, bnbPrice, AuctionType.PRO)
+        ...getProfitableBidAuctionsNormalVsPro(proAuctions, floorPrices, bnbPrice, AuctionType.PRO)
     );
     for (let i = 0; i < bundleAuctions.length; i++) {
         const auction = bundleAuctions[i];
@@ -59,7 +59,7 @@ export const checkProfit = (
             const minValueType = getMinValueType(
                 auction?.ids[j],
                 Number(auction?.amounts[j]),
-                priceMins
+                floorPrices
             );
             minValueAuction += minValueType[0];
             minProfit += minValueType[1];
@@ -78,7 +78,7 @@ export const checkProfit = (
                     [auction],
                     profit,
                     minProfit,
-                    priceMins,
+                    floorPrices,
                     bnbPrice,
                     feeBundle(bnbPrice),
                     AuctionType.BUNDLE,

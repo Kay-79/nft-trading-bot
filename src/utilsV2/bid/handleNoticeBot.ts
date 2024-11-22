@@ -84,6 +84,11 @@ export const noticeBotDetectProfit = async (profitableAuctions: BidAuction[]) =>
     const profit = `\nProfit: $${profitableAuctions
         .map(auction => auction.profit?.toFixed(3))
         .join(", $")}`;
-    const message = `${status}${profit}`;
+    const floorPrices = profitableAuctions[0].minPrice
+        ? `\nFloor: ${Object.entries(profitableAuctions[0]?.minPrice)
+              .map(([key, value]) => `${Number(value).toFixed(2)}`)
+              .join(",")}`
+        : "";
+    const message = `${status}${profit}${floorPrices}`;
     await noticeBot(message);
 };
