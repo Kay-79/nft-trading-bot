@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_TELEGRAM, CHATID_MOBOX, EXPLORER_URL } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { AuctionStatus, AuctionType } from "../../enum/enum";
+import { BidStatus, AuctionType } from "../../enum/enum";
 import { bidContract } from "../../config/config";
 import { shortenAddress } from "../common/utils";
 import { sleep } from "../common/sleep";
@@ -23,7 +23,7 @@ const noticeBot = async (message: string) => {
 
 export const noticeProfitAuction = async (
     bidAuction: BidAuction,
-    auctionStatus: AuctionStatus,
+    auctionStatus: BidStatus,
     txHash: string
 ) => {
     if (!bidAuction || !bidAuction.profit || !bidAuction.totalPrice || !bidAuction.auctions) {

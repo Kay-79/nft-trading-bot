@@ -14,7 +14,7 @@ export enum FunctionFragment {
     BID_BATCH = "bid(address[],uint256[],uint256[],uint256[],bool)"
 }
 
-export enum AuctionStatus {
+export enum BidStatus {
     SUCCESS = "✅",
     FAILED = "❌"
 }
