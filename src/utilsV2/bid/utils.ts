@@ -86,7 +86,7 @@ export const getTxData = (bidAuction: BidAuction): string => {
         ]);
 };
 
-export const getBlockByTimestamp = async (timestamp: number): Promise<number> => {
+export const getBlockByTimestamp = async (timestamp: number, step: number): Promise<number> => {
     const latestBlockNumber = await ethersProvider.getBlockNumber();
     const latestBlock = await ethersProvider.getBlock(latestBlockNumber);
     if (!latestBlock) {
@@ -104,7 +104,7 @@ export const getBlockByTimestamp = async (timestamp: number): Promise<number> =>
         if (block.timestamp < timestamp) {
             break;
         }
-        startBlockNumber -= 50;
+        startBlockNumber -= step;
     }
     startBlockNumber = Math.max(startBlockNumber, 1);
     let endBlockNumber = latestBlockNumber;
@@ -136,7 +136,7 @@ export const getNowBlock = async (): Promise<number> => {
 };
 
 export const delay40Blocks = async (uptime: number) => {
-    const createdBlock = await getBlockByTimestamp(uptime);
+    const createdBlock = await getBlockByTimestamp(uptime, 50);
     const warningBlock = createdBlock + 39;
     while (true) {
         const nowBlock = await getNowBlock();

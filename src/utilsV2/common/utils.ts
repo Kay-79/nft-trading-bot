@@ -1,3 +1,4 @@
+import { time } from "console";
 import { FunctionFragment } from "../../enum/enum";
 import { contractProvider } from "../../providers/contractProvider";
 import { ethersProvider } from "../../providers/ethersProvider";
@@ -16,17 +17,25 @@ export const addressTo32Bytes = (address: string) => {
 };
 
 export const checkDelayBlockTransaction = async (txHash: string): Promise<number> => {
+    if (txHash.length !== 66) {
+        console.error("Invalid txHash length");
+        return -1;
+    }
     const tx = await ethersProvider.provider.getTransaction(txHash);
     if (!tx) {
+        console.error("Invalid txHash");
         return -1;
     }
     let prams = [];
+    let timeStamp = 0;
     try {
         prams = decodeFunctionData(FunctionFragment.BID, tx.data);
+        timeStamp = prams[2];
     } catch (error) {
         prams = decodeFunctionData(FunctionFragment.BID_BATCH, tx.data);
+        timeStamp = prams[2][0];
     }
-    const tagetBlock = (await getBlockByTimestamp(prams[2])) + 40;
-    // console.log(prams[2]);
+    console.log(timeStamp);
+    const tagetBlock = (await getBlockByTimestamp(timeStamp, 1000)) + 40;
     return tx.blockNumber ? tx.blockNumber - tagetBlock : -1;
 };
