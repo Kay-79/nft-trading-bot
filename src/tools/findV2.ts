@@ -14,7 +14,7 @@ import { noticeBotFind } from "../utilsV2/bid/handleNoticeBot";
 const findV2 = async () => {
     console.log("Starting findV2...", ENV);
     let latestNotice = new Date().getHours();
-    latestNotice = await noticeBotFind(latestNotice);
+    latestNotice = await noticeBotFind(latestNotice, {});
     let cacheIds: string[] = [];
     let initSetup: SetupFind = await setup(CACHE_BNB_PRICE);
     let {
@@ -30,7 +30,7 @@ const findV2 = async () => {
         const currentHour = now.getHours();
         if (Math.abs(currentHour - latestNotice) >= 4) {
             console.log("Notice bot find");
-            latestNotice = await noticeBotFind(latestNotice);
+            latestNotice = await noticeBotFind(latestNotice, floorPrices || {});
         }
         let newAuctions: AuctionDto[] = [];
         await getNewAutions(cacheIds).then(async ([auctions, ids]) => {

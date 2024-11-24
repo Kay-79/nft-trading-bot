@@ -5,6 +5,7 @@ import { BidStatus, AuctionType } from "../../enum/enum";
 import { bidContract } from "../../config/config";
 import { shortenAddress } from "../common/utils";
 import { sleep } from "../common/sleep";
+import { TierPrice } from "../../types/common/TierPrice";
 
 const noticeBot = async (message: string) => {
     try {
@@ -61,12 +62,17 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
     }
     const now = new Date();
     const currentHour = now.getHours();
-    return currentHour;
+    return currentHour - (currentHour % 4);
 };
 
-export const noticeBotFind = async (latestNotice: number): Promise<number> => {
+export const noticeBotFind = async (latestNotice: number, minPrice: TierPrice): Promise<number> => {
     const status = "Status: 🔎";
-    const message = `${status}`;
+    const floorPrices = minPrice
+        ? `\nFloor: ${Object.entries(minPrice)
+              .map(([key, value]) => `${Number(value).toFixed(2)}`)
+              .join(",")}`
+        : "";
+    const message = `${status}${floorPrices}`;
     await sleep(10);
     try {
         await noticeBot(message);
@@ -75,7 +81,7 @@ export const noticeBotFind = async (latestNotice: number): Promise<number> => {
     }
     const now = new Date();
     const currentHour = now.getHours();
-    return currentHour;
+    return currentHour - (currentHour % 4);
 };
 
 export const noticeBotDetectProfit = async (profitableAuctions: BidAuction[]) => {
