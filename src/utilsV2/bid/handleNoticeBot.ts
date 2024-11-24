@@ -92,3 +92,12 @@ export const noticeBotDetectProfit = async (profitableAuctions: BidAuction[]) =>
     const message = `${status}${profit}${floorPrices}`;
     await noticeBot(message);
 };
+
+export const noticeErrorBid = async (errBidAuction: BidAuction) => {
+    const status = "Error: 📛";
+    const profit = `\nProfit: ${errBidAuction.profit?.toFixed(3)}`;
+    const time = `\nTime: ${errBidAuction.uptime}`;
+    const nowTime = `\nNow: ${Math.round(Date.now() / 1000).toFixed()}`;
+    const message = `${status}${profit}${time}${nowTime}`;
+    await noticeBot(message);
+};

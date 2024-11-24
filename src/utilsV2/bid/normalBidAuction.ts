@@ -5,6 +5,7 @@ import common from "ethereumjs-common";
 import { Environment } from "../../enum/enum";
 import { delay40Blocks, getRawTx, getTxData, privateKey } from "./utils";
 import { sendTransaction } from "./sendTransactionNormal";
+import { noticeErrorBid } from "./handleNoticeBot";
 
 const chainInfor = common.forCustomChain(
     "mainnet",
@@ -17,7 +18,6 @@ const chainInfor = common.forCustomChain(
 );
 
 export const normalBidAuction = async (bidAuctions: BidAuction[]) => {
-    console.log("Start bidAuction");
     const serializedTxs: Buffer[] = [];
     for (const bidAuction of bidAuctions) {
         if (
@@ -35,6 +35,7 @@ export const normalBidAuction = async (bidAuctions: BidAuction[]) => {
         const nowTime = Math.round(Date.now() / 1000);
         if (bidAuction.profit < 0 || nowTime - bidAuction.uptime > TIME_DELAY_BLOCK_BID) {
             console.log("Over time or profit < 0", nowTime);
+            await noticeErrorBid(bidAuction);
             return;
         }
         if (!bidAuction.contractAddress || !bidAuction.buyer) return;

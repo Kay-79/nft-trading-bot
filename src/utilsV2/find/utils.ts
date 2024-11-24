@@ -226,6 +226,9 @@ export const getProfitableBidAuctionsNormalVsPro = (
             totalPrice -= auction?.nowPrice;
         }
     }
+    if (profitableAuctions.length === 0) {
+        return profitableBidAuctions;
+    }
     if (profitableAuctions.length > 0 && profitableAuctions.length <= 5) {
         profitableBidAuctions.push(
             setupBidAuction(

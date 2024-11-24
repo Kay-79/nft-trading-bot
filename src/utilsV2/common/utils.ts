@@ -35,7 +35,6 @@ export const checkDelayBlockTransaction = async (txHash: string): Promise<number
         prams = decodeFunctionData(FunctionFragment.BID_BATCH, tx.data);
         timeStamp = prams[2][0];
     }
-    console.log(timeStamp);
     const tagetBlock = (await getBlockByTimestamp(timeStamp, 1000)) + 40;
     return tx.blockNumber ? tx.blockNumber - tagetBlock : -1;
 };
