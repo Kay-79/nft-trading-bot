@@ -6,12 +6,19 @@ import { contractProvider } from "../../providers/contractProvider";
 import { AuctionType, FunctionFragment } from "../../enum/enum";
 import {
     GAS_PRICE_BID,
+    NORMAL_BUYER,
     PRIVATE_KEY_BID,
     PRIVATE_KEY_BID_PRO,
+    PRO_BUYER,
+    TIME_DELAY_BLOCK_BID,
     WAIT_BID_PATH
 } from "../../constants/constants";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { sleep } from "../common/sleep";
+import exp from "constants";
+import { noticeErrorBid } from "./handleNoticeBot";
+import { Transaction } from "ethereumjs-tx";
+import { chainInfor } from "./normalBidAuction";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
@@ -33,11 +40,10 @@ export const saveBidAuctions = async (bidAuctions: BidAuction[]) => {
     }
 };
 
-export const getRawTx = async (bidAuction: BidAuction, txData: string): Promise<RawTransaction> => {
+export const getRawTx = (bidAuction: BidAuction, txData: string, nonce: number): RawTransaction => {
     if (!bidAuction.buyer || !bidAuction.minGasPrice || !bidAuction.contractAddress) {
         return {} as RawTransaction;
     }
-    const nonce = await ethersProvider.getTransactionCount(bidAuction?.buyer);
     const txParams = {
         from: bidAuction.buyer,
         gas: "0x" + GAS_PRICE_BID.toString(16),
@@ -151,4 +157,60 @@ export const delay40Blocks = async (uptime: number) => {
         }
         await sleep(checkInterval);
     }
+};
+
+export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffer[]> => {
+    const serializedTxs: Buffer[] = [];
+    let nonce = {
+        NORMAL: 0,
+        PRO: 0,
+        BUNDLE: 0
+    };
+    nonce[AuctionType.BUNDLE] = nonce.NORMAL;
+    if (bidAuctions.some(bidAuction => bidAuction.type === AuctionType.PRO)) {
+        nonce[AuctionType.PRO] = await ethersProvider.getTransactionCount(
+            PRO_BUYER || "",
+            "latest"
+        );
+    }
+    if (bidAuctions.some(bidAuction => bidAuction.type === AuctionType.NORMAL)) {
+        nonce[AuctionType.NORMAL] = await ethersProvider.getTransactionCount(
+            NORMAL_BUYER || "",
+            "latest"
+        );
+        nonce[AuctionType.BUNDLE] = nonce[AuctionType.NORMAL];
+    }
+    for (const bidAuction of bidAuctions) {
+        if (
+            !bidAuction ||
+            !bidAuction.profit ||
+            !bidAuction.uptime ||
+            !bidAuction.buyer ||
+            !bidAuction.auctions ||
+            !bidAuction.contractAddress ||
+            !bidAuction.type ||
+            !bidAuction.minGasPrice ||
+            !bidAuction.auctions.length
+        )
+            continue;
+        const nowTime = Math.round(Date.now() / 1000);
+        if (bidAuction.profit < 0 || nowTime - bidAuction.uptime > TIME_DELAY_BLOCK_BID) {
+            console.log("Over time or profit < 0", nowTime);
+            await noticeErrorBid(bidAuction);
+            continue;
+        }
+        if (!bidAuction.contractAddress || !bidAuction.buyer) continue;
+        const txData = getTxData(bidAuction);
+        if (!txData) continue;
+        if (bidAuction.type === AuctionType.PRO) nonce[AuctionType.PRO] += 1;
+        else {
+            nonce[AuctionType.NORMAL] += 1;
+            nonce[AuctionType.BUNDLE] += 1;
+        }
+        const rawTx = getRawTx(bidAuction, txData, nonce[bidAuction.type]);
+        const tx = new Transaction(rawTx, { common: chainInfor });
+        tx.sign(privateKey(bidAuction.type));
+        serializedTxs.push(tx.serialize());
+    }
+    return serializedTxs;
 };
