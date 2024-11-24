@@ -88,6 +88,8 @@ export const CACHE_TIER_PRICE: TierPrice = {
     6: 0
 };
 
+export const TIME_ENABLE_BID = 120; //2mins
+
 export const TIME_DELAY_BLOCK_BID = 60; //1min
 
 export const IS_FRONT_RUNNING = false;
