@@ -1,5 +1,5 @@
 import { AuctionDto } from "../../types/dtos/Auction.dto";
-import { TierPrice } from "../../types/dtos/TierPrice.dto";
+import { TierPrice } from "../../types/common/TierPrice";
 import { bidContract, profitPerTier } from "../../config/config";
 import fs from "fs";
 import {

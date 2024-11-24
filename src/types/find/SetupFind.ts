@@ -1,4 +1,4 @@
-import { TierPrice } from "../dtos/TierPrice.dto";
+import { TierPrice } from "../common/TierPrice";
 
 export interface SetupFind {
     bnbPrice?: number;

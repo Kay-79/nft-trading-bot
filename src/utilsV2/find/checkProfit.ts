@@ -2,7 +2,7 @@ import { RATE_FEE_MARKET } from "../../constants/constants";
 import { AuctionType } from "../../enum/enum";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
-import { TierPrice } from "../../types/dtos/TierPrice.dto";
+import { TierPrice } from "../../types/common/TierPrice";
 import {
     isBundleAuction,
     isProAuction,

@@ -1,5 +1,5 @@
 import { Environment } from "../enum/enum";
-import { TierPrice } from "../types/dtos/TierPrice.dto";
+import { TierPrice } from "../types/common/TierPrice";
 import { GasPrices } from "../types/gas/GasPrices";
 
 export const ENV = process.env.ENV || Environment.TESTNET; // Default TESTNET

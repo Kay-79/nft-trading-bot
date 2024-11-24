@@ -1,4 +1,4 @@
-import { TierPrice } from "../types/dtos/TierPrice.dto";
+import { TierPrice } from "../types/common/TierPrice";
 
 export const profitPerTier: TierPrice = {
     1: 0,
