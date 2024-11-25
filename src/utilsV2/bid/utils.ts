@@ -197,7 +197,7 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
         const nowTime = Math.round(Date.now() / 1000);
         if (
             bidAuction.profit < 0 ||
-            nowTime - bidAuction.uptime + TIME_ENABLE_BID > TIME_DELAY_BLOCK_BID
+            nowTime - (bidAuction.uptime + TIME_ENABLE_BID) > TIME_DELAY_BLOCK_BID
         ) {
             console.log("Over time or profit < 0", nowTime);
             await noticeErrorBid(bidAuction);
