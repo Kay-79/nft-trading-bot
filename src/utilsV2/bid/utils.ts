@@ -169,16 +169,12 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
     };
     nonce[AuctionType.BUNDLE] = nonce.NORMAL;
     if (bidAuctions.some(bidAuction => bidAuction.type === AuctionType.PRO)) {
-        nonce[AuctionType.PRO] = await ethersProvider.getTransactionCount(
-            PRO_BUYER || "",
-            "latest"
-        );
+        nonce[AuctionType.PRO] =
+            (await ethersProvider.getTransactionCount(PRO_BUYER || "", "latest")) - 1;
     }
     if (bidAuctions.some(bidAuction => bidAuction.type === AuctionType.NORMAL)) {
-        nonce[AuctionType.NORMAL] = await ethersProvider.getTransactionCount(
-            NORMAL_BUYER || "",
-            "latest"
-        );
+        nonce[AuctionType.NORMAL] =
+            (await ethersProvider.getTransactionCount(NORMAL_BUYER || "", "latest")) - 1;
         nonce[AuctionType.BUNDLE] = nonce[AuctionType.NORMAL];
     }
     for (const bidAuction of bidAuctions) {
