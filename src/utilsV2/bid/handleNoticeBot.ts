@@ -39,7 +39,7 @@ export const noticeProfitAuction = async (
         }
     }
     const status = `Status: ${auctionStatus}`;
-    const profit = `\nMin profit: $${shortenNumber(bidAuction.profit ?? 0, 9, 3)}`;
+    const profit = `\nMin profit: $${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
     const bidType = `\nType: ${bidAuction.type}`;
     const totalPrice = `\nTotal price: $${shortenNumber(bidAuction.totalPrice, 9, 3)}`;
     const amounts = bidAuction.auctions.some(auction => auction.amounts?.length)
