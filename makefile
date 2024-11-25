@@ -34,3 +34,9 @@ temp:
 
 deploy:
 	npx hardhat run scripts/deploy.ts --network bsc
+
+check:
+	npm run check
+
+create:
+	npm run create

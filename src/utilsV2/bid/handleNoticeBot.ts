@@ -1,5 +1,10 @@
 import axios from "axios";
-import { API_TELEGRAM, CHATID_MOBOX, EXPLORER_URL, TIME_ENABLE_BID } from "../../constants/constants";
+import {
+    API_TELEGRAM,
+    CHATID_MOBOX,
+    EXPLORER_URL,
+    TIME_ENABLE_BID
+} from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { BidStatus, AuctionType } from "../../enum/enum";
 import { bidContract } from "../../config/config";
