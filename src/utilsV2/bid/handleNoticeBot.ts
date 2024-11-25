@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_TELEGRAM, CHATID_MOBOX, EXPLORER_URL } from "../../constants/constants";
+import { API_TELEGRAM, CHATID_MOBOX, EXPLORER_URL, TIME_ENABLE_BID } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { BidStatus, AuctionType } from "../../enum/enum";
 import { bidContract } from "../../config/config";
@@ -104,6 +104,9 @@ export const noticeErrorBid = async (errBidAuction: BidAuction) => {
     const profit = `\nProfit: ${errBidAuction.profit?.toFixed(3)}`;
     const time = `\nTime: ${errBidAuction.uptime}`;
     const nowTime = `\nNow: ${Math.round(Date.now() / 1000).toFixed()}`;
-    const message = `${status}${profit}${time}${nowTime}`;
+    const overTime = `\nOver: ${
+        Math.round(Date.now() / 1000) - (errBidAuction.uptime ?? 0 + TIME_ENABLE_BID)
+    }s`;
+    const message = `${status}${profit}${time}${nowTime}${overTime}`;
     await noticeBot(message);
 };
