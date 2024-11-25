@@ -189,29 +189,25 @@ export const getProfitableBidAuctionsNormalVsPro = (
             continue;
         }
         const { profit, minProfit } = calculateAuctionMetrics(auction);
-        profitableAuctions.push(auction);
-        totalFee += fee;
-        totalProfit += profit;
-        totalMinProfit += minProfit;
-        totalPrice += auction?.nowPrice;
         if (isProfitable(profit, minProfit)) {
+            profitableAuctions.push(auction);
+            totalFee += fee;
+            totalProfit += profit;
+            totalMinProfit += minProfit;
+            totalPrice += auction?.nowPrice;
             if (isBreakBatch(profitableAuctions, auction)) {
-                profitableAuctions = profitableAuctions.filter(a => a !== auction);
-                totalProfit -= profit;
-                totalMinProfit -= minProfit;
-                totalFee -= fee;
-                totalPrice -= auction?.nowPrice;
+                profitableAuctions.pop();
                 profitableBidAuctions.push(
                     setupBidAuction(
                         profitableAuctions,
-                        totalProfit,
-                        totalMinProfit,
+                        totalProfit - profit,
+                        totalMinProfit - minProfit,
                         floorPrices,
                         bnbPrice,
-                        totalFee,
+                        totalFee - fee,
                         type,
                         profitableAuctions.length,
-                        totalPrice
+                        totalPrice - auction?.nowPrice
                     )
                 );
                 profitableAuctions = [auction];
@@ -220,12 +216,6 @@ export const getProfitableBidAuctionsNormalVsPro = (
                 totalFee = fee;
                 totalPrice = auction?.nowPrice;
             }
-        } else {
-            profitableAuctions = profitableAuctions.filter(a => a !== auction);
-            totalProfit -= profit;
-            totalMinProfit -= minProfit;
-            totalFee -= fee;
-            totalPrice -= auction?.nowPrice;
         }
     }
     if (profitableAuctions.length === 0) {
