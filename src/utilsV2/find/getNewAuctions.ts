@@ -8,17 +8,23 @@ export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDt
         const data = await axios.get(
             `${API_DOMAIN}/auction/search_v2/BNB?page=1&limit=${25}&category=&vType=&sort=-time&pType=`
         );
-        data.data.list.forEach((auction: AuctionDto) => {
-            if (auction.id && !cacheIdsCheck.includes(auction.id + auction.uptime)) {
+        const auctionsList = data?.data?.list || [];
+        auctionsList.forEach((auction: AuctionDto) => {
+            if (
+                auction.id &&
+                auction.uptime &&
+                !cacheIdsCheck.includes(auction.id + auction.uptime)
+            ) {
                 newAuctions.push(auction);
                 cacheIdsCheck.push(auction.id + auction.uptime);
             }
         });
     } catch (error) {
         console.log(`Error get new auctions, waiting for next loop...`);
+        return [newAuctions, cacheIdsCheck];
     }
     if (cacheIdsCheck.length > 100) {
-        cacheIdsCheck = cacheIdsCheck.slice(cacheIdsCheck.length - 50);
+        cacheIdsCheck.splice(0, cacheIdsCheck.length - 50);
     }
     return [newAuctions, cacheIdsCheck];
 };

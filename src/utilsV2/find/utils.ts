@@ -137,11 +137,11 @@ export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
 };
 
 export const isBreakBatch = (profitAuctions: AuctionDto[], auction: AuctionDto): boolean => {
-    if (profitAuctions.length > 5) {
-        return true;
-    }
     if (profitAuctions.length === 0) {
         return false;
+    }
+    if (profitAuctions.length >= 6) {
+        return true;
     }
     return auction?.uptime !== profitAuctions[0]?.uptime;
 };
@@ -164,6 +164,19 @@ export const getProfitableBidAuctionsNormalVsPro = (
     let totalFee = 0;
     let totalPrice = 0;
     const fee = type === AuctionType.PRO ? feePro(bnbPrice) : feePro(bnbPrice);
+    const calculateAuctionMetrics = (
+        auction: AuctionDto
+    ): { profit: number; minProfit: number } => {
+        const minValueType =
+            type === AuctionType.PRO
+                ? getMinValueType((auction.prototype ?? "").toString(), 1, floorPrices)
+                : getMinValueType(auction.ids?.[0] ?? "", 1, floorPrices);
+
+        const minValue = minValueType[0];
+        const minProfit = minValueType[1];
+        const profit = calculateProfit(minValue, fee, auction, bnbPrice);
+        return { profit, minProfit };
+    };
     for (let i = 0; i < normalVsProAuctions.length; i++) {
         const auction = normalVsProAuctions[i];
         if (!auction?.nowPrice) {
@@ -175,23 +188,7 @@ export const getProfitableBidAuctionsNormalVsPro = (
         ) {
             continue;
         }
-        let profit = 0;
-        let minProfit = 0;
-        let minValueAuction = 0;
-        if (type === AuctionType.PRO) {
-            const minValueType = getMinValueType(
-                (auction?.prototype ?? "").toString(),
-                1,
-                floorPrices
-            );
-            minValueAuction += minValueType[0];
-            minProfit += minValueType[1];
-        } else {
-            const minValueType = getMinValueType(auction?.ids?.[0] ?? "", 1, floorPrices);
-            minValueAuction += minValueType[0];
-            minProfit += minValueType[1];
-        }
-        profit = calculateProfit(minValueAuction, fee, auction, bnbPrice);
+        const { profit, minProfit } = calculateAuctionMetrics(auction);
         profitableAuctions.push(auction);
         totalFee += fee;
         totalProfit += profit;
@@ -199,6 +196,11 @@ export const getProfitableBidAuctionsNormalVsPro = (
         totalPrice += auction?.nowPrice;
         if (isProfitable(profit, minProfit)) {
             if (isBreakBatch(profitableAuctions, auction)) {
+                profitableAuctions = profitableAuctions.filter(a => a !== auction);
+                totalProfit -= profit;
+                totalMinProfit -= minProfit;
+                totalFee -= fee;
+                totalPrice -= auction?.nowPrice;
                 profitableBidAuctions.push(
                     setupBidAuction(
                         profitableAuctions,
@@ -249,10 +251,6 @@ export const getProfitableBidAuctionsNormalVsPro = (
     return profitableBidAuctions;
 };
 
-/**
- * @param {number} cacheBnbPrice - A fallback BNB price value that will be used if both API calls fail.
- * @returns {Promise<number>} The current BNB price in USD as retrieved from the APIs or, in case of failure, the provided cached price.
- */
 export const getBnbPrice = async (cacheBnbPrice: number): Promise<number> => {
     let bnbPrice = cacheBnbPrice;
     try {
