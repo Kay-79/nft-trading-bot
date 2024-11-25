@@ -87,7 +87,8 @@ export const getTxData = (bidAuction: BidAuction): string => {
             bidAuction.auctions.map((auction: AuctionDto) => auction.index),
             bidAuction.auctions.map((auction: AuctionDto) => auction.uptime),
             bidAuction.auctions.map(
-                (auction: AuctionDto) => (auction.nowPrice ?? 0 + 10 ** 5).toString() + "000000000"
+                (auction: AuctionDto) =>
+                    ((auction.nowPrice ?? 0) + 10 ** 5).toString() + "000000000"
             ),
             true
         ]);

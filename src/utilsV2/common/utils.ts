@@ -40,6 +40,6 @@ export const checkDelayBlockTransaction = async (txHash: string): Promise<number
 };
 
 export const shortenNumber = (value: number, decimals: number, round: number): string => {
-    let result = value / 10 ** decimals;
+    const result = value / 10 ** decimals;
     return result.toFixed(round).replace(/\.?0*$/, "");
 };
