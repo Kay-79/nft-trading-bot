@@ -38,3 +38,8 @@ export const checkDelayBlockTransaction = async (txHash: string): Promise<number
     const tagetBlock = (await getBlockByTimestamp(timeStamp, 1000)) + 40;
     return tx.blockNumber ? tx.blockNumber - tagetBlock : -1;
 };
+
+export const shortenNumber = (value: number, decimals: number, round: number): string => {
+    let result = value / 10 ** decimals;
+    return result.toFixed(round).replace(/\.?0*$/, "");
+};

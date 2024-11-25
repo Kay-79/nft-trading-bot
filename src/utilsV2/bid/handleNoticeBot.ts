@@ -8,7 +8,7 @@ import {
 import { BidAuction } from "../../types/bid/BidAuction";
 import { BidStatus, AuctionType } from "../../enum/enum";
 import { bidContract } from "../../config/config";
-import { shortenAddress } from "../common/utils";
+import { shortenAddress, shortenNumber } from "../common/utils";
 import { sleep } from "../common/sleep";
 import { TierPrice } from "../../types/common/TierPrice";
 
@@ -39,14 +39,14 @@ export const noticeProfitAuction = async (
         }
     }
     const status = `Status: ${auctionStatus}`;
-    const profit = `\nProfit: $${(bidAuction.profit ?? 0).toFixed(3)}`;
+    const profit = `\nMin profit: $${shortenNumber(bidAuction.profit ?? 0, 9, 3)}`;
     const bidType = `\nType: ${bidAuction.type}`;
-    const totalPrice = `\nTotal price: $${(bidAuction.totalPrice / 10 ** 9).toFixed(3)}`;
+    const totalPrice = `\nTotal price: $${shortenNumber(bidAuction.totalPrice, 9, 3)}`;
     const amounts = bidAuction.auctions.some(auction => auction.amounts?.length)
-        ? `\nAmounts: ${bidAuction.auctions?.map(auction => auction.amounts).join(",")}`
+        ? `\nAmounts: ${bidAuction.auctions?.map(auction => auction.amounts).join(", ")}`
         : "";
     const ids = bidAuction.auctions.some(auction => auction.ids?.length)
-        ? `\nIds: ${bidAuction.auctions.map(auction => auction.ids).join(",")}`
+        ? `\nIds: ${bidAuction.auctions.map(auction => auction.ids).join(", ")}`
         : "";
     const amount = bidAuction.type === AuctionType.PRO ? "\nAmount: 1" : "";
     const tokenId =
@@ -74,8 +74,8 @@ export const noticeBotFind = async (latestNotice: number, minPrice: TierPrice): 
     const status = "Status: 🔎";
     const floorPrices = minPrice
         ? `\nFloor: ${Object.entries(minPrice)
-              .map(([key, value]) => `${Number(value).toFixed(2)}`)
-              .join(",")}`
+              .map(([key, value]) => `${shortenNumber(Number(value), 0, 2)}`)
+              .join(", ")}`
         : "";
     const message = `${status}${floorPrices}`;
     await sleep(10);
@@ -89,16 +89,16 @@ export const noticeBotFind = async (latestNotice: number, minPrice: TierPrice): 
     return currentHour - (currentHour % 4);
 };
 
-export const noticeBotDetectProfit = async (profitableAuctions: BidAuction[]) => {
-    if (!profitableAuctions.length) return;
+export const noticeBotDetectProfit = async (profitableBidAuctions: BidAuction[]) => {
+    if (!profitableBidAuctions.length) return;
     const status = "Detected: 💰";
-    const profit = `\nProfit: $${profitableAuctions
-        .map(auction => auction.profit?.toFixed(3))
+    const profit = `\nMin profit: $${profitableBidAuctions
+        .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
         .join(", $")}`;
-    const floorPrices = profitableAuctions[0].minPrice
-        ? `\nFloor: ${Object.entries(profitableAuctions[0]?.minPrice)
-              .map(([key, value]) => `${Number(value).toFixed(2)}`)
-              .join(",")}`
+    const floorPrices = profitableBidAuctions[0].minPrice
+        ? `\nFloor: ${Object.entries(profitableBidAuctions[0]?.minPrice)
+              .map(([key, value]) => `${shortenNumber(Number(value), 0, 2)}`)
+              .join(", ")}`
         : "";
     const message = `${status}${profit}${floorPrices}`;
     await noticeBot(message);
@@ -106,9 +106,9 @@ export const noticeBotDetectProfit = async (profitableAuctions: BidAuction[]) =>
 
 export const noticeErrorBid = async (errBidAuction: BidAuction) => {
     const status = "Error: 📛";
-    const profit = `\nProfit: ${errBidAuction.profit?.toFixed(3)}`;
+    const profit = `\nMin profit: ${shortenNumber(errBidAuction.profit ?? 0, 0, 3)}`;
     const time = `\nTime: ${errBidAuction.uptime}`;
-    const nowTime = `\nNow: ${Math.round(Date.now() / 1000).toFixed()}`;
+    const nowTime = `\nNow: ${shortenNumber(Math.round(Date.now() / 1000), 0, 0)}`;
     const overTime = `\nOver: ${
         Math.round(Date.now() / 1000) - (errBidAuction.uptime ?? 0 + TIME_ENABLE_BID)
     }s`;
