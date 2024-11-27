@@ -390,5 +390,39 @@ export const abiMobox = [
     {
         stateMutability: "payable",
         type: "receive"
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: "auctionFee",
+        outputs: [{ name: "", type: "uint256" }],
+        type: "function"
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: "devAddress",
+        outputs: [{ name: "", type: "address" }],
+        type: "function"
+    },
+    {
+        constant: true,
+        inputs: [
+            { name: "userAddress", type: "address" },
+            { name: "orderId", type: "uint256" }
+        ],
+        name: "getOrder",
+        outputs: [
+            { name: "r0", type: "uint256" },
+            { name: "arg0", type: "uint256" },
+            { name: "r2", type: "uint256" },
+            { name: "r3", type: "uint256" },
+            { name: "r4", type: "uint256" },
+            { name: "r5", type: "uint256" },
+            { name: "r6", type: "uint256[]" },
+            { name: "r7", type: "uint256[]" },
+        ],
+        stateMutability: "view",
+        type: "function"
     }
 ];
