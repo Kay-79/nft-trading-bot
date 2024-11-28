@@ -60,23 +60,46 @@ const getTokenIdUserByIndex = async (address: string, index: string): Promise<nu
     return Number(result);
 };
 
-const test = async (n: string): Promise<number> => {
+const getAddressTopByUnknownIndex = async (n: string): Promise<string> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["uint256"], [n]);
-    const data = MomoSelector.GET_TOKEN_ID_USER_BY_INDEX + encodedData.slice(2);
+    const data = MomoSelector.GET_ADDRESS_TOP_BY_UNKNOWN_INDEX + encodedData.slice(2);
+    const result = await ethersProvider.call({
+        to: MOMO_ADDRESS,
+        data: data
+    });
+    return getAddress("0x" + result.slice(26));
+};
+
+const getUserRewardInfo = async (address: string): Promise<string> => {
+    const abiCoder = new AbiCoder();
+    const encodedData = abiCoder.encode(["address"], [address]);
+    const data = MomoSelector.GET_USER_REWARD_INFO + encodedData.slice(2);
+    const result = await ethersProvider.call({
+        to: MOMO_ADDRESS,
+        data: data
+    });
+    const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
+    return decodedResult.toString();
+};
+
+const getAmountSomeThingOfUser = async (address: string): Promise<number> => {
+    const abiCoder = new AbiCoder();
+    const encodedData = abiCoder.encode(["address"], [address]);
+    const data = MomoSelector.GET_AMOUNT_SOME_THING_OF_USER + encodedData.slice(2);
     const result = await ethersProvider.call({
         to: MOMO_ADDRESS,
         data: data
     });
     return Number(result);
 };
-
 export const momoUtils = {
     earned,
     ownerOfTokenId,
     tokensOfOwner,
     userHashrate,
-    getTimeUnknown1,
     getTokenIdUserByIndex,
-    test
+    getAddressTopByUnknownIndex,
+    getUserRewardInfo,
+    getAmountSomeThingOfUser
 };
