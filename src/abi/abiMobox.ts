@@ -413,14 +413,14 @@ export const abiMobox = [
         ],
         name: "getOrder",
         outputs: [
-            { name: "r0", type: "uint256" },
-            { name: "arg0", type: "uint256" },
-            { name: "r2", type: "uint256" },
-            { name: "r3", type: "uint256" },
-            { name: "r4", type: "uint256" },
-            { name: "r5", type: "uint256" },
-            { name: "r6", type: "uint256[]" },
-            { name: "r7", type: "uint256[]" },
+            { name: "status", type: "uint256" },
+            { name: "startPrice", type: "uint256" },
+            { name: "endPrice", type: "uint256" },
+            { name: "uptime", type: "uint256" },
+            { name: "durationDays", type: "uint256" },
+            { name: "tokenId", type: "uint256" },
+            { name: "ids", type: "uint256[]" },
+            { name: "amounts", type: "uint256[]" }
         ],
         stateMutability: "view",
         type: "function"

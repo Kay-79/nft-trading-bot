@@ -1,10 +1,14 @@
 import { CACHE_TIER_PRICE } from "../../constants/constants";
+import { TierPrice } from "../../types/common/TierPrice";
 import { SetupFind } from "../../types/find/SetupFind";
 import { getBnbPrice, getTierPrice } from "./utils";
 
-export const setup = async (cacheBnbPrice: number): Promise<SetupFind> => {
+export const setup = async (
+    cacheBnbPrice: number,
+    cacheTierPrice: TierPrice
+): Promise<SetupFind> => {
     const bnbPrice = await getBnbPrice(cacheBnbPrice);
-    const floorPrices = await getTierPrice(CACHE_TIER_PRICE);
+    const floorPrices = await getTierPrice(cacheTierPrice);
     return {
         bnbPrice: bnbPrice,
         isFrontRunNormal: true,

@@ -263,7 +263,11 @@ export const getBnbPrice = async (cacheBnbPrice: number): Promise<number> => {
 
 export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice> => {
     let floorPrices = cacheTierPrice;
-    const getPrice = async (prototype: number, amountCheck: number): Promise<number> => {
+    const getPrice = async (
+        prototype: number,
+        amountCheck: number,
+        cachePrice: number
+    ): Promise<number> => {
         try {
             const res = await axios.get(`${API_DOMAIN}/auction/search_v2/BNB`, {
                 params: {
@@ -293,8 +297,9 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
             }
         } catch (error) {
             console.log(error);
+            return cachePrice;
         }
-        return floorPrices[prototype as keyof TierPrice] ?? 0;
+        return floorPrices[prototype as keyof TierPrice] ?? cachePrice;
     };
 
     const priceConfigs = [
@@ -307,7 +312,11 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
     ];
 
     for (const { tier, amount } of priceConfigs) {
-        floorPrices[tier as keyof TierPrice] = await getPrice(tier, amount);
+        floorPrices[tier as keyof TierPrice] = await getPrice(
+            tier,
+            amount,
+            floorPrices[tier as keyof TierPrice] ?? 0
+        );
     }
 
     return floorPrices;
