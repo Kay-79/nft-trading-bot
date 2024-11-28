@@ -1,4 +1,4 @@
-export const abiMobox = [
+export const abiBid = [
     {
         inputs: [],
         name: "InvalidInitialization",

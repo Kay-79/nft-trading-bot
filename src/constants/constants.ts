@@ -45,6 +45,11 @@ export const MP_ADDRESS =
         ? process.env.ADDRESS_MP_MAINNET
         : process.env.ADDRESS_MP_TESTNET || "0x";
 
+export const MOMO_ADDRESS =
+    ENV === Environment.MAINNET
+        ? process.env.ADDRESS_MOMO_MAINNET
+        : process.env.ADDRESS_MOMO_TESTNET || "0x";
+
 export const USDT_ADDRESS =
     ENV === Environment.MAINNET
         ? "0x55d398326f99059fF775485246999027B3197955"

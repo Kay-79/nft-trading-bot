@@ -1,0 +1,428 @@
+export const abiMp = [
+    {
+        inputs: [],
+        name: "InvalidInitialization",
+        type: "error"
+    },
+    {
+        inputs: [],
+        name: "NotInitializing",
+        type: "error"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "owner",
+                type: "address"
+            }
+        ],
+        name: "OwnableInvalidOwner",
+        type: "error"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "account",
+                type: "address"
+            }
+        ],
+        name: "OwnableUnauthorizedAccount",
+        type: "error"
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: false,
+                internalType: "uint64",
+                name: "version",
+                type: "uint64"
+            }
+        ],
+        name: "Initialized",
+        type: "event"
+    },
+    {
+        anonymous: false,
+        inputs: [
+            {
+                indexed: true,
+                internalType: "address",
+                name: "previousOwner",
+                type: "address"
+            },
+            {
+                indexed: true,
+                internalType: "address",
+                name: "newOwner",
+                type: "address"
+            }
+        ],
+        name: "OwnershipTransferred",
+        type: "event"
+    },
+    {
+        inputs: [],
+        name: "addressMP",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address"
+            }
+        ],
+        stateMutability: "view",
+        type: "function"
+    },
+    {
+        inputs: [],
+        name: "addressMomo",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address"
+            }
+        ],
+        stateMutability: "view",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "spender",
+                type: "address"
+            },
+            {
+                internalType: "address",
+                name: "token",
+                type: "address"
+            }
+        ],
+        name: "approve",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "auctor_",
+                type: "address"
+            },
+            {
+                internalType: "uint256",
+                name: "index_",
+                type: "uint256"
+            },
+            {
+                internalType: "uint256",
+                name: "startTime_",
+                type: "uint256"
+            },
+            {
+                internalType: "uint256",
+                name: "price_",
+                type: "uint256"
+            }
+        ],
+        name: "bid",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address[]",
+                name: "auctors_",
+                type: "address[]"
+            },
+            {
+                internalType: "uint256[]",
+                name: "indexs_",
+                type: "uint256[]"
+            },
+            {
+                internalType: "uint256[]",
+                name: "startTimes_",
+                type: "uint256[]"
+            },
+            {
+                internalType: "uint256[]",
+                name: "prices_",
+                type: "uint256[]"
+            },
+            {
+                internalType: "bool",
+                name: "ignoreSold",
+                type: "bool"
+            }
+        ],
+        name: "bid",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "index_",
+                type: "uint256"
+            }
+        ],
+        name: "cancelAuction",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "index_",
+                type: "uint256"
+            },
+            {
+                internalType: "uint256",
+                name: "startPrice_",
+                type: "uint256"
+            },
+            {
+                internalType: "uint256",
+                name: "endPrice_",
+                type: "uint256"
+            },
+            {
+                internalType: "uint256",
+                name: "duration_",
+                type: "uint256"
+            }
+        ],
+        name: "changePrice",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function"
+    },
+    {
+        inputs: [],
+        name: "changer",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address"
+            }
+        ],
+        stateMutability: "view",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "suggestIndex_",
+                type: "uint256"
+            },
+            {
+                internalType: "uint256[]",
+                name: "tokenIds_",
+                type: "uint256[]"
+            },
+            {
+                internalType: "uint256[]",
+                name: "prices721_",
+                type: "uint256[]"
+            },
+            {
+                internalType: "uint256[]",
+                name: "ids_",
+                type: "uint256[]"
+            },
+            {
+                internalType: "uint256[]",
+                name: "prices1155_",
+                type: "uint256[]"
+            }
+        ],
+        name: "createAuctionBatch",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "_target",
+                type: "address"
+            },
+            {
+                internalType: "uint256",
+                name: "_value",
+                type: "uint256"
+            },
+            {
+                internalType: "bytes",
+                name: "_data",
+                type: "bytes"
+            }
+        ],
+        name: "execute",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function"
+    },
+    {
+        inputs: [],
+        name: "getReward",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function"
+    },
+    {
+        inputs: [],
+        name: "initialize",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+    },
+    {
+        inputs: [],
+        name: "owner",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address"
+            }
+        ],
+        stateMutability: "view",
+        type: "function"
+    },
+    {
+        inputs: [],
+        name: "renounceOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "newChanger_",
+                type: "address"
+            }
+        ],
+        name: "setChanger",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "newMP_",
+                type: "address"
+            }
+        ],
+        name: "setMP",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "contract IERC20",
+                name: "token",
+                type: "address"
+            },
+            {
+                internalType: "address",
+                name: "to",
+                type: "address"
+            },
+            {
+                internalType: "uint256",
+                name: "amount",
+                type: "uint256"
+            }
+        ],
+        name: "transferERC20",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "newOwner",
+                type: "address"
+            }
+        ],
+        name: "transferOwnership",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+    },
+    {
+        inputs: [
+            {
+                internalType: "address payable",
+                name: "destAddr",
+                type: "address"
+            }
+        ],
+        name: "withdraw",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function"
+    },
+    {
+        stateMutability: "payable",
+        type: "receive"
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: "auctionFee",
+        outputs: [{ name: "", type: "uint256" }],
+        type: "function"
+    },
+    {
+        constant: true,
+        inputs: [],
+        name: "devAddress",
+        outputs: [{ name: "", type: "address" }],
+        type: "function"
+    },
+    {
+        constant: true,
+        inputs: [
+            { name: "userAddress", type: "address" },
+            { name: "orderId", type: "uint256" }
+        ],
+        name: "getOrder",
+        outputs: [
+            { name: "status", type: "uint256" },
+            { name: "startPrice", type: "uint256" },
+            { name: "endPrice", type: "uint256" },
+            { name: "uptime", type: "uint256" },
+            { name: "durationDays", type: "uint256" },
+            { name: "tokenId", type: "uint256" },
+            { name: "ids", type: "uint256[]" },
+            { name: "amounts", type: "uint256[]" }
+        ],
+        stateMutability: "view",
+        type: "function"
+    }
+];

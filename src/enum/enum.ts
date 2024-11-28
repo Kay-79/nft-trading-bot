@@ -18,3 +18,7 @@ export enum BidStatus {
     SUCCESS = "✅",
     FAILED = "❌"
 }
+
+export enum MomoSelector {
+    EARNED = "0x008cc262"
+}

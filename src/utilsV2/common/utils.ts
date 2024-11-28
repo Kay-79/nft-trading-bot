@@ -1,11 +1,11 @@
 import { time } from "console";
 import { FunctionFragment } from "../../enum/enum";
-import { contractProvider } from "../../providers/contractProvider";
+import { bidProvider } from "../../providers/bidProvider";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { getBlockByTimestamp } from "../bid/utils";
 
 export const decodeFunctionData = (functionFragment: string, data: string) => {
-    return contractProvider.interface.decodeFunctionData(functionFragment, data);
+    return bidProvider.interface.decodeFunctionData(functionFragment, data);
 };
 
 export const shortenAddress = (address: string, prefix = 6, suffix = 4) => {
