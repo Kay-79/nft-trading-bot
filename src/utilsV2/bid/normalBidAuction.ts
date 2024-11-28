@@ -17,14 +17,14 @@ export const chainInfor = common.forCustomChain(
     "petersburg"
 );
 
-export const normalBidAuction = async (bidAuctions: BidAuction[]) => {
-    const serializedTxs: Buffer[] = await getSerializedTxs(bidAuctions);
-    await delay40Blocks(bidAuctions[0].uptime ?? 0);
+export const normalBidAuction = async (bidAuctionsSameTime: BidAuction[]) => {
+    const serializedTxs: Buffer[] = await getSerializedTxs(bidAuctionsSameTime);
+    await delay40Blocks(bidAuctionsSameTime[0]);
     for (let i = 0; i < serializedTxs.length; i++) {
         if (i === serializedTxs.length - 1) {
-            await sendTransaction(serializedTxs[i], bidAuctions[i]);
+            await sendTransaction(serializedTxs[i], bidAuctionsSameTime[i]);
         } else {
-            sendTransaction(serializedTxs[i], bidAuctions[i]);
+            sendTransaction(serializedTxs[i], bidAuctionsSameTime[i]);
         }
     }
 };

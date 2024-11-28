@@ -11,8 +11,6 @@ const getListedMomos = async (user: string) => {
         to: MP_ADDRESS,
         data: data
     });
-    console.log("result", result);
-    console.log("========================");
     const decodeData = abiCoder.decode(["uint256[]", "uint256[]", "uint256[]"], result);
     return decodeData.toString();
 };

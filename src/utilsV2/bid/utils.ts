@@ -3,7 +3,7 @@ import { BidAuction } from "../../types/bid/BidAuction";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { RawTransaction } from "../../types/transaction/Transaction";
 import { bidProvider } from "../../providers/bidProvider";
-import { AuctionType, FunctionFragment } from "../../enum/enum";
+import { AuctionStatus, AuctionType, FunctionFragment } from "../../enum/enum";
 import {
     GAS_PRICE_BID,
     NORMAL_BUYER,
@@ -20,6 +20,7 @@ import exp from "constants";
 import { noticeErrorBid } from "./handleNoticeBot";
 import { Transaction } from "ethereumjs-tx";
 import { chainInfor } from "./normalBidAuction";
+import { mpProvider } from "../../providers/mpProvider";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
@@ -143,7 +144,9 @@ export const getNowBlock = async (): Promise<number> => {
     return latestBlockNumber;
 };
 
-export const delay40Blocks = async (uptime: number) => {
+export const delay40Blocks = async (bidAuction: BidAuction) => {
+    if (!bidAuction.uptime) return;
+    const uptime = bidAuction.uptime;
     const createdBlock = await getBlockByTimestamp(uptime, 50);
     const warningBlock = createdBlock + 39;
     while (true) {
@@ -214,4 +217,9 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
         serializedTxs.push(tx.serialize());
     }
     return serializedTxs;
+};
+
+export const isExistAuction = async (auctor: string, index: number): Promise<boolean> => {
+    const result = await mpProvider.getOrder(auctor, index);
+    return Math.round(Number(result.status)) === AuctionStatus.ACTIVE;
 };
