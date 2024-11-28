@@ -220,6 +220,11 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
 };
 
 export const isExistAuction = async (auctor: string, index: number): Promise<boolean> => {
-    const result = await mpProvider.getOrder(auctor, index);
-    return Math.round(Number(result.status)) === AuctionStatus.ACTIVE;
+    try {
+        const result = await mpProvider.getOrder(auctor, index);
+        return Math.round(Number(result.status)) === AuctionStatus.ACTIVE;
+    } catch (error) {
+        console.error("Error calling contract function:", error); // if unknown return true
+        return true;
+    }
 };
