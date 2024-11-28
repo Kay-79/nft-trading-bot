@@ -4,6 +4,12 @@ export enum AuctionType {
     PRO = "PRO"
 }
 
+export enum AuctionStatus {
+    ACTIVE = 3,
+    FINISHED = 2,
+    CANCELLED = 1
+}
+
 export enum Environment {
     TESTNET = "TESTNET",
     MAINNET = "MAINNET"
@@ -32,4 +38,10 @@ export enum MomoSelector {
     GET_USER_REWARD_INFO = "0x69517310",
     GET_AMOUNT_SOME_THING_OF_USER = "0x90786351",
     TEST = "0xb6a47d55"
+}
+
+export enum MpSelector {
+    UNKNOWN_1 = "0xd28cc5f0", //get number of user
+    GET_LISTED_MOMOS = "0xcbbac767",
+    GET_ORDER = "0xedb25841"
 }
