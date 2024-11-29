@@ -9,19 +9,19 @@ process.on("unhandledRejection", (reason, promise) => {
 
 export const sendTransaction = async (serializedTx: Buffer, bidAuction: BidAuction) => {
     try {
-        const txResponse = await ethersProvider.send("eth_sendRawTransaction", [
+        const txHash = await ethersProvider.send("eth_sendRawTransaction", [
             "0x" + serializedTx.toString("hex")
         ]);
-        const receipt = await ethersProvider.send("eth_getTransactionReceipt", [txResponse]);
+        const receipt = await ethersProvider.waitForTransaction(txHash);
         if (!receipt) {
             await noticeProfitAuction(bidAuction, BidStatus.FAILED, "");
             return;
         }
-        if (receipt.status === "0x0") {
-            await noticeProfitAuction(bidAuction, BidStatus.FAILED, txResponse);
+        if (receipt.status === 0) {
+            await noticeProfitAuction(bidAuction, BidStatus.FAILED, txHash);
             return;
         }
-        await noticeProfitAuction(bidAuction, BidStatus.SUCCESS, txResponse);
+        await noticeProfitAuction(bidAuction, BidStatus.SUCCESS, txHash);
     } catch (error) {
         console.error("Error send transaction", error);
         await noticeProfitAuction(bidAuction, BidStatus.FAILED, "");

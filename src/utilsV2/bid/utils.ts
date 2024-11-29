@@ -219,12 +219,18 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
     return serializedTxs;
 };
 
-export const isExistAuction = async (auctor: string, index: number): Promise<boolean> => {
+export const isExistAuction = async (
+    auctor: string,
+    index: number,
+    uptime: number
+): Promise<boolean> => {
     try {
         const result = await mpProvider.getOrder(auctor, index);
-        return Math.round(Number(result.status)) === AuctionStatus.ACTIVE;
+        return (
+            Math.round(Number(result.status)) === AuctionStatus.ACTIVE &&
+            uptime === Number(result.uptime)
+        );
     } catch (error) {
-        console.error("Error calling contract function:", error); // if unknown return true
-        return true;
+        return true; // if error, return true to avoid bid
     }
 };

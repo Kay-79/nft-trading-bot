@@ -36,7 +36,8 @@ export const normalBidAuction = async (bidAuctionsSameTime: BidAuction[]) => {
     }
     const authorCheck = firstAuction.auctions[0].auctor ?? "";
     const indexCheck = firstAuction.auctions[0].index ?? 0;
-    if (!isExistAuction(authorCheck, indexCheck)) {
+    const uptimeCheck = firstAuction.uptime ?? 0;
+    if (!isExistAuction(authorCheck, indexCheck, uptimeCheck)) {
         return;
     }
     for (let i = 0; i < serializedTxs.length; i++) {
