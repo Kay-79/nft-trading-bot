@@ -176,7 +176,12 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
         nonce[AuctionType.PRO] =
             (await ethersProvider.getTransactionCount(PRO_BUYER || "", "latest")) - 1;
     }
-    if (bidAuctions.some(bidAuction => bidAuction.type === AuctionType.NORMAL)) {
+    if (
+        bidAuctions.some(
+            bidAuction =>
+                bidAuction.type === AuctionType.NORMAL || bidAuction.type === AuctionType.BUNDLE
+        )
+    ) {
         nonce[AuctionType.NORMAL] =
             (await ethersProvider.getTransactionCount(NORMAL_BUYER || "", "latest")) - 1;
         nonce[AuctionType.BUNDLE] = nonce[AuctionType.NORMAL];

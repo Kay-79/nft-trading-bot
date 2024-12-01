@@ -93,6 +93,18 @@ const getAmountSomeThingOfUser = async (address: string): Promise<number> => {
     });
     return Number(result);
 };
+
+const test = async (test: string, n: string) => {
+    const abiCoder = new AbiCoder();
+    const encodedData = abiCoder.encode(["uint256"], [test]);
+    const data = MomoSelector.UNKNOWN_3 + encodedData.slice(2);
+    const result = await ethersProvider.call({
+        to: MOMO_ADDRESS,
+        data: data
+    });
+    return result;
+};
+
 export const momoUtils = {
     earned,
     ownerOfTokenId,
@@ -101,5 +113,6 @@ export const momoUtils = {
     getTokenIdUserByIndex,
     getAddressTopByUnknownIndex,
     getUserRewardInfo,
-    getAmountSomeThingOfUser
+    getAmountSomeThingOfUser,
+    test
 };

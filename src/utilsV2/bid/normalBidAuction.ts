@@ -3,14 +3,7 @@ import { BidAuction } from "../../types/bid/BidAuction";
 import { Transaction } from "ethereumjs-tx";
 import common from "ethereumjs-common";
 import { Environment } from "../../enum/enum";
-import {
-    delay40Blocks,
-    getRawTx,
-    getSerializedTxs,
-    getTxData,
-    isExistAuction,
-    privateKey
-} from "./utils";
+import { delay40Blocks, getSerializedTxs, isExistAuction } from "./utils";
 import { sendTransaction } from "./sendTransactionNormal";
 import { noticeErrorBid } from "./handleNoticeBot";
 
