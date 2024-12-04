@@ -43,3 +43,16 @@ export const shortenNumber = (value: number, decimals: number, round: number): s
     const result = value / 10 ** decimals;
     return result.toFixed(round).replace(/\.?0*$/, "");
 };
+
+export const byte32ToAddress = (byte32: string) => {
+    return "0x" + byte32.slice(26);
+};
+
+export const getImplementAddressOfProxy = async (address: string) => {
+    return byte32ToAddress(
+        await ethersProvider.getStorage(
+            address,
+            "0x360894A13BA1A3210667C828492DB98DCA3E2076CC3735A920A3CA505D382BBC"
+        )
+    );
+};

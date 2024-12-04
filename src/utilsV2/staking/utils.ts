@@ -105,7 +105,7 @@ const test = async (test: string, n: string) => {
     return result;
 };
 
-export const momoUtils = {
+export const stakingUtils = {
     earned,
     ownerOfTokenId,
     tokensOfOwner,
