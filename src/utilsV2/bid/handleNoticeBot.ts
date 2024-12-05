@@ -115,3 +115,14 @@ export const noticeErrorBid = async (errBidAuction: BidAuction) => {
     const message = `${status}${profit}${time}${nowTime}${overTime}`;
     await noticeBot(message);
 };
+
+export const noticeBotCancel = async (bidAuction: BidAuction) => {
+    const status = "Cancel: 🚫";
+    const profit = `\nMin profit: ${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
+    const auctor =
+        bidAuction.auctions && bidAuction.auctions.length > 0
+            ? `\nAuctor: ${shortenAddress(bidAuction.auctions[0].auctor ?? "")}`
+            : "";
+    const message = `${status}${profit}${auctor}`;
+    await noticeBot(message);
+};

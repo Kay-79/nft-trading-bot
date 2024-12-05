@@ -31,6 +31,7 @@ export const normalBidAuction = async (bidAuctionsSameTime: BidAuction[]) => {
     const indexCheck = firstAuction.auctions[0].index ?? 0;
     const uptimeCheck = firstAuction.uptime ?? 0;
     if (!isExistAuction(authorCheck, indexCheck, uptimeCheck)) {
+        await noticeErrorBid(firstAuction);
         return;
     }
     for (let i = 0; i < serializedTxs.length; i++) {
