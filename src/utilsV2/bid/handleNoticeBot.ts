@@ -70,14 +70,23 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
     return currentHour - (currentHour % 4);
 };
 
-export const noticeBotFind = async (latestNotice: number, minPrice: TierPrice): Promise<number> => {
+export const noticeBotFind = async (
+    latestNotice: number,
+    minPrice: TierPrice,
+    bnbPrice: number
+): Promise<number> => {
     const status = "Status: 🔎";
     const floorPrices = minPrice
         ? `\nFloor: ${Object.entries(minPrice)
               .map(([key, value]) => `${shortenNumber(Number(value), 0, 2)}`)
               .join(", ")}`
         : "";
-    const message = `${status}${floorPrices}`;
+    const bnbNow = `\nBNB: $${shortenNumber(bnbPrice, 0, 2)}`;
+    const budgetNormal = `\nBudget normal: $${shortenNumber(0, 0, 2)}`;
+    const budgetPro = `\nBudget pro: $${shortenNumber(0, 0, 2)}`;
+    const feeNormal = `\nFee normal: $${shortenNumber(0, 0, 2)}`;
+    const feePro = `\nFee pro: $${shortenNumber(0, 0, 2)}`;
+    const message = `${status}${floorPrices}${bnbNow}${budgetNormal}${budgetPro}${feeNormal}${feePro}`;
     await sleep(10);
     try {
         await noticeBot(message);
@@ -117,7 +126,7 @@ export const noticeErrorBid = async (errBidAuction: BidAuction) => {
 };
 
 export const noticeBotCancel = async (bidAuction: BidAuction) => {
-    const status = "Cancel: 🚫";
+    const status = "Canceled: 🚫";
     const profit = `\nMin profit: ${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
     const auctor =
         bidAuction.auctions && bidAuction.auctions.length > 0
