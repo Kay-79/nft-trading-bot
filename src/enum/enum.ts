@@ -63,5 +63,5 @@ export enum Momo721Selector {
 }
 
 export enum Momo1155Selector {
-    TEST = "0x06fdde03"
+    TEST = "0x0e89341c"
 }

@@ -41,19 +41,16 @@ export const RPC_URL =
 export const MIN_GAS_PRICE = ENV === Environment.MAINNET ? 1.0001 : 6;
 
 export const MP_ADDRESS =
-    ENV === Environment.MAINNET
-        ? process.env.ADDRESS_MP_MAINNET
-        : process.env.ADDRESS_MP_TESTNET || "0x";
+    ENV === Environment.MAINNET ? "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2" : "0x";
 
 export const STAKING_ADDRESS =
-    ENV === Environment.MAINNET
-        ? process.env.ADDRESS_STAKING_MAINNET
-        : process.env.ADDRESS_STAKING_TESTNET || "0x";
+    ENV === Environment.MAINNET ? "0x3bD6a582698ECCf6822dB08141818A1a8512c68D" : "0x";
 
 export const MOMO721_ADDRESS =
-    ENV === Environment.MAINNET
-        ? process.env.MOMO721_ADDRESS_MAINNET
-        : process.env.MOMO721_ADDRESS_TESTNET || "0x";
+    ENV === Environment.MAINNET ? "0x4eeDeDfe89dad70aB8cbf70E4dD140Ff8E6e8ce5" : "0x";
+
+export const MOMO1155_ADDRESS =
+    ENV === Environment.MAINNET ? "0xb3e968ba01a78ea489292130bcf8bbe6a64be648" : "0x";
 
 export const USDT_ADDRESS =
     ENV === Environment.MAINNET
