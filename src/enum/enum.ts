@@ -61,3 +61,7 @@ export enum Momo721Selector {
     TOKEN_BY_INDEX = "0x4f6ccce7",
     OWNER_OF = "0x6352211e"
 }
+
+export enum Momo1155Selector {
+    TEST = "0x06fdde03"
+}
