@@ -83,10 +83,10 @@ const getUserRewardInfo = async (address: string): Promise<string> => {
     return decodedResult.toString();
 };
 
-const getAmountSomeThingOfUser = async (address: string): Promise<number> => {
+const getUserMomo721Stake = async (address: string): Promise<number> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address"], [address]);
-    const data = StakingSelector.GET_AMOUNT_SOME_THING_OF_USER + encodedData.slice(2);
+    const data = StakingSelector.USER_MOMO721_STAKE + encodedData.slice(2);
     const result = await ethersProvider.call({
         to: STAKING_ADDRESS,
         data: data
@@ -94,16 +94,6 @@ const getAmountSomeThingOfUser = async (address: string): Promise<number> => {
     return Number(result);
 };
 
-const test = async (test: string, n: string) => {
-    const abiCoder = new AbiCoder();
-    const encodedData = abiCoder.encode(["uint256"], [test]);
-    const data = StakingSelector.UNKNOWN_3 + encodedData.slice(2);
-    const result = await ethersProvider.call({
-        to: STAKING_ADDRESS,
-        data: data
-    });
-    return result;
-};
 
 export const stakingUtils = {
     earned,
@@ -113,6 +103,5 @@ export const stakingUtils = {
     getTokenIdUserByIndex,
     getAddressTopByUnknownIndex,
     getUserRewardInfo,
-    getAmountSomeThingOfUser,
-    test
+    getUserMomo721Stake,
 };
