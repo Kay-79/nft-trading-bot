@@ -1,14 +1,14 @@
-import { MOMO_ADDRESS } from "../../constants/constants";
-import { MomoSelector } from "../../enum/enum";
+import { STAKING_ADDRESS } from "../../constants/constants";
+import { StakingSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder, getAddress } from "ethers";
 
 const earned = async (userAddress: string) => {
     const abiCoder = new AbiCoder();
     const encodedAddress = abiCoder.encode(["address"], [userAddress]);
-    const data = MomoSelector.EARNED + encodedAddress.slice(2);
+    const data = StakingSelector.EARNED + encodedAddress.slice(2);
     const result = await ethersProvider.call({
-        to: MOMO_ADDRESS,
+        to: STAKING_ADDRESS,
         data: data
     });
     return Number(result) / 10 ** 18;
@@ -17,9 +17,9 @@ const earned = async (userAddress: string) => {
 const ownerOfTokenId = async (tokenId: string): Promise<string> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["uint256"], [tokenId]);
-    const data = MomoSelector.OWNER_OF_TOKEN_ID + encodedData.slice(2);
+    const data = StakingSelector.OWNER_OF_TOKEN_ID + encodedData.slice(2);
     const result = await ethersProvider.call({
-        to: MOMO_ADDRESS,
+        to: STAKING_ADDRESS,
         data: data
     });
     return getAddress("0x" + result.slice(26));
@@ -28,9 +28,9 @@ const ownerOfTokenId = async (tokenId: string): Promise<string> => {
 const tokensOfOwner = async (address: string): Promise<string> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address"], [address]);
-    const data = MomoSelector.TOKENS_OF_OWNER + encodedData.slice(2);
+    const data = StakingSelector.TOKENS_OF_OWNER + encodedData.slice(2);
     const result = await ethersProvider.call({
-        to: MOMO_ADDRESS,
+        to: STAKING_ADDRESS,
         data: data
     });
     const decodedResult = abiCoder.decode(["uint256[]"], result);
@@ -41,9 +41,9 @@ const tokensOfOwner = async (address: string): Promise<string> => {
 const userHashrate = async (address: string): Promise<number> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address"], [address]);
-    const data = MomoSelector.USER_HASH_RATE + encodedData.slice(2);
+    const data = StakingSelector.USER_HASH_RATE + encodedData.slice(2);
     const result = await ethersProvider.call({
-        to: MOMO_ADDRESS,
+        to: STAKING_ADDRESS,
         data: data
     });
     return Number(result);
@@ -52,9 +52,9 @@ const userHashrate = async (address: string): Promise<number> => {
 const getTokenIdUserByIndex = async (address: string, index: string): Promise<number> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address", "uint256"], [address, index]);
-    const data = MomoSelector.GET_TOKEN_ID_USER_BY_INDEX + encodedData.slice(2);
+    const data = StakingSelector.GET_TOKEN_ID_USER_BY_INDEX + encodedData.slice(2);
     const result = await ethersProvider.call({
-        to: MOMO_ADDRESS,
+        to: STAKING_ADDRESS,
         data: data
     });
     return Number(result);
@@ -63,9 +63,9 @@ const getTokenIdUserByIndex = async (address: string, index: string): Promise<nu
 const getAddressTopByUnknownIndex = async (n: string): Promise<string> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["uint256"], [n]);
-    const data = MomoSelector.GET_ADDRESS_TOP_BY_UNKNOWN_INDEX + encodedData.slice(2);
+    const data = StakingSelector.GET_ADDRESS_TOP_BY_UNKNOWN_INDEX + encodedData.slice(2);
     const result = await ethersProvider.call({
-        to: MOMO_ADDRESS,
+        to: STAKING_ADDRESS,
         data: data
     });
     return getAddress("0x" + result.slice(26));
@@ -74,9 +74,9 @@ const getAddressTopByUnknownIndex = async (n: string): Promise<string> => {
 const getUserRewardInfo = async (address: string): Promise<string> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address"], [address]);
-    const data = MomoSelector.GET_USER_REWARD_INFO + encodedData.slice(2);
+    const data = StakingSelector.GET_USER_REWARD_INFO + encodedData.slice(2);
     const result = await ethersProvider.call({
-        to: MOMO_ADDRESS,
+        to: STAKING_ADDRESS,
         data: data
     });
     const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
@@ -86,9 +86,9 @@ const getUserRewardInfo = async (address: string): Promise<string> => {
 const getAmountSomeThingOfUser = async (address: string): Promise<number> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address"], [address]);
-    const data = MomoSelector.GET_AMOUNT_SOME_THING_OF_USER + encodedData.slice(2);
+    const data = StakingSelector.GET_AMOUNT_SOME_THING_OF_USER + encodedData.slice(2);
     const result = await ethersProvider.call({
-        to: MOMO_ADDRESS,
+        to: STAKING_ADDRESS,
         data: data
     });
     return Number(result);
@@ -97,9 +97,9 @@ const getAmountSomeThingOfUser = async (address: string): Promise<number> => {
 const test = async (test: string, n: string) => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["uint256"], [test]);
-    const data = MomoSelector.UNKNOWN_3 + encodedData.slice(2);
+    const data = StakingSelector.UNKNOWN_3 + encodedData.slice(2);
     const result = await ethersProvider.call({
-        to: MOMO_ADDRESS,
+        to: STAKING_ADDRESS,
         data: data
     });
     return result;

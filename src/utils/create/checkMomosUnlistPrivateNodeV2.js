@@ -35,7 +35,7 @@ const syncInventory = async (endBlock, nowBlock) => {
         try {
             let toBlockNew = endBlock + configJson.limitBlockUpdate;
             data = await web3.eth.getPastLogs({
-                address: [process.env.ADDRESS_MP_MAINNET, process.env.ADDRESS_MOMO_MAINNET],
+                address: [process.env.ADDRESS_MP_MAINNET, process.env.ADDRESS_STAKING_MAINNET],
                 fromBlock: endBlock,
                 toBlock: toBlockNew
             });

@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { ethersProvider } from "./ethersProvider";
 import { abiMomo } from "../abi/abiMomo";
-import { MOMO_ADDRESS } from "../constants/constants";
+import { STAKING_ADDRESS } from "../constants/constants";
 
-export const momoProvider = new ethers.Contract(MOMO_ADDRESS ?? "", abiMomo, ethersProvider);
+export const momoProvider = new ethers.Contract(STAKING_ADDRESS ?? "", abiMomo, ethersProvider);

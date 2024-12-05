@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export enum AuctionType {
     NORMAL = "NORMAL",
     BUNDLE = "BUNDLE",
@@ -25,7 +27,7 @@ export enum BidStatus {
     FAILED = "❌"
 }
 
-export enum MomoSelector {
+export enum StakingSelector {
     UNKNOWN_1 = "0x390c5f07", //unknow function selector
     UNKNOWN_2 = "0xd1728859", //get time unknown
     UNKNOWN_3 = "0x501bbaec", //get time unknown
@@ -44,4 +46,14 @@ export enum MpSelector {
     UNKNOWN_1 = "0xd28cc5f0", //get number of user
     GET_LISTED_MOMOS = "0xcbbac767",
     GET_ORDER = "0xedb25841"
+}
+
+export enum Momo721Selector {
+    GET_MOMO1155_ADDRESS = "0x8d2df48f",
+    GET_MEC_TOKEN_ADDRESS = "0xdbf4025b",
+    GET_MOMO_INFO = "0xc282c1ea",
+    GET_PROTOTYPE_HASH_TIME = "0x3323889a",
+    GET_APPROVED = "0x081812fc",
+    GET_PROTOTYPE_HASH = "0x74498169",
+    TOKENS_OF_OWNER = "0x8462151c"
 }

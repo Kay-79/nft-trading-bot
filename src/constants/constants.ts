@@ -45,10 +45,15 @@ export const MP_ADDRESS =
         ? process.env.ADDRESS_MP_MAINNET
         : process.env.ADDRESS_MP_TESTNET || "0x";
 
-export const MOMO_ADDRESS =
+export const STAKING_ADDRESS =
     ENV === Environment.MAINNET
-        ? process.env.ADDRESS_MOMO_MAINNET
-        : process.env.ADDRESS_MOMO_TESTNET || "0x";
+        ? process.env.ADDRESS_STAKING_MAINNET
+        : process.env.ADDRESS_STAKING_TESTNET || "0x";
+
+export const MOMO721_ADDRESS =
+    ENV === Environment.MAINNET
+        ? process.env.MOMO721_ADDRESS_MAINNET
+        : process.env.MOMO721_ADDRESS_TESTNET || "0x";
 
 export const USDT_ADDRESS =
     ENV === Environment.MAINNET
