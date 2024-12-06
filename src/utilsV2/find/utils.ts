@@ -147,7 +147,7 @@ export const isBreakBatch = (profitAuctions: AuctionDto[], auction: AuctionDto):
 };
 
 export const isProfitable = (profit: number, minProfit: number): boolean => {
-    return profit < minProfit;
+    return profit >= minProfit;
 };
 
 export const getProfitableBidAuctionsNormalVsPro = (

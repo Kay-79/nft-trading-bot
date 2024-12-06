@@ -1,14 +1,14 @@
 bid:
-	nohup bun bidV2 > /dev/null 2>&1 &
+	nohup bun bid > /dev/null 2>&1 &
 
 killBid:
-	kill -9 $(shell ps aux | grep bidV2 | grep -v grep | awk '{print $$2}')
+	kill -9 $(shell ps aux | grep bid | grep -v grep | awk '{print $$2}')
 
 find:
-	nohup bun findV2 > /dev/null 2>&1 &
+	nohup bun find > /dev/null 2>&1 &
 
 killFind:
-	kill -9 $(shell ps aux | grep findV2 | grep -v grep | awk '{print $$2}')
+	kill -9 $(shell ps aux | grep find | grep -v grep | awk '{print $$2}')
 
 change:
 	nohup npm run change > /dev/null 2>&1 &
