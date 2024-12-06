@@ -55,7 +55,7 @@ const config = {
     ],
     timeDelays: {
         //in hours
-        normal: 1,
+        normal: 4,
         pro: 8
     },
     timeChangeSecond: {
@@ -70,7 +70,7 @@ const config = {
         change: 1.0001
     },
     gasLimitBundle: 388000,
-    timeDelayPerLoop: 1,
+    timeDelayPerLoop: 3,
     profits: {
         common: 0.01,
         uncommon: 0.01,
