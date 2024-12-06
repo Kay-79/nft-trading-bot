@@ -101,15 +101,19 @@ export const noticeBotFind = async (
 export const noticeBotDetectProfit = async (profitableBidAuctions: BidAuction[]) => {
     if (!profitableBidAuctions.length) return;
     const status = "Detected: 💰";
-    const profit = `\nMin profit: $${profitableBidAuctions
+    const profits = `\nMin profit: $${profitableBidAuctions
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
+        .join(", $")}`;
+    const types = `\nType: ${profitableBidAuctions.map(bidAuction => bidAuction.type).join(", ")}`;
+    const prices = `\nPrice: $${profitableBidAuctions
+        .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
     const floorPrices = profitableBidAuctions[0].minPrice
         ? `\nFloor: ${Object.entries(profitableBidAuctions[0]?.minPrice)
               .map(([key, value]) => `${shortenNumber(Number(value), 0, 2)}`)
               .join(", ")}`
         : "";
-    const message = `${status}${profit}${floorPrices}`;
+    const message = `${status}${profits}${types}${prices}${floorPrices}`;
     await noticeBot(message);
 };
 
