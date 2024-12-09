@@ -27,10 +27,7 @@ export const normalBidAuction = async (bidAuctionsSameTime: BidAuction[]) => {
     if (!firstAuction.auctions || firstAuction.auctions.length === 0) {
         throw new Error("auctions is empty or undefined");
     }
-    const authorCheck = firstAuction.auctions[0].auctor ?? "";
-    const indexCheck = firstAuction.auctions[0].index ?? 0;
-    const uptimeCheck = firstAuction.uptime ?? 0;
-    if (!isExistAuction(authorCheck, indexCheck, uptimeCheck)) {
+    if (!isExistAuction(firstAuction.auctions[0])) {
         await noticeErrorBid(firstAuction);
         return;
     }

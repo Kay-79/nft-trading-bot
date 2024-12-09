@@ -16,11 +16,10 @@ import {
 } from "../../constants/constants";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { sleep } from "../common/sleep";
-import exp from "constants";
 import { noticeErrorBid } from "./handleNoticeBot";
 import { Transaction } from "ethereumjs-tx";
 import { chainInfor } from "./normalBidAuction";
-import { mpProvider } from "../../providers/mpProvider";
+import { mpUtils } from "../mp/utils";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
@@ -224,18 +223,26 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
     return serializedTxs;
 };
 
-export const isExistAuction = async (
-    auctor: string,
-    index: number,
-    uptime: number
-): Promise<boolean> => {
+export const isExistAuction = async (auction: AuctionDto): Promise<boolean> => {
     try {
-        const result = await mpProvider.getOrder(auctor, index);
+        if (!auction.auctor || !auction.uptime) {
+            throw new Error("Auction auctor is undefined");
+        }
+        const order = await mpUtils.getOrder(auction.auctor, (auction.index ?? 0).toString());
         return (
-            Math.round(Number(result.status)) === AuctionStatus.ACTIVE &&
-            uptime === Number(result.uptime)
+            (order.status === BigInt(AuctionStatus.ACTIVE) &&
+                BigInt(auction.uptime) === order.uptime &&
+                order.tokenId === BigInt(auction.tokenId ?? 0) &&
+                (auction.ids?.length ?? 0) === (order.ids?.length ?? 0) &&
+                (auction.amounts?.length ?? 0) === (order.amounts?.length ?? 0) &&
+                auction.ids?.every((id, index) => order.ids && BigInt(id) === order.ids[index]) &&
+                auction.amounts?.every(
+                    (amount, index) => order.amounts && BigInt(amount) === order.amounts[index]
+                )) ??
+            false
         );
     } catch (error) {
+        console.error("Error checking auction:", error);
         return true; // if error, return true to avoid bid
     }
 };
