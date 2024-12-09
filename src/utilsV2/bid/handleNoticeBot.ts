@@ -87,8 +87,8 @@ export const noticeBotFind = async (
     const feeChange = (await ethersProvider.getBalance(CHANGER ?? "")) ?? 0;
     const status = "Status: 🔎";
     const floorPrices = minPrice
-        ? `\nFloor: ${Object.entries(minPrice)
-              .map(([key, value]) => `${shortenNumber(Number(value), 0, 2)}`)
+        ? `\nFloor: $${Object.entries(minPrice)
+              .map(([key, value]) => `${shortenNumber(Number(value), 0, 1)}`)
               .join(", $")}`
         : "";
     const bnbNow = `\nBNB: $${shortenNumber(bnbPrice, 0, 2)}`;
@@ -119,8 +119,8 @@ export const noticeBotDetectProfit = async (profitableBidAuctions: BidAuction[])
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
     const floorPrices = profitableBidAuctions[0].minPrice
-        ? `\nFloor: ${Object.entries(profitableBidAuctions[0]?.minPrice)
-              .map(([key, value]) => `${shortenNumber(Number(value), 0, 2)}`)
+        ? `\nFloor: $${Object.entries(profitableBidAuctions[0]?.minPrice)
+              .map(([key, value]) => `${shortenNumber(Number(value), 0, 1)}`)
               .join(", $")}`
         : "";
     const message = `${status}${profits}${types}${prices}${floorPrices}`;
