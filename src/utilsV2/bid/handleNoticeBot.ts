@@ -44,9 +44,9 @@ export const noticeProfitAuction = async (
         }
     }
     const status = `Status: ${auctionStatus}`;
-    const profit = `\nMin profit: $${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
+    const profit = `\nMin profit: 💵${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
     const bidType = `\nType: ${bidAuction.type}`;
-    const totalPrice = `\nTotal price: $${shortenNumber(bidAuction.totalPrice, 9, 3)}`;
+    const totalPrice = `\nTotal price: 💵${shortenNumber(bidAuction.totalPrice, 9, 3)}`;
     const amounts = bidAuction.auctions.some(auction => auction.amounts?.length)
         ? `\nAmounts: ${bidAuction.auctions?.map(auction => auction.amounts).join(", ")}`
         : "";
@@ -91,9 +91,9 @@ export const noticeBotFind = async (
               .map(([key, value]) => `${shortenNumber(Number(value), 0, 2)}`)
               .join(", ")}`
         : "";
-    const bnbNow = `\nBNB: $${shortenNumber(bnbPrice, 0, 2)}`;
-    const budgetNormalMess = `\nBudget normal: $${shortenNumber(Number(budgetNormal), 18, 2)}`;
-    const budgetProMess = `\nBudget pro: $${shortenNumber(Number(budgetPro), 18, 2)}`;
+    const bnbNow = `\nBNB: 💵${shortenNumber(bnbPrice, 0, 2)}`;
+    const budgetNormalMess = `\nBudget normal: 💵${shortenNumber(Number(budgetNormal), 18, 2)}`;
+    const budgetProMess = `\nBudget pro: 💵${shortenNumber(Number(budgetPro), 18, 2)}`;
     const feeBidderMess = `\nFee bidder: ${shortenNumber(Number(feeBidder), 18, 4)} BNB`;
     const feeProMess = `\nFee pro: ${shortenNumber(Number(feePro), 18, 4)} BNB`;
     const feeChangeMess = `\nFee change: ${shortenNumber(Number(feeChange), 18, 4)} BNB`;
@@ -111,11 +111,11 @@ export const noticeBotFind = async (
 export const noticeBotDetectProfit = async (profitableBidAuctions: BidAuction[]) => {
     if (!profitableBidAuctions.length) return;
     const status = "Detected: 💰";
-    const profits = `\nMin profit: $${profitableBidAuctions
+    const profits = `\nMin profit: 💵${profitableBidAuctions
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
         .join(", $")}`;
     const types = `\nType: ${profitableBidAuctions.map(bidAuction => bidAuction.type).join(", ")}`;
-    const prices = `\nPrice: $${profitableBidAuctions
+    const prices = `\nPrice: 💵${profitableBidAuctions
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
     const floorPrices = profitableBidAuctions[0].minPrice
@@ -129,7 +129,7 @@ export const noticeBotDetectProfit = async (profitableBidAuctions: BidAuction[])
 
 export const noticeErrorBid = async (errBidAuction: BidAuction) => {
     const status = "Error: 📛";
-    const profit = `\nMin profit: ${shortenNumber(errBidAuction.profit ?? 0, 0, 3)}`;
+    const profit = `\nMin profit: 💵${shortenNumber(errBidAuction.profit ?? 0, 0, 3)}`;
     const time = `\nTime: ${errBidAuction.uptime}`;
     const nowTime = `\nNow: ${shortenNumber(Math.round(Date.now() / 1000), 0, 0)}`;
     const overTime = `\nOver: ${
@@ -141,7 +141,7 @@ export const noticeErrorBid = async (errBidAuction: BidAuction) => {
 
 export const noticeBotCancel = async (bidAuction: BidAuction) => {
     const status = "Canceled: 🚫";
-    const profit = `\nMin profit: ${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
+    const profit = `\nMin profit: 💵${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
     const auctor =
         bidAuction.auctions && bidAuction.auctions.length > 0
             ? `\nAuctor: ${shortenAddress(bidAuction.auctions[0].auctor ?? "")}`

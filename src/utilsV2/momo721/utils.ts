@@ -4,8 +4,9 @@ import { Momo721Selector, StakingSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder, getAddress } from "ethers";
 import { byte32ToAddress } from "../common/utils";
+import { Momo721Info } from "../../types/dtos/Momo721Info.dto";
 
-const getMomoInfo = async (n: string) => {
+const getMomoInfo = async (n: string): Promise<Momo721Info> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["uint256"], [n]);
     const data = Momo721Selector.GET_MOMO_INFO + encodedData.slice(2);
@@ -27,7 +28,18 @@ const getMomoInfo = async (n: string) => {
         ],
         result
     );
-    return decodedResult.toString();
+    const [, , prototype, quality, category, level, specialty, hashrate, lvHashrate] =
+        decodedResult;
+    const momo721Info: Momo721Info = {
+        prototype,
+        quality,
+        category,
+        level,
+        specialty,
+        hashrate,
+        lvHashrate
+    };
+    return momo721Info;
 };
 
 const getPrototypeHashTime = async (id: string) => {

@@ -1,5 +1,3 @@
-import { AuctionStatus } from "../../enum/enum";
-
 export class OrderInfo {
     status?: BigInt;
     startPrice?: BigInt;
