@@ -10,6 +10,7 @@ import {
     CACHE_BNB_PRICE,
     CACHE_TIER_PRICE,
     ENV,
+    TIME_DELAY_NOTICE_STATUS_BOT,
     TIME_DELAY_SETUP_FIND
 } from "../constants/constants";
 import { setup } from "../utilsV2/find/setup";
@@ -18,8 +19,7 @@ import { noticeBotFind } from "../utilsV2/bid/handleNoticeBot";
 
 const findV2 = async () => {
     console.log("Starting findV2...", ENV);
-    let latestNotice = new Date().getHours();
-    latestNotice = await noticeBotFind(latestNotice, CACHE_TIER_PRICE, CACHE_BNB_PRICE);
+    let latestNotice = new Date().getHours() - TIME_DELAY_NOTICE_STATUS_BOT;
     let cacheIds: string[] = [];
     let initSetup: SetupFind = await setup(CACHE_BNB_PRICE, CACHE_TIER_PRICE);
     let {
@@ -33,8 +33,7 @@ const findV2 = async () => {
     while (true) {
         const now = new Date();
         const currentHour = now.getHours();
-        if (Math.abs(currentHour - latestNotice) >= 4) {
-            console.log("Notice bot find");
+        if (Math.abs(currentHour - latestNotice) >= TIME_DELAY_NOTICE_STATUS_BOT) {
             latestNotice = await noticeBotFind(
                 latestNotice,
                 floorPrices || CACHE_TIER_PRICE,

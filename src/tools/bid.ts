@@ -1,7 +1,7 @@
 import { BidAuction } from "../types/bid/BidAuction";
 import { ranSleep } from "../utilsV2/common/sleep";
 import { normalBidAuction } from "../utilsV2/bid/normalBidAuction";
-import { ENV, IS_FRONT_RUNNING } from "../constants/constants";
+import { ENV, IS_FRONT_RUNNING, TIME_DELAY_NOTICE_STATUS_BOT } from "../constants/constants";
 import { frontRunBidAuction } from "../utilsV2/bid/frontRunBidAuction";
 import { getBidAuctions, saveBidAuctions } from "../utilsV2/bid/utils";
 import { noticeBotBid, noticeErrorBid } from "../utilsV2/bid/handleNoticeBot";
@@ -13,7 +13,7 @@ const bidV2 = async () => {
     while (true) {
         const now = new Date();
         const currentHour = now.getHours();
-        if (Math.abs(currentHour - latestNotice) >= 4) {
+        if (Math.abs(currentHour - latestNotice) >= TIME_DELAY_NOTICE_STATUS_BOT) {
             console.log("Notice bot bid");
             latestNotice = await noticeBotBid(latestNotice);
         }

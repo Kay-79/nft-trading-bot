@@ -102,6 +102,8 @@ export const TIME_ENABLE_BID = 120; //2mins
 
 export const TIME_DELAY_BLOCK_BID = 600; //10mins
 
+export const TIME_DELAY_NOTICE_STATUS_BOT = 4; //4hours
+
 export const IS_FRONT_RUNNING = false;
 
 export const WAIT_BID_PATH = "./src/data/waitBid.json";

@@ -89,9 +89,9 @@ export const noticeBotFind = async (
     const floorPrices = minPrice
         ? `\nFloor: ${Object.entries(minPrice)
               .map(([key, value]) => `${shortenNumber(Number(value), 0, 2)}`)
-              .join(", ")}`
+              .join(", $")}`
         : "";
-    const bnbNow = `\nBNB: 💵${shortenNumber(bnbPrice, 0, 2)}`;
+    const bnbNow = `\nBNB: $${shortenNumber(bnbPrice, 0, 2)}`;
     const budgetNormalMess = `\nBudget normal: 💵${shortenNumber(Number(budgetNormal), 18, 2)}`;
     const budgetProMess = `\nBudget pro: 💵${shortenNumber(Number(budgetPro), 18, 2)}`;
     const feeBidderMess = `\nFee bidder: ${shortenNumber(Number(feeBidder), 18, 4)} BNB`;
@@ -121,7 +121,7 @@ export const noticeBotDetectProfit = async (profitableBidAuctions: BidAuction[])
     const floorPrices = profitableBidAuctions[0].minPrice
         ? `\nFloor: ${Object.entries(profitableBidAuctions[0]?.minPrice)
               .map(([key, value]) => `${shortenNumber(Number(value), 0, 2)}`)
-              .join(", ")}`
+              .join(", $")}`
         : "";
     const message = `${status}${profits}${types}${prices}${floorPrices}`;
     await noticeBot(message);
