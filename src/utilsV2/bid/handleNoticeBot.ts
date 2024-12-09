@@ -127,6 +127,20 @@ export const noticeBotDetectProfit = async (profitableBidAuctions: BidAuction[])
     await noticeBot(message);
 };
 
+export const noticeBotOutOfStock = async (bidAuctions: BidAuction[]) => {
+    if (!bidAuctions.length) return;
+    const status = "Out of stock: 🚫";
+    const profits = `\nMin profit: 💵${bidAuctions
+        .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
+        .join(", $")}`;
+    const types = `\nType: ${bidAuctions.map(bidAuction => bidAuction.type).join(", ")}`;
+    const prices = `\nPrice: 💵${bidAuctions
+        .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
+        .join(", $")}`;
+    const message = `${status}${profits}${types}${prices}`;
+    await noticeBot(message);
+};
+
 export const noticeErrorBid = async (errBidAuction: BidAuction) => {
     const status = "Error: 📛";
     const profit = `\nMin profit: 💵${shortenNumber(errBidAuction.profit ?? 0, 0, 3)}`;

@@ -16,10 +16,12 @@ import {
 } from "../../constants/constants";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { sleep } from "../common/sleep";
-import { noticeErrorBid } from "./handleNoticeBot";
+import { noticeBotOutOfStock, noticeErrorBid } from "./handleNoticeBot";
 import { Transaction } from "ethereumjs-tx";
 import { chainInfor } from "./normalBidAuction";
 import { mpUtils } from "../mp/utils";
+import { erc20Provider } from "../../providers/erc20Provider";
+import { bidContract } from "../../config/config";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
@@ -245,4 +247,27 @@ export const isExistAuction = async (auction: AuctionDto): Promise<boolean> => {
         console.error("Error checking auction:", error);
         return true; // if error, return true to avoid bid
     }
+};
+
+export const getPayableBidAuctions = async (bidAuctions: BidAuction[]): Promise<BidAuction[]> => {
+    let payableBidAuctions: BidAuction[] = [];
+    let outOfStockBidAuctions: BidAuction[] = [];
+    for (let i = 0; i < bidAuctions.length; i++) {
+        const bidAuction = bidAuctions[i];
+        if (!bidAuction.buyer || !bidAuction.totalPrice || !bidAuction.type) {
+            continue;
+        }
+        const balance = await erc20Provider.balanceOf(
+            bidAuction.type === AuctionType.PRO ? PRO_BUYER : bidContract
+        );
+        if (Number(balance) / 10 ** 9 < bidAuction.totalPrice) {
+            outOfStockBidAuctions.push(bidAuction);
+            continue;
+        }
+        payableBidAuctions.push(bidAuction);
+    }
+    if (outOfStockBidAuctions.length > 0) {
+        await noticeBotOutOfStock(outOfStockBidAuctions);
+    }
+    return payableBidAuctions;
 };

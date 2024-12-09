@@ -4,7 +4,7 @@ import { normalBidAuction } from "../utilsV2/bid/normalBidAuction";
 import { ENV, IS_FRONT_RUNNING } from "../constants/constants";
 import { frontRunBidAuction } from "../utilsV2/bid/frontRunBidAuction";
 import { getBidAuctions, saveBidAuctions } from "../utilsV2/bid/utils";
-import { noticeBotBid } from "../utilsV2/bid/handleNoticeBot";
+import { noticeBotBid, noticeErrorBid } from "../utilsV2/bid/handleNoticeBot";
 
 const bidV2 = async () => {
     console.log("Starting bidV2...", ENV);
@@ -40,10 +40,13 @@ const bidV2 = async () => {
             console.error("Error saving bid auctions:", error);
         }
         if (IS_FRONT_RUNNING) {
-            await frontRunBidAuction(sameUpTimeAuctions); // Comming soon
+            try {
+                await frontRunBidAuction(sameUpTimeAuctions); // Comming soon
+            } catch (error) {}
         } else {
-            await normalBidAuction(sameUpTimeAuctions);
-            console.log("Bid done");
+            try {
+                await normalBidAuction(sameUpTimeAuctions);
+            } catch (error) {}
         }
         await ranSleep(5, 6);
     }
