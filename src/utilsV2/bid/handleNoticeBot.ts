@@ -1,8 +1,11 @@
 import axios from "axios";
 import {
     API_TELEGRAM,
+    CHANGER,
     CHATID_MOBOX,
     EXPLORER_URL,
+    NORMAL_BUYER,
+    PRO_BUYER,
     TIME_ENABLE_BID
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
@@ -11,6 +14,8 @@ import { bidContract } from "../../config/config";
 import { shortenAddress, shortenNumber } from "../common/utils";
 import { sleep } from "../common/sleep";
 import { TierPrice } from "../../types/common/TierPrice";
+import { ethersProvider } from "../../providers/ethersProvider";
+import { erc20Provider } from "../../providers/erc20Provider";
 
 const noticeBot = async (message: string) => {
     try {
@@ -75,6 +80,11 @@ export const noticeBotFind = async (
     minPrice: TierPrice,
     bnbPrice: number
 ): Promise<number> => {
+    const budgetNormal = (await erc20Provider.balanceOf(bidContract)) ?? 0;
+    const budgetPro = (await erc20Provider.balanceOf(PRO_BUYER)) ?? 0;
+    const feeBidder = (await ethersProvider.getBalance(NORMAL_BUYER ?? "")) ?? 0;
+    const feePro = (await ethersProvider.getBalance(PRO_BUYER ?? "")) ?? 0;
+    const feeChange = (await ethersProvider.getBalance(CHANGER ?? "")) ?? 0;
     const status = "Status: 🔎";
     const floorPrices = minPrice
         ? `\nFloor: ${Object.entries(minPrice)
@@ -82,12 +92,12 @@ export const noticeBotFind = async (
               .join(", ")}`
         : "";
     const bnbNow = `\nBNB: $${shortenNumber(bnbPrice, 0, 2)}`;
-    const budgetNormal = `\nBudget normal: $${shortenNumber(0, 0, 2)}`;
-    const budgetPro = `\nBudget pro: $${shortenNumber(0, 0, 2)}`;
-    const feeNormal = `\nFee normal: $${shortenNumber(0, 0, 2)}`;
-    const feePro = `\nFee pro: $${shortenNumber(0, 0, 2)}`;
-    const message = `${status}${floorPrices}${bnbNow}${budgetNormal}${budgetPro}${feeNormal}${feePro}`;
-    await sleep(10);
+    const budgetNormalMess = `\nBudget normal: $${shortenNumber(Number(budgetNormal), 18, 2)}`;
+    const budgetProMess = `\nBudget pro: $${shortenNumber(Number(budgetPro), 18, 2)}`;
+    const feeBidderMess = `\nFee bidder: ${shortenNumber(Number(feeBidder), 18, 4)} BNB`;
+    const feeProMess = `\nFee pro: ${shortenNumber(Number(feePro), 18, 4)} BNB`;
+    const feeChangeMess = `\nFee change: ${shortenNumber(Number(feeChange), 18, 4)} BNB`;
+    const message = `${status}${floorPrices}${bnbNow}${budgetNormalMess}${budgetProMess}${feeBidderMess}${feeProMess}${feeChangeMess}`;
     try {
         await noticeBot(message);
     } catch (error) {

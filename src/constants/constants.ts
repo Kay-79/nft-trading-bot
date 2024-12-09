@@ -62,6 +62,12 @@ export const NORMAL_BUYER =
         ? process.env.NORMAL_BUYER_MAINNET
         : process.env.NORMAL_BUYER_TESTNET;
 
+export const PRO_BUYER =
+    ENV === Environment.MAINNET ? process.env.PRO_BUYER_MAINNET : process.env.PRO_BUYER_TESTNET;
+
+export const CHANGER =
+    ENV === Environment.MAINNET ? process.env.CHANGER_MAINNET : process.env.CHANGER_TESTNET;
+
 export const PRIVATE_KEY_BID =
     ENV === Environment.MAINNET
         ? process.env.PRIVATE_KEY_BID_MAINNET
@@ -71,9 +77,6 @@ export const PRIVATE_KEY_BID_PRO =
     ENV === Environment.MAINNET
         ? process.env.PRIVATE_KEY_BID_PRO_MAINNET
         : process.env.PRIVATE_KEY_BID_PRO_TESTNET;
-
-export const PRO_BUYER =
-    ENV === Environment.MAINNET ? process.env.PRO_BUYER_MAINNET : process.env.PRO_BUYER_TESTNET;
 
 export const CACHE_BNB_PRICE = 600;
 
