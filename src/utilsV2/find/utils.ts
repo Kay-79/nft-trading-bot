@@ -369,6 +369,6 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
             floorPrices[tier as keyof TierPrice] ?? 0
         );
     }
-
+    floorPrices[6] ?? 0 > 1000 ? (floorPrices[6] = 900) : {};
     return floorPrices;
 };
