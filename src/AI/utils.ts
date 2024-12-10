@@ -1,25 +1,49 @@
-import axios from "axios";
 import { API_MOBOX } from "../constants/constants";
+import axios from "axios";
 import { NeuralNetwork } from "brain.js";
 import fs from "fs";
+import { TrainingData } from "types/AI/TrainingData";
+import { RecentSold } from "types/dtos/TopAuction.dto";
 
-export const initModel = async () => {
-    const net = new NeuralNetwork();
-    const trainingData = [
-        { input: [0, 0], output: [0] },
-        { input: [0, 1], output: [1] },
-        { input: [1, 0], output: [1] },
-        { input: [1, 1], output: [0] }
-    ];
-    const model = net.toJSON();
-    fs.writeFileSync("./src/AI/model/model.json", JSON.stringify(model));
-    return model;
+export const getTrainingData = async (): Promise<TrainingData[]> => {
+    let trainingData: any[] = [];
+    const res1 = await axios.get(`${API_MOBOX}/auction/transactions/top50`);
+    const rawDatasets: RecentSold[] = res1.data.list;
+    const res2 = await axios.get(`${API_MOBOX}/auction/logs_new`, {
+        params: {
+            limit: 100,
+            page: 1
+        }
+    });
+    rawDatasets.push(...res2.data.list);
+    const finalDatasets = [];
+    let cachesTx: string[] = [];
+    for (const dataset of rawDatasets) {
+        if (!dataset.tx) continue;
+        if (cachesTx.includes(dataset.tx)) continue;
+        cachesTx.push(dataset.tx);
+        finalDatasets.push(dataset);
+    }
+    trainingData.push(...preprocessRawData(finalDatasets));
+    return trainingData;
 };
 
-export const getDataset = async () => {
-    const url = API_MOBOX
-    console.log("Full URL:", url);
-    const rawdata = await axios.get(`${API_MOBOX}/auction/transactions/top50`);
-    const dataset = rawdata.data;
-    console.log(dataset);
+export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => {
+    if (!rawDatasets || rawDatasets.length === 0) return [];
+    return rawDatasets.reduce<TrainingData[]>((acc, dataset) => {
+        if (!dataset.tokens || !dataset.bidPrice || dataset.tokens.length != 1) return acc;
+        const input = dataset.tokens.flatMap(token => {
+            if (!token || !token.prototype || !token.hashrate || !token.lvHashrate || !token.level)
+                return [0, 0, 0, 0];
+            return [
+                (token.hashrate - 10) / (500 - 10),
+                (token.lvHashrate - 10) / (30000 - 10),
+                (Math.floor(token.prototype / 10 ** 4) - 4) / (6 - 4),
+                (token.level - 1) / (40 - 1)
+            ];
+        });
+        const output = [(dataset.bidPrice / 10 ** 9 - 7) / (500 - 7)];
+        acc.push({ input, output });
+        return acc;
+    }, []);
 };
