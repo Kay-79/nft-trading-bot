@@ -241,6 +241,57 @@ export const getProfitableBidAuctionsNormalVsPro = (
     return profitableBidAuctions;
 };
 
+export const getProfitableBidAuctionsBundle = (
+    bundleAuctions: AuctionDto[],
+    floorPrices: TierPrice,
+    bnbPrice: number
+): BidAuction[] => {
+    let profitableBidAuctions: BidAuction[] = [];
+    for (let i = 0; i < bundleAuctions.length; i++) {
+        const auction = bundleAuctions[i];
+        let profit = 0;
+        let minProfit = 0;
+        let minValueAuction = 0;
+        if (auction?.ids === undefined || auction?.amounts === undefined) {
+            continue;
+        }
+        let amount = 0;
+        for (let j = 0; j < (auction?.ids ?? []).length; j++) {
+            const minValueType = getMinValueType(
+                auction?.ids[j],
+                Number(auction?.amounts[j]),
+                floorPrices
+            );
+            minValueAuction += minValueType[0];
+            minProfit += minValueType[1];
+            amount += Number(auction?.amounts[j]);
+        }
+        if (auction?.nowPrice === undefined) {
+            continue;
+        }
+        profit =
+            minValueAuction * (1 - RATE_FEE_MARKET) -
+            feeBundle(bnbPrice) -
+            auction?.nowPrice * 10 ** -9;
+        if (isProfitable(profit, minProfit)) {
+            profitableBidAuctions.push(
+                setupBidAuction(
+                    [auction],
+                    profit,
+                    minProfit,
+                    floorPrices,
+                    bnbPrice,
+                    feeBundle(bnbPrice),
+                    AuctionType.BUNDLE,
+                    amount,
+                    auction?.nowPrice
+                )
+            );
+        }
+    }
+    return profitableBidAuctions;
+};
+
 export const getBnbPrice = async (cacheBnbPrice: number): Promise<number> => {
     let bnbPrice = cacheBnbPrice;
     try {
