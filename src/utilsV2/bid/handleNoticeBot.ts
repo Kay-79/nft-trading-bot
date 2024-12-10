@@ -112,10 +112,10 @@ export const noticeBotDetectProfit = async (profitableBidAuctions: BidAuction[])
     if (!profitableBidAuctions.length) return;
     const status = "Detected: 💰";
     const profits = `\nMin profit: 💵${profitableBidAuctions
-        .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
+        .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 2))
         .join(", $")}`;
     const types = `\nType: ${profitableBidAuctions.map(bidAuction => bidAuction.type).join(", ")}`;
-    const prices = `\nPrice: 💵${profitableBidAuctions
+    const prices = `\nPrice: $${profitableBidAuctions
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
     const floorPrices = profitableBidAuctions[0].minPrice
@@ -134,7 +134,7 @@ export const noticeBotOutOfStock = async (bidAuctions: BidAuction[]) => {
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
         .join(", $")}`;
     const types = `\nType: ${bidAuctions.map(bidAuction => bidAuction.type).join(", ")}`;
-    const prices = `\nPrice: 💵${bidAuctions
+    const prices = `\nPrice: $${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
     const message = `${status}${profits}${types}${prices}`;

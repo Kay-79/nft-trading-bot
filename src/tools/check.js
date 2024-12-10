@@ -541,4 +541,4 @@ const rateSale = 0.42;
 if (!checkRightAccBuy(myAcc, accRun)) {
     console.error("Acc buy is wrongs!!");
 }
-checkListedAll(0.1);
+checkListedAll(1);

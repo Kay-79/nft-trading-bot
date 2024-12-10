@@ -12,7 +12,7 @@ export const TOPPICS: string[] = [
     process.env.TOPIC_HASH || "default_topic"
 ];
 
-export const API_DOMAIN = process.env.API_DOMAIN || "https://nftapi.mobox.io";
+export const API_MOBOX = "https://nftapi.mobox.io";
 
 export const EXPLORER_URL =
     ENV === Environment.MAINNET ? "https://bscscan.com/tx/" : "https://testnet.bscscan.com/tx/";

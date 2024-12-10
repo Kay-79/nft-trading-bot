@@ -5,7 +5,7 @@ import fs from "fs";
 import {
     API_BNB_PRICE_COIGEKO,
     API_BNB_PRICE_MOBOX,
-    API_DOMAIN,
+    API_MOBOX,
     GAS_PRICE_LIST,
     GAS_PRICES_BID,
     MIN_GAS_PRICE,
@@ -320,7 +320,7 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
         cachePrice: number
     ): Promise<number> => {
         try {
-            const res = await axios.get(`${API_DOMAIN}/auction/search_v2/BNB`, {
+            const res = await axios.get(`${API_MOBOX}/auction/search_v2/BNB`, {
                 params: {
                     page: 1,
                     limit: amountCheck,

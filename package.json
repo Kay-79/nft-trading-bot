@@ -17,7 +17,8 @@
     "devDependencies": {
         "@types/node": "^22.10.1",
         "concurrently": "^8.2.2",
-        "hardhat": "^2.22.16"
+        "hardhat": "^2.22.16",
+        "ts-node": "^10.9.2"
     },
     "name": "be-mobox-front-run",
     "description": "bot front run",
