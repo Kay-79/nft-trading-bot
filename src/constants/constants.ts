@@ -34,7 +34,7 @@ export const GAS_PRICE_LIST = 325000 / 6;
 export const RATE_FEE_MARKET = 0.05;
 
 export const RPC_URL =
-    process.env.ENV === Environment.MAINNET
+    ENV === Environment.MAINNET
         ? "https://bsc-dataseed.binance.org/"
         : "https://data-seed-prebsc-1-s1.binance.org:8545/";
 

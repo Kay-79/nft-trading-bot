@@ -1,15 +1,14 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import dotenv from "dotenv";
-dotenv.config();
+import { ENV, MIN_GAS_PRICE, RPC_URL } from "./src/constants/constants";
+import { Environment } from "./src/enum/enum";
 
-const PRIVATE_KEY = process.env.PRIVATE_KEY_BID_TESTNET;
+const PRIVATE_KEY =
+    ENV === Environment.MAINNET
+        ? process.env.PRIVATE_KEY_BID_MAINNET
+        : process.env.PRIVATE_KEY_BID_TESTNET;
 
-const GAS_PRICE_DEPLOY = 6;
-
-const chainId = 97;
-
-const RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545/";
+const chainId = ENV === Environment.MAINNET ? 56 : 97;
 
 const config: HardhatUserConfig = {
     solidity: "0.8.28",
@@ -22,7 +21,7 @@ const config: HardhatUserConfig = {
             url: RPC_URL ? RPC_URL : "",
             chainId: chainId,
             accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
-            gasPrice: GAS_PRICE_DEPLOY * 10 ** 9
+            gasPrice: MIN_GAS_PRICE * 10 ** 9
         }
     }
 };
