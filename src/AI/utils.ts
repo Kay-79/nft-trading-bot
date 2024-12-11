@@ -36,13 +36,13 @@ export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => 
             if (!token || !token.prototype || !token.hashrate || !token.lvHashrate || !token.level)
                 return [0, 0, 0, 0];
             return [
-                (token.hashrate - 10) / (500 - 10),
-                (token.lvHashrate - 10) / (30000 - 10),
-                (Math.floor(token.prototype / 10 ** 4) - 4) / (6 - 4),
-                (token.level - 1) / (40 - 1)
+                token.hashrate,
+                token.lvHashrate,
+                Math.floor(token.prototype / 10 ** 4),
+                token.level
             ];
         });
-        const output = [(dataset.bidPrice / 10 ** 9 - 7) / (500 - 7)];
+        const output = [Number((dataset.bidPrice / 10 ** 9).toFixed(2))];
         acc.push({ input, output });
         return acc;
     }, []);
