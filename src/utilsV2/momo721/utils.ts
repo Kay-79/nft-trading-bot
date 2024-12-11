@@ -2,9 +2,10 @@ import { token } from "../../../typechain-types/@openzeppelin/contracts";
 import { MOMO721_ADDRESS, STAKING_ADDRESS } from "../../constants/constants";
 import { Momo721Selector, StakingSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
-import { AbiCoder, getAddress } from "ethers";
+import { AbiCoder } from "ethers";
 import { byte32ToAddress } from "../common/utils";
 import { Momo721Info } from "../../types/dtos/Momo721Info.dto";
+import { archiveProvider } from "providers/archiveProvider";
 
 const getMomoInfo = async (n: string): Promise<Momo721Info> => {
     const abiCoder = new AbiCoder();
@@ -13,6 +14,43 @@ const getMomoInfo = async (n: string): Promise<Momo721Info> => {
     const result = await ethersProvider.call({
         to: MOMO721_ADDRESS,
         data: data
+    });
+    const decodedResult = abiCoder.decode(
+        [
+            "uint256",
+            "uint256",
+            "uint256",
+            "uint256",
+            "uint256",
+            "uint256",
+            "uint256",
+            "uint256",
+            "uint256"
+        ],
+        result
+    );
+    const [, , prototype, quality, category, level, specialty, hashrate, lvHashrate] =
+        decodedResult;
+    const momo721Info: Momo721Info = {
+        prototype,
+        quality,
+        category,
+        level,
+        specialty,
+        hashrate,
+        lvHashrate
+    };
+    return momo721Info;
+};
+
+const getMomoInfoHistory = async (n: string, block: number): Promise<Momo721Info> => {
+    const abiCoder = new AbiCoder();
+    const encodedData = abiCoder.encode(["uint256"], [n]);
+    const data = Momo721Selector.GET_MOMO_INFO + encodedData.slice(2);
+    const result = await archiveProvider.call({
+        to: MOMO721_ADDRESS,
+        data: data,
+        blockTag: block
     });
     const decodedResult = abiCoder.decode(
         [
@@ -135,6 +173,7 @@ const ownerOf = async (id: string) => {
 
 export const momo721 = {
     getMomoInfo,
+    getMomoInfoHistory,
     getPrototypeHashTime,
     getApproved,
     getPrototypeHash,

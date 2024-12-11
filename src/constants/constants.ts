@@ -4,13 +4,17 @@ import { GasPrices } from "../types/gas/GasPrices";
 
 export const ENV = process.env.ENV || Environment.TESTNET; // Default TESTNET
 
-export const TOPPICS: string[] = [
-    process.env.TOPIC_CREATE || "default_topic",
-    process.env.TOPIC_BID || "default_topic",
-    process.env.TOPIC_CANCEL || "default_topic",
-    process.env.TOPIC_CHANGE || "default_topic",
-    process.env.TOPIC_HASH || "default_topic"
-];
+export const TOPIC_BID = process.env.TOPIC_BID || "default_topic";
+
+export const TOPIC_CANCEL = process.env.TOPIC_CANCEL || "default_topic";
+
+export const TOPIC_CHANGE = process.env.TOPIC_CHANGE || "default_topic";
+
+export const TOPIC_HASH = process.env.TOPIC_HASH || "default_topic";
+
+export const TOPIC_CREATE = process.env.TOPIC_CREATE || "default_topic";
+
+export const TOPPICS: string[] = [TOPIC_BID, TOPIC_CANCEL, TOPIC_CHANGE, TOPIC_HASH, TOPIC_CREATE];
 
 export const API_MOBOX = "https://nftapi.mobox.io";
 
@@ -37,6 +41,10 @@ export const RPC_URL =
     ENV === Environment.MAINNET
         ? "https://bsc-dataseed.binance.org/"
         : "https://data-seed-prebsc-1-s1.binance.org:8545/";
+
+export const RPC_URL_ARCHIVE = process.env.MORALIST_RPC_ARCHIVE_NODE || "default_rpc_archive";
+
+export const RPC_URL_FULL_NODE = process.env.GET_BLOCK_RPC_FULL_NODE || "default_rpc_full_node";
 
 export const MIN_GAS_PRICE = ENV === Environment.MAINNET ? 1.0001 : 6;
 

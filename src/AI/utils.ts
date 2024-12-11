@@ -48,18 +48,26 @@ export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => 
     }, []);
 };
 
-export const predictModel = async (input: number[]): Promise<number> => {
-    try {
-        const params = new URLSearchParams();
-        input.forEach(value => params.append("input", value.toString()));
-
-        const response = await axios.get(`http://127.0.0.1:5000/predict`, {
-            params: params
-        });
-        console.log(response.data.prediction[0]);
-        return response.data.prediction[0];
-    } catch (error) {
-        console.error("Error predicting model:", error);
-        throw error;
+export const predictModel = async () => {
+    const datasetsTest = await getTrainingData();
+    for (let i = 0; i < datasetsTest.length; i++) {
+        const dataset = datasetsTest[i];
+        const input = dataset.input;
+        try {
+            const params = new URLSearchParams();
+            (input ?? []).forEach(value => params.append("input", value.toString()));
+            const response = await axios.get(`http://127.0.0.1:5000/predict`, {
+                params: params
+            });
+            if (dataset.output) {
+                console.log(input)
+                console.log(response.data.prediction[0], dataset.output[0]);
+            } else {
+                console.warn("Dataset output is undefined");
+            }
+        } catch (error) {
+            console.error("Error predicting model:", error);
+            throw error;
+        }
     }
 };

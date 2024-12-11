@@ -6,7 +6,7 @@ import { RecentSold } from "types/dtos/TopAuction.dto";
 import { preprocessRawData } from "./utils";
 import { sleep } from "utilsV2/common/sleep";
 
-export const crawlingDatasets = async () => {
+export const crawlingDatasetsApi = async () => {
     let cacheTimeInSec = Date.now() / 1000;
     const interval = 1800;
     while (true) {
