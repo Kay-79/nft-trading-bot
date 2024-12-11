@@ -43,3 +43,6 @@ create:
 
 modelAI:
 	py ./src/AI/initModel.py
+
+apiPredict:
+	py ./src/AI/api/app.py

@@ -38,7 +38,7 @@ if data is not None:
     X_test = scaler.transform(X_test)
 
     model = xgb.XGBRegressor(objective='reg:squarederror',
-                             n_estimators=1000, learning_rate=0.1, max_depth=10, random_state=42)
+                             n_estimators=10000, learning_rate=0.01, max_depth=1, random_state=42)
     model.fit(X_train, y_train)
 
     y_pred = model.predict(X_test)

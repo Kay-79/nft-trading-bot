@@ -47,3 +47,19 @@ export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => 
         return acc;
     }, []);
 };
+
+export const predictModel = async (input: number[]): Promise<number> => {
+    try {
+        const params = new URLSearchParams();
+        input.forEach(value => params.append("input", value.toString()));
+
+        const response = await axios.get(`http://127.0.0.1:5000/predict`, {
+            params: params
+        });
+        console.log(response.data.prediction[0]);
+        return response.data.prediction[0];
+    } catch (error) {
+        console.error("Error predicting model:", error);
+        throw error;
+    }
+};
