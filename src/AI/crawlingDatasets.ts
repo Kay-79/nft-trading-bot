@@ -17,7 +17,7 @@ export const crawlingDatasets = async () => {
         const data = await axios.get(`${API_MOBOX}/auction/logs_new`);
         const rawDatasets: RecentSold[] = data.data.list;
         const finalDatasets = [];
-        for (const dataset of rawDatasets.reverse()) {
+        for (const dataset of [...rawDatasets].reverse()) {
             if (
                 !dataset.tx ||
                 (dataset.crtime ?? 0) <= cacheTimeInSec ||

@@ -5,11 +5,9 @@
         "@openzeppelin/contracts": "^5.1.0",
         "@openzeppelin/contracts-upgradeable": "^5.1.0",
         "axios": "^1.7.8",
-        "brain.js": "^2.0.0-beta.24",
         "dotenv": "^16.4.5",
         "ethereumjs-tx": "^2.1.2",
         "ethers": "^6.13.4",
-        "node-telegram-bot-api": "^0.65.1",
         "request": "^2.88.2",
         "typescript": "^5.7.2",
         "web3": "^1.10.4"
