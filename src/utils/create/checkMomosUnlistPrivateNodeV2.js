@@ -15,7 +15,13 @@ const getBlockByTime = require("../bid/getBlockByTime");
 const { sleep } = require("../common/sleep");
 let momoStorage = require("../../data/inventory.json");
 const HEX_ADDRESSES = momoStorage.contracts.map(item => item.hexAddress);
-const TOPICS = require("../../constants/constants.js");
+const TOPICS = [
+    process.env.TOPIC_BID,
+    process.env.TOPIC_CREATE,
+    process.env.TOPIC_HASH,
+    process.env.TOPIC_CANCEL,
+    process.env.TOPIC_CHANGE
+];
 
 if (TOPICS.includes(null) || process.env.ENV === "TESTNET") {
     console.warn("Please check your environment or constants.js file");
