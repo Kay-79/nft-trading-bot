@@ -13,6 +13,8 @@ src/data/*.txt
 nohup.out
 dist
 src/env/.env
+src/AI/model/*.pkl
+src/AI/data/*.json
 
 # Hardhat files
 /cache

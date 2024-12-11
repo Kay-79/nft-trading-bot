@@ -40,3 +40,6 @@ check:
 
 create:
 	npm run create
+
+modelAI:
+	py ./src/AI/initModel.py
