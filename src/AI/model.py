@@ -57,7 +57,7 @@ model.compile(
     weighted_metrics=['mae']
 )
 
-history = model.fit(
+model.fit(
     X_train, y_train,
     epochs=5000,
     batch_size=16,

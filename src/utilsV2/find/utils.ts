@@ -151,12 +151,12 @@ export const isProfitable = (profit: number, minProfit: number): boolean => {
 };
 
 export const getProfitableBidAuctionsNormalVsPro = (
-    normalVsProAuctions: AuctionDto[],
+    auctions: AuctionDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
     type: AuctionType
 ): BidAuction[] => {
-    normalVsProAuctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
+    auctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableAuctions: AuctionDto[] = [];
     let profitableBidAuctions: BidAuction[] = [];
     let totalProfit = 0;
@@ -177,8 +177,8 @@ export const getProfitableBidAuctionsNormalVsPro = (
         const profit = calculateProfit(minValue, fee, auction, bnbPrice);
         return { profit, minProfit };
     };
-    for (let i = 0; i < normalVsProAuctions.length; i++) {
-        const auction = normalVsProAuctions[i];
+    for (let i = 0; i < auctions.length; i++) {
+        const auction = auctions[i];
         if (!auction?.nowPrice) {
             continue;
         }
