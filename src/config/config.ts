@@ -4,9 +4,9 @@ export const profitPerTier: TierPrice = {
     1: 0,
     2: 0,
     3: 0,
-    4: 1,
-    5: 2,
-    6: 10000
+    4: 3,
+    5: 5,
+    6: 500
 };
 
 export const snippers: string[] = [

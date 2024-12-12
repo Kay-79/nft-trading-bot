@@ -45,7 +45,13 @@ export const noticeProfitAuction = async (
     }
     const status = `Status: ${auctionStatus}`;
     const profit = `\nMin profit: 💵${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
-    const bidType = `\nType: ${bidAuction.type}`;
+    const bidType = `\nType: ${
+        bidAuction.type === AuctionType.BUNDLE
+            ? AuctionType.BUNDLE
+            : bidAuction.amount === 1
+            ? bidAuction.type
+            : `BATCH ${bidAuction.type}`
+    }`;
     const totalPrice = `\nTotal price: 💵${shortenNumber(bidAuction.totalPrice, 9, 3)}`;
     const amounts = bidAuction.auctions.some(auction => auction.amounts?.length)
         ? `\nAmounts: ${bidAuction.auctions?.map(auction => auction.amounts).join(", ")}`
@@ -53,7 +59,7 @@ export const noticeProfitAuction = async (
     const ids = bidAuction.auctions.some(auction => auction.ids?.length)
         ? `\nIds: ${bidAuction.auctions.map(auction => auction.ids).join(", ")}`
         : "";
-    const amount = bidAuction.type === AuctionType.PRO ? "\nAmount: 1" : "";
+    const amount = bidAuction.type === AuctionType.PRO ? `\nAmount: ${bidAuction.amount}` : "";
     const tokenId =
         bidAuction.type === AuctionType.PRO ? `\nTokenId: ${bidAuction.auctions[0].tokenId}` : "";
     const txInfo = txHash ? `\nTx info: [here](${EXPLORER_URL}${txHash})` : "";
@@ -108,22 +114,31 @@ export const noticeBotFind = async (
     return currentHour - (currentHour % 4);
 };
 
-export const noticeBotDetectProfit = async (profitableBidAuctions: BidAuction[]) => {
-    if (!profitableBidAuctions.length) return;
+export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
+    if (!bidAuctions.length) return;
     const status = "Detected: 💰";
-    const profits = `\nMin profit: 💵${profitableBidAuctions
+    const profits = `\nMin profit: 💵${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 2))
         .join(", $")}`;
-    const types = `\nType: ${profitableBidAuctions.map(bidAuction => bidAuction.type).join(", ")}`;
-    const prices = `\nPrice: $${profitableBidAuctions
+    const types = `\nType: ${bidAuctions
+        .map(bidAuction =>
+            bidAuction.type === AuctionType.BUNDLE
+                ? AuctionType.BUNDLE
+                : bidAuction.amount === 1
+                ? bidAuction.type
+                : `BATCH ${bidAuction.type}`
+        )
+        .join(", ")}`;
+    const amounts = `\nAmount: ${bidAuctions.map(bidAuction => bidAuction.amount).join(", ")}`;
+    const prices = `\nPrice: $${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
-    const floorPrices = profitableBidAuctions[0].minPrice
-        ? `\nFloor: $${Object.entries(profitableBidAuctions[0]?.minPrice)
+    const floorPrices = bidAuctions[0].minPrice
+        ? `\nFloor: $${Object.entries(bidAuctions[0]?.minPrice)
               .map(([key, value]) => `${shortenNumber(Number(value), 0, 1)}`)
               .join(", $")}`
         : "";
-    const message = `${status}${profits}${types}${prices}${floorPrices}`;
+    const message = `${status}${profits}${types}${amounts}${prices}${floorPrices}`;
     await noticeBot(message);
 };
 
@@ -133,7 +148,15 @@ export const noticeBotOutOfStock = async (bidAuctions: BidAuction[]) => {
     const profits = `\nMin profit: 💵${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
         .join(", $")}`;
-    const types = `\nType: ${bidAuctions.map(bidAuction => bidAuction.type).join(", ")}`;
+    const types = `\nType: ${bidAuctions
+        .map(bidAuction =>
+            bidAuction.type === AuctionType.BUNDLE
+                ? AuctionType.BUNDLE
+                : bidAuction.amount === 1
+                ? bidAuction.type
+                : `BATCH ${bidAuction.type}`
+        )
+        .join(", ")}`;
     const prices = `\nPrice: $${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
