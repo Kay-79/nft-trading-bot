@@ -5,7 +5,6 @@ import { fullNodeProvider } from "providers/fullNodeProvider";
 import { byte32ToAddress } from "utilsV2/common/utils";
 import { AbiCoder } from "ethers";
 import { momo721 } from "utilsV2/momo721/utils";
-import { TrainingData } from "types/AI/TrainingData";
 import fs from "fs";
 
 const abiCoder = new AbiCoder();
@@ -14,7 +13,7 @@ const periodBlocks = 5184000; // 60 days
 
 export const crawlingDatasetsRpc = async () => {
     let endBlock = await fullNodeProvider.getBlockNumber();
-    let startBlock = 43599211;
+    let startBlock = 44517706;
     while (startBlock < endBlock) {
         let datasets = "";
         const toBlock = startBlock + 4000;
@@ -36,11 +35,13 @@ export const crawlingDatasetsRpc = async () => {
                 log.data
             );
             if (decodedResult[2] === 0n) continue;
+            console.log("Processing", decodedResult);
             const momo721InforHistory = await momo721.getMomoInfoHistory(
                 Number(decodedResult[2]).toString(),
                 log.blockNumber
             );
-            // console.log(decodedResult);
+            if (momo721InforHistory.hashrate === 0n || momo721InforHistory.prototype === 6n)
+                continue;
             const bidPrice = +(decodedResult[0].toString().slice(0, -9) / 1e9).toFixed(2);
             const dataset = {
                 input: [

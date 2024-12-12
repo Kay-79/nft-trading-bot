@@ -1,4 +1,3 @@
-import { token } from "../../../typechain-types/@openzeppelin/contracts";
 import { MOMO721_ADDRESS, STAKING_ADDRESS } from "../../constants/constants";
 import { Momo721Selector, StakingSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
@@ -15,6 +14,16 @@ const getMomoInfo = async (n: string): Promise<Momo721Info> => {
         to: MOMO721_ADDRESS,
         data: data
     });
+    if (result === "0x")
+        return {
+            prototype: 0n,
+            quality: 0n,
+            category: 0n,
+            level: 0n,
+            specialty: 0n,
+            hashrate: 0n,
+            lvHashrate: 0n
+        };
     const decodedResult = abiCoder.decode(
         [
             "uint256",
@@ -52,6 +61,17 @@ const getMomoInfoHistory = async (n: string, block: number): Promise<Momo721Info
         data: data,
         blockTag: block
     });
+    if (result === "0x")
+        return {
+            prototype: 0n,
+            quality: 0n,
+            category: 0n,
+            level: 0n,
+            specialty: 0n,
+            hashrate: 0n,
+            lvHashrate: 0n
+        };
+
     const decodedResult = abiCoder.decode(
         [
             "uint256",
