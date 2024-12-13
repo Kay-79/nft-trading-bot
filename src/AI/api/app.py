@@ -1,7 +1,6 @@
 from flask import Flask, request, jsonify
 import joblib
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 
 model_path = "./src/AI/model/model.pkl"
 scaler_path = "./src/AI/model/scaler.pkl"
