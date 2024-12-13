@@ -20,6 +20,7 @@ all:
 	make bid
 	make find
 	make change
+	make apiPredict
 
 allWin:
 	npm run bid
@@ -28,6 +29,9 @@ allWin:
 
 killAll:
 	kill -9 $(shell ps aux | grep bun | grep -v grep | awk '{print $$2}')
+	kill -9 $(shell ps aux | grep node | grep -v grep | awk '{print $$2}')
+	kill -9 $(shell ps aux | grep python | grep -v grep | awk '{print $$2}')
+
 
 temp:
 	cat /sys/class/thermal/thermal_zone0/temp
@@ -42,7 +46,7 @@ create:
 	npm run create
 
 modelAI:
-	py ./src/AI/initModel.py
+	python ./src/AI/initModel.py
 
 apiPredict:
-	py ./src/AI/api/app.py
+	python ./src/AI/api/app.py
