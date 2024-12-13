@@ -20,7 +20,7 @@
     },
     "name": "be-mobox-front-run",
     "description": "bot front run",
-    "version": "4.1.10",
+    "version": "4.1.11",
     "private": true,
     "main": "",
     "scripts": {
