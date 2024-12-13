@@ -46,7 +46,7 @@ create:
 	npm run create
 
 modelAI:
-	python ./src/AI/initModel.py
+	python ./src/AI/model.py
 
 apiPredict:
 	python ./src/AI/api/app.py

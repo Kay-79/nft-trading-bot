@@ -2,8 +2,8 @@ from flask import Flask, request, jsonify
 import joblib
 import numpy as np
 
-model_path = "./src/AI/model/model.pkl"
-scaler_path = "./src/AI/model/scaler.pkl"
+model_path = "./src/AI/model/model.keras"
+scaler_path = "./src/AI/model/scaler.keras"
 
 model = joblib.load(model_path)
 scaler = joblib.load(scaler_path)

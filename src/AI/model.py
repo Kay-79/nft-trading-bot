@@ -70,8 +70,8 @@ loss, mae, mape, weighted_mae = model.evaluate(X_test, y_test)
 print(
     f"Test Loss: {loss}, Test MAE: {mae}, Test MAPE: {mape}, Weighted MAE: {weighted_mae}")
 
-model_path = "./src/AI/model/model.pkl"
-scaler_path = "./src/AI/model/scaler.pkl"
+model_path = "./src/AI/model/model.keras"
+scaler_path = "./src/AI/model/scaler.keras"
 joblib.dump(model, model_path)
 joblib.dump(scaler, scaler_path)
 print(f"Model saved to {model_path}")
