@@ -1,12 +1,12 @@
 from flask import Flask, request, jsonify
-import joblib
 import numpy as np
+import tensorflow as tf
 
 model_path = "./src/AI/model/model.keras"
 scaler_path = "./src/AI/model/scaler.keras"
 
-model = joblib.load(model_path)
-scaler = joblib.load(scaler_path)
+model = model = tf.keras.models.load_model(model_path)
+scaler = tf.keras.models.load_model(scaler_path)
 
 app = Flask(__name__)
 
