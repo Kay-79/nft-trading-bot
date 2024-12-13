@@ -7,6 +7,7 @@ import json
 import joblib
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau
 from tensorflow.keras.optimizers import Adam
+import joblib
 
 
 def load_data(file_path):
@@ -44,7 +45,7 @@ model.compile(optimizer='adam', loss='mse', metrics=['mae'])
 
 sample_weights = np.linspace(0.5, 1.0, num=len(y_train))
 early_stopping = EarlyStopping(
-    monitor='val_loss', patience=100, restore_best_weights=True)
+    monitor='val_loss', patience=20, restore_best_weights=True)
 reduce_lr = ReduceLROnPlateau(
     monitor='val_loss', factor=0.5, patience=10, min_lr=1e-6)
 
@@ -70,8 +71,8 @@ loss, mae, mape, weighted_mae = model.evaluate(X_test, y_test)
 print(
     f"Test Loss: {loss}, Test MAE: {mae}, Test MAPE: {mape}, Weighted MAE: {weighted_mae}")
 
-model_path = "./src/AI/model/model.keras"
-scaler_path = "./src/AI/model/scaler.keras"
+model_path = "./src/AI/model/model.pkl"
+scaler_path = "./src/AI/model/scaler.pkl"
 joblib.dump(model, model_path)
 joblib.dump(scaler, scaler_path)
 print(f"Model saved to {model_path}")
