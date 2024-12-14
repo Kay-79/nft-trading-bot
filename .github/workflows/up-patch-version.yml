@@ -25,7 +25,7 @@ jobs:
 
             - name: Force create patch changeset
               run: |
-                  printf -- "---\n\"be-mobox-front-run\": patch\n---\n\nPump patch version\n" > .changeset/auto-patch-changeset.md
+                  printf -- "---\n\"mobox-profit-bot\": patch\n---\n\nPump patch version\n" > .changeset/auto-patch-changeset.md
 
             - name: Create changeset
               run: npx changeset version

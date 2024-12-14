@@ -3,6 +3,7 @@ import { TierPrice } from "../../types/common/TierPrice";
 import { bidContract, profitPerTier, profitProAI } from "../../config/config";
 import fs from "fs";
 import {
+    API_AI_PRICE,
     API_BNB_PRICE_COIGEKO,
     API_BNB_PRICE_MOBOX,
     API_MOBOX,
@@ -150,9 +151,30 @@ export const isProfitable = (profit: number, minProfit: number): boolean => {
     return profit >= minProfit;
 };
 
-// export const getPriceFromAI = async (auction: AuctionDto): Promise<number> => {
-
-// };
+export const getPriceFromAI = async (auction: AuctionDto): Promise<number> => {
+    if (!auction.tokenId || !auction.prototype) return 0;
+    if (auction.prototype === 6) return 0;
+    const input = [
+        auction.hashrate,
+        auction.lvHashrate,
+        Math.floor(auction.prototype / 10 ** 4),
+        auction.level
+    ];
+    try {
+        const params = new URLSearchParams();
+        input.forEach(value => {
+            if (value !== undefined) {
+                params.append("input", value.toString());
+            }
+        });
+        const response = await axios.get(API_AI_PRICE, {
+            params: params
+        });
+        return response.data.prediction[0][0];
+    } catch (error) {
+        return 0;
+    }
+};
 
 export const getProfitableBidAuctionsNormalVsPro = async (
     auctions: AuctionDto[],
@@ -179,8 +201,8 @@ export const getProfitableBidAuctionsNormalVsPro = async (
         let minValue = minValueType[0];
         let minProfit = minValueType[1];
         if (type === AuctionType.PRO) {
-            // const newMinProfit = profitProAI.min;
-            // const newMinValue = await getPriceFromAI(auction);
+            const newMinProfit = profitProAI.min;
+            const newMinValue = await getPriceFromAI(auction);
         }
         const profit = calculateProfit(minValue, fee, auction, bnbPrice);
         return { profit, minProfit };
