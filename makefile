@@ -49,8 +49,7 @@ modelAI:
 	python ./src/AI/model.py
 
 apiMomo:
-	source venv/bin/activate
-	nohup python ./src/AI/api/app.py > /dev/null 2>&1 &
+	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 &"
 
 apiMomoWin:
 	.\venv\Scripts\activate
