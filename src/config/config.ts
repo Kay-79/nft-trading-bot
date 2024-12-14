@@ -9,6 +9,11 @@ export const profitPerTier: TierPrice = {
     6: 500
 };
 
+export const profitProAI = {
+    min: 5,
+    percent: 0.75
+};
+
 export const snippers: string[] = [
     "0x179815260f9265950286918fa34b624071E09D68", //normal snippers
     "0xfa11AA3953B46c12dC1fB5c880912A80BF52203A",

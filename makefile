@@ -20,7 +20,7 @@ all:
 	make bid
 	make find
 	make change
-	make apiPredict
+	make apiMomo
 
 allWin:
 	npm run bid
@@ -48,5 +48,10 @@ create:
 modelAI:
 	python ./src/AI/model.py
 
-apiPredict:
+apiMomo:
+	source .\venv\bin\activate
+	python ./src/AI/api/app.py
+
+apiMomoWin:
+	.\venv\Scripts\activate
 	python ./src/AI/api/app.py

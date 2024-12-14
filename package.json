@@ -1,4 +1,9 @@
 {
+    "name": "mobox-profit-bot",
+    "description": "mobox profit bot",
+    "version": "4.2.0",
+    "private": true,
+    "main": "",
     "dependencies": {
         "@changesets/cli": "^2.27.10",
         "@nomicfoundation/hardhat-toolbox": "^5.0.0",
@@ -18,11 +23,6 @@
         "hardhat": "^2.22.16",
         "ts-node": "^10.9.2"
     },
-    "name": "be-mobox-front-run",
-    "description": "bot front run",
-    "version": "4.2.0",
-    "private": true,
-    "main": "",
     "scripts": {
         "check": "node ./src/tools/check",
         "node": "node ./src/tools/hostNode",

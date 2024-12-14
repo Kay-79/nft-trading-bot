@@ -9,11 +9,11 @@ import {
     getProfitableBidAuctionsBundle
 } from "./utils";
 
-export const checkProfit = (
+export const checkProfit = async (
     auctions: AuctionDto[],
     floorPrices: TierPrice,
     bnbPrice: number
-): BidAuction[] => {
+): Promise<BidAuction[]> => {
     if (!auctions || auctions.length == 0) {
         return [];
     }
@@ -32,15 +32,20 @@ export const checkProfit = (
         }
     }
     profitableBidAuctions.push(
-        ...getProfitableBidAuctionsNormalVsPro(
+        ...(await getProfitableBidAuctionsNormalVsPro(
             normalAuctions,
             floorPrices,
             bnbPrice,
             AuctionType.NORMAL
-        )
+        ))
     );
     profitableBidAuctions.push(
-        ...getProfitableBidAuctionsNormalVsPro(proAuctions, floorPrices, bnbPrice, AuctionType.PRO)
+        ...(await getProfitableBidAuctionsNormalVsPro(
+            proAuctions,
+            floorPrices,
+            bnbPrice,
+            AuctionType.PRO
+        ))
     );
     profitableBidAuctions.push(
         ...getProfitableBidAuctionsBundle(bundleAuctions, floorPrices, bnbPrice)

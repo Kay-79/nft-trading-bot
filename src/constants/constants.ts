@@ -115,3 +115,5 @@ export const TIME_DELAY_NOTICE_STATUS_BOT = 4; //4hours
 export const IS_FRONT_RUNNING = false;
 
 export const WAIT_BID_PATH = "./src/data/waitBid.json";
+
+export const API_AI_PRICE = "http://127.0.0.1:5000/predict";

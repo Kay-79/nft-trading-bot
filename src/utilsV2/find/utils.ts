@@ -1,6 +1,6 @@
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierPrice } from "../../types/common/TierPrice";
-import { bidContract, profitPerTier } from "../../config/config";
+import { bidContract, profitPerTier, profitProAI } from "../../config/config";
 import fs from "fs";
 import {
     API_BNB_PRICE_COIGEKO,
@@ -150,12 +150,16 @@ export const isProfitable = (profit: number, minProfit: number): boolean => {
     return profit >= minProfit;
 };
 
-export const getProfitableBidAuctionsNormalVsPro = (
+// export const getPriceFromAI = async (auction: AuctionDto): Promise<number> => {
+
+// };
+
+export const getProfitableBidAuctionsNormalVsPro = async (
     auctions: AuctionDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
     type: AuctionType
-): BidAuction[] => {
+): Promise<BidAuction[]> => {
     auctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableAuctions: AuctionDto[] = [];
     let profitableBidAuctions: BidAuction[] = [];
@@ -164,16 +168,20 @@ export const getProfitableBidAuctionsNormalVsPro = (
     let totalFee = 0;
     let totalPrice = 0;
     const fee = type === AuctionType.PRO ? feePro(bnbPrice) : feePro(bnbPrice);
-    const calculateAuctionMetrics = (
+    const calculateAuctionMetrics = async (
         auction: AuctionDto
-    ): { profit: number; minProfit: number } => {
+    ): Promise<{ profit: number; minProfit: number }> => {
         const minValueType =
             type === AuctionType.PRO
                 ? getMinValueType((auction.prototype ?? "").toString(), 1, floorPrices)
                 : getMinValueType(auction.ids?.[0] ?? "", 1, floorPrices);
 
-        const minValue = minValueType[0];
-        const minProfit = minValueType[1];
+        let minValue = minValueType[0];
+        let minProfit = minValueType[1];
+        if (type === AuctionType.PRO) {
+            // const newMinProfit = profitProAI.min;
+            // const newMinValue = await getPriceFromAI(auction);
+        }
         const profit = calculateProfit(minValue, fee, auction, bnbPrice);
         return { profit, minProfit };
     };
@@ -188,7 +196,7 @@ export const getProfitableBidAuctionsNormalVsPro = (
         ) {
             continue;
         }
-        const { profit, minProfit } = calculateAuctionMetrics(auction);
+        const { profit, minProfit } = await calculateAuctionMetrics(auction);
         if (isProfitable(profit, minProfit)) {
             profitableAuctions.push(auction);
             totalFee += fee;
