@@ -1,5 +1,3 @@
-import exp from "constants";
-
 export enum AuctionType {
     NORMAL = "NORMAL",
     BUNDLE = "BUNDLE",
