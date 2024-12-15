@@ -54,8 +54,8 @@ const findV2 = async () => {
             !timeLastSetup
         )
             continue;
-        const isHasProfit = checkProfit(newAuctions, floorPrices, bnbPrice).length > 0;
-        isHasProfit ? updateWaitBid(checkProfit(newAuctions, floorPrices, bnbPrice)) : {};
+        const isHasProfit = (await checkProfit(newAuctions, floorPrices, bnbPrice)).length > 0;
+        isHasProfit ? updateWaitBid(await checkProfit(newAuctions, floorPrices, bnbPrice)) : {};
         if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
             initSetup = await setup(bnbPrice, floorPrices);
             ({
