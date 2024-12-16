@@ -128,7 +128,7 @@ export const isBreakBatch = (profitAuctions: AuctionDto[], auction: AuctionDto):
     if (profitAuctions.length === 0) {
         return false;
     }
-    if (profitAuctions.length >= 6) {
+    if (profitAuctions.length > 6) {
         return true;
     }
     return auction?.uptime !== profitAuctions[0]?.uptime;
