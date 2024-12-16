@@ -44,7 +44,7 @@ export const noticeProfitAuction = async (
         }
     }
     const status = `Status: ${auctionStatus}`;
-    const profit = `\nMin profit: 💵${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
+    const profit = `\nMin profit: 💵${shortenNumber(bidAuction.profit ?? 0, 0, 2)}`;
     const bidType = `\nType: ${
         bidAuction.type === AuctionType.BUNDLE
             ? AuctionType.BUNDLE
@@ -119,7 +119,7 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
     const status = "Detected: 💰";
     const profits = `\nMin profit: 💵${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 2))
-        .join(", $")}`;
+        .join(", 💵")}`;
     const types = `\nType: ${bidAuctions
         .map(bidAuction =>
             bidAuction.type === AuctionType.BUNDLE
@@ -147,7 +147,7 @@ export const noticeBotOutOfStock = async (bidAuctions: BidAuction[]) => {
     const status = "Out of stock: 🚫";
     const profits = `\nMin profit: 💵${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
-        .join(", $")}`;
+        .join(", 💵")}`;
     const types = `\nType: ${bidAuctions
         .map(bidAuction =>
             bidAuction.type === AuctionType.BUNDLE
