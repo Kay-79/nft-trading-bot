@@ -12,7 +12,6 @@ import { BidAuction } from "../../types/bid/BidAuction";
 import { BidStatus, AuctionType } from "../../enum/enum";
 import { bidContract } from "../../config/config";
 import { shortenAddress, shortenNumber } from "../common/utils";
-import { sleep } from "../common/sleep";
 import { TierPrice } from "../../types/common/TierPrice";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { erc20Provider } from "../../providers/erc20Provider";
