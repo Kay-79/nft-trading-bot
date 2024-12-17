@@ -94,6 +94,22 @@ const getUserMomo721Stake = async (address: string): Promise<number> => {
     return Number(result);
 };
 
+const previewMysteryBox = async (address: string, amount: string) => {
+    const abiCoder = new AbiCoder();
+    const encodedData = abiCoder.encode(["address", "uint256"], [address, amount]);
+    const data = "0x00117210" + encodedData.slice(2);
+    try {
+        const result = await ethersProvider.call({
+            from: "0x3bD6a582698ECCf6822dB08141818A1a8512c68D",
+            to: "0x1da9b6e37f006dd349089dea21cb8261391593d5",
+            data: data
+        });
+        const decodedResult = abiCoder.decode(["uint256[]", "uint256[]", "uint256[]"], result);
+        return decodedResult;
+    } catch (error) {
+        return (error as any).message;
+    }
+};
 
 export const stakingUtils = {
     earned,
@@ -104,4 +120,5 @@ export const stakingUtils = {
     getAddressTopByUnknownIndex,
     getUserRewardInfo,
     getUserMomo721Stake,
+    previewMysteryBox
 };

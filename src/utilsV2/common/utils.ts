@@ -60,3 +60,8 @@ export const getImplementAddressOfProxy = async (address: string) => {
     }
     return implementAddress;
 };
+
+
+export const getDataStorage = async (address: string, slot: string) => {
+    return ethersProvider.getStorage(address, slot);
+}
