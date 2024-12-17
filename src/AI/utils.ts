@@ -1,7 +1,5 @@
 import { API_AI_PRICE, API_MOBOX } from "../constants/constants";
 import axios from "axios";
-import { NeuralNetwork } from "brain.js";
-import fs from "fs";
 import { TrainingData } from "types/AI/TrainingData";
 import { RecentSold } from "types/dtos/TopAuction.dto";
 

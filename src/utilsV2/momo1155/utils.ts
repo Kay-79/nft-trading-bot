@@ -1,9 +1,7 @@
-import { token } from "../../../typechain-types/@openzeppelin/contracts";
-import { MOMO1155_ADDRESS, MOMO721_ADDRESS, STAKING_ADDRESS } from "../../constants/constants";
-import { Momo1155Selector, StakingSelector } from "../../enum/enum";
+import { MOMO1155_ADDRESS } from "../../constants/constants";
+import { Momo1155Selector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
-import { AbiCoder, getAddress } from "ethers";
-import { byte32ToAddress } from "../common/utils";
+import { AbiCoder } from "ethers";
 
 const test = async (id: string) => {
     const abiCoder = new AbiCoder();
