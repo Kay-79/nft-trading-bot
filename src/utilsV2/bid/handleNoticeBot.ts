@@ -141,9 +141,9 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
     await noticeBot(message);
 };
 
-export const noticeBotOutOfStock = async (bidAuctions: BidAuction[]) => {
+export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
     if (!bidAuctions.length) return;
-    const status = "Out of stock: 🚫";
+    const status = "Insufficient fund: 😭";
     const profits = `\nMin profit: 💵${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
         .join(", 💵")}`;

@@ -16,7 +16,7 @@ import {
 } from "../../constants/constants";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { sleep } from "../common/sleep";
-import { noticeBotOutOfStock, noticeErrorBid } from "./handleNoticeBot";
+import { noticeBotInsufficient, noticeErrorBid } from "./handleNoticeBot";
 import { Transaction } from "ethereumjs-tx";
 import { chainInfor } from "./normalBidAuction";
 import { mpUtils } from "../mp/utils";
@@ -267,7 +267,7 @@ export const getPayableBidAuctions = async (bidAuctions: BidAuction[]): Promise<
         payableBidAuctions.push(bidAuction);
     }
     if (outOfStockBidAuctions.length > 0) {
-        await noticeBotOutOfStock(outOfStockBidAuctions);
+        await noticeBotInsufficient(outOfStockBidAuctions);
     }
     return payableBidAuctions;
 };
