@@ -47,15 +47,15 @@ export const getMinValueType = (
 };
 
 export const feeBundle = (bnbPrice: number): number => {
-    return GAS_PRICES_BID.bundleAuction * bnbPrice * 10 ** -9;
+    return GAS_PRICES_BID.bundleAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_NORMAL;
 };
 
 export const feePro = (bnbPrice: number): number => {
-    return GAS_PRICES_BID.proAuction * bnbPrice * 10 ** -9;
+    return GAS_PRICES_BID.proAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_PRO;
 };
 
 export const feeNormal = (bnbPrice: number): number => {
-    return GAS_PRICES_BID.proAuction * bnbPrice * 10 ** -9;
+    return GAS_PRICES_BID.proAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_NORMAL;
 };
 
 export const setupBidAuction = (
@@ -63,7 +63,6 @@ export const setupBidAuction = (
     profit: number,
     minProfit: number,
     floorPrices: TierPrice,
-    bnbPrice: number,
     totalFee: number,
     auctionType: AuctionType,
     amount: number,
@@ -71,8 +70,8 @@ export const setupBidAuction = (
 ): BidAuction => {
     let buyer = "";
     let contractAddress = "";
-    let fee = 0;
-    let maxGasPrice = auctionType === AuctionType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL;
+    let minGasPrice = auctionType === AuctionType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL;
+    let maxGasPrice = auctionType === AuctionType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL; // comming soon
     switch (auctionType) {
         case AuctionType.NORMAL:
             buyer = NORMAL_BUYER ?? "";
@@ -101,7 +100,7 @@ export const setupBidAuction = (
         fee: totalFee,
         type: auctionType,
         amount: amount,
-        minGasPrice: MIN_GAS_PRICE_NORMAL,
+        minGasPrice: minGasPrice,
         maxGasPrice: maxGasPrice,
         auctions: auctions
     };
@@ -250,7 +249,6 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                         totalProfit - profit,
                         totalMinProfit - minProfit,
                         floorPrices,
-                        bnbPrice,
                         totalFee - fee,
                         type,
                         profitableAuctions.length,
@@ -280,7 +278,6 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                             totalProfit - profit,
                             totalMinProfit - minProfit,
                             floorPrices,
-                            bnbPrice,
                             totalFee - fee,
                             type,
                             profitableAuctions.length,
@@ -306,7 +303,6 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 totalProfit,
                 totalMinProfit,
                 floorPrices,
-                bnbPrice,
                 totalFee,
                 type,
                 profitableAuctions.length,
@@ -358,7 +354,6 @@ export const getProfitableBidAuctionsBundle = (
                     profit,
                     minProfit,
                     floorPrices,
-                    bnbPrice,
                     feeBundle(bnbPrice),
                     AuctionType.BUNDLE,
                     amount,
