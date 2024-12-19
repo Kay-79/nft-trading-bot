@@ -1,11 +1,9 @@
-import { ENV, TIME_DELAY_BLOCK_BID } from "../../constants/constants";
+import { ENV } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { Transaction } from "ethereumjs-tx";
 import common from "ethereumjs-common";
 import { Environment } from "../../enum/enum";
-import { delay40Blocks, getPayableBidAuctions, getSerializedTxs, isExistAuction } from "./utils";
+import { delay40Blocks, getPayableBidAuctions, getSerializedTxs } from "./utils";
 import { sendTransaction } from "./sendTransactionNormal";
-import { noticeErrorBid } from "./handleNoticeBot";
 
 export const chainInfor = common.forCustomChain(
     "mainnet",
@@ -26,13 +24,8 @@ export const normalBidAuction = async (bidAuctionsSameTime: BidAuction[]) => {
         return;
     }
     const serializedTxs: Buffer[] = await getSerializedTxs(payableBidAuctions);
-    const firstAuction = payableBidAuctions[0];
-    if (!firstAuction.auctions || firstAuction.auctions.length === 0) {
-        throw new Error("auctions is empty or undefined");
-    }
-    await delay40Blocks(firstAuction);
-    if (!isExistAuction(firstAuction.auctions[0])) {
-        await noticeErrorBid(firstAuction);
+    const isExistAuction = await delay40Blocks(bidAuctionsSameTime); // wait 2m and check auction is exist
+    if (!isExistAuction) {
         return;
     }
     for (let i = 0; i < serializedTxs.length; i++) {

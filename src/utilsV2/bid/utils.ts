@@ -16,7 +16,7 @@ import {
 } from "../../constants/constants";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { sleep } from "../common/sleep";
-import { noticeBotInsufficient, noticeErrorBid } from "./handleNoticeBot";
+import { noticeBotCancel, noticeBotInsufficient, noticeErrorBid } from "./handleNoticeBot";
 import { Transaction } from "ethereumjs-tx";
 import { chainInfor } from "./normalBidAuction";
 import { mpUtils } from "../mp/utils";
@@ -145,11 +145,34 @@ export const getNowBlock = async (): Promise<number> => {
     return latestBlockNumber;
 };
 
-export const delay40Blocks = async (bidAuction: BidAuction) => {
-    if (!bidAuction.uptime) return;
-    const uptime = bidAuction.uptime;
+export const delay40Blocks = async (bidAuctions: BidAuction[]): Promise<boolean> => {
+    if (!bidAuctions[0].uptime) return false;
+    const uptime = bidAuctions[0].uptime;
     const createdBlock = await getBlockByTimestamp(uptime, 50);
     const warningBlock = createdBlock + 39;
+    // Wait for check exist auction (before bid 5 blocks)
+    while (true) {
+        const nowBlock = await getNowBlock();
+        if (nowBlock >= warningBlock - 5) {
+            break;
+        }
+        const blocksRemaining = warningBlock - nowBlock;
+        const estimatedDelay = blocksRemaining * 3;
+        let checkInterval = Math.max(estimatedDelay / 2, 3);
+        if (checkInterval > 10) {
+            checkInterval = checkInterval * 1.5;
+        }
+        await sleep(checkInterval);
+    }
+    if (
+        !bidAuctions[0].auctions ||
+        !bidAuctions[0].auctions[0] ||
+        !isExistAuction(bidAuctions[0].auctions[0])
+    ) {
+        await noticeBotCancel(bidAuctions[0]);
+        return false;
+    }
+    // Wait for bid
     while (true) {
         const nowBlock = await getNowBlock();
         if (nowBlock >= warningBlock) {
@@ -163,6 +186,7 @@ export const delay40Blocks = async (bidAuction: BidAuction) => {
         }
         await sleep(checkInterval);
     }
+    return true;
 };
 
 export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffer[]> => {
@@ -245,7 +269,7 @@ export const isExistAuction = async (auction: AuctionDto): Promise<boolean> => {
         );
     } catch (error) {
         console.error("Error checking auction:", error);
-        return true; // if error, return true to avoid bid
+        return true;
     }
 };
 
