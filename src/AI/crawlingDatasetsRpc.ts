@@ -1,22 +1,23 @@
-import { snippers } from "config/config";
+import { traders } from "config/config";
 import { MP_ADDRESS, TOPIC_BID } from "constants/constants";
-import { archiveProvider } from "providers/archiveProvider";
 import { fullNodeProvider } from "providers/fullNodeProvider";
 import { byte32ToAddress } from "utilsV2/common/utils";
 import { AbiCoder } from "ethers";
 import { momo721 } from "utilsV2/momo721/utils";
 import fs from "fs";
+import { exit } from "process";
+import { sleep } from "utilsV2/common/sleep";
 
 const abiCoder = new AbiCoder();
-const periodBlocks = 5184000; // 60 days
-// const periodBlocks = 5000; // 60 days
+const periodBlocks = 7776000; // 90 days
 
 export const crawlingDatasetsRpc = async () => {
     let endBlock = await fullNodeProvider.getBlockNumber();
-    let startBlock = 44517706;
+    // let startBlock = endBlock - periodBlocks;
+    let startBlock = 38083619;
     while (startBlock < endBlock) {
         let datasets = "";
-        const toBlock = startBlock + 4000;
+        const toBlock = startBlock + 5000;
         const filter = {
             address: [MP_ADDRESS],
             fromBlock: startBlock,
@@ -26,8 +27,8 @@ export const crawlingDatasetsRpc = async () => {
         for (const log of logs) {
             if (log.topics[0] !== TOPIC_BID) continue;
             if (
-                snippers.includes(byte32ToAddress(log.topics[2])) ||
-                snippers.includes(byte32ToAddress(log.topics[2]).toLocaleLowerCase())
+                traders.includes(byte32ToAddress(log.topics[2])) ||
+                traders.includes(byte32ToAddress(log.topics[2]).toLocaleLowerCase())
             )
                 continue;
             const decodedResult = abiCoder.decode(
@@ -36,12 +37,29 @@ export const crawlingDatasetsRpc = async () => {
             );
             if (decodedResult[2] === 0n) continue;
             console.log("Processing", decodedResult);
+            const block = await fullNodeProvider.getBlock(log.blockNumber);
+            if (!block) continue;
+            const timestamp = block.timestamp; // timestamp của block
+            console.log("Block", log.blockNumber, "timestamp", block.timestamp);
+            if (timestamp - Number(decodedResult[5]) < 1800) {
+                console.log("Bid too fast");
+                continue;
+            }
+            if (timestamp - Number(decodedResult[5]) > 24 * 3600) {
+                console.log("Bid too slow");
+                continue;
+            }
             const momo721InforHistory = await momo721.getMomoInfoHistory(
                 Number(decodedResult[2]).toString(),
                 log.blockNumber
             );
+            await sleep(1);
             if (momo721InforHistory.hashrate === 0n || momo721InforHistory.prototype === 6n)
                 continue;
+            if (Number(momo721InforHistory.prototype) >= 60000) {
+                console.log("Legendary prototype is not allowed");
+                continue;
+            }
             const bidPrice = +(decodedResult[0].toString().slice(0, -9) / 1e9).toFixed(2);
             const dataset = {
                 input: [
