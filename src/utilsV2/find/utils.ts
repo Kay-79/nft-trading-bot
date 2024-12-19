@@ -9,7 +9,8 @@ import {
     API_MOBOX,
     GAS_PRICE_LIST,
     GAS_PRICES_BID,
-    MIN_GAS_PRICE,
+    MIN_GAS_PRICE_NORMAL,
+    MIN_GAS_PRICE_PRO,
     MIN_TIME_GET_PRICE,
     MP_ADDRESS,
     NORMAL_BUYER,
@@ -53,6 +54,10 @@ export const feePro = (bnbPrice: number): number => {
     return GAS_PRICES_BID.proAuction * bnbPrice * 10 ** -9;
 };
 
+export const feeNormal = (bnbPrice: number): number => {
+    return GAS_PRICES_BID.proAuction * bnbPrice * 10 ** -9;
+};
+
 export const setupBidAuction = (
     auctions: AuctionDto[],
     profit: number,
@@ -67,22 +72,19 @@ export const setupBidAuction = (
     let buyer = "";
     let contractAddress = "";
     let fee = 0;
-    let maxGasPrice = MIN_GAS_PRICE;
+    let maxGasPrice = auctionType === AuctionType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL;
     switch (auctionType) {
         case AuctionType.NORMAL:
             buyer = NORMAL_BUYER ?? "";
             contractAddress = bidContract;
-            fee = totalFee;
             break;
         case AuctionType.BUNDLE:
             buyer = NORMAL_BUYER ?? "";
             contractAddress = bidContract;
-            fee = feeBundle(bnbPrice);
             break;
         case AuctionType.PRO:
             buyer = PRO_BUYER ?? "";
             contractAddress = MP_ADDRESS ?? "";
-            fee = feePro(bnbPrice);
             break;
         default:
             break;
@@ -96,10 +98,10 @@ export const setupBidAuction = (
         contractAddress: contractAddress,
         totalPrice: totalPrice,
         minPrice: floorPrices,
-        fee: fee,
+        fee: totalFee,
         type: auctionType,
         amount: amount,
-        minGasPrice: MIN_GAS_PRICE,
+        minGasPrice: MIN_GAS_PRICE_NORMAL,
         maxGasPrice: maxGasPrice,
         auctions: auctions
     };
@@ -176,7 +178,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
     let totalMinProfit = 0;
     let totalFee = 0;
     let totalPrice = 0;
-    const fee = type === AuctionType.PRO ? feePro(bnbPrice) : feePro(bnbPrice);
+    const fee = type === AuctionType.PRO ? feePro(bnbPrice) : feeNormal(bnbPrice);
     const calculateAuctionMetrics = async (
         auction: AuctionDto
     ): Promise<{ profit: number; minProfit: number }> => {

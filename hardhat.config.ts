@@ -1,6 +1,6 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import { ENV, MIN_GAS_PRICE, RPC_URL } from "./src/constants/constants";
+import { ENV, MIN_GAS_PRICE_NORMAL, RPC_URL } from "./src/constants/constants";
 import { Environment } from "./src/enum/enum";
 
 const PRIVATE_KEY =
@@ -21,7 +21,7 @@ const config: HardhatUserConfig = {
             url: RPC_URL ? RPC_URL : "",
             chainId: chainId,
             accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
-            gasPrice: MIN_GAS_PRICE * 10 ** 9
+            gasPrice: MIN_GAS_PRICE_NORMAL * 10 ** 9
         }
     }
 };

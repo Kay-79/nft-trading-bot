@@ -27,10 +27,10 @@ export const normalBidAuction = async (bidAuctionsSameTime: BidAuction[]) => {
     }
     const serializedTxs: Buffer[] = await getSerializedTxs(payableBidAuctions);
     const firstAuction = payableBidAuctions[0];
-    await delay40Blocks(firstAuction);
     if (!firstAuction.auctions || firstAuction.auctions.length === 0) {
         throw new Error("auctions is empty or undefined");
     }
+    await delay40Blocks(firstAuction);
     if (!isExistAuction(firstAuction.auctions[0])) {
         await noticeErrorBid(firstAuction);
         return;
