@@ -51,7 +51,6 @@ modelAI:
 
 modelAIPi:
 	bash -c "source venv/bin/activate && python ./src/AI/model.py"
-	python ./src/AI/model.py
 
 apiMomo:
 	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 &"
@@ -59,3 +58,6 @@ apiMomo:
 apiMomoWin:
 	.\venv\Scripts\activate
 	python ./src/AI/api/app.py
+
+moveSsh:
+	scp /Users/legend_k/Downloads/datasets.json kaybot@172.16.1.111:/home/kaybot/Desktop/be-mobox-front-run/src/AI/data
