@@ -45,7 +45,12 @@ check:
 create:
 	npm run create
 
+
 modelAI:
+	python ./src/AI/model.py
+
+modelAIPi:
+	bash -c "source venv/bin/activate && python ./src/AI/model.py"
 	python ./src/AI/model.py
 
 apiMomo:
