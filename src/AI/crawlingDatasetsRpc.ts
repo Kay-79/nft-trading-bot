@@ -5,19 +5,21 @@ import { byte32ToAddress } from "utilsV2/common/utils";
 import { AbiCoder } from "ethers";
 import { momo721 } from "utilsV2/momo721/utils";
 import fs from "fs";
-import { exit } from "process";
-import { sleep } from "utilsV2/common/sleep";
 
 const abiCoder = new AbiCoder();
-const periodBlocks = 7776000; // 90 days
 
 export const crawlingDatasetsRpc = async () => {
     let endBlock = await fullNodeProvider.getBlockNumber();
-    // let startBlock = endBlock - periodBlocks;
-    let startBlock = 38083619;
+    const lastBlock = JSON.parse(fs.readFileSync("./src/AI/data/lastBlock.json", "utf-8"));
+    let startBlock = lastBlock.lastBlock;
+    const step = 5000;
     while (startBlock < endBlock) {
+        fs.writeFileSync(
+            "./src/AI/data/lastBlock.json",
+            JSON.stringify({ lastBlock: startBlock }, null, 2)
+        );
         let datasets = "";
-        const toBlock = startBlock + 5000;
+        const toBlock = startBlock + step;
         const filter = {
             address: [MP_ADDRESS],
             fromBlock: startBlock,
@@ -53,7 +55,6 @@ export const crawlingDatasetsRpc = async () => {
                 Number(decodedResult[2]).toString(),
                 log.blockNumber
             );
-            await sleep(1);
             if (momo721InforHistory.hashrate === 0n || momo721InforHistory.prototype === 6n)
                 continue;
             if (Number(momo721InforHistory.prototype) >= 60000) {
@@ -88,7 +89,7 @@ export const crawlingDatasetsRpc = async () => {
         }
         if (logs.length === 0) startBlock = toBlock + 1;
         else startBlock = logs[logs.length - 1].blockNumber + 1;
-        console.log("Querying from block", startBlock, "to block", toBlock);
+        console.log("Querying from block", startBlock, "to block", toBlock + step);
     }
     console.log("Done");
 };
