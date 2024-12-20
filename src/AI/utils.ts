@@ -47,6 +47,7 @@ export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => 
 };
 
 export const predictModel = async (inputOne: number[]) => {
+    console.log("Predicting model...", API_AI_PRICE);
     if (inputOne.length === 4) {
         try {
             const params = new URLSearchParams();
