@@ -5,12 +5,12 @@ export const profitPerTier: TierPrice = {
     2: 0,
     3: 0,
     4: 3,
-    5: 5,
+    5: 8,
     6: 500
 };
 
 export const profitProAI = {
-    min: 2,
+    min: 3,
     percent: 0.8
 };
 
