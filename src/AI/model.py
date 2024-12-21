@@ -9,6 +9,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.optimizers import Adam
 import joblib
 
+
 def load_data(file_path):
     if not os.path.exists(file_path):
         return None
@@ -65,9 +66,9 @@ model.compile(optimizer='adam', loss='mse', metrics=['mae'])
 
 sample_weights = np.linspace(0.01, 1.0, num=len(y_train))
 early_stopping = EarlyStopping(
-    monitor='val_loss', patience=10, restore_best_weights=True)
+    monitor='val_loss', patience=30, restore_best_weights=True)
 reduce_lr = ReduceLROnPlateau(
-    monitor='val_loss', factor=0.5, patience=10, min_lr=1e-6)
+    monitor='val_loss', factor=0.5, patience=30, min_lr=1e-6)
 
 optimizer = Adam(learning_rate=0.001)
 
