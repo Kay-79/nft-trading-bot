@@ -118,6 +118,10 @@ export const IS_FRONT_RUNNING = false;
 
 export const WAIT_BID_PATH = "./src/data/waitBid.json";
 
-export const API_AI_PRICE = "http://127.0.0.1:5000/predict";
+export const IP_MAIN = "172.16.1.133";
+
+export const PORT_HOST_DATASET = 3004;
 
 // export const API_AI_PRICE = "http://172.16.1.111:5000/predict";
+
+export const API_AI_PRICE = "http://127.0.0.1:5000/predict";

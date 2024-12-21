@@ -50,7 +50,7 @@ modelAI:
 	python ./src/AI/model.py
 
 modelAIPi:
-	bash -c "source venv/bin/activate && python ./src/AI/model.py"
+	bash -c "source venv/bin/activate && python ./src/AI/modelPi.py"
 
 apiMomo:
 	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 &"

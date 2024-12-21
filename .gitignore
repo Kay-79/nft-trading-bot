@@ -14,6 +14,7 @@ nohup.out
 dist
 src/env/.env
 src/AI/data/*.json
+src/AI/model/*.pkl
 
 # Hardhat files
 /cache

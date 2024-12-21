@@ -1,4 +1,6 @@
 import fs from "fs";
+import { traders } from "config/config";
+import { ethers } from "ethers";
 
 export const cleanDataset = async () => {
     const filePath = "./src/AI/data/datasets.json";
@@ -18,7 +20,8 @@ export const cleanDataset = async () => {
         }) =>
             dataset.input.length === 4 &&
             dataset.output.length === 1 &&
-            dataset.bidder !== "0x198d66dc32310579bf041203c8e9d1cc5baeb941" &&
+            !traders.includes(dataset.bidder.toLowerCase()) &&
+            !traders.includes(ethers.getAddress(dataset.bidder)) &&
             dataset.output[0] > 7 &&
             dataset.output[0] < 1100 &&
             dataset.bidTime - dataset.listTime > 10 * 60
