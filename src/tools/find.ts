@@ -1,5 +1,5 @@
 process.on("unhandledRejection", (reason, promise) => {
-    console.log("Unhandled Rejection at:", promise, "reason:", reason);
+    console.log("Custom Unhandled Rejection at:", promise, "reason:", reason);
 });
 import { getNewAutions } from "../utilsV2/find/getNewAuctions";
 import { ranSleep } from "../utilsV2/common/sleep";
