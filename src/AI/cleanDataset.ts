@@ -18,9 +18,10 @@ export const cleanDataset = async () => {
         }) =>
             dataset.input.length === 4 &&
             dataset.output.length === 1 &&
-            dataset.bidder !== "0x198d66dc32310579bf041203c8e9d1cc5baeb941"&&
+            dataset.bidder !== "0x198d66dc32310579bf041203c8e9d1cc5baeb941" &&
             dataset.output[0] > 7 &&
-            dataset.output[0] < 1100
+            dataset.output[0] < 1100 &&
+            dataset.bidTime - dataset.listTime > 10 * 60
     );
     fs.writeFileSync(filePath, JSON.stringify(newData, null, 2));
 };
