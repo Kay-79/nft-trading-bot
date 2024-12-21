@@ -1,4 +1,3 @@
-import { traders } from "config/config";
 import { MP_ADDRESS, TOPIC_BID } from "constants/constants";
 import { fullNodeProvider } from "providers/fullNodeProvider";
 import { byte32ToAddress } from "utilsV2/common/utils";
@@ -28,11 +27,6 @@ export const crawlingDatasetsRpc = async () => {
         const logs = await fullNodeProvider.getLogs(filter);
         for (const log of logs) {
             if (log.topics[0] !== TOPIC_BID) continue;
-            if (
-                traders.includes(byte32ToAddress(log.topics[2])) ||
-                traders.includes(byte32ToAddress(log.topics[2]).toLocaleLowerCase())
-            )
-                continue;
             const decodedResult = abiCoder.decode(
                 ["uint256", "uint256", "uint256", "uint256[]", "uint256[]", "uint256"],
                 log.data
@@ -41,16 +35,8 @@ export const crawlingDatasetsRpc = async () => {
             console.log("Processing", decodedResult);
             const block = await fullNodeProvider.getBlock(log.blockNumber);
             if (!block) continue;
-            const timestamp = block.timestamp; // timestamp của block
+            const timestamp = block.timestamp;
             console.log("Block", log.blockNumber, "timestamp", block.timestamp);
-            if (timestamp - Number(decodedResult[5]) < 1800) {
-                console.log("Bid too fast");
-                continue;
-            }
-            if (timestamp - Number(decodedResult[5]) > 24 * 3600) {
-                console.log("Bid too slow");
-                continue;
-            }
             const momo721InforHistory = await momo721.getMomoInfoHistory(
                 Number(decodedResult[2]).toString(),
                 log.blockNumber
@@ -69,7 +55,11 @@ export const crawlingDatasetsRpc = async () => {
                     Math.floor(Number(momo721InforHistory.prototype ?? 0) / 1e4),
                     Number(momo721InforHistory.level ?? 0)
                 ],
-                output: [bidPrice]
+                output: [bidPrice],
+                bidTime: timestamp,
+                listTime: Number(decodedResult[5]),
+                bidder: byte32ToAddress(log.topics[2]),
+                auctor: byte32ToAddress(log.topics[1])
             };
             datasets += JSON.stringify(dataset) + ",";
         }
@@ -93,3 +83,5 @@ export const crawlingDatasetsRpc = async () => {
     }
     console.log("Done");
 };
+
+crawlingDatasetsRpc();

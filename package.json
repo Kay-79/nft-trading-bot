@@ -24,7 +24,7 @@
         "ts-node": "^10.9.2"
     },
     "scripts": {
-        "crawl": "node ./src/AI/",
+        "crawl": "bun ./src/AI/crawlingDatasetsRpc.ts",
         "check": "node ./src/tools/check",
         "find": "bun ./src/tools/find",
         "bid": "bun ./src/tools/bid.ts",
