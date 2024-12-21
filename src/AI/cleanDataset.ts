@@ -8,15 +8,19 @@ export const cleanDataset = async () => {
         existingData = fileContent.trim() ? JSON.parse(fileContent) : [];
     }
     let newData = existingData.filter(
-        (dataset: { input: number[]; output: number[] }) =>
+        (dataset: {
+            input: number[];
+            output: number[];
+            bidTime: number;
+            listTime: number;
+            bidder: string;
+            auctor: string;
+        }) =>
             dataset.input.length === 4 &&
             dataset.output.length === 1 &&
-            dataset.output[0] < 1100 &&
-            dataset.output[0] > 8
-    );
-    newData = existingData.filter(
-        (dataset: { input: number[]; output: number[] }) =>
-            !(dataset.output[0] > 700 && dataset.input[2] < 15000 && dataset.input[3] === 40)
+            dataset.bidder !== "0x198d66dc32310579bf041203c8e9d1cc5baeb941"&&
+            dataset.output[0] > 7 &&
+            dataset.output[0] < 1100
     );
     fs.writeFileSync(filePath, JSON.stringify(newData, null, 2));
 };
