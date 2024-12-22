@@ -10,8 +10,8 @@ export const profitPerTier: TierPrice = {
 };
 
 export const profitProAI = {
-    min: 10,
-    percent: 0.7
+    min: 5,
+    percent: 0.75
 };
 
 export const traders: string[] = [
