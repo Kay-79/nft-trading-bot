@@ -157,7 +157,7 @@ contract BidUpgradeable is OwnableUpgradeable {
         }
     }
 
-    function getReward() external payable onlyOwner {
+    function getReward() external payable {
         (bool success, bytes memory returnData) = addressMomo.call{
             gas: gasleft(),
             value: msg.value
