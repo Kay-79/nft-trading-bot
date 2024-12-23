@@ -68,26 +68,10 @@ export const setupBidAuction = (
     amount: number,
     totalPrice: number
 ): BidAuction => {
-    let buyer = "";
-    let contractAddress = "";
+    let buyer = auctionType === AuctionType.PRO ? PRO_BUYER : NORMAL_BUYER;
+    let contractAddress = auctionType === AuctionType.PRO ? MP_ADDRESS : bidContract;
     let minGasPrice = auctionType === AuctionType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL;
     let maxGasPrice = auctionType === AuctionType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL; // comming soon
-    switch (auctionType) {
-        case AuctionType.NORMAL:
-            buyer = NORMAL_BUYER ?? "";
-            contractAddress = bidContract;
-            break;
-        case AuctionType.BUNDLE:
-            buyer = NORMAL_BUYER ?? "";
-            contractAddress = bidContract;
-            break;
-        case AuctionType.PRO:
-            buyer = PRO_BUYER ?? "";
-            contractAddress = MP_ADDRESS ?? "";
-            break;
-        default:
-            break;
-    }
     return {
         id: auctions[0]?.id,
         uptime: auctions[0]?.uptime,
