@@ -25,7 +25,8 @@ export const traders: string[] = [
     "0x2D02D9fa00eFE096068c733e925035aBB9661e98",
     "0x0e9bc747335a4b01a6194a6c1bb1de54a0a5355c", // pro traders
     "0x8C6d06D614aB70a3AB6fAAf7cFF83102D840458b",
-    "0x198D66Dc32310579bF041203c8e9d1cc5baeb941"
+    "0x198D66Dc32310579bF041203c8e9d1cc5baeb941",
+    "0x9488821c7d84ce4b72c7f85b2ad12b84bacfe7c5"
 ];
 
 export const contracts: string[] = [
