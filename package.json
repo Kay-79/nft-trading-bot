@@ -27,6 +27,8 @@
     },
     "scripts": {
         "crawl": "bun ./src/AI/crawlingDatasetsRpc.ts",
+        "apiData": "bun ./src/AI/api/serverDatasets.ts",
+        "getData": "bun ./src/AI/data/getDataset.ts",
         "clean": "bun ./src/AI/cleanDataset.ts",
         "check": "node ./src/tools/check",
         "find": "bun ./src/tools/find",

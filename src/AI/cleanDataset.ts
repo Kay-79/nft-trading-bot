@@ -3,7 +3,7 @@ import { traders } from "config/config";
 import { ethers } from "ethers";
 
 export const cleanDataset = async () => {
-    const filePath = "./src/AI/data/datasets.json";
+    const filePath = "./src/AI/data/moboxDatasets.json";
     let existingData = [];
     if (fs.existsSync(filePath)) {
         const fileContent = fs.readFileSync(filePath, "utf-8");

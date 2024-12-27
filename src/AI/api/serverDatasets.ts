@@ -5,17 +5,14 @@ import { PORT_HOST_DATASET } from "constants/constants";
 
 const app = express();
 const PORT = PORT_HOST_DATASET;
+const filePath = "./src/AI/data/datasets.json";
+const data = fs.readFileSync(filePath, "utf-8");
 
 app.use(cors());
 app.use(express.json());
 
 app.get("/dataset", (req: any, res: any) => {
-    const filePath = "./src/AI/data/datasets.json";
-    if (!fs.existsSync(filePath)) {
-        return res.status(404).json({ error: "Dataset not found." });
-    }
     try {
-        const data = fs.readFileSync(filePath, "utf-8");
         res.json(JSON.parse(data));
     } catch (error) {
         console.error("Error reading dataset:", error);

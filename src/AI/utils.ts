@@ -50,7 +50,7 @@ export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => 
     }, []);
 };
 
-export const predictModel = async (inputOne: number[]) => {
+export const predictModel = async (inputOne: number[]): Promise<number> => {
     console.log("Predicting model...", API_AI_PRICE);
     if (inputOne.length === 4) {
         try {
@@ -60,7 +60,7 @@ export const predictModel = async (inputOne: number[]) => {
                 params: params
             });
             console.log(response.data.prediction[0]);
-            return;
+            return response.data.prediction[0];
         } catch (error) {
             console.error("Error predicting model:", error);
             throw error;
@@ -87,4 +87,5 @@ export const predictModel = async (inputOne: number[]) => {
             throw error;
         }
     }
+    return 0;
 };
