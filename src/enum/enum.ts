@@ -46,6 +46,11 @@ export enum MpSelector {
     GET_ORDER = "0xedb25841"
 }
 
+export enum MpBlockSelector {
+    GET_LISTED_MOMOS = "0xcbbac767",
+    GET_ORDER = "0xedb25841"
+}
+
 export enum Momo721Selector {
     GET_MOMO1155_ADDRESS = "0x8d2df48f",
     GET_MEC_TOKEN_ADDRESS = "0xdbf4025b",

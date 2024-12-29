@@ -1,5 +1,5 @@
-import { MP_ADDRESS } from "../../constants/constants";
-import { MpSelector } from "../../enum/enum";
+import { MP_BLOCK_ADDRESS } from "../../constants/constants";
+import { MpBlockSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder } from "ethers";
 import { OrderInfo } from "../../types/dtos/OrderInfo.dto";
@@ -7,9 +7,9 @@ import { OrderInfo } from "../../types/dtos/OrderInfo.dto";
 const getListedMomos = async (user: string) => {
     const abiCoder = new AbiCoder();
     const encodedAddress = abiCoder.encode(["address"], [user]);
-    const data = MpSelector.GET_LISTED_MOMOS + encodedAddress.slice(2);
+    const data = MpBlockSelector.GET_LISTED_MOMOS + encodedAddress.slice(2);
     const result = await ethersProvider.call({
-        to: MP_ADDRESS,
+        to: MP_BLOCK_ADDRESS,
         data: data
     });
     const decodeData = abiCoder.decode(["uint256[]", "uint256[]", "uint256[]"], result);
@@ -19,9 +19,9 @@ const getListedMomos = async (user: string) => {
 const getOrder = async (user: string, index: string): Promise<OrderInfo> => {
     const abiCoder = new AbiCoder();
     const encodedAddress = abiCoder.encode(["address", "uint256"], [user, index]);
-    const data = MpSelector.GET_ORDER + encodedAddress.slice(2);
+    const data = MpBlockSelector.GET_ORDER + encodedAddress.slice(2);
     const result = await ethersProvider.call({
-        to: MP_ADDRESS,
+        to: MP_BLOCK_ADDRESS,
         data: data
     });
     const decodeData = abiCoder.decode(

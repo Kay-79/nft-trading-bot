@@ -53,6 +53,9 @@ export const MIN_GAS_PRICE_PRO = ENV === Environment.MAINNET ? 3.01 : 6;
 export const MP_ADDRESS =
     ENV === Environment.MAINNET ? "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2" : "0x";
 
+export const MP_BLOCK_ADDRESS =
+    ENV === Environment.MAINNET ? "0x1d4d9706b057a945fce86ee53b8894bd17ffa0de" : "0x";
+
 export const STAKING_ADDRESS =
     ENV === Environment.MAINNET ? "0x3bD6a582698ECCf6822dB08141818A1a8512c68D" : "0x";
 
