@@ -1,10 +1,11 @@
 import { API_AI_PRICE, API_MOBOX } from "../constants/constants";
 import axios from "axios";
+import { traders } from "config/config";
 import { TrainingData } from "types/AI/TrainingData";
 import { RecentSold } from "types/dtos/RecentSold.dto";
 
 export const getTrainingData = async (): Promise<TrainingData[]> => {
-    let trainingData: any[] = [];
+    let trainingData: TrainingData[] = [];
     const res1 = await axios.get(`${API_MOBOX}/auction/transactions/top50`);
     const rawDatasets: RecentSold[] = [...res1.data.list];
     const res2 = await axios.get(`${API_MOBOX}/auction/logs_new`, {
@@ -45,7 +46,11 @@ export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => 
             ];
         });
         const output = [Number((dataset.bidPrice / 10 ** 9).toFixed(2))];
-        acc.push({ input, output });
+        const bidTime = dataset.crtime;
+        const listTime = dataset.crtime;
+        const bidder = dataset.bidder;
+        const auctor = dataset.auctor;
+        acc.push({ input, output, bidTime, listTime, bidder, auctor });
         return acc;
     }, []);
 };
@@ -59,7 +64,6 @@ export const predictModel = async (inputOne: number[]): Promise<number> => {
             const response = await axios.get(API_AI_PRICE, {
                 params: params
             });
-            console.log(response.data.prediction[0]);
             return response.data.prediction[0];
         } catch (error) {
             console.error("Error predicting model:", error);
@@ -77,8 +81,15 @@ export const predictModel = async (inputOne: number[]): Promise<number> => {
                 params: params
             });
             if (dataset.output) {
-                console.log(input);
-                console.log(response.data.prediction[0], dataset.output[0]);
+                console.log("===================================================================");
+                if (dataset.bidder && traders.includes(dataset.bidder))
+                    console.log("Bidder is a trader:\t", dataset.bidder);
+                if (dataset.auctor && traders.includes(dataset.auctor))
+                    console.log("Auctor is a trader:\t", dataset.auctor);
+                console.log("Input:\t\t\t", input);
+                console.log("Output:\t\t\t", dataset.output);
+                console.log("Prediction:\t\t", response.data.prediction[0]);
+                console.log("===================================================================");
             } else {
                 console.warn("Dataset output is undefined");
             }
