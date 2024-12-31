@@ -2,11 +2,17 @@ import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import { ENV, MIN_GAS_PRICE_NORMAL, RPC_URL } from "./src/constants/constants";
 import { Environment } from "./src/enum/enum";
+import dotenv from "dotenv";
+dotenv.config();
 
 const PRIVATE_KEY =
     ENV === Environment.MAINNET
         ? process.env.PRIVATE_KEY_BID_MAINNET
         : process.env.PRIVATE_KEY_BID_TESTNET;
+
+if (!PRIVATE_KEY) {
+    throw new Error("PRIVATE_KEY is not set");
+}
 
 const chainId = ENV === Environment.MAINNET ? 56 : 97;
 
@@ -25,9 +31,5 @@ const config: HardhatUserConfig = {
         }
     }
 };
-
-console.log(config);
-console.log("ENV: ", ENV);
-console.log("PRIVATE_KEY: ", PRIVATE_KEY);
 
 export default config;

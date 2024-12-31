@@ -39,6 +39,9 @@ temp:
 deploy:
 	npx hardhat run scripts/deploy.ts --network bsc
 
+deployUpgrade:
+	npx hardhat run scripts/deployUpgrade.ts --network bsc
+
 check:
 	npm run check
 
