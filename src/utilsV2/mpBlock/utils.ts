@@ -32,6 +32,7 @@ const getOrderBlock = async (user: string, index: string): Promise<OrderBlockInf
             "uint256", // index
             "uint256", // uptime
             "uint256[]", //tokenIds
+            "uint256[]" //ids
         ],
         result
     );
@@ -42,6 +43,7 @@ const getOrderBlock = async (user: string, index: string): Promise<OrderBlockInf
         index: decodeData[3],
         uptime: decodeData[4],
         tokenIds: decodeData[5],
+        ids: decodeData[6]
     };
     return orderBlockInforesult;
 };

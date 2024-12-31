@@ -1,4 +1,3 @@
-import { AuctionType } from "../../enum/enum";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierPrice } from "../../types/common/TierPrice";
@@ -8,8 +7,9 @@ import {
     getProfitableBidAuctionsNormalVsPro,
     getProfitableBidAuctionsBundle
 } from "./utils";
+import { AuctionType } from "enum/enum";
 
-export const checkProfit = async (
+export const checkProfitAuctions = async (
     auctions: AuctionDto[],
     floorPrices: TierPrice,
     bnbPrice: number

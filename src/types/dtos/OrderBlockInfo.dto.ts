@@ -5,4 +5,5 @@ export class OrderBlockInfo {
     index?: BigInt;
     uptime?: BigInt;
     tokenIds?: BigInt[];
+    ids?: BigInt[];
 }

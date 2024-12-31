@@ -4,7 +4,6 @@ process.on("unhandledRejection", (reason, promise) => {
 import { getNewAutions } from "../utilsV2/find/getNewAuctions";
 import { ranSleep } from "../utilsV2/common/sleep";
 import { AuctionDto } from "../types/dtos/Auction.dto";
-import { checkProfit } from "../utilsV2/find/checkProfit";
 import { updateWaitBid } from "../utilsV2/find/utils";
 import {
     CACHE_BNB_PRICE,
@@ -16,6 +15,7 @@ import {
 import { setup } from "../utilsV2/find/setup";
 import { SetupFind } from "../types/find/SetupFind";
 import { noticeBotFind } from "../utilsV2/bid/handleNoticeBot";
+import { checkProfitAuctions } from "utilsV2/find/checkProfitAuctions";
 
 const findV2 = async () => {
     console.log("Starting findV2...", ENV);
@@ -45,7 +45,6 @@ const findV2 = async () => {
             newAuctions = auctions;
             cacheIds = ids;
         });
-
         if (
             !bnbPrice ||
             !isFrontRunNormal ||
@@ -55,8 +54,13 @@ const findV2 = async () => {
             !timeLastSetup
         )
             continue;
-        const isHasProfit = (await checkProfit(newAuctions, floorPrices, bnbPrice)).length > 0;
-        isHasProfit ? updateWaitBid(await checkProfit(newAuctions, floorPrices, bnbPrice)) : {};
+        const isHasProfitAuctions =
+            (await checkProfitAuctions(newAuctions, floorPrices, bnbPrice)).length > 0;
+        isHasProfitAuctions
+            ? updateWaitBid(await checkProfitAuctions(newAuctions, floorPrices, bnbPrice))
+            : {};
+        await ranSleep(20, 30);
+
         if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
             initSetup = await setup(bnbPrice, floorPrices);
             ({
