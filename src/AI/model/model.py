@@ -9,7 +9,6 @@ from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.optimizers import Adam
 import joblib
 
-
 def load_data(file_path):
     if not os.path.exists(file_path):
         return None

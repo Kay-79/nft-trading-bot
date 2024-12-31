@@ -263,7 +263,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 totalPricePrediction = 0;
             }
         } else {
-            // AI method
+            // AI method (check profit again)
             if (type !== AuctionType.PRO) continue;
             const { profit, minProfit, pricePrediction } = await calculateAuctionMetricsAI(auction);
             if (isProfitable(profit, minProfit)) {

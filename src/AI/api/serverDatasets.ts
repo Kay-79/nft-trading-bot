@@ -12,6 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/dataset", (req: any, res: any) => {
+    console.log("GET /dataset");
     try {
         res.json(JSON.parse(data));
     } catch (error) {
