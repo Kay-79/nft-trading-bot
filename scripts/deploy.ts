@@ -2,21 +2,19 @@ import { ethers } from "hardhat";
 import { sleep } from "../src/utilsV2/common/sleep";
 
 async function main() {
-    const BidUpgradeableContract = await ethers.getContractFactory("BidUpgradeable");
-    console.log("=====Deploying BID_UPGRADEABLE=====");
-    const BID_UPGRADEABLE = await BidUpgradeableContract.deploy();
-    console.log("BID_UPGRADEABLE deployed to:", BID_UPGRADEABLE.target);
-    console.log("=====Initializing BID_UPGRADEABLE=====");
+    const BidContract = await ethers.getContractFactory("Bid");
+    console.log("=====Deploying BID=====");
+    const BID = await BidContract.deploy();
+    console.log("BID deployed to:", BID.target);
+    console.log("=====Initializing BID=====");
     await sleep(10);
-    await BID_UPGRADEABLE.initialize();
-    console.log("BID_UPGRADEABLE initialized");
-    console.log("=====Approving BID_UPGRADEABLE=====");
+    console.log("=====Approving BID=====");
     await sleep(10);
-    await BID_UPGRADEABLE.approve(
+    await BID.approve(
         "0x5555e5DC401AB6E86a240C7C3f3F86dE88E05Ee8",
         "0x221c5B1a293aAc1187ED3a7D7d2d9aD7fE1F3FB0"
     );
-    console.log("BID_UPGRADEABLE approved");
+    console.log("BID approved");
 }
 
 main().catch(error => {

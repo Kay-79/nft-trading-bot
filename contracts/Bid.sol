@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
-import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
-contract Bid is OwnableUpgradeable {
+contract Bid is Ownable(msg.sender) {
     address public addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
     address public addressMomo = 0x3bD6a582698ECCf6822dB08141818A1a8512c68D;
     address public changer = 0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000;
@@ -11,10 +11,6 @@ contract Bid is OwnableUpgradeable {
     modifier onlyChanger() {
         require(msg.sender == changer, "Only the contract changer can call this function.");
         _;
-    }
-
-    function initialize() public initializer {
-        __Ownable_init(msg.sender);
     }
 
     receive() external payable {}

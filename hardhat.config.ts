@@ -26,4 +26,8 @@ const config: HardhatUserConfig = {
     }
 };
 
+console.log(config);
+console.log("ENV: ", ENV);
+console.log("PRIVATE_KEY: ", PRIVATE_KEY);
+
 export default config;
