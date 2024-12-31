@@ -58,17 +58,27 @@ export const feeNormal = (bnbPrice: number): number => {
     return GAS_PRICES_BID.proAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_NORMAL;
 };
 
-export const setupBidAuction = (
-    auctions: AuctionDto[],
-    profit: number,
-    minProfit: number,
-    floorPrices: TierPrice,
-    totalFee: number,
-    auctionType: AuctionType,
-    amount: number,
-    totalPrice: number,
-    pricePrediction: number
-): BidAuction => {
+export const setupBidAuction = ({
+    auctions,
+    profit,
+    minProfit,
+    floorPrices,
+    totalFee,
+    auctionType,
+    amount,
+    totalPrice,
+    pricePrediction
+}: {
+    auctions: AuctionDto[];
+    profit: number;
+    minProfit: number;
+    floorPrices: TierPrice;
+    totalFee: number;
+    auctionType: AuctionType;
+    amount: number;
+    totalPrice: number;
+    pricePrediction: number;
+}): BidAuction => {
     let buyer = auctionType === AuctionType.PRO ? PRO_BUYER : NORMAL_BUYER;
     let contractAddress = auctionType === AuctionType.PRO ? MP_ADDRESS : bidContract;
     let minGasPrice = auctionType === AuctionType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL;
@@ -233,17 +243,17 @@ export const getProfitableBidAuctionsNormalVsPro = async (
             if (isBreakBatch(profitableAuctions, auction)) {
                 profitableAuctions.pop();
                 profitableBidAuctions.push(
-                    setupBidAuction(
-                        profitableAuctions,
-                        totalProfit - profit,
-                        totalMinProfit - minProfit,
-                        floorPrices,
-                        totalFee - fee,
-                        type,
-                        profitableAuctions.length,
-                        totalPrice - auction?.nowPrice,
-                        totalPricePrediction
-                    )
+                    setupBidAuction({
+                        auctions: profitableAuctions,
+                        profit: totalProfit - profit,
+                        minProfit: totalMinProfit - minProfit,
+                        floorPrices: floorPrices,
+                        totalFee: totalFee - fee,
+                        auctionType: type,
+                        amount: profitableAuctions.length,
+                        totalPrice: totalPrice - auction?.nowPrice,
+                        pricePrediction: totalPricePrediction - 0
+                    })
                 );
                 profitableAuctions = [auction];
                 totalProfit = profit;
@@ -266,17 +276,17 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 if (isBreakBatch(profitableAuctions, auction)) {
                     profitableAuctions.pop();
                     profitableBidAuctions.push(
-                        setupBidAuction(
-                            profitableAuctions,
-                            totalProfit - profit,
-                            totalMinProfit - minProfit,
-                            floorPrices,
-                            totalFee - fee,
-                            type,
-                            profitableAuctions.length,
-                            totalPrice - auction?.nowPrice,
-                            totalPricePrediction - pricePrediction
-                        )
+                        setupBidAuction({
+                            auctions: profitableAuctions,
+                            profit: totalProfit - profit,
+                            minProfit: totalMinProfit - minProfit,
+                            floorPrices: floorPrices,
+                            totalFee: totalFee - fee,
+                            auctionType: type,
+                            amount: profitableAuctions.length,
+                            totalPrice: totalPrice - auction?.nowPrice,
+                            pricePrediction: totalPricePrediction - pricePrediction
+                        })
                     );
                     profitableAuctions = [auction];
                     totalProfit = profit;
@@ -291,19 +301,19 @@ export const getProfitableBidAuctionsNormalVsPro = async (
     if (profitableAuctions.length === 0) {
         return profitableBidAuctions;
     }
-    if (profitableAuctions.length > 0 && profitableAuctions.length <= 5) {
+    if (profitableAuctions.length >= 1 && profitableAuctions.length <= 6) {
         profitableBidAuctions.push(
-            setupBidAuction(
-                profitableAuctions,
-                totalProfit,
-                totalMinProfit,
-                floorPrices,
-                totalFee,
-                type,
-                profitableAuctions.length,
-                totalPrice,
-                totalPricePrediction
-            )
+            setupBidAuction({
+                auctions: profitableAuctions,
+                profit: totalProfit,
+                minProfit: totalMinProfit,
+                floorPrices: floorPrices,
+                totalFee: totalFee,
+                auctionType: type,
+                amount: profitableAuctions.length,
+                totalPrice: totalPrice,
+                pricePrediction: totalPricePrediction
+            })
         );
     } else {
         console.log("Profitable auctions length is too long");
@@ -345,17 +355,17 @@ export const getProfitableBidAuctionsBundle = (
             auction?.nowPrice * 10 ** -9;
         if (isProfitable(profit, minProfit)) {
             profitableBidAuctions.push(
-                setupBidAuction(
-                    [auction],
-                    profit,
-                    minProfit,
-                    floorPrices,
-                    feeBundle(bnbPrice),
-                    AuctionType.BUNDLE,
-                    amount,
-                    auction?.nowPrice,
-                    0
-                )
+                setupBidAuction({
+                    auctions: [auction],
+                    profit: profit,
+                    minProfit: minProfit,
+                    floorPrices: floorPrices,
+                    totalFee: feeBundle(bnbPrice),
+                    auctionType: AuctionType.BUNDLE,
+                    amount: amount,
+                    totalPrice: auction?.nowPrice,
+                    pricePrediction: 0
+                })
             );
         }
     }
