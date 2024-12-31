@@ -66,7 +66,8 @@ export const setupBidAuction = (
     totalFee: number,
     auctionType: AuctionType,
     amount: number,
-    totalPrice: number
+    totalPrice: number,
+    pricePrediction: number
 ): BidAuction => {
     let buyer = auctionType === AuctionType.PRO ? PRO_BUYER : NORMAL_BUYER;
     let contractAddress = auctionType === AuctionType.PRO ? MP_ADDRESS : bidContract;
@@ -80,6 +81,7 @@ export const setupBidAuction = (
         buyer: buyer,
         contractAddress: contractAddress,
         totalPrice: totalPrice,
+        pricePrediction: pricePrediction,
         minPrice: floorPrices,
         fee: totalFee,
         type: auctionType,
@@ -161,6 +163,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
     let totalMinProfit = 0;
     let totalFee = 0;
     let totalPrice = 0;
+    let totalPricePrediction = 0;
     const fee = type === AuctionType.PRO ? feePro(bnbPrice) : feeNormal(bnbPrice);
     const calculateAuctionMetrics = async (
         auction: AuctionDto
@@ -189,7 +192,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
     };
     const calculateAuctionMetricsAI = async (
         auction: AuctionDto
-    ): Promise<{ profit: number; minProfit: number }> => {
+    ): Promise<{ profit: number; minProfit: number; pricePrediction: number }> => {
         const calculateProfitPro = (
             minValueAuction: number,
             fee: number,
@@ -205,7 +208,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
         const minValue = await getPriceFromAI(auction);
         const minProfit = profitProAI.min;
         const profit = calculateProfitPro(minValue, fee, auction, bnbPrice);
-        return { profit, minProfit };
+        return { profit, minProfit, pricePrediction: minValue };
     };
     for (let i = 0; i < auctions.length; i++) {
         const auction = auctions[i];
@@ -220,11 +223,13 @@ export const getProfitableBidAuctionsNormalVsPro = async (
         }
         const { profit, minProfit } = await calculateAuctionMetrics(auction);
         if (isProfitable(profit, minProfit)) {
+            // floor method
             profitableAuctions.push(auction);
             totalFee += fee;
             totalProfit += profit;
             totalMinProfit += minProfit;
             totalPrice += auction?.nowPrice;
+            totalPricePrediction += 0;
             if (isBreakBatch(profitableAuctions, auction)) {
                 profitableAuctions.pop();
                 profitableBidAuctions.push(
@@ -236,7 +241,8 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                         totalFee - fee,
                         type,
                         profitableAuctions.length,
-                        totalPrice - auction?.nowPrice
+                        totalPrice - auction?.nowPrice,
+                        totalPricePrediction
                     )
                 );
                 profitableAuctions = [auction];
@@ -244,16 +250,19 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 totalMinProfit = minProfit;
                 totalFee = fee;
                 totalPrice = auction?.nowPrice;
+                totalPricePrediction = 0;
             }
         } else {
+            // AI method
             if (type !== AuctionType.PRO) continue;
-            const { profit, minProfit } = await calculateAuctionMetricsAI(auction);
+            const { profit, minProfit, pricePrediction } = await calculateAuctionMetricsAI(auction);
             if (isProfitable(profit, minProfit)) {
                 profitableAuctions.push(auction);
                 totalFee += fee;
                 totalProfit += profit;
                 totalMinProfit += minProfit;
                 totalPrice += auction?.nowPrice;
+                totalPricePrediction += pricePrediction;
                 if (isBreakBatch(profitableAuctions, auction)) {
                     profitableAuctions.pop();
                     profitableBidAuctions.push(
@@ -265,7 +274,8 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                             totalFee - fee,
                             type,
                             profitableAuctions.length,
-                            totalPrice - auction?.nowPrice
+                            totalPrice - auction?.nowPrice,
+                            totalPricePrediction - pricePrediction
                         )
                     );
                     profitableAuctions = [auction];
@@ -273,6 +283,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                     totalMinProfit = minProfit;
                     totalFee = fee;
                     totalPrice = auction?.nowPrice;
+                    totalPricePrediction = pricePrediction;
                 }
             }
         }
@@ -290,7 +301,8 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 totalFee,
                 type,
                 profitableAuctions.length,
-                totalPrice
+                totalPrice,
+                totalPricePrediction
             )
         );
     } else {
@@ -341,7 +353,8 @@ export const getProfitableBidAuctionsBundle = (
                     feeBundle(bnbPrice),
                     AuctionType.BUNDLE,
                     amount,
-                    auction?.nowPrice
+                    auction?.nowPrice,
+                    0
                 )
             );
         }

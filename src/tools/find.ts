@@ -45,7 +45,7 @@ const findV2 = async () => {
             newAuctions = auctions;
             cacheIds = ids;
         });
-        
+
         if (
             !bnbPrice ||
             !isFrontRunNormal ||

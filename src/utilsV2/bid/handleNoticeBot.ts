@@ -132,12 +132,15 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
     const prices = `\nPrice: $${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
+    const pricePredictions = `\nPrediction: $${bidAuctions
+        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 9, 3))
+        .join(", $")}`;
     const floorPrices = bidAuctions[0].minPrice
         ? `\nFloor: $${Object.entries(bidAuctions[0]?.minPrice)
               .map(([key, value]) => `${shortenNumber(Number(value), 0, 1)}`)
               .join(", $")}`
         : "";
-    const message = `${status}${profits}${types}${amounts}${prices}${floorPrices}`;
+    const message = `${status}${profits}${types}${amounts}${prices}${pricePredictions}${floorPrices}`;
     await noticeBot(message);
 };
 
@@ -159,7 +162,10 @@ export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
     const prices = `\nPrice: $${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
-    const message = `${status}${profits}${types}${prices}`;
+    const pricePredictions = `\nPrediction: $${bidAuctions
+        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 9, 3))
+        .join(", $")}`;
+    const message = `${status}${profits}${types}${prices}${pricePredictions}`;
     await noticeBot(message);
 };
 
