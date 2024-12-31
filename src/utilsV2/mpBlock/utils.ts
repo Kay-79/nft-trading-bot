@@ -2,7 +2,7 @@ import { MP_BLOCK_ADDRESS } from "../../constants/constants";
 import { MpBlockSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder } from "ethers";
-import { OrderInfo } from "../../types/dtos/OrderInfo.dto";
+import { OrderBlockInfo } from "types/dtos/OrderBlockInfo.dto";
 
 const getListedMomos = async (user: string) => {
     const abiCoder = new AbiCoder();
@@ -16,7 +16,7 @@ const getListedMomos = async (user: string) => {
     return decodeData.toString();
 };
 
-const getOrder = async (user: string, index: string): Promise<OrderInfo> => {
+const getOrderBlock = async (user: string, index: string): Promise<OrderBlockInfo> => {
     const abiCoder = new AbiCoder();
     const encodedAddress = abiCoder.encode(["address", "uint256"], [user, index]);
     const data = MpBlockSelector.GET_ORDER + encodedAddress.slice(2);
@@ -26,31 +26,27 @@ const getOrder = async (user: string, index: string): Promise<OrderInfo> => {
     });
     const decodeData = abiCoder.decode(
         [
-            "uint256",
-            "uint256",
-            "uint256",
-            "uint256",
-            "uint256",
-            "uint256",
-            "uint256[]",
-            "uint256[]"
+            "uint256", //orderId
+            "uint256", //price
+            "uint256", // order status
+            "uint256", // index
+            "uint256", // uptime
+            "uint256[]", //tokenIds
         ],
         result
     );
-    let orderInforesult: OrderInfo = {
-        status: decodeData[0],
-        startPrice: decodeData[1],
-        endPrice: decodeData[2],
-        uptime: decodeData[3],
-        durationDays: decodeData[4],
-        tokenId: decodeData[5],
-        ids: decodeData[6],
-        amounts: decodeData[7]
+    let orderBlockInforesult: OrderBlockInfo = {
+        orderId: decodeData[0],
+        price: decodeData[1],
+        status: decodeData[2],
+        index: decodeData[3],
+        uptime: decodeData[4],
+        tokenIds: decodeData[5],
     };
-    return orderInforesult;
+    return orderBlockInforesult;
 };
 
-export const mpUtils = {
+export const mpBlockUtils = {
     getListedMomos,
-    getOrder
+    getOrderBlock
 };
