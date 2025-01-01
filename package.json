@@ -31,7 +31,7 @@
         "getData": "bun ./src/AI/data/getDataset.ts",
         "clean": "bun ./src/AI/cleanDataset.ts",
         "check": "node ./src/tools/check",
-        "find": "bun ./src/tools/find",
+        "find": "bun ./src/tools/find.ts",
         "bid": "bun ./src/tools/bid.ts",
         "create": "node ./src/tools/create",
         "change": "node ./src/tools/change",
