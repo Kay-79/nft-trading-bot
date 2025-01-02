@@ -16,11 +16,19 @@ import { setup } from "../utilsV2/find/setup";
 import { SetupFind } from "../types/find/SetupFind";
 import { noticeBotFind } from "../utilsV2/bid/handleNoticeBot";
 import { checkProfitAuctions } from "utilsV2/find/checkProfitAuctions";
+import { CacheFind } from "types/find/CacheFind";
+import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
+import { getNewAuctionGroups } from "utilsV2/find/getNewAuctionGroups";
 
 const findV2 = async () => {
     console.log("Starting findV2...", ENV);
     let latestNotice = new Date().getHours() - TIME_DELAY_NOTICE_STATUS_BOT;
-    let cacheIds: string[] = [];
+    let cacheIds: CacheFind = {
+        momo: [],
+        momoBlock: [],
+        Box: [],
+        MexBox: []
+    };
     let initSetup: SetupFind = await setup(CACHE_BNB_PRICE, CACHE_TIER_PRICE);
     let {
         bnbPrice,
@@ -41,10 +49,17 @@ const findV2 = async () => {
             );
         }
         let newAuctions: AuctionDto[] = [];
-        await getNewAutions(cacheIds).then(async ([auctions, ids]) => {
+        await getNewAutions(cacheIds.momo || []).then(async ([auctions, auctionIds]) => {
             newAuctions = auctions;
-            cacheIds = ids;
+            cacheIds.momo = auctionIds;
         });
+        let newAuctionsBlock: AuctionGroupDto[] = [];
+        await getNewAuctionGroups(cacheIds.momoBlock || []).then(
+            async ([auctionGroups, auctionGroupIds]) => {
+                newAuctionsBlock = auctionGroups;
+                cacheIds.momoBlock = auctionGroupIds;
+            }
+        );
         if (
             !bnbPrice ||
             !isFrontRunNormal ||
@@ -59,8 +74,6 @@ const findV2 = async () => {
         isHasProfitAuctions
             ? updateWaitBid(await checkProfitAuctions(newAuctions, floorPrices, bnbPrice))
             : {};
-        await ranSleep(20, 30);
-
         if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
             initSetup = await setup(bnbPrice, floorPrices);
             ({
