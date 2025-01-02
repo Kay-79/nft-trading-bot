@@ -9,7 +9,7 @@ import {
     TIME_ENABLE_BID
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { BidStatus, AuctionType } from "../../enum/enum";
+import { BidStatus, BidType } from "../../enum/enum";
 import { bidContract } from "../../config/config";
 import { shortenAddress, shortenNumber } from "../common/utils";
 import { TierPrice } from "../../types/common/TierPrice";
@@ -45,8 +45,8 @@ export const noticeProfitAuction = async (
     const status = `Status: ${auctionStatus}`;
     const profit = `\nMin profit: 💵${shortenNumber(bidAuction.profit ?? 0, 0, 2)}`;
     const bidType = `\nType: ${
-        bidAuction.type === AuctionType.BUNDLE
-            ? AuctionType.BUNDLE
+        bidAuction.type === BidType.BUNDLE
+            ? BidType.BUNDLE
             : bidAuction.amount === 1
             ? bidAuction.type
             : `BATCH ${bidAuction.type}`
@@ -58,9 +58,9 @@ export const noticeProfitAuction = async (
     const ids = bidAuction.auctions.some(auction => auction.ids?.length)
         ? `\nIds: ${bidAuction.auctions.map(auction => auction.ids).join(", ")}`
         : "";
-    const amount = bidAuction.type === AuctionType.PRO ? `\nAmount: ${bidAuction.amount}` : "";
+    const amount = bidAuction.type === BidType.PRO ? `\nAmount: ${bidAuction.amount}` : "";
     const tokenId =
-        bidAuction.type === AuctionType.PRO ? `\nTokenId: ${bidAuction.auctions[0].tokenId}` : "";
+        bidAuction.type === BidType.PRO ? `\nTokenId: ${bidAuction.auctions[0].tokenId}` : "";
     const txInfo = txHash ? `\nTx info: [here](${EXPLORER_URL}${txHash})` : "";
     const message = `${status}${profit}${bidType}${totalPrice}${amounts}${amount}${ids}${tokenId}${txInfo}`;
     await noticeBot(message);
@@ -121,8 +121,8 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
         .join(", 💵")}`;
     const types = `\nType: ${bidAuctions
         .map(bidAuction =>
-            bidAuction.type === AuctionType.BUNDLE
-                ? AuctionType.BUNDLE
+            bidAuction.type === BidType.BUNDLE
+                ? BidType.BUNDLE
                 : bidAuction.amount === 1
                 ? bidAuction.type
                 : `BATCH ${bidAuction.type}`
@@ -152,8 +152,8 @@ export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
         .join(", 💵")}`;
     const types = `\nType: ${bidAuctions
         .map(bidAuction =>
-            bidAuction.type === AuctionType.BUNDLE
-                ? AuctionType.BUNDLE
+            bidAuction.type === BidType.BUNDLE
+                ? BidType.BUNDLE
                 : bidAuction.amount === 1
                 ? bidAuction.type
                 : `BATCH ${bidAuction.type}`

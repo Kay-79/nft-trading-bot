@@ -1,4 +1,4 @@
-import { AuctionType } from "../../enum/enum";
+import { BidType } from "../../enum/enum";
 import { AuctionDto } from "../dtos/Auction.dto";
 import { TierPrice } from "../common/TierPrice";
 
@@ -13,7 +13,7 @@ export class BidAuction {
     pricePrediction?: number;
     minPrice?: TierPrice;
     fee?: number;
-    type?: AuctionType;
+    type?: BidType;
     amount?: number;
     auctions?: AuctionDto[];
     minGasPrice?: number;

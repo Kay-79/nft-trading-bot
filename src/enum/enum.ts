@@ -1,4 +1,4 @@
-export enum AuctionType {
+export enum BidType {
     NORMAL = "NORMAL",
     BUNDLE = "BUNDLE",
     PRO = "PRO"

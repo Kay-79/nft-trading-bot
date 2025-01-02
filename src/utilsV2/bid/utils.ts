@@ -3,7 +3,7 @@ import { BidAuction } from "../../types/bid/BidAuction";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { RawTransaction } from "../../types/transaction/Transaction";
 import { bidProvider } from "../../providers/bidProvider";
-import { AuctionStatus, AuctionType, FunctionFragment } from "../../enum/enum";
+import { AuctionStatus, BidType, FunctionFragment } from "../../enum/enum";
 import {
     GAS_PRICE_BID,
     NORMAL_BUYER,
@@ -65,11 +65,10 @@ export const getRawTx = (bidAuction: BidAuction, txData: string, nonce: number):
     return rawTx;
 };
 
-export const privateKey = (type: AuctionType): Buffer => {
-    if ((type === AuctionType.NORMAL || type === AuctionType.BUNDLE) && PRIVATE_KEY_BID)
+export const privateKey = (type: BidType): Buffer => {
+    if ((type === BidType.NORMAL || type === BidType.BUNDLE) && PRIVATE_KEY_BID)
         return Buffer.from(PRIVATE_KEY_BID, "hex");
-    if (type === AuctionType.PRO && PRIVATE_KEY_BID_PRO)
-        return Buffer.from(PRIVATE_KEY_BID_PRO, "hex");
+    if (type === BidType.PRO && PRIVATE_KEY_BID_PRO) return Buffer.from(PRIVATE_KEY_BID_PRO, "hex");
     throw new Error(`Invalid private key type: ${type}`);
 };
 
@@ -196,20 +195,19 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
         PRO: 0,
         BUNDLE: 0
     };
-    nonce[AuctionType.BUNDLE] = nonce.NORMAL;
-    if (bidAuctions.some(bidAuction => bidAuction.type === AuctionType.PRO)) {
-        nonce[AuctionType.PRO] =
+    nonce[BidType.BUNDLE] = nonce.NORMAL;
+    if (bidAuctions.some(bidAuction => bidAuction.type === BidType.PRO)) {
+        nonce[BidType.PRO] =
             (await ethersProvider.getTransactionCount(PRO_BUYER || "", "latest")) - 1;
     }
     if (
         bidAuctions.some(
-            bidAuction =>
-                bidAuction.type === AuctionType.NORMAL || bidAuction.type === AuctionType.BUNDLE
+            bidAuction => bidAuction.type === BidType.NORMAL || bidAuction.type === BidType.BUNDLE
         )
     ) {
-        nonce[AuctionType.NORMAL] =
+        nonce[BidType.NORMAL] =
             (await ethersProvider.getTransactionCount(NORMAL_BUYER || "", "latest")) - 1;
-        nonce[AuctionType.BUNDLE] = nonce[AuctionType.NORMAL];
+        nonce[BidType.BUNDLE] = nonce[BidType.NORMAL];
     }
     for (const bidAuction of bidAuctions) {
         if (
@@ -236,10 +234,10 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
         if (!bidAuction.contractAddress || !bidAuction.buyer) continue;
         const txData = getTxData(bidAuction);
         if (!txData) continue;
-        if (bidAuction.type === AuctionType.PRO) nonce[AuctionType.PRO] += 1;
+        if (bidAuction.type === BidType.PRO) nonce[BidType.PRO] += 1;
         else {
-            nonce[AuctionType.NORMAL] += 1;
-            nonce[AuctionType.BUNDLE] += 1;
+            nonce[BidType.NORMAL] += 1;
+            nonce[BidType.BUNDLE] += 1;
         }
         const rawTx = getRawTx(bidAuction, txData, nonce[bidAuction.type]);
         const tx = new Transaction(rawTx, { common: chainInfor });
@@ -282,7 +280,7 @@ export const getPayableBidAuctions = async (bidAuctions: BidAuction[]): Promise<
             continue;
         }
         const balance = await erc20Provider.balanceOf(
-            bidAuction.type === AuctionType.PRO ? PRO_BUYER : bidContract
+            bidAuction.type === BidType.PRO ? PRO_BUYER : bidContract
         );
         if (Number(balance) / 10 ** 9 < bidAuction.totalPrice) {
             outOfStockBidAuctions.push(bidAuction);

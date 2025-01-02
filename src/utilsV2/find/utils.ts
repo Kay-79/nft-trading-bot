@@ -19,7 +19,7 @@ import {
     WAIT_BID_PATH
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { AuctionType } from "../../enum/enum";
+import { BidType } from "../../enum/enum";
 import axios from "axios";
 import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
 
@@ -74,15 +74,15 @@ export const setupBidAuction = ({
     minProfit: number;
     floorPrices: TierPrice;
     totalFee: number;
-    auctionType: AuctionType;
+    auctionType: BidType;
     amount: number;
     totalPrice: number;
     pricePrediction: number;
 }): BidAuction => {
-    let buyer = auctionType === AuctionType.PRO ? PRO_BUYER : NORMAL_BUYER;
-    let contractAddress = auctionType === AuctionType.PRO ? MP_ADDRESS : bidContract;
-    let minGasPrice = auctionType === AuctionType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL;
-    let maxGasPrice = auctionType === AuctionType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL; // comming soon
+    let buyer = auctionType === BidType.PRO ? PRO_BUYER : NORMAL_BUYER;
+    let contractAddress = auctionType === BidType.PRO ? MP_ADDRESS : bidContract;
+    let minGasPrice = auctionType === BidType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL;
+    let maxGasPrice = auctionType === BidType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL; // comming soon
     return {
         id: auctions[0]?.id,
         uptime: auctions[0]?.uptime,
@@ -164,7 +164,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
     auctions: AuctionDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
-    type: AuctionType
+    type: BidType
 ): Promise<BidAuction[]> => {
     auctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableAuctions: AuctionDto[] = [];
@@ -174,7 +174,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
     let totalFee = 0;
     let totalPrice = 0;
     let totalPricePrediction = 0;
-    const fee = type === AuctionType.PRO ? feePro(bnbPrice) : feeNormal(bnbPrice);
+    const fee = type === BidType.PRO ? feePro(bnbPrice) : feeNormal(bnbPrice);
     const calculateAuctionMetrics = async (
         auction: AuctionDto
     ): Promise<{ profit: number; minProfit: number }> => {
@@ -191,7 +191,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
             );
         };
         const minValueType =
-            type === AuctionType.PRO
+            type === BidType.PRO
                 ? getMinValueType((auction.prototype ?? "").toString(), 1, floorPrices)
                 : getMinValueType(auction.ids?.[0] ?? "", 1, floorPrices);
 
@@ -226,8 +226,8 @@ export const getProfitableBidAuctionsNormalVsPro = async (
             continue;
         }
         if (
-            (type === AuctionType.NORMAL && isProAuction(auction)) ||
-            (type === AuctionType.PRO && !isProAuction(auction))
+            (type === BidType.NORMAL && isProAuction(auction)) ||
+            (type === BidType.PRO && !isProAuction(auction))
         ) {
             continue;
         }
@@ -264,7 +264,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
             }
         } else {
             // AI method (check profit again)
-            if (type !== AuctionType.PRO) continue;
+            if (type !== BidType.PRO) continue;
             const { profit, minProfit, pricePrediction } = await calculateAuctionMetricsAI(auction);
             if (isProfitable(profit, minProfit)) {
                 profitableAuctions.push(auction);
@@ -361,7 +361,7 @@ export const getProfitableBidAuctionsBundle = (
                     minProfit: minProfit,
                     floorPrices: floorPrices,
                     totalFee: feeBundle(bnbPrice),
-                    auctionType: AuctionType.BUNDLE,
+                    auctionType: BidType.BUNDLE,
                     amount: amount,
                     totalPrice: auction?.nowPrice,
                     pricePrediction: 0
