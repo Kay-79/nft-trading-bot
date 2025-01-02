@@ -34,8 +34,14 @@ export const getTrainingData = async (): Promise<TrainingData[]> => {
 export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => {
     if (!rawDatasets || rawDatasets.length === 0) return [];
     return rawDatasets.reduce<TrainingData[]>((acc, dataset) => {
-        if (!dataset.tokens || !dataset.bidPrice || dataset.tokens.length != 1) return acc;
-        const input = dataset.tokens.flatMap(token => {
+        if (!dataset.tokens || !dataset.bidPrice) return acc;
+        const input = [
+            dataset.tokens[0].hashrate ?? 0,
+            dataset.tokens[0].lvHashrate ?? 0,
+            Math.floor((dataset.tokens[0].prototype ?? 0) / 10 ** 4),
+            dataset.tokens[0].level ?? 0
+        ];
+        const inputs = dataset.tokens.map(token => {
             if (!token || !token.prototype || !token.hashrate || !token.lvHashrate || !token.level)
                 return [0, 0, 0, 0];
             return [
@@ -50,7 +56,7 @@ export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => 
         const listTime = dataset.crtime;
         const bidder = dataset.bidder;
         const auctor = dataset.auctor;
-        acc.push({ input, output, bidTime, listTime, bidder, auctor });
+        acc.push({ input, output, inputs, bidTime, listTime, bidder, auctor });
         return acc;
     }, []);
 };
@@ -73,30 +79,25 @@ export const predictModel = async (inputOne: number[]): Promise<number> => {
     const datasetsTest = await getTrainingData();
     for (let i = 0; i < datasetsTest.length; i++) {
         const dataset = datasetsTest[i];
-        const input = dataset.input;
-        try {
+        let totalPredicted = 0;
+        console.log("===================================================================");
+        if (dataset.bidder && traders.includes(dataset.bidder))
+            console.log("Bidder is a trader:\t", dataset.bidder);
+        if (dataset.auctor && traders.includes(dataset.auctor))
+            console.log("Auctor is a trader:\t", dataset.auctor);
+        for (const input of dataset.inputs ?? []) {
             const params = new URLSearchParams();
-            (input ?? []).forEach(value => params.append("input", value.toString()));
-            const response = await axios.get(API_AI_PRICE, {
-                params: params
-            });
-            if (dataset.output) {
-                console.log("===================================================================");
-                if (dataset.bidder && traders.includes(dataset.bidder))
-                    console.log("Bidder is a trader:\t", dataset.bidder);
-                if (dataset.auctor && traders.includes(dataset.auctor))
-                    console.log("Auctor is a trader:\t", dataset.auctor);
-                console.log("Input:\t\t\t", input);
-                console.log("Output:\t\t\t", dataset.output);
-                console.log("Prediction:\t\t", response.data.prediction[0]);
-                console.log("===================================================================");
-            } else {
-                console.warn("Dataset output is undefined");
-            }
-        } catch (error) {
-            console.error("Error predicting model:", error);
-            throw error;
+            input.forEach(value => params.append("input", value.toString()));
+            const response = await axios.get(API_AI_PRICE, { params });
+            console.log("Input:\t\t\t", input);
+            console.log("Prediction:\t\t", response.data.prediction[0]);
+            totalPredicted += Number(response.data.prediction[0]);
         }
+        if (dataset.output) {
+            console.log("Total pirce:\t\t", dataset.output[0]);
+        }
+        console.log("Total predicted:\t", totalPredicted);
+        console.log("===================================================================");
     }
     return 0;
 };
