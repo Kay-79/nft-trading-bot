@@ -1,7 +1,7 @@
 {
     "name": "mobox-profit-bot",
     "description": "mobox profit bot",
-    "version": "4.4.6",
+    "version": "4.4.7",
     "private": true,
     "main": "",
     "dependencies": {
