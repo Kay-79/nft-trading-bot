@@ -8,13 +8,22 @@ export const getNewAuctionGroups = async (
     let newAuctionGroups: AuctionGroupDto[] = [];
     try {
         const data = await axios.get(
-            `${API_MOBOX}/auction/search_v2/BNB?page=1&limit=${25}&category=&vType=&sort=-time&pType=`
+            `${API_MOBOX}/auction_group/list_v2?page=1&limit=${15}&sort=-time`
         );
         const auctionsList = data?.data?.list || [];
         auctionsList.forEach((auctionGroup: AuctionGroupDto) => {
-            if (auctionGroup.tx && !cacheIdsCheck.includes(auctionGroup.tx)) {
+            if (
+                auctionGroup.orderId &&
+                auctionGroup.uptime &&
+                auctionGroup.auctor &&
+                !cacheIdsCheck.includes(
+                    auctionGroup.auctor + auctionGroup.orderId + auctionGroup.uptime
+                )
+            ) {
                 newAuctionGroups.push(auctionGroup);
-                cacheIdsCheck.push(auctionGroup.tx);
+                cacheIdsCheck.push(
+                    auctionGroup.auctor + auctionGroup.orderId + auctionGroup.uptime
+                );
             }
         });
     } catch (error) {
