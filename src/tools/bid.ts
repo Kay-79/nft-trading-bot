@@ -4,7 +4,7 @@ import { normalBidAuction } from "../utilsV2/bid/normalBidAuction";
 import { ENV, IS_FRONT_RUNNING, TIME_DELAY_NOTICE_STATUS_BOT } from "../constants/constants";
 import { frontRunBidAuction } from "../utilsV2/bid/frontRunBidAuction";
 import { getBidAuctions, saveBidAuctions } from "../utilsV2/bid/utils";
-import { noticeBotBid, noticeErrorBid } from "../utilsV2/bid/handleNoticeBot";
+import { noticeBotBid } from "../utilsV2/bid/handleNoticeBot";
 
 const bidV2 = async () => {
     console.log("Starting bidV2...", ENV);

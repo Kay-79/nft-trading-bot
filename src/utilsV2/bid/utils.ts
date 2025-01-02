@@ -73,26 +73,33 @@ export const privateKey = (type: BidType): Buffer => {
 };
 
 export const getTxData = (bidAuction: BidAuction): string => {
-    if (!bidAuction || !bidAuction.auctions || !bidAuction.auctions.length) return "";
-    const isBatch = bidAuction.auctions.length > 1;
-    if (!isBatch)
-        return bidProvider.interface.encodeFunctionData(FunctionFragment.BID, [
-            bidAuction.auctions[0].auctor,
-            bidAuction.auctions[0].index,
-            bidAuction.auctions[0].uptime,
-            ((bidAuction.auctions[0]?.nowPrice ?? 0) + 10 ** 5).toString() + "000000000"
-        ]);
-    else
-        return bidProvider.interface.encodeFunctionData(FunctionFragment.BID_BATCH, [
-            bidAuction.auctions.map((auction: AuctionDto) => auction.auctor),
-            bidAuction.auctions.map((auction: AuctionDto) => auction.index),
-            bidAuction.auctions.map((auction: AuctionDto) => auction.uptime),
-            bidAuction.auctions.map(
-                (auction: AuctionDto) =>
-                    ((auction.nowPrice ?? 0) + 10 ** 5).toString() + "000000000"
-            ),
-            true
-        ]);
+    if (!bidAuction.auctions) return "";
+    switch (bidAuction.type) {
+        case BidType.NORMAL:
+        case BidType.PRO:
+        case BidType.BUNDLE:
+            const isBatch = bidAuction.auctions.length > 1;
+            if (!isBatch)
+                return bidProvider.interface.encodeFunctionData(FunctionFragment.BID, [
+                    bidAuction.auctions[0].auctor,
+                    bidAuction.auctions[0].index,
+                    bidAuction.auctions[0].uptime,
+                    ((bidAuction.auctions[0]?.nowPrice ?? 0) + 10 ** 5).toString() + "000000000"
+                ]);
+            else
+                return bidProvider.interface.encodeFunctionData(FunctionFragment.BID_BATCH, [
+                    bidAuction.auctions.map((auction: AuctionDto) => auction.auctor),
+                    bidAuction.auctions.map((auction: AuctionDto) => auction.index),
+                    bidAuction.auctions.map((auction: AuctionDto) => auction.uptime),
+                    bidAuction.auctions.map(
+                        (auction: AuctionDto) =>
+                            ((auction.nowPrice ?? 0) + 10 ** 5).toString() + "000000000"
+                    ),
+                    true
+                ]);
+        default:
+            return "";
+    }
 };
 
 export const getBlockByTimestamp = async (timestamp: number, step: number): Promise<number> => {
@@ -279,9 +286,18 @@ export const getPayableBidAuctions = async (bidAuctions: BidAuction[]): Promise<
         if (!bidAuction.buyer || !bidAuction.totalPrice || !bidAuction.type) {
             continue;
         }
-        const balance = await erc20Provider.balanceOf(
-            bidAuction.type === BidType.PRO ? PRO_BUYER : bidContract
-        );
+        const addressCheck = (type: BidType) => {
+            switch (type) {
+                case BidType.PRO:
+                    return PRO_BUYER;
+                case BidType.NORMAL:
+                case BidType.BUNDLE:
+                    return NORMAL_BUYER;
+                default:
+                    return PRO_BUYER;
+            }
+        };
+        const balance = await erc20Provider.balanceOf(addressCheck(bidAuction.type));
         if (Number(balance) / 10 ** 9 < bidAuction.totalPrice) {
             outOfStockBidAuctions.push(bidAuction);
             continue;

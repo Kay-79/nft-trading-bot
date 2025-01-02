@@ -36,6 +36,3 @@ export const normalBidAuction = async (bidAuctionsSameTime: BidAuction[]) => {
         }
     }
 };
-function exit() {
-    throw new Error("Processing exit");
-}
