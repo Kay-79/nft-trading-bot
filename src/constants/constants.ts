@@ -68,7 +68,7 @@ export const MOMO1155_ADDRESS =
 export const USDT_ADDRESS =
     ENV === Environment.MAINNET
         ? "0x55d398326f99059fF775485246999027B3197955"
-        : "0x221c5B1a293aAc1187ED3a7D7d2d9aD7fE1F3FB0";
+        : "0xcc2df785651C3D58bebcaa211eeDdC6901F896f0";
 
 export const NORMAL_BUYER =
     ENV === Environment.MAINNET

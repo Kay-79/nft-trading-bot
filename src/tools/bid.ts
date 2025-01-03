@@ -46,7 +46,10 @@ const bidV2 = async () => {
         } else {
             try {
                 await normalBidAuction(sameUpTimeAuctions);
-            } catch (error) {}
+                console.log("Normal bid auction");
+            } catch (error) {
+                console.error("Error normal bid auction:", error);
+            }
         }
         await ranSleep(5, 6);
     }

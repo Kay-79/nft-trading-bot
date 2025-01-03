@@ -3,13 +3,14 @@ import {
     API_TELEGRAM,
     CHANGER,
     CHATID_MOBOX,
+    ENV,
     EXPLORER_URL,
     NORMAL_BUYER,
     PRO_BUYER,
     TIME_ENABLE_BID
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { BidStatus, BidType } from "../../enum/enum";
+import { BidStatus, BidType, Environment } from "../../enum/enum";
 import { bidContract } from "../../config/config";
 import { shortenAddress, shortenNumber } from "../common/utils";
 import { TierPrice } from "../../types/common/TierPrice";
@@ -67,6 +68,7 @@ export const noticeProfitAuction = async (
 };
 
 export const noticeBotBid = async (latestNotice: number): Promise<number> => {
+    if (ENV === Environment.TESTNET) return latestNotice;
     const status = "Status: 🛒";
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
     const message = `${status}${contract}`;
@@ -85,6 +87,7 @@ export const noticeBotFind = async (
     minPrice: TierPrice,
     bnbPrice: number
 ): Promise<number> => {
+    if (ENV === Environment.TESTNET) return latestNotice;
     const budgetNormal = (await erc20Provider.balanceOf(bidContract)) ?? 0;
     const budgetPro = (await erc20Provider.balanceOf(PRO_BUYER)) ?? 0;
     const feeBidder = (await ethersProvider.getBalance(NORMAL_BUYER ?? "")) ?? 0;

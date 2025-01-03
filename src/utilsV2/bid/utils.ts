@@ -200,12 +200,29 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
     let nonce = {
         NORMAL: 0,
         PRO: 0,
-        BUNDLE: 0
+        BUNDLE: 0,
+        GROUP: 0,
+        BOX: 0,
+        MECBOX: 0,
+        GEM: 0
     };
     nonce[BidType.BUNDLE] = nonce.NORMAL;
-    if (bidAuctions.some(bidAuction => bidAuction.type === BidType.PRO)) {
+    if (
+        bidAuctions.some(
+            bidAuction =>
+                bidAuction.type === BidType.PRO ||
+                bidAuction.type === BidType.GROUP ||
+                bidAuction.type === BidType.BOX ||
+                bidAuction.type === BidType.MECBOX ||
+                bidAuction.type === BidType.GEM
+        )
+    ) {
         nonce[BidType.PRO] =
             (await ethersProvider.getTransactionCount(PRO_BUYER || "", "latest")) - 1;
+        nonce[BidType.GROUP] = nonce[BidType.PRO];
+        nonce[BidType.BOX] = nonce[BidType.PRO];
+        nonce[BidType.MECBOX] = nonce[BidType.PRO];
+        nonce[BidType.GEM] = nonce[BidType.PRO];
     }
     if (
         bidAuctions.some(
@@ -241,8 +258,20 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
         if (!bidAuction.contractAddress || !bidAuction.buyer) continue;
         const txData = getTxData(bidAuction);
         if (!txData) continue;
-        if (bidAuction.type === BidType.PRO) nonce[BidType.PRO] += 1;
-        else {
+        if (
+            bidAuction.type === BidType.PRO ||
+            bidAuction.type === BidType.GROUP ||
+            bidAuction.type === BidType.BOX ||
+            bidAuction.type === BidType.MECBOX ||
+            bidAuction.type === BidType.GEM
+        ) {
+            nonce[BidType.PRO] += 1;
+            nonce[BidType.GROUP] += 1;
+            nonce[BidType.BOX] += 1;
+            nonce[BidType.MECBOX] += 1;
+            nonce[BidType.GEM] += 1;
+        }
+        if (bidAuction.type === BidType.NORMAL || bidAuction.type === BidType.BUNDLE) {
             nonce[BidType.NORMAL] += 1;
             nonce[BidType.BUNDLE] += 1;
         }
@@ -289,15 +318,20 @@ export const getPayableBidAuctions = async (bidAuctions: BidAuction[]): Promise<
         const addressCheck = (type: BidType) => {
             switch (type) {
                 case BidType.PRO:
+                case BidType.GROUP:
+                case BidType.BOX:
+                case BidType.MECBOX:
+                case BidType.GEM:
                     return PRO_BUYER;
                 case BidType.NORMAL:
                 case BidType.BUNDLE:
                     return NORMAL_BUYER;
                 default:
-                    return PRO_BUYER;
+                    return "";
             }
         };
         const balance = await erc20Provider.balanceOf(addressCheck(bidAuction.type));
+        console.log("Balance", balance);
         if (Number(balance) / 10 ** 9 < bidAuction.totalPrice) {
             outOfStockBidAuctions.push(bidAuction);
             continue;

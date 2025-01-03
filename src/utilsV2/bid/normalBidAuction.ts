@@ -21,6 +21,7 @@ export const normalBidAuction = async (bidAuctionsSameTime: BidAuction[]) => {
     }
     let payableBidAuctions = await getPayableBidAuctions(bidAuctionsSameTime);
     if (!payableBidAuctions || payableBidAuctions.length === 0) {
+        console.log("Error getPayableBidAuctions");
         return;
     }
     const serializedTxs: Buffer[] = await getSerializedTxs(payableBidAuctions);

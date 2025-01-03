@@ -8,6 +8,11 @@ export enum BidType {
     GEM = "GEM" // 🔜
 }
 
+export enum BlockType {
+    SINGLE = 0,
+    BATCH = 1
+}
+
 export enum AuctionStatus {
     ACTIVE = 3,
     FINISHED = 2,

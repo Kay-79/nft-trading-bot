@@ -22,6 +22,7 @@ import { BidAuction } from "../../types/bid/BidAuction";
 import { BidType } from "../../enum/enum";
 import axios from "axios";
 import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
+import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -451,4 +452,28 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
     }
     floorPrices[6] ?? 0 > 1000 ? (floorPrices[6] = 900) : {};
     return floorPrices;
+};
+
+export const getProfitableBidAuctionsBlockSingle = async (
+    auctionGroups: AuctionGroupDto[],
+    floorPrices: TierPrice,
+    bnbPrice: number,
+    type: BidType
+): Promise<BidAuction[]> => {
+    let profitableBidAuctions: BidAuction[] = [];
+    let totalProfit = 0;
+    let totalMinProfit = 0;
+    let totalFee = 0;
+    let totalPrice = 0;
+    let totalPricePrediction = 0;
+    return profitableBidAuctions;
+};
+
+export const getProfitableBidAuctionsBlockBatch = async (
+    auctionGroups: AuctionGroupDto[],
+    floorPrices: TierPrice,
+    bnbPrice: number,
+    type: BidType
+): Promise<BidAuction[]> => {
+    return getProfitableBidAuctionsNormalVsPro(auctionGroups, floorPrices, bnbPrice, type);
 };

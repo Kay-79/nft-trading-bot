@@ -1,14 +1,8 @@
 import { BidAuction } from "../../types/bid/BidAuction";
-import { AuctionDto } from "../../types/dtos/Auction.dto";
-import { TierPrice } from "../../types/common/TierPrice";
-import {
-    isBundleAuction,
-    isProAuction,
-    getProfitableBidAuctionsNormalVsPro,
-    getProfitableBidAuctionsBundle
-} from "./utils";
-import { BidType } from "enum/enum";
 import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
+import { TierPrice } from "../../types/common/TierPrice";
+import { getProfitableBidAuctionsBlockBatch, getProfitableBidAuctionsBlockSingle } from "./utils";
+import { BidType, BlockType } from "enum/enum";
 
 export const checkProfitAuctionGroups = async (
     auctionGroups: AuctionGroupDto[],
@@ -19,37 +13,31 @@ export const checkProfitAuctionGroups = async (
         return [];
     }
     let profitableBidAuctionGroups: BidAuction[] = [];
-    let normalAuctions: AuctionDto[] = [];
-    let proAuctions: AuctionDto[] = [];
-    let bundleAuctions: AuctionDto[] = [];
+    let groupSingleAuctions: AuctionGroupDto[] = [];
+    let groupBatchAuctions: AuctionGroupDto[] = [];
     for (let i = 0; i < auctionGroups.length; i++) {
         const auctionGroup = auctionGroups[i];
-        if (isProAuction(auctionGroup)) {
-            proAuctions.push(auctionGroup);
-        } else if (isBundleAuction(auctionGroup)) {
-            bundleAuctions.push(auctionGroup);
-        } else {
-            normalAuctions.push(auctionGroup);
+        if (auctionGroup.type === BlockType.SINGLE) {
+            groupSingleAuctions.push(auctionGroup);
+        } else if (auctionGroup.type === BlockType.BATCH) {
+            groupBatchAuctions.push(auctionGroup);
         }
     }
     profitableBidAuctionGroups.push(
-        ...(await getProfitableBidAuctionsNormalVsPro(
-            normalAuctions,
+        ...(await getProfitableBidAuctionsBlockSingle(
+            groupSingleAuctions,
             floorPrices,
             bnbPrice,
-            BidType.NORMAL
+            BidType.GROUP
         ))
     );
     profitableBidAuctionGroups.push(
-        ...(await getProfitableBidAuctionsNormalVsPro(
-            proAuctions,
+        ...(await getProfitableBidAuctionsBlockBatch(
+            groupBatchAuctions,
             floorPrices,
             bnbPrice,
-            BidType.PRO
+            BidType.GROUP
         ))
-    );
-    profitableBidAuctionGroups.push(
-        ...getProfitableBidAuctionsBundle(bundleAuctions, floorPrices, bnbPrice)
     );
     return profitableBidAuctionGroups;
 };
