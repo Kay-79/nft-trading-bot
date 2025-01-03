@@ -21,7 +21,6 @@ import { Transaction } from "ethereumjs-tx";
 import { chainInfor } from "./normalBidAuction";
 import { mpUtils } from "../mp/utils";
 import { erc20Provider } from "../../providers/erc20Provider";
-import { bidContract } from "../../config/config";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {

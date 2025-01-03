@@ -6,9 +6,9 @@ import { delay40Blocks, getPayableBidAuctions, getSerializedTxs } from "./utils"
 import { sendTransaction } from "./sendTransactionNormal";
 
 export const chainInfor = common.forCustomChain(
-    "mainnet",
+    "mainnet", // only support mainnet
     {
-        name: "bnb",
+        name: ENV === Environment.MAINNET ? "bnb" : "bnbt",
         networkId: ENV === Environment.MAINNET ? 56 : 97,
         chainId: ENV === Environment.MAINNET ? 56 : 97
     },

@@ -68,7 +68,10 @@ export const noticeProfitAuction = async (
 };
 
 export const noticeBotBid = async (latestNotice: number): Promise<number> => {
-    if (ENV === Environment.TESTNET) return latestNotice;
+    if (ENV === Environment.TESTNET) {
+        console.log("Notice bot bid testnet");
+        return latestNotice;
+    }
     const status = "Status: 🛒";
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
     const message = `${status}${contract}`;
@@ -87,7 +90,10 @@ export const noticeBotFind = async (
     minPrice: TierPrice,
     bnbPrice: number
 ): Promise<number> => {
-    if (ENV === Environment.TESTNET) return latestNotice;
+    if (ENV === Environment.TESTNET) {
+        console.log("Notice bot find testnet");
+        return latestNotice;
+    }
     const budgetNormal = (await erc20Provider.balanceOf(bidContract)) ?? 0;
     const budgetPro = (await erc20Provider.balanceOf(PRO_BUYER)) ?? 0;
     const feeBidder = (await ethersProvider.getBalance(NORMAL_BUYER ?? "")) ?? 0;
