@@ -175,9 +175,9 @@ export const getProfitableBidAuctionsNormalVsPro = async (
     let totalPrice = 0;
     let totalPricePrediction = 0;
     const fee = type === BidType.PRO ? feePro(bnbPrice) : feeNormal(bnbPrice);
-    const calculateAuctionMetrics = async (
+    const calculateAuctionMetrics = (
         auction: AuctionDto
-    ): Promise<{ profit: number; minProfit: number }> => {
+    ): { profit: number; minProfit: number } => {
         const calculateProfit = (
             minValueAuction: number,
             fee: number,
@@ -231,7 +231,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
         ) {
             continue;
         }
-        const { profit, minProfit } = await calculateAuctionMetrics(auction);
+        const { profit, minProfit } = calculateAuctionMetrics(auction);
         if (isProfitable(profit, minProfit)) {
             // floor method
             profitableAuctions.push(auction);

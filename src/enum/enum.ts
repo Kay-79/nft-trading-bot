@@ -1,7 +1,11 @@
 export enum BidType {
-    NORMAL = "NORMAL",
-    BUNDLE = "BUNDLE",
-    PRO = "PRO"
+    NORMAL = "NORMAL", //✅
+    BUNDLE = "BUNDLE", //✅
+    PRO = "PRO", //✅
+    GROUP = "GROUP", // 🧑‍💻
+    BOX = "BOX", // 🔜
+    MECBOX = "MECBOX", // 🔜
+    GEM = "GEM" // 🔜
 }
 
 export enum AuctionStatus {

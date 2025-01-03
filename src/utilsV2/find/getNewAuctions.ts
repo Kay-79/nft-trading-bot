@@ -10,9 +10,14 @@ export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDt
         );
         const auctionsList = data?.data?.list || [];
         auctionsList.forEach((auction: AuctionDto) => {
-            if (auction.tx && !cacheIdsCheck.includes(auction.tx)) {
+            if (
+                auction.index &&
+                auction.uptime &&
+                auction.auctor &&
+                !cacheIdsCheck.includes(auction.index + auction.uptime + auction.auctor) // Cant use tx for check new auction (batch auction same tx)
+            ) {
                 newAuctions.push(auction);
-                cacheIdsCheck.push(auction.tx);
+                cacheIdsCheck.push(auction.index + auction.uptime + auction.auctor);
             }
         });
     } catch (error) {

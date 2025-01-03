@@ -48,7 +48,7 @@ export const RPC_URL_FULL_NODE = process.env.GET_BLOCK_RPC_FULL_NODE || "default
 
 export const MIN_GAS_PRICE_NORMAL = ENV === Environment.MAINNET ? 1.0001 : 6;
 
-export const MIN_GAS_PRICE_PRO = ENV === Environment.MAINNET ? 3.01 : 6;
+export const MIN_GAS_PRICE_PRO = ENV === Environment.MAINNET ? 3.002 : 6;
 
 export const MP_ADDRESS =
     ENV === Environment.MAINNET ? "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2" : "0x";

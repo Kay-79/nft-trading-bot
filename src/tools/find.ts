@@ -53,6 +53,7 @@ const findV2 = async () => {
             newAuctions = auctions;
             cacheIds.momo = auctionIds;
         });
+        await ranSleep(5, 10);
         let newAuctionsBlock: AuctionGroupDto[] = [];
         await getNewAuctionGroups(cacheIds.momoBlock || []).then(
             async ([auctionGroups, auctionGroupIds]) => {
@@ -69,11 +70,18 @@ const findV2 = async () => {
             !timeLastSetup
         )
             continue;
-        const isHasProfitAuctions =
-            (await checkProfitAuctions(newAuctions, floorPrices, bnbPrice)).length > 0;
-        isHasProfitAuctions
-            ? updateWaitBid(await checkProfitAuctions(newAuctions, floorPrices, bnbPrice))
-            : {};
+        const profitAuctions = await checkProfitAuctions(newAuctions, floorPrices, bnbPrice);
+        if (profitAuctions.length > 0) {
+            updateWaitBid(profitAuctions);
+        }
+        const profitAuctionsBlock = await checkProfitAuctions(
+            newAuctionsBlock,
+            floorPrices,
+            bnbPrice
+        );
+        if (profitAuctionsBlock.length > 0) {
+            updateWaitBid(profitAuctionsBlock);
+        }
         if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
             initSetup = await setup(bnbPrice, floorPrices);
             ({
@@ -85,7 +93,7 @@ const findV2 = async () => {
                 timeLastSetup
             } = initSetup);
         }
-        await ranSleep(20, 30);
+        await ranSleep(15, 30);
     }
 };
 
