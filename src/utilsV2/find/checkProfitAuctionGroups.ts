@@ -9,7 +9,7 @@ import {
 } from "./utils";
 import { BidType } from "enum/enum";
 
-export const checkProfitAuctions = async (
+export const checkProfitAuctionGroups = async (
     auctions: AuctionDto[],
     floorPrices: TierPrice,
     bnbPrice: number
@@ -17,7 +17,7 @@ export const checkProfitAuctions = async (
     if (!auctions || auctions.length === 0) {
         return [];
     }
-    let profitableBidAuctions: BidAuction[] = [];
+    let profitableBidAuctionGroups: BidAuction[] = [];
     let normalAuctions: AuctionDto[] = [];
     let proAuctions: AuctionDto[] = [];
     let bundleAuctions: AuctionDto[] = [];
@@ -31,7 +31,7 @@ export const checkProfitAuctions = async (
             normalAuctions.push(auction);
         }
     }
-    profitableBidAuctions.push(
+    profitableBidAuctionGroups.push(
         ...(await getProfitableBidAuctionsNormalVsPro(
             normalAuctions,
             floorPrices,
@@ -39,7 +39,7 @@ export const checkProfitAuctions = async (
             BidType.NORMAL
         ))
     );
-    profitableBidAuctions.push(
+    profitableBidAuctionGroups.push(
         ...(await getProfitableBidAuctionsNormalVsPro(
             proAuctions,
             floorPrices,
@@ -47,8 +47,8 @@ export const checkProfitAuctions = async (
             BidType.PRO
         ))
     );
-    profitableBidAuctions.push(
+    profitableBidAuctionGroups.push(
         ...getProfitableBidAuctionsBundle(bundleAuctions, floorPrices, bnbPrice)
     );
-    return profitableBidAuctions;
+    return profitableBidAuctionGroups;
 };

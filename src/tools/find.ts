@@ -19,6 +19,8 @@ import { checkProfitAuctions } from "utilsV2/find/checkProfitAuctions";
 import { CacheFind } from "types/find/CacheFind";
 import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
 import { getNewAuctionGroups } from "utilsV2/find/getNewAuctionGroups";
+import { modeBot } from "config/config";
+import { checkProfitAuctionGroups } from "utilsV2/find/checkProfitAuctionGroups";
 
 const findV2 = async () => {
     console.log("Starting findV2...", ENV);
@@ -38,7 +40,18 @@ const findV2 = async () => {
         floorPrices,
         timeLastSetup
     } = initSetup;
+    console.log(`Mode Bot\nAuction: ${modeBot.auction}\nGroup:${modeBot.auctionGroup}`);
     while (true) {
+        //===========================SETUP===========================
+        if (
+            !bnbPrice ||
+            !isFrontRunNormal ||
+            !isFrontRunPro ||
+            !isFrontRunProHash ||
+            !floorPrices ||
+            !timeLastSetup
+        )
+            continue;
         const now = new Date();
         const currentHour = now.getHours();
         if (Math.abs(currentHour - latestNotice) >= TIME_DELAY_NOTICE_STATUS_BOT) {
@@ -49,39 +62,35 @@ const findV2 = async () => {
             );
         }
         let newAuctions: AuctionDto[] = [];
-        await getNewAutions(cacheIds.momo || []).then(async ([auctions, auctionIds]) => {
-            newAuctions = auctions;
-            cacheIds.momo = auctionIds;
-        });
-        await ranSleep(5, 10);
         let newAuctionsBlock: AuctionGroupDto[] = [];
-        await getNewAuctionGroups(cacheIds.momoBlock || []).then(
-            async ([auctionGroups, auctionGroupIds]) => {
-                newAuctionsBlock = auctionGroups;
-                cacheIds.momoBlock = auctionGroupIds;
+        //===========================AUCTION===========================
+        if (modeBot.auction) {
+            await getNewAutions(cacheIds.momo || []).then(async ([auctions, auctionIds]) => {
+                newAuctions = auctions;
+                cacheIds.momo = auctionIds;
+            });
+            const profitAuctions = await checkProfitAuctions(newAuctions, floorPrices, bnbPrice);
+            if (profitAuctions.length > 0) {
+                updateWaitBid(profitAuctions);
             }
-        );
-        if (
-            !bnbPrice ||
-            !isFrontRunNormal ||
-            !isFrontRunPro ||
-            !isFrontRunProHash ||
-            !floorPrices ||
-            !timeLastSetup
-        )
-            continue;
-        const profitAuctions = await checkProfitAuctions(newAuctions, floorPrices, bnbPrice);
-        if (profitAuctions.length > 0) {
-            updateWaitBid(profitAuctions);
         }
-        const profitAuctionsBlock = await checkProfitAuctions(
-            newAuctionsBlock,
-            floorPrices,
-            bnbPrice
-        );
-        if (profitAuctionsBlock.length > 0) {
-            updateWaitBid(profitAuctionsBlock);
+        if (modeBot.auctionGroup) {
+            await getNewAuctionGroups(cacheIds.momoBlock || []).then(
+                async ([auctionGroups, auctionGroupIds]) => {
+                    newAuctionsBlock = auctionGroups;
+                    cacheIds.momoBlock = auctionGroupIds;
+                }
+            );
+            const profitAuctionsBlock = await checkProfitAuctionGroups(
+                newAuctionsBlock,
+                floorPrices,
+                bnbPrice
+            );
+            if (profitAuctionsBlock.length > 0) {
+                updateWaitBid(profitAuctionsBlock);
+            }
         }
+        //===========================SETUP===========================
         if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
             initSetup = await setup(bnbPrice, floorPrices);
             ({
