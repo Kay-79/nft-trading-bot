@@ -1,13 +1,18 @@
-import { MP_ADDRESS, TOPIC_BID } from "constants/constants";
+import { ENV, MP_ADDRESS, TOPIC_BID } from "constants/constants";
 import { fullNodeProvider } from "providers/fullNodeProvider";
 import { byte32ToAddress } from "utilsV2/common/utils";
 import { AbiCoder } from "ethers";
 import { momo721 } from "utilsV2/momo721/utils";
 import fs from "fs";
+import { Environment } from "enum/enum";
 
 const abiCoder = new AbiCoder();
 
 export const crawlingDatasetsRpc = async () => {
+    if (ENV !== Environment.MAINNET) {
+        console.log("Testnet not supported");
+        return;
+    }
     let endBlock = await fullNodeProvider.getBlockNumber();
     const lastBlock = JSON.parse(fs.readFileSync("./src/AI/data/lastBlock.json", "utf-8"));
     let startBlock = lastBlock.lastBlock;
