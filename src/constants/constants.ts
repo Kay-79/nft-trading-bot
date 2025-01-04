@@ -25,15 +25,18 @@ export const API_TELEGRAM = process.env.API_TELEGRAM || "default_api";
 
 export const CHATID_MOBOX = process.env.CHATID_MOBOX || "default_chatid";
 
-export const GAS_PRICES_BID: GasPrices = {
+export const GAS_ESTIMATE_PRICES_BID: GasPrices = {
     proAuction: 250000,
     bundleAuction: 350000,
-    normalAuction: { 1: 250000, 2: 300000, 3: 325000, 4: 350000, 5: 450000, 6: 500000 }
+    normalAuction: { 1: 250000, 2: 300000, 3: 325000, 4: 350000, 5: 450000, 6: 500000 },
+    auctionGroup: 1000000
 };
 
-export const GAS_PRICE_BID = 1000000;
+export const GAS_LIMIT_BID = 1000000;
 
-export const GAS_PRICE_LIST = 325000 / 6;
+export const GAS_LIMIT_BID_BLOCK = 1000000;
+
+export const GAS_LIMIT_LIST = 325000 / 6;
 
 export const RATE_FEE_MARKET = 0.05;
 

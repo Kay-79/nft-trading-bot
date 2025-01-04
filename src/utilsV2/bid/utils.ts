@@ -5,7 +5,7 @@ import { RawTransaction } from "../../types/transaction/Transaction";
 import { bidProvider } from "../../providers/bidProvider";
 import { AuctionStatus, BidType, FunctionFragment } from "../../enum/enum";
 import {
-    GAS_PRICE_BID,
+    GAS_LIMIT_BID,
     NORMAL_BUYER,
     PRIVATE_KEY_BID,
     PRIVATE_KEY_BID_PRO,
@@ -48,7 +48,7 @@ export const getRawTx = (bidAuction: BidAuction, txData: string, nonce: number):
     }
     const txParams = {
         from: bidAuction.buyer,
-        gas: "0x" + GAS_PRICE_BID.toString(16),
+        gas: "0x" + GAS_LIMIT_BID.toString(16),
         gasPrice: "0x" + Math.round(bidAuction.minGasPrice * 10 ** 9).toString(16),
         nonce: "0x" + nonce.toString(16),
         to: bidAuction.contractAddress,

@@ -3,5 +3,5 @@ export interface CacheFind {
     momoBlock?: string[];
     Box?: string[];
     MexBox?: string[];
-    GemBox?: string[];
+    Gem?: string[];
 }

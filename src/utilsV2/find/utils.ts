@@ -7,8 +7,8 @@ import {
     API_BNB_PRICE_COIGEKO,
     API_BNB_PRICE_MOBOX,
     API_MOBOX,
-    GAS_PRICE_LIST,
-    GAS_PRICES_BID,
+    GAS_LIMIT_LIST,
+    GAS_ESTIMATE_PRICES_BID,
     MIN_GAS_PRICE_NORMAL,
     MIN_GAS_PRICE_PRO,
     MIN_TIME_GET_PRICE,
@@ -48,15 +48,15 @@ export const getMinValueType = (
 };
 
 export const feeBundle = (bnbPrice: number): number => {
-    return GAS_PRICES_BID.bundleAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_NORMAL;
+    return GAS_ESTIMATE_PRICES_BID.bundleAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_NORMAL;
 };
 
 export const feePro = (bnbPrice: number): number => {
-    return GAS_PRICES_BID.proAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_PRO;
+    return GAS_ESTIMATE_PRICES_BID.proAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_PRO;
 };
 
 export const feeNormal = (bnbPrice: number): number => {
-    return GAS_PRICES_BID.proAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_NORMAL;
+    return GAS_ESTIMATE_PRICES_BID.proAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_NORMAL;
 };
 
 export const setupBidAuction = ({
@@ -188,7 +188,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
             if (!auction?.nowPrice) return -1;
             return (
                 minValueAuction * (1 - RATE_FEE_MARKET) -
-                (fee + auction?.nowPrice * 10 ** -9 + GAS_PRICE_LIST * bnbPrice * 10 ** -9)
+                (fee + auction?.nowPrice * 10 ** -9 + GAS_LIMIT_LIST * bnbPrice * 10 ** -9)
             );
         };
         const minValueType =
@@ -213,7 +213,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
             if (!auction?.nowPrice) return -1;
             return (
                 minValueAuction * profitProAI.percent * (1 - RATE_FEE_MARKET) -
-                (fee + auction?.nowPrice * 10 ** -9 + GAS_PRICE_LIST * bnbPrice * 10 ** -9)
+                (fee + auction?.nowPrice * 10 ** -9 + GAS_LIMIT_LIST * bnbPrice * 10 ** -9)
             );
         };
         const minValue = await getPriceFromAI(auction);
@@ -475,5 +475,11 @@ export const getProfitableBidAuctionsBlockBatch = async (
     bnbPrice: number,
     type: BidType
 ): Promise<BidAuction[]> => {
-    return getProfitableBidAuctionsNormalVsPro(auctionGroups, floorPrices, bnbPrice, type);
+    let profitableBidAuctions: BidAuction[] = [];
+    let totalProfit = 0;
+    let totalMinProfit = 0;
+    let totalFee = 0;
+    let totalPrice = 0;
+    let totalPricePrediction = 0;
+    return profitableBidAuctions;
 };

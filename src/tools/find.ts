@@ -71,7 +71,7 @@ const findV2 = async () => {
             });
             const profitAuctions = await checkProfitAuctions(newAuctions, floorPrices, bnbPrice);
             if (profitAuctions.length > 0) {
-                updateWaitBid(profitAuctions);
+                await updateWaitBid(profitAuctions);
             }
         }
         if (modeBot.auctionGroup) {
@@ -87,7 +87,7 @@ const findV2 = async () => {
                 bnbPrice
             );
             if (profitAuctionsBlock.length > 0) {
-                updateWaitBid(profitAuctionsBlock);
+                await updateWaitBid(profitAuctionsBlock);
             }
         }
         //===========================SETUP===========================
