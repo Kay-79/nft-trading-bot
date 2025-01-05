@@ -59,7 +59,7 @@ export const feeNormal = (bnbPrice: number): number => {
     return GAS_ESTIMATE_PRICES_BID.proAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_NORMAL;
 };
 
-export const feeBlock = (bnbPrice: number): number => {
+export const feeBlock = (amount: number, bnbPrice: number): number => {
     return GAS_ESTIMATE_PRICES_BID.auctionGroup.default * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_PRO;
 };
 
@@ -471,7 +471,10 @@ export const getProfitableBidAuctionsBlock721 = async (
     let profitableBidAuctions: BidAuction[] = [];
     for (let i = 0; i < auctionGroups.length; i++) {
         const auctionGroup = auctionGroups[i];
-        const totalFee = feeBlock(bnbPrice);
+        if (!auctionGroup.tokens || auctionGroup.tokens.length === 0) {
+            continue;
+        }
+        const totalFee = feeBlock(auctionGroup.tokens.length, bnbPrice);
         let totalProfit = 0;
         let totalMinProfit = 0;
         let totalPrice = auctionGroup.price;
