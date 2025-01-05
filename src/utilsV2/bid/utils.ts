@@ -21,6 +21,7 @@ import { Transaction } from "ethereumjs-tx";
 import { chainInfor } from "./normalBidAuction";
 import { mpUtils } from "../mp/utils";
 import { erc20Provider } from "../../providers/erc20Provider";
+import { bidContract } from "config/config";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
@@ -324,7 +325,7 @@ export const getPayableBidAuctions = async (bidAuctions: BidAuction[]): Promise<
                     return PRO_BUYER;
                 case BidType.NORMAL:
                 case BidType.BUNDLE:
-                    return NORMAL_BUYER;
+                    return bidContract;
                 default:
                     return "";
             }
