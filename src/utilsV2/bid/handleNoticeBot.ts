@@ -16,6 +16,7 @@ import { shortenAddress, shortenNumber } from "../common/utils";
 import { TierPrice } from "../../types/common/TierPrice";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { erc20Provider } from "../../providers/erc20Provider";
+import packageJson from "../../../package.json";
 
 const noticeBot = async (message: string) => {
     try {
@@ -74,7 +75,8 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
     }
     const status = "Status: 🛒";
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
-    const message = `${status}${contract}`;
+    const version = `\nVersion: ${packageJson.version}`;
+    const message = `${status}${contract}${version}`;
     try {
         await noticeBot(message);
     } catch (error) {
