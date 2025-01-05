@@ -59,6 +59,10 @@ export const feeNormal = (bnbPrice: number): number => {
     return GAS_ESTIMATE_PRICES_BID.proAuction * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_NORMAL;
 };
 
+export const feeBlock = (bnbPrice: number): number => {
+    return GAS_ESTIMATE_PRICES_BID.auctionGroup.default * bnbPrice * 10 ** -9 * MIN_GAS_PRICE_PRO;
+};
+
 export const setupBidAuction = ({
     auctions,
     profit,
@@ -425,6 +429,9 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
                     sumPrice += auction.nowPrice / 10 ** 9;
                     amount++;
                 }
+                if (amount === 0) {
+                    return cachePrice;
+                }
                 return sumPrice / amount;
             }
         } catch (error) {
@@ -454,27 +461,30 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
     return floorPrices;
 };
 
-export const getProfitableBidAuctionsBlockSingle = async (
+export const getProfitableBidAuctionsBlock721 = async (
     auctionGroups: AuctionGroupDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
     type: BidType
 ): Promise<BidAuction[]> => {
+    auctionGroups.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableBidAuctions: BidAuction[] = [];
     let totalProfit = 0;
     let totalMinProfit = 0;
     let totalFee = 0;
     let totalPrice = 0;
     let totalPricePrediction = 0;
+    const fee = feeBlock(bnbPrice);
     return profitableBidAuctions;
 };
 
-export const getProfitableBidAuctionsBlockBatch = async (
+export const getProfitableBidAuctionsBlockCrew = async (
     auctionGroups: AuctionGroupDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
     type: BidType
 ): Promise<BidAuction[]> => {
+    auctionGroups.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableBidAuctions: BidAuction[] = [];
     let totalProfit = 0;
     let totalMinProfit = 0;

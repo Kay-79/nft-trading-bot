@@ -1,7 +1,7 @@
 import { BidAuction } from "../../types/bid/BidAuction";
 import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
 import { TierPrice } from "../../types/common/TierPrice";
-import { getProfitableBidAuctionsBlockBatch, getProfitableBidAuctionsBlockSingle } from "./utils";
+import { getProfitableBidAuctionsBlockCrew, getProfitableBidAuctionsBlock721 } from "./utils";
 import { BidType, BlockType } from "enum/enum";
 
 export const checkProfitAuctionGroups = async (
@@ -17,14 +17,14 @@ export const checkProfitAuctionGroups = async (
     let groupBatchAuctions: AuctionGroupDto[] = [];
     for (let i = 0; i < auctionGroups.length; i++) {
         const auctionGroup = auctionGroups[i];
-        if (auctionGroup.type === BlockType.SINGLE) {
+        if (auctionGroup.type === BlockType.BEP721) {
             groupSingleAuctions.push(auctionGroup);
-        } else if (auctionGroup.type === BlockType.BATCH) {
+        } else if (auctionGroup.type === BlockType.CREW) {
             groupBatchAuctions.push(auctionGroup);
         }
     }
     profitableBidAuctionGroups.push(
-        ...(await getProfitableBidAuctionsBlockSingle(
+        ...(await getProfitableBidAuctionsBlock721(
             groupSingleAuctions,
             floorPrices,
             bnbPrice,
@@ -32,7 +32,7 @@ export const checkProfitAuctionGroups = async (
         ))
     );
     profitableBidAuctionGroups.push(
-        ...(await getProfitableBidAuctionsBlockBatch(
+        ...(await getProfitableBidAuctionsBlockCrew(
             groupBatchAuctions,
             floorPrices,
             bnbPrice,

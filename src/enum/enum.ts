@@ -9,8 +9,8 @@ export enum BidType {
 }
 
 export enum BlockType {
-    SINGLE = 0,
-    BATCH = 1
+    BEP721 = 0,
+    CREW = 1
 }
 
 export enum AuctionStatus {

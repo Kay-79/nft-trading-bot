@@ -29,7 +29,29 @@ export const GAS_ESTIMATE_PRICES_BID: GasPrices = {
     proAuction: 250000,
     bundleAuction: 350000,
     normalAuction: { 1: 250000, 2: 300000, 3: 325000, 4: 350000, 5: 450000, 6: 500000 },
-    auctionGroup: 1000000
+    auctionGroup: {
+        bep721: {
+            3: NaN,
+            4: NaN,
+            5: NaN,
+            6: NaN,
+            7: NaN,
+            8: NaN,
+            9: NaN,
+            10: NaN
+        },
+        crew: {
+            3: 431390,
+            4: NaN,
+            5: NaN,
+            6: NaN,
+            7: NaN,
+            8: NaN,
+            9: NaN,
+            10: NaN
+        },
+        default: 1000000
+    }
 };
 
 export const GAS_LIMIT_BID = 1000000;
