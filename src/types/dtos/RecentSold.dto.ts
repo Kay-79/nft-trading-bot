@@ -1,15 +1,6 @@
-class Token {
-    tokenId?: number;
-    quality?: number;
-    category?: number;
-    level?: number;
-    specialty?: number;
-    hashrate?: number;
-    lvHashrate?: number;
-    prototype?: number;
-}
+import { Momo721 } from "./Momo721";
 
-export class RecentSold {
+export interface RecentSold {
     auctor?: string;
     bidder?: string;
     bidPrice?: number;
@@ -17,5 +8,5 @@ export class RecentSold {
     amounts?: string[];
     tx?: string;
     crtime?: number;
-    tokens?: Token[];
+    tokens?: Momo721[];
 }

@@ -1,4 +1,4 @@
-export class AuctionDto {
+export interface AuctionDto {
     id?: string;
     chain?: string;
     auctor?: string;

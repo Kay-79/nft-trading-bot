@@ -3,7 +3,7 @@ import { AuctionDto } from "../dtos/Auction.dto";
 import { TierPrice } from "../common/TierPrice";
 import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
 
-export class BidAuction {
+export interface BidAuction {
     id?: string;
     uptime?: number;
     profit?: number;

@@ -1,4 +1,4 @@
-export class OrderBlockInfo {
+export interface OrderBlockInfo {
     orderId?: BigInt;
     price?: BigInt;
     status?: BigInt;

@@ -1,4 +1,4 @@
-export class ModeBot {
+export interface ModeBot {
     auction?: boolean;
     auctionGroup?: boolean;
     box?: boolean;

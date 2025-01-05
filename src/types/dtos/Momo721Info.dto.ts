@@ -1,4 +1,4 @@
-export class Momo721Info {
+export interface Momo721Info {
     prototype?: BigInt;
     quality?: BigInt;
     category?: BigInt;

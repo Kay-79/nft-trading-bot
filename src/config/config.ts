@@ -1,5 +1,6 @@
 import { ModeBot } from "types/common/ModeBot";
 import { TierPrice } from "../types/common/TierPrice";
+import { ProfitConfig } from "types/common/ProfitConfig";
 
 export const modeBot: ModeBot = {
     auction: false,
@@ -18,7 +19,12 @@ export const profitPerTier: TierPrice = {
     6: 500
 };
 
-export const profitProAI = {
+export const profitBlock: ProfitConfig = {
+    min: 10,
+    percent: 0.8
+};
+
+export const profitProAI: ProfitConfig = {
     min: 5,
     percent: 0.8
 };

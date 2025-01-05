@@ -469,12 +469,14 @@ export const getProfitableBidAuctionsBlock721 = async (
 ): Promise<BidAuction[]> => {
     auctionGroups.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableBidAuctions: BidAuction[] = [];
-    let totalProfit = 0;
-    let totalMinProfit = 0;
-    let totalFee = 0;
-    let totalPrice = 0;
-    let totalPricePrediction = 0;
-    const fee = feeBlock(bnbPrice);
+    for (let i = 0; i < auctionGroups.length; i++) {
+        const auctionGroup = auctionGroups[i];
+        const totalFee = feeBlock(bnbPrice);
+        let totalProfit = 0;
+        let totalMinProfit = 0;
+        let totalPrice = auctionGroup.price;
+        let totalPricePrediction = 0;
+    }
     return profitableBidAuctions;
 };
 

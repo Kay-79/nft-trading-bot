@@ -1,22 +1,13 @@
-class Token {
-    tokenId?: number;
-    quality?: number;
-    category?: number;
-    level?: number;
-    specialty?: number;
-    hashrate?: number;
-    lvHashrate?: number;
-    prototype?: number;
-}
+import { Momo721 } from "./Momo721";
 
-export class AuctionGroupDto {
+export interface AuctionGroupDto {
     orderId?: number;
     auctor?: string;
     type?: number;
     uptime?: number;
     price?: number;
     hashrate?: number;
-    tokens?: Token[];
+    tokens?: Momo721[];
     tx?: string;
     index?: number;
 }
