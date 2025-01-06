@@ -3,8 +3,8 @@ import { TierPrice } from "../types/common/TierPrice";
 import { ProfitConfig } from "types/common/ProfitConfig";
 
 export const modeBot: ModeBot = {
-    auction: false,
-    auctionGroup: true,
+    auction: true,
+    auctionGroup: false,
     box: false,
     mexBox: false,
     gem: false
