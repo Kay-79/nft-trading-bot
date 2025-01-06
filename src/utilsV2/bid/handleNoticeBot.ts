@@ -75,8 +75,9 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
     }
     const status = "Status: 🛒";
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
+    const platform = `\nPlatform: ${ENV}`;
     const version = `\nVersion: ${packageJson.version}`;
-    const message = `${status}${contract}${version}`;
+    const message = `${status}${contract}${version}${platform}`;
     try {
         await noticeBot(message);
     } catch (error) {
