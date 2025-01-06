@@ -77,7 +77,7 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
     const platform = `\nPlatform: ${ENV}`;
     const version = `\nVersion: ${packageJson.version}`;
-    const message = `${status}${contract}${version}${platform}`;
+    const message = `${status}${contract}${platform}${version}`;
     try {
         await noticeBot(message);
     } catch (error) {
@@ -145,7 +145,7 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
     const pricePredictions = `\nPrediction: $${bidAuctions
-        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 9, 3))
+        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 0, 3))
         .join(", $")}`;
     const floorPrices = bidAuctions[0].minPrice
         ? `\nFloor: $${Object.entries(bidAuctions[0]?.minPrice)
@@ -175,7 +175,7 @@ export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
         .join(", $")}`;
     const pricePredictions = `\nPrediction: $${bidAuctions
-        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 9, 3))
+        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 0, 3))
         .join(", $")}`;
     const message = `${status}${profits}${types}${prices}${pricePredictions}`;
     await noticeBot(message);
