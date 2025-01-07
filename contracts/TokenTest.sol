@@ -5,6 +5,6 @@ import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 contract MyToken is ERC20 {
     constructor() ERC20("USDT", "USDT Token") {
-        _mint(msg.sender, 100 * 10 ** uint256(18));
+        _mint(msg.sender, 79797979 * 10 ** uint256(18));
     }
 }

@@ -76,10 +76,14 @@ export const MIN_GAS_PRICE_NORMAL = ENV === Environment.MAINNET ? 1.0001 : 6;
 export const MIN_GAS_PRICE_PRO = ENV === Environment.MAINNET ? 3.002 : 6;
 
 export const MP_ADDRESS =
-    ENV === Environment.MAINNET ? "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2" : "0x";
+    ENV === Environment.MAINNET
+        ? "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2"
+        : "0xCCCC9D44B0A3e6d01eE204849d195f2422dcD437";
 
 export const MP_BLOCK_ADDRESS =
-    ENV === Environment.MAINNET ? "0x1d4d9706b057a945fce86ee53b8894bd17ffa0de" : "0x";
+    ENV === Environment.MAINNET
+        ? "0x1d4d9706b057a945fce86ee53b8894bd17ffa0de"
+        : "0xBBBBD0DE58A5964d183b855A1626795Df7E894aD";
 
 export const STAKING_ADDRESS =
     ENV === Environment.MAINNET ? "0x3bD6a582698ECCf6822dB08141818A1a8512c68D" : "0x";
@@ -93,7 +97,7 @@ export const MOMO1155_ADDRESS =
 export const USDT_ADDRESS =
     ENV === Environment.MAINNET
         ? "0x55d398326f99059fF775485246999027B3197955"
-        : "0xcc2df785651C3D58bebcaa211eeDdC6901F896f0";
+        : "0x190B955CE93deDACA9E3Dcc06BF19BF025B194C6";
 
 export const NORMAL_BUYER =
     ENV === Environment.MAINNET
