@@ -2,7 +2,7 @@ import fs from "fs";
 import { traders } from "config/config";
 import { ethers } from "ethers";
 
-export const cleanDataset = async () => {
+export const cleanDatasets = async () => {
     const filePath = "./src/AI/data/moboxDatasets.json";
     let existingData = [];
     if (fs.existsSync(filePath)) {
@@ -29,4 +29,4 @@ export const cleanDataset = async () => {
     fs.writeFileSync(filePath, JSON.stringify(newData, null, 2));
 };
 
-cleanDataset();
+cleanDatasets();

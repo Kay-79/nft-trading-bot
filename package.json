@@ -29,7 +29,7 @@
         "crawl": "bun ./src/AI/crawlingDatasetsRpc.ts",
         "apiData": "bun ./src/AI/api/serverDatasets.ts",
         "getData": "bun ./src/AI/data/getDataset.ts",
-        "clean": "bun ./src/AI/cleanDataset.ts",
+        "clean": "bun ./src/AI/cleanDatasets.ts",
         "check": "node ./src/tools/check",
         "find": "bun ./src/tools/find.ts",
         "bid": "bun ./src/tools/bid.ts",
