@@ -16,6 +16,13 @@ change:
 killChange:
 	kill -9 $(shell ps aux | grep change | grep -v grep | awk '{print $$2}')
 
+killApiMomo:
+	if [ -f apiMomo.pid ]; then \
+		kill -9 $$(cat apiMomo.pid) && rm -f apiMomo.pid; \
+	else \
+		echo "apiMomo PID file not found."; \
+	fi
+
 all:
 	make bid
 	make find
@@ -30,7 +37,7 @@ allWin:
 killAll:
 	kill -9 $(shell ps aux | grep bun | grep -v grep | awk '{print $$2}')
 	kill -9 $(shell ps aux | grep node | grep -v grep | awk '{print $$2}')
-	kill -9 $(shell ps aux | grep python | grep -v grep | awk '{print $$2}')
+	make killApiMomo
 
 
 temp:
@@ -58,8 +65,11 @@ modelAI:
 modelAIPi:
 	bash -c "source venv/bin/activate && python ./src/AI/model/modelPi.py"
 
+# apiMomo:
+# 	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 &"
+
 apiMomo:
-	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 &"
+	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 & echo $$! > apiMomo.pid"
 
 apiMomoWin:
 	.\venv\Scripts\activate
