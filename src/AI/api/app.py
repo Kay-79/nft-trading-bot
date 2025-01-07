@@ -19,7 +19,7 @@ def predict():
             return jsonify({"error": "Invalid input"}), 400
         if len(input_data) != 4:
             return jsonify({"error": "Invalid input length"}), 400
-        if input_data[2] not in [4, 6]:
+        if input_data[2] not in [4, 5, 6]:
             return jsonify({"error": "Invalid input value"}), 400
         input_data = np.array(input_data).reshape(1, -1)
         input_data = scaler.transform(input_data)
