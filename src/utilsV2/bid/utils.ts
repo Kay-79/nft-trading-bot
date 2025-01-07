@@ -6,6 +6,7 @@ import { bidProvider } from "../../providers/bidProvider";
 import { AuctionStatus, BidType, FunctionFragment } from "../../enum/enum";
 import {
     GAS_LIMIT_BID,
+    GAS_LIMIT_BID_BLOCK,
     NORMAL_BUYER,
     PRIVATE_KEY_BID,
     PRIVATE_KEY_BID_PRO,
@@ -49,9 +50,33 @@ export const getRawTx = (bidAuction: BidAuction, txData: string, nonce: number):
     if (!bidAuction.buyer || !bidAuction.minGasPrice || !bidAuction.contractAddress) {
         return {} as RawTransaction;
     }
+    let gasLimit = 0;
+    switch (bidAuction.type) {
+        case BidType.NORMAL:
+        case BidType.BUNDLE:
+            gasLimit = GAS_LIMIT_BID;
+            break;
+        case BidType.PRO:
+            gasLimit = GAS_LIMIT_BID;
+            break;
+        case BidType.GROUP:
+            gasLimit = GAS_LIMIT_BID_BLOCK;
+            break;
+        case BidType.BOX:
+            gasLimit = 0;
+            break;
+        case BidType.MECBOX:
+            gasLimit = 0;
+            break;
+        case BidType.GEM:
+            gasLimit = 0;
+            break;
+        default:
+            gasLimit = 0;
+    }
     const txParams = {
         from: bidAuction.buyer,
-        gas: "0x" + GAS_LIMIT_BID.toString(16),
+        gas: "0x" + Math.round(gasLimit).toString(16),
         gasPrice: "0x" + Math.round(bidAuction.minGasPrice * 10 ** 9).toString(16),
         nonce: "0x" + nonce.toString(16),
         to: bidAuction.contractAddress,
