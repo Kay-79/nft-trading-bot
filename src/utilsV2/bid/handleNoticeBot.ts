@@ -10,8 +10,8 @@ import {
     TIME_ENABLE_BID
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { BidStatus, BidType, Environment } from "../../enum/enum";
-import { bidContract } from "../../config/config";
+import { BidStatus, BidType, Environment, ModeBotStatus } from "../../enum/enum";
+import { bidContract, modeBot } from "../../config/config";
 import { shortenAddress, shortenNumber } from "../common/utils";
 import { TierPrice } from "../../types/common/TierPrice";
 import { ethersProvider } from "../../providers/ethersProvider";
@@ -74,10 +74,16 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
         return latestNotice;
     }
     const status = "Status: 🛒";
+    const mode = `\nMode:
+        Auction:${modeBot.auction ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Group:${modeBot.auctionGroup ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Box:${modeBot.box ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Mex:${modeBot.mexBox ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Gem:${modeBot.gem ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}`;
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
     const platform = `\nPlatform: ${ENV}`;
     const version = `\nVersion: ${packageJson.version}`;
-    const message = `${status}${contract}${platform}${version}`;
+    const message = `${status}${mode}${contract}${platform}${version}`;
     try {
         await noticeBot(message);
     } catch (error) {
@@ -142,10 +148,10 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
         .join(", ")}`;
     const amounts = `\nAmount: ${bidAuctions.map(bidAuction => bidAuction.amount).join(", ")}`;
     const prices = `\nPrice: $${bidAuctions
-        .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
+        .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 2))
         .join(", $")}`;
     const pricePredictions = `\nPrediction: $${bidAuctions
-        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 0, 3))
+        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 0, 2))
         .join(", $")}`;
     const floorPrices = bidAuctions[0].minPrice
         ? `\nFloor: $${Object.entries(bidAuctions[0]?.minPrice)
@@ -160,7 +166,7 @@ export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
     if (!bidAuctions.length) return;
     const status = "Insufficient fund: 😭";
     const profits = `\nMin profit: 💵${bidAuctions
-        .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 3))
+        .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 2))
         .join(", 💵")}`;
     const types = `\nType: ${bidAuctions
         .map(bidAuction =>
@@ -172,10 +178,10 @@ export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
         )
         .join(", ")}`;
     const prices = `\nPrice: $${bidAuctions
-        .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 3))
+        .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 2))
         .join(", $")}`;
     const pricePredictions = `\nPrediction: $${bidAuctions
-        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 0, 3))
+        .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 0, 2))
         .join(", $")}`;
     const message = `${status}${profits}${types}${prices}${pricePredictions}`;
     await noticeBot(message);
@@ -183,7 +189,7 @@ export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
 
 export const noticeErrorBid = async (errBidAuction: BidAuction) => {
     const status = "Error: 📛";
-    const profit = `\nMin profit: 💵${shortenNumber(errBidAuction.profit ?? 0, 0, 3)}`;
+    const profit = `\nMin profit: 💵${shortenNumber(errBidAuction.profit ?? 0, 0, 2)}`;
     const time = `\nTime: ${errBidAuction.uptime}`;
     const nowTime = `\nNow: ${shortenNumber(Math.round(Date.now() / 1000), 0, 0)}`;
     const overTime = `\nOver: ${
@@ -195,7 +201,7 @@ export const noticeErrorBid = async (errBidAuction: BidAuction) => {
 
 export const noticeBotCancel = async (bidAuction: BidAuction) => {
     const status = "Canceled: 🚫";
-    const profit = `\nMin profit: 💵${shortenNumber(bidAuction.profit ?? 0, 0, 3)}`;
+    const profit = `\nMin profit: 💵${shortenNumber(bidAuction.profit ?? 0, 0, 2)}`;
     const auctor =
         bidAuction.auctions && bidAuction.auctions.length > 0
             ? `\nAuctor: ${shortenAddress(bidAuction.auctions[0].auctor ?? "")}`
