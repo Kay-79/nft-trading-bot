@@ -17,7 +17,7 @@ export interface BidAuction {
     type?: BidType;
     amount?: number;
     auctions?: AuctionDto[];
-    auctionGroups?: AuctionGroupDto[];
+    auctionGroup?: AuctionGroupDto;
     minGasPrice?: number;
     maxGasPrice?: number;
 }

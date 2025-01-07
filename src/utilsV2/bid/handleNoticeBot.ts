@@ -10,7 +10,7 @@ import {
     TIME_ENABLE_BID
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { BidStatus, BidType, Environment, ModeBotStatus } from "../../enum/enum";
+import { BidStatus, BidType, BlockType, Environment, ModeBotStatus } from "../../enum/enum";
 import { bidContract, modeBot } from "../../config/config";
 import { shortenAddress, shortenNumber } from "../common/utils";
 import { TierPrice } from "../../types/common/TierPrice";
@@ -137,14 +137,39 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
     const profits = `\nMin profit: 💵${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 2))
         .join(", 💵")}`;
+    // const types = `\nType: ${bidAuctions
+    //     .map(bidAuction =>
+    //         bidAuction.type === BidType.BUNDLE
+    //             ? BidType.BUNDLE
+    //             : bidAuction.amount === 1
+    //             ? bidAuction.type
+    //             : `BATCH ${bidAuction.type}`
+    //     )
+    //     .join(", ")}`;
     const types = `\nType: ${bidAuctions
-        .map(bidAuction =>
-            bidAuction.type === BidType.BUNDLE
-                ? BidType.BUNDLE
-                : bidAuction.amount === 1
-                ? bidAuction.type
-                : `BATCH ${bidAuction.type}`
-        )
+        .map(bidAuction => {
+            switch (bidAuction.type) {
+                case BidType.NORMAL:
+                    if (bidAuction.amount === 1) return BidType.NORMAL;
+                    return `BATCH ${BidType.NORMAL}`;
+                case BidType.BUNDLE:
+                    return BidType.BUNDLE;
+                case BidType.PRO:
+                    if (bidAuction.amount === 1) return BidType.PRO;
+                    return `BATCH ${BidType.PRO}`;
+                case BidType.GROUP:
+                    if (bidAuction.auctionGroup?.type === BlockType.BEP721) return `721 GROUP`;
+                    return `CREW GROUP`;
+                case BidType.GEM: //comin soon
+                    break;
+                case BidType.BOX: //comin soon
+                    break;
+                case BidType.MECBOX: //comin soon
+                    break;
+                default:
+                    break;
+            }
+        })
         .join(", ")}`;
     const amounts = `\nAmount: ${bidAuctions.map(bidAuction => bidAuction.amount).join(", ")}`;
     const prices = `\nPrice: $${bidAuctions
@@ -169,13 +194,29 @@ export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 2))
         .join(", 💵")}`;
     const types = `\nType: ${bidAuctions
-        .map(bidAuction =>
-            bidAuction.type === BidType.BUNDLE
-                ? BidType.BUNDLE
-                : bidAuction.amount === 1
-                ? bidAuction.type
-                : `BATCH ${bidAuction.type}`
-        )
+        .map(bidAuction => {
+            switch (bidAuction.type) {
+                case BidType.NORMAL:
+                    if (bidAuction.amount === 1) return BidType.NORMAL;
+                    return `BATCH ${BidType.NORMAL}`;
+                case BidType.BUNDLE:
+                    return BidType.BUNDLE;
+                case BidType.PRO:
+                    if (bidAuction.amount === 1) return BidType.PRO;
+                    return `BATCH ${BidType.PRO}`;
+                case BidType.GROUP:
+                    if (bidAuction.auctionGroup?.type === BlockType.BEP721) return `721 GROUP`;
+                    return `CREW GROUP`;
+                case BidType.GEM: //comin soon
+                    break;
+                case BidType.BOX: //comin soon
+                    break;
+                case BidType.MECBOX: //comin soon
+                    break;
+                default:
+                    break;
+            }
+        })
         .join(", ")}`;
     const prices = `\nPrice: $${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.totalPrice ?? 0, 9, 2))

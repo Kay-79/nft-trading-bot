@@ -97,24 +97,28 @@ export const USDT_ADDRESS =
 
 export const NORMAL_BUYER =
     ENV === Environment.MAINNET
-        ? process.env.NORMAL_BUYER_MAINNET
-        : process.env.NORMAL_BUYER_TESTNET;
+        ? process.env.NORMAL_BUYER_MAINNET || "0x"
+        : process.env.NORMAL_BUYER_TESTNET || "0x";
 
 export const PRO_BUYER =
-    ENV === Environment.MAINNET ? process.env.PRO_BUYER_MAINNET : process.env.PRO_BUYER_TESTNET;
+    ENV === Environment.MAINNET
+        ? process.env.PRO_BUYER_MAINNET || "0x"
+        : process.env.PRO_BUYER_TESTNET || "0x";
 
 export const CHANGER =
-    ENV === Environment.MAINNET ? process.env.CHANGER_MAINNET : process.env.CHANGER_TESTNET;
+    ENV === Environment.MAINNET
+        ? process.env.CHANGER_MAINNET || "0x"
+        : process.env.CHANGER_TESTNET || "0x";
 
 export const PRIVATE_KEY_BID =
     ENV === Environment.MAINNET
-        ? process.env.PRIVATE_KEY_BID_MAINNET
-        : process.env.PRIVATE_KEY_BID_TESTNET;
+        ? process.env.PRIVATE_KEY_BID_MAINNET || "0x"
+        : process.env.PRIVATE_KEY_BID_TESTNET || "0x";
 
 export const PRIVATE_KEY_BID_PRO =
     ENV === Environment.MAINNET
-        ? process.env.PRIVATE_KEY_BID_PRO_MAINNET
-        : process.env.PRIVATE_KEY_BID_PRO_TESTNET;
+        ? process.env.PRIVATE_KEY_BID_PRO_MAINNET || "0x"
+        : process.env.PRIVATE_KEY_BID_PRO_TESTNET || "0x";
 
 export const CACHE_BNB_PRICE = 600;
 
@@ -150,6 +154,6 @@ export const IP_MAIN = "172.16.1.133";
 
 export const PORT_HOST_DATASET = 3004;
 
-export const API_AI_PRICE = "http://172.16.1.111:5000/predict";
+// export const API_AI_PRICE = "http://172.16.1.111:5000/predict";
 
-// export const API_AI_PRICE = "http://127.0.0.1:5000/predict";
+export const API_AI_PRICE = "http://127.0.0.1:5000/predict";

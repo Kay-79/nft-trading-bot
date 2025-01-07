@@ -1,6 +1,6 @@
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierPrice } from "../../types/common/TierPrice";
-import { bidContract, profitPerTier, profitProAI } from "../../config/config";
+import { bidContract, profitBlock, profitPerTier, profitProAI } from "../../config/config";
 import fs from "fs";
 import {
     API_AI_PRICE,
@@ -16,13 +16,15 @@ import {
     NORMAL_BUYER,
     PRO_BUYER,
     RATE_FEE_MARKET,
-    WAIT_BID_PATH
+    WAIT_BID_PATH,
+    MP_BLOCK_ADDRESS
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { BidType } from "../../enum/enum";
+import { BidType, BlockType } from "../../enum/enum";
 import axios from "axios";
 import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
 import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
+import { console } from "inspector";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -65,32 +67,78 @@ export const feeBlock = (amount: number, bnbPrice: number): number => {
 
 export const setupBidAuction = ({
     auctions,
+    auctionGroup,
     profit,
     minProfit,
     floorPrices,
     totalFee,
-    auctionType,
+    bidType,
     amount,
     totalPrice,
     pricePrediction
 }: {
     auctions: AuctionDto[];
+    auctionGroup?: AuctionGroupDto;
     profit: number;
     minProfit: number;
     floorPrices: TierPrice;
     totalFee: number;
-    auctionType: BidType;
+    bidType: BidType;
     amount: number;
     totalPrice: number;
     pricePrediction: number;
 }): BidAuction => {
-    let buyer = auctionType === BidType.PRO ? PRO_BUYER : NORMAL_BUYER;
-    let contractAddress = auctionType === BidType.PRO ? MP_ADDRESS : bidContract;
-    let minGasPrice = auctionType === BidType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL;
-    let maxGasPrice = auctionType === BidType.PRO ? MIN_GAS_PRICE_PRO : MIN_GAS_PRICE_NORMAL; // comming soon
+    let buyer = "";
+    let contractAddress = "";
+    let minGasPrice = 0;
+    let maxGasPrice = 0;
+    let uptime = 0;
+    let id = "";
+    switch (bidType) {
+        case BidType.NORMAL:
+            buyer = NORMAL_BUYER;
+            contractAddress = bidContract;
+            minGasPrice = MIN_GAS_PRICE_NORMAL;
+            maxGasPrice = MIN_GAS_PRICE_NORMAL;
+            uptime = auctions[0]?.uptime ?? 0;
+            id = auctions[0]?.id ?? "";
+            break;
+        case BidType.BUNDLE:
+            buyer = NORMAL_BUYER;
+            contractAddress = bidContract;
+            minGasPrice = MIN_GAS_PRICE_NORMAL;
+            maxGasPrice = MIN_GAS_PRICE_NORMAL;
+            uptime = auctions[0]?.uptime ?? 0;
+            id = auctions[0]?.id ?? "";
+            break;
+        case BidType.PRO:
+            buyer = PRO_BUYER;
+            contractAddress = MP_ADDRESS;
+            minGasPrice = MIN_GAS_PRICE_PRO;
+            maxGasPrice = MIN_GAS_PRICE_PRO;
+            uptime = auctions[0]?.uptime ?? 0;
+            id = auctions[0]?.id ?? "";
+            break;
+        case BidType.GROUP:
+            buyer = PRO_BUYER;
+            contractAddress = MP_BLOCK_ADDRESS;
+            minGasPrice = MIN_GAS_PRICE_PRO;
+            maxGasPrice = MIN_GAS_PRICE_PRO;
+            uptime = (auctionGroup?.uptime ?? 0) + 8 * 60;
+            id = auctionGroup?.auctor ?? "" + auctionGroup?.orderId ?? "";
+            break;
+        case BidType.GEM: //comin soon
+            break;
+        case BidType.BOX: //comin soon
+            break;
+        case BidType.MECBOX: //comin soon
+            break;
+        default:
+            break;
+    }
     return {
-        id: auctions[0]?.id,
-        uptime: auctions[0]?.uptime,
+        id: id,
+        uptime: uptime,
         profit: profit,
         minProfit: minProfit,
         buyer: buyer,
@@ -99,11 +147,12 @@ export const setupBidAuction = ({
         pricePrediction: pricePrediction,
         minPrice: floorPrices,
         fee: totalFee,
-        type: auctionType,
+        type: bidType,
         amount: amount,
         minGasPrice: minGasPrice,
         maxGasPrice: maxGasPrice,
-        auctions: auctions
+        auctions: auctions,
+        auctionGroup: auctionGroup
     };
 };
 
@@ -163,6 +212,39 @@ export const getPriceFromAI = async (auction: AuctionDto): Promise<number> => {
     } catch (error) {
         return 0;
     }
+};
+
+export const getPriceBlockFromAI = async (auctionGroup: AuctionGroupDto): Promise<number> => {
+    if (!auctionGroup.tokens) return 0;
+    let inputs: number[][] = [];
+    auctionGroup.tokens.forEach(token => {
+        let input = [
+            token.hashrate,
+            token.lvHashrate,
+            token.prototype !== undefined ? Math.floor(token.prototype / 10 ** 4) : undefined,
+            token.level
+        ].filter(value => value !== undefined) as number[];
+        inputs.push(input);
+    });
+    let totalPredict = 0;
+    try {
+        for (const input of inputs) {
+            console.log(input);
+            const params = new URLSearchParams();
+            input.forEach(value => {
+                if (value !== undefined) {
+                    params.append("input", value.toString());
+                }
+            });
+            const response = await axios.get(API_AI_PRICE, {
+                params: params
+            });
+            totalPredict += response.data.prediction[0][0];
+        }
+    } catch (error) {
+        return 0;
+    }
+    return totalPredict;
 };
 
 export const getProfitableBidAuctionsNormalVsPro = async (
@@ -254,7 +336,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                         minProfit: totalMinProfit - minProfit,
                         floorPrices: floorPrices,
                         totalFee: totalFee - fee,
-                        auctionType: type,
+                        bidType: type,
                         amount: profitableAuctions.length,
                         totalPrice: totalPrice - auction?.nowPrice,
                         pricePrediction: totalPricePrediction - 0
@@ -287,7 +369,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                             minProfit: totalMinProfit - minProfit,
                             floorPrices: floorPrices,
                             totalFee: totalFee - fee,
-                            auctionType: type,
+                            bidType: type,
                             amount: profitableAuctions.length,
                             totalPrice: totalPrice - auction?.nowPrice,
                             pricePrediction: totalPricePrediction - pricePrediction
@@ -314,7 +396,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 minProfit: totalMinProfit,
                 floorPrices: floorPrices,
                 totalFee: totalFee,
-                auctionType: type,
+                bidType: type,
                 amount: profitableAuctions.length,
                 totalPrice: totalPrice,
                 pricePrediction: totalPricePrediction
@@ -366,7 +448,7 @@ export const getProfitableBidAuctionsBundle = (
                     minProfit: minProfit,
                     floorPrices: floorPrices,
                     totalFee: feeBundle(bnbPrice),
-                    auctionType: BidType.BUNDLE,
+                    bidType: BidType.BUNDLE,
                     amount: amount,
                     totalPrice: auction?.nowPrice,
                     pricePrediction: 0
@@ -461,40 +543,88 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
     return floorPrices;
 };
 
-export const getProfitableBidAuctionsBlock721 = async (
+export const getProfitableBidAuctionsBlock = async (
     auctionGroups: AuctionGroupDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
     type: BidType
 ): Promise<BidAuction[]> => {
+    if (type !== BidType.GROUP) {
+        console.log("Type is not group");
+        return [];
+    }
     auctionGroups.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableBidAuctions: BidAuction[] = [];
     for (let i = 0; i < auctionGroups.length; i++) {
         const auctionGroup = auctionGroups[i];
-        if (!auctionGroup.tokens || auctionGroup.tokens.length === 0) {
+        if (!auctionGroup.tokens || auctionGroup.tokens.length === 0 || !auctionGroup.price) {
             continue;
         }
         const totalFee = feeBlock(auctionGroup.tokens.length, bnbPrice);
-        let totalProfit = 0;
-        let totalMinProfit = 0;
-        let totalPrice = auctionGroup.price;
-        let totalPricePrediction = 0;
+        const calculateAuctionMetricsBlockAI = async (
+            auctionGroup: AuctionGroupDto
+        ): Promise<{ profit: number; minProfit: number; pricePrediction: number }> => {
+            const calculateProfitBlock = (
+                minValueAuctionGroup: number,
+                crewPrice: number,
+                fee: number,
+                auctionGroup: AuctionGroupDto,
+                bnbPrice: number
+            ): number => {
+                if (!auctionGroup?.price || !auctionGroup.tokens) return -1;
+                return (
+                    (minValueAuctionGroup * profitBlock.percent + crewPrice) *
+                        (1 - RATE_FEE_MARKET) -
+                    (fee +
+                        auctionGroup?.price * 10 ** -9 +
+                        auctionGroup.tokens?.length * GAS_LIMIT_LIST * bnbPrice * 10 ** -9)
+                );
+            };
+            let minValue = await getPriceBlockFromAI(auctionGroup);
+            let crewPrice = 0;
+            if (auctionGroup.type === BlockType.CREW) {
+                crewPrice += floorPrices[1] ?? 0;
+                crewPrice += floorPrices[2] ?? 0;
+                crewPrice += floorPrices[3] ?? 0;
+                if (auctionGroup.tokens) {
+                    crewPrice *= auctionGroup.tokens.length;
+                }
+                crewPrice;
+            }
+            const minProfit = profitBlock.min;
+            const profit = calculateProfitBlock(
+                minValue,
+                crewPrice,
+                totalFee,
+                auctionGroup,
+                bnbPrice
+            );
+            return { profit, minProfit, pricePrediction: minValue + crewPrice };
+        };
+        const { profit, minProfit, pricePrediction } = await calculateAuctionMetricsBlockAI(
+            auctionGroup
+        );
+        const totalProfit = profit;
+        const totalMinProfit = minProfit;
+        const totalPricePrediction = pricePrediction;
+        const totalPrice = auctionGroup.price;
+        console.log(profit, minProfit, pricePrediction);
+        if (!isProfitable(totalProfit, totalMinProfit)) {
+            profitableBidAuctions.push(
+                setupBidAuction({
+                    auctions: [],
+                    auctionGroup: auctionGroup,
+                    profit: totalProfit,
+                    minProfit: totalMinProfit,
+                    floorPrices: floorPrices,
+                    totalFee: totalFee,
+                    bidType: type,
+                    amount: auctionGroup.tokens.length,
+                    totalPrice: totalPrice,
+                    pricePrediction: totalPricePrediction
+                })
+            );
+        }
     }
-    return profitableBidAuctions;
-};
-
-export const getProfitableBidAuctionsBlockCrew = async (
-    auctionGroups: AuctionGroupDto[],
-    floorPrices: TierPrice,
-    bnbPrice: number,
-    type: BidType
-): Promise<BidAuction[]> => {
-    auctionGroups.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
-    let profitableBidAuctions: BidAuction[] = [];
-    let totalProfit = 0;
-    let totalMinProfit = 0;
-    let totalFee = 0;
-    let totalPrice = 0;
-    let totalPricePrediction = 0;
     return profitableBidAuctions;
 };
