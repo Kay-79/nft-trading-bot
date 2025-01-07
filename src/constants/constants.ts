@@ -86,13 +86,19 @@ export const MP_BLOCK_ADDRESS =
         : "0xBBBBD0DE58A5964d183b855A1626795Df7E894aD";
 
 export const STAKING_ADDRESS =
-    ENV === Environment.MAINNET ? "0x3bD6a582698ECCf6822dB08141818A1a8512c68D" : "0x";
+    ENV === Environment.MAINNET
+        ? "0x3bD6a582698ECCf6822dB08141818A1a8512c68D"
+        : "0x0000000000000000000000000000000000000000";
 
 export const MOMO721_ADDRESS =
-    ENV === Environment.MAINNET ? "0x4eeDeDfe89dad70aB8cbf70E4dD140Ff8E6e8ce5" : "0x";
+    ENV === Environment.MAINNET
+        ? "0x4eeDeDfe89dad70aB8cbf70E4dD140Ff8E6e8ce5"
+        : "0x0000000000000000000000000000000000000000";
 
 export const MOMO1155_ADDRESS =
-    ENV === Environment.MAINNET ? "0xb3e968ba01a78ea489292130bcf8bbe6a64be648" : "0x";
+    ENV === Environment.MAINNET
+        ? "0xb3e968ba01a78ea489292130bcf8bbe6a64be648"
+        : "0x0000000000000000000000000000000000000000";
 
 export const USDT_ADDRESS =
     ENV === Environment.MAINNET
@@ -101,18 +107,18 @@ export const USDT_ADDRESS =
 
 export const NORMAL_BUYER =
     ENV === Environment.MAINNET
-        ? process.env.NORMAL_BUYER_MAINNET || "0x"
-        : process.env.NORMAL_BUYER_TESTNET || "0x";
+        ? process.env.NORMAL_BUYER_MAINNET || "0x0000000000000000000000000000000000000000"
+        : process.env.NORMAL_BUYER_TESTNET || "0x0000000000000000000000000000000000000000";
 
 export const PRO_BUYER =
     ENV === Environment.MAINNET
-        ? process.env.PRO_BUYER_MAINNET || "0x"
-        : process.env.PRO_BUYER_TESTNET || "0x";
+        ? process.env.PRO_BUYER_MAINNET || "0x0000000000000000000000000000000000000000"
+        : process.env.PRO_BUYER_TESTNET || "0x0000000000000000000000000000000000000000";
 
 export const CHANGER =
     ENV === Environment.MAINNET
-        ? process.env.CHANGER_MAINNET || "0x"
-        : process.env.CHANGER_TESTNET || "0x";
+        ? process.env.CHANGER_MAINNET || "0x0000000000000000000000000000000000000000"
+        : process.env.CHANGER_TESTNET || "0x0000000000000000000000000000000000000000";
 
 export const PRIVATE_KEY_BID =
     ENV === Environment.MAINNET
