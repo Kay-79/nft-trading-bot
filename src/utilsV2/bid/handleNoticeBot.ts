@@ -247,6 +247,9 @@ export const noticeBotCancel = async (bidAuction: BidAuction) => {
         bidAuction.auctions && bidAuction.auctions.length > 0
             ? `\nAuctor: ${shortenAddress(bidAuction.auctions[0].auctor ?? "")}`
             : "";
-    const message = `${status}${profit}${auctor}`;
+    const auctorGroup = bidAuction.auctionGroup
+        ? `\nAuctor: ${shortenAddress(bidAuction.auctionGroup.auctor ?? "")}`
+        : "";
+    const message = `${status}${profit}${auctor}${auctorGroup}`;
     await noticeBot(message);
 };

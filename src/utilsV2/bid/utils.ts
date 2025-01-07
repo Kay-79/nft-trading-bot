@@ -22,6 +22,8 @@ import { chainInfor } from "./normalBidAuction";
 import { mpUtils } from "../mp/utils";
 import { erc20Provider } from "../../providers/erc20Provider";
 import { bidContract } from "config/config";
+import { mpBlockUtils } from "utilsV2/mpBlock/utils";
+import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
@@ -66,10 +68,24 @@ export const getRawTx = (bidAuction: BidAuction, txData: string, nonce: number):
 };
 
 export const privateKey = (type: BidType): Buffer => {
-    if ((type === BidType.NORMAL || type === BidType.BUNDLE) && PRIVATE_KEY_BID)
-        return Buffer.from(PRIVATE_KEY_BID, "hex");
-    if (type === BidType.PRO && PRIVATE_KEY_BID_PRO) return Buffer.from(PRIVATE_KEY_BID_PRO, "hex");
-    throw new Error(`Invalid private key type: ${type}`);
+    // if ((type === BidType.NORMAL || type === BidType.BUNDLE) && PRIVATE_KEY_BID)
+    //     return Buffer.from(PRIVATE_KEY_BID, "hex");
+    // if (type === BidType.PRO && PRIVATE_KEY_BID_PRO) return Buffer.from(PRIVATE_KEY_BID_PRO, "hex");
+    switch (type) {
+        case BidType.NORMAL:
+        case BidType.BUNDLE:
+            if (PRIVATE_KEY_BID) return Buffer.from(PRIVATE_KEY_BID, "hex");
+            throw new Error(`Invalid private key type: ${type}`);
+        case BidType.BOX:
+        case BidType.MECBOX:
+        case BidType.GEM:
+        case BidType.GROUP:
+        case BidType.PRO:
+            if (PRIVATE_KEY_BID_PRO) return Buffer.from(PRIVATE_KEY_BID_PRO, "hex");
+            throw new Error(`Invalid private key type: ${type}`);
+        default:
+            throw new Error(`Invalid private key type: ${type}`);
+    }
 };
 
 export const getTxData = (bidAuction: BidAuction): string => {
@@ -97,6 +113,19 @@ export const getTxData = (bidAuction: BidAuction): string => {
                     ),
                     true
                 ]);
+        case BidType.GROUP:
+            return bidProvider.interface.encodeFunctionData(FunctionFragment.BID, [
+                bidAuction.auctionGroup?.auctor,
+                bidAuction.auctionGroup?.index,
+                bidAuction.auctionGroup?.orderId,
+                ((bidAuction.totalPrice ?? 0) + 10 ** 5).toString() + "000000000"
+            ]);
+        case BidType.BOX:
+            return "";
+        case BidType.MECBOX:
+            return "";
+        case BidType.GEM:
+            return "";
         default:
             return "";
     }
@@ -170,13 +199,31 @@ export const delay40Blocks = async (bidAuctions: BidAuction[]): Promise<boolean>
         }
         await sleep(checkInterval);
     }
-    if (
-        !bidAuctions[0].auctions ||
-        !bidAuctions[0].auctions[0] ||
-        !isExistAuction(bidAuctions[0].auctions[0])
-    ) {
-        await noticeBotCancel(bidAuctions[0]);
-        return false;
+    switch (bidAuctions[0].type) {
+        case BidType.NORMAL:
+        case BidType.BUNDLE:
+        case BidType.PRO:
+            if (
+                !bidAuctions[0].auctions ||
+                !bidAuctions[0].auctions[0] ||
+                !isExistAuction(bidAuctions[0].auctions[0])
+            ) {
+                await noticeBotCancel(bidAuctions[0]);
+                return false;
+            }
+            break;
+        case BidType.GROUP:
+        case BidType.BOX:
+        case BidType.MECBOX:
+        case BidType.GEM:
+            if (!bidAuctions[0].auctionGroup || !isExistAuctionGroup(bidAuctions[0].auctionGroup)) {
+                await noticeBotCancel(bidAuctions[0]);
+                return false;
+            }
+            break;
+        default:
+            await noticeBotCancel(bidAuctions[0]);
+            return false;
     }
     // Wait for bid
     while (true) {
@@ -239,11 +286,9 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
             !bidAuction.profit ||
             !bidAuction.uptime ||
             !bidAuction.buyer ||
-            !bidAuction.auctions ||
             !bidAuction.contractAddress ||
             !bidAuction.type ||
-            !bidAuction.minGasPrice ||
-            !bidAuction.auctions.length
+            !bidAuction.minGasPrice
         )
             continue;
         const nowTime = Math.round(Date.now() / 1000);
@@ -299,6 +344,26 @@ export const isExistAuction = async (auction: AuctionDto): Promise<boolean> => {
                 auction.amounts?.every(
                     (amount, index) => order.amounts && BigInt(amount) === order.amounts[index]
                 )) ??
+            false
+        );
+    } catch (error) {
+        console.error("Error checking auction:", error);
+        return true;
+    }
+};
+
+export const isExistAuctionGroup = async (auctionGroup: AuctionGroupDto): Promise<boolean> => {
+    try {
+        if (!auctionGroup.auctor || !auctionGroup.uptime) {
+            throw new Error("Auction auctor is undefined");
+        }
+        const order = await mpBlockUtils.getOrderBlock(
+            auctionGroup.auctor,
+            (auctionGroup.index ?? 0).toString()
+        );
+        return (
+            (order.status === BigInt(AuctionStatus.ACTIVE) &&
+                BigInt(auctionGroup.uptime) === order.uptime) ??
             false
         );
     } catch (error) {

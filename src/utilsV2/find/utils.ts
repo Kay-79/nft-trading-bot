@@ -440,6 +440,7 @@ export const getProfitableBidAuctionsBundle = (
             minValueAuction * (1 - RATE_FEE_MARKET) -
             feeBundle(bnbPrice) -
             auction?.nowPrice * 10 ** -9;
+        // Bundle method
         if (isProfitable(profit, minProfit)) {
             profitableBidAuctions.push(
                 setupBidAuction({
@@ -609,7 +610,8 @@ export const getProfitableBidAuctionsBlock = async (
         const totalPricePrediction = pricePrediction;
         const totalPrice = auctionGroup.price;
         console.log(profit, minProfit, pricePrediction);
-        if (!isProfitable(totalProfit, totalMinProfit)) {
+        // Block method
+        if (isProfitable(totalProfit, totalMinProfit)) {
             profitableBidAuctions.push(
                 setupBidAuction({
                     auctions: [],
