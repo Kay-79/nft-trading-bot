@@ -19,6 +19,12 @@ export enum AuctionStatus {
     CANCELLED = 1
 }
 
+export enum AuctionGroupStatus {
+    ACTIVE = 3,
+    FINISHED = 2,
+    CANCELLED = 1
+}
+
 export enum Environment {
     TESTNET = "TESTNET",
     MAINNET = "MAINNET"

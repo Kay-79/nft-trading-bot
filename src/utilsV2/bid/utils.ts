@@ -3,7 +3,7 @@ import { BidAuction } from "../../types/bid/BidAuction";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { RawTransaction } from "../../types/transaction/Transaction";
 import { bidProvider } from "../../providers/bidProvider";
-import { AuctionStatus, BidType, FunctionFragment } from "../../enum/enum";
+import { AuctionGroupStatus, AuctionStatus, BidType, FunctionFragment } from "../../enum/enum";
 import {
     GAS_LIMIT_BID,
     GAS_LIMIT_BID_BLOCK,
@@ -214,6 +214,7 @@ export const delay40Blocks = async (bidAuctions: BidAuction[]): Promise<boolean>
     while (true) {
         const nowBlock = await getNowBlock();
         if (nowBlock >= warningBlock - 5) {
+            await sleep(3); // Wait for 3s before checking status order
             break;
         }
         const blocksRemaining = warningBlock - nowBlock;
@@ -388,7 +389,7 @@ export const isExistAuctionGroup = async (auctionGroup: AuctionGroupDto): Promis
             (auctionGroup.index ?? 0).toString()
         );
         return (
-            (order.status === BigInt(AuctionStatus.ACTIVE) &&
+            (order.status === BigInt(AuctionGroupStatus.ACTIVE) &&
                 BigInt(auctionGroup.uptime) === order.uptime) ??
             false
         );
