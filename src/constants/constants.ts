@@ -150,9 +150,13 @@ export const CACHE_TIER_PRICE: TierPrice = {
     6: 0
 };
 
-export const TIME_ENABLE_BID = 120; //2mins
+export const TIME_PER_BLOCK = 3;
 
-export const TIME_DELAY_BLOCK_BID = 600; //10mins
+export const TIME_ENABLE_BID_AUCTION = 120; //2mins
+
+export const TIME_ENABLE_BID_AUCTION_GROUP = 600; //10mins
+
+export const TIME_DISABLE_BID = 600; //10mins
 
 export const TIME_DELAY_NOTICE_STATUS_BOT = 4; //4hours
 
@@ -164,6 +168,6 @@ export const IP_MAIN = "172.16.1.133";
 
 export const PORT_HOST_DATASET = 3004;
 
-// export const API_AI_PRICE = "http://172.16.1.111:5000/predict";
+export const API_AI_PRICE = "http://172.16.1.111:5000/predict";
 
-export const API_AI_PRICE = "http://127.0.0.1:5000/predict";
+// export const API_AI_PRICE = "http://127.0.0.1:5000/predict";

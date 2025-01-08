@@ -11,8 +11,8 @@ import {
     PRIVATE_KEY_BID,
     PRIVATE_KEY_BID_PRO,
     PRO_BUYER,
-    TIME_DELAY_BLOCK_BID,
-    TIME_ENABLE_BID,
+    TIME_DISABLE_BID,
+    TIME_ENABLE_BID_AUCTION,
     WAIT_BID_PATH
 } from "../../constants/constants";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
@@ -238,13 +238,14 @@ export const delay40Blocks = async (bidAuctions: BidAuction[]): Promise<boolean>
             }
             break;
         case BidType.GROUP:
-        case BidType.BOX:
-        case BidType.MECBOX:
-        case BidType.GEM:
             if (!bidAuctions[0].auctionGroup || !isExistAuctionGroup(bidAuctions[0].auctionGroup)) {
                 await noticeBotCancel(bidAuctions[0]);
                 return false;
             }
+            break;
+        case BidType.BOX:
+        case BidType.MECBOX:
+        case BidType.GEM:
             break;
         default:
             await noticeBotCancel(bidAuctions[0]);
@@ -319,7 +320,7 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
         const nowTime = Math.round(Date.now() / 1000);
         if (
             bidAuction.profit < 0 ||
-            nowTime - (bidAuction.uptime + TIME_ENABLE_BID) > TIME_DELAY_BLOCK_BID
+            nowTime - (bidAuction.uptime + TIME_ENABLE_BID_AUCTION) > TIME_DISABLE_BID
         ) {
             console.log("Over time or profit < 0", nowTime);
             await noticeErrorBid(bidAuction);

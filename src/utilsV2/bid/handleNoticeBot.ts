@@ -7,7 +7,7 @@ import {
     EXPLORER_URL,
     NORMAL_BUYER,
     PRO_BUYER,
-    TIME_ENABLE_BID
+    TIME_ENABLE_BID_AUCTION
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { BidStatus, BidType, BlockType, Environment, ModeBotStatus } from "../../enum/enum";
@@ -234,7 +234,7 @@ export const noticeErrorBid = async (errBidAuction: BidAuction) => {
     const time = `\nTime: ${errBidAuction.uptime}`;
     const nowTime = `\nNow: ${shortenNumber(Math.round(Date.now() / 1000), 0, 0)}`;
     const overTime = `\nOver: ${
-        Math.round(Date.now() / 1000) - (errBidAuction.uptime ?? 0 + TIME_ENABLE_BID)
+        Math.round(Date.now() / 1000) - (errBidAuction.uptime ?? 0 + TIME_ENABLE_BID_AUCTION)
     }s`;
     const message = `${status}${profit}${time}${nowTime}${overTime}`;
     await noticeBot(message);
