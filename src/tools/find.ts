@@ -19,17 +19,26 @@ import { checkProfitAuctions } from "utilsV2/find/checkProfitAuctions";
 import { CacheFind } from "types/find/CacheFind";
 import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
 import { getNewAuctionGroups } from "utilsV2/find/getNewAuctionGroups";
-import { modeBot } from "config/config";
+import { delayTimeGet, modeBot } from "config/config";
 import { checkProfitAuctionGroups } from "utilsV2/find/checkProfitAuctionGroups";
+import { LatestGet } from "types/find/LatestGet";
 
 const findV2 = async () => {
     console.log("Starting findV2...", ENV);
     let latestNotice = new Date().getHours() - TIME_DELAY_NOTICE_STATUS_BOT;
+    let latestGetData: LatestGet = {
+        auction: 0,
+        auctionGroup: 0,
+        box: 0,
+        mexBox: 0,
+        gem: 0
+    };
     let cacheIds: CacheFind = {
-        momo: [],
-        momoBlock: [],
-        Box: [],
-        MexBox: []
+        auction: [],
+        auctionGroup: [],
+        box: [],
+        mexBox: [],
+        gem: []
     };
     let initSetup: SetupFind = await setup(CACHE_BNB_PRICE, CACHE_TIER_PRICE);
     let {
@@ -64,21 +73,30 @@ const findV2 = async () => {
         let newAuctions: AuctionDto[] = [];
         let newAuctionsBlock: AuctionGroupDto[] = [];
         //===========================AUCTION===========================
-        if (modeBot.auction) {
-            await getNewAutions(cacheIds.momo || []).then(async ([auctions, auctionIds]) => {
+        if (
+            modeBot.auction &&
+            Date.now() / 1000 - (latestGetData.auction ?? 0) > (delayTimeGet.auction ?? 0)
+        ) {
+            latestGetData.auction = Date.now() / 1000;
+            await getNewAutions(cacheIds.auction || []).then(async ([auctions, auctionIds]) => {
                 newAuctions = auctions;
-                cacheIds.momo = auctionIds;
+                cacheIds.auction = auctionIds;
             });
             const profitAuctions = await checkProfitAuctions(newAuctions, floorPrices, bnbPrice);
             if (profitAuctions.length > 0) {
                 await updateWaitBid(profitAuctions);
             }
         }
-        if (modeBot.auctionGroup) {
-            await getNewAuctionGroups(cacheIds.momoBlock || []).then(
+        await ranSleep(3, 7);
+        if (
+            modeBot.auctionGroup &&
+            Date.now() / 1000 - (latestGetData.auctionGroup ?? 0) > (delayTimeGet.auctionGroup ?? 0)
+        ) {
+            latestGetData.auctionGroup = Date.now() / 1000;
+            await getNewAuctionGroups(cacheIds.auctionGroup || []).then(
                 async ([auctionGroups, auctionGroupIds]) => {
                     newAuctionsBlock = auctionGroups;
-                    cacheIds.momoBlock = auctionGroupIds;
+                    cacheIds.auctionGroup = auctionGroupIds;
                 }
             );
             const profitAuctionsBlock = await checkProfitAuctionGroups(

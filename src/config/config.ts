@@ -1,6 +1,7 @@
 import { ModeBot } from "types/common/ModeBot";
 import { TierPrice } from "../types/common/TierPrice";
 import { ProfitConfig } from "types/common/ProfitConfig";
+import { LatestGet } from "types/find/LatestGet";
 
 export const modeBot: ModeBot = {
     auction: true,
@@ -17,6 +18,14 @@ export const profitPerTier: TierPrice = {
     4: 3,
     5: 10,
     6: 500
+};
+
+export const delayTimeGet: LatestGet = {
+    auction: 60,
+    auctionGroup: 60 * 4,
+    box: NaN,
+    mexBox: NaN,
+    gem: NaN
 };
 
 export const profitBlock: ProfitConfig = {
