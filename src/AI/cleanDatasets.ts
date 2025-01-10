@@ -23,7 +23,7 @@ export const cleanDatasets = async () => {
             !traders.includes(dataset.bidder.toLowerCase()) &&
             !traders.includes(ethers.getAddress(dataset.bidder)) &&
             dataset.output[0] > 7 &&
-            dataset.output[0] < 1100 &&
+            dataset.output[0] < 1500 &&
             dataset.bidTime - dataset.listTime > 10 * 60
     );
     fs.writeFileSync(filePath, JSON.stringify(newData, null, 2));
