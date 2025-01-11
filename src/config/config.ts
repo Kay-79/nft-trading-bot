@@ -46,7 +46,8 @@ export const traders: string[] = [
     "0x9488821c7d84ce4b72c7f85b2ad12b84bacfe7c5",
     "0xE13eBac7c22863396eE16877Aa4A049D671B4FA5",
     "0x8b5da11bd2955569a6408050246f14b5340f61c8",
-    "0xbaf0B0F1D4aE45E71650988f054856da5027558C"
+    "0xbaf0B0F1D4aE45E71650988f054856da5027558C",
+    "0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D"
 ];
 
 export const contracts: string[] = [
