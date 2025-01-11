@@ -29,13 +29,13 @@ export const delayTimeGet: LatestGet = {
 };
 
 export const profitBlock: ProfitConfig = {
-    min: 10,
-    percent: 0.8
+    min: 3,
+    percent: 0.85
 };
 
 export const profitProAI: ProfitConfig = {
-    min: 5,
-    percent: 0.8
+    min: 3,
+    percent: 0.85
 };
 
 export const traders: string[] = [
