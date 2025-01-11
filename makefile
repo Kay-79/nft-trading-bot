@@ -1,3 +1,4 @@
+############### BOT ###############
 bid:
 	nohup bun bid > /dev/null 2>&1 &
 
@@ -17,11 +18,7 @@ killChange:
 	kill -9 $(shell ps aux | grep change | grep -v grep | awk '{print $$2}')
 
 killApiMomo:
-	if [ -f apiMomo.pid ]; then \
-		kill -9 $$(cat apiMomo.pid) && rm -f apiMomo.pid; \
-	else \
-		echo "apiMomo PID file not found."; \
-	fi
+	kill -9 $(shell ps aux | grep app.py | grep -v grep | awk '{print $$2}')
 
 all:
 	make bid
@@ -38,11 +35,8 @@ killAll:
 	kill -9 $(shell ps aux | grep bun | grep -v grep | awk '{print $$2}')
 	kill -9 $(shell ps aux | grep node | grep -v grep | awk '{print $$2}')
 	make killApiMomo
-
-
-temp:
-	cat /sys/class/thermal/thermal_zone0/temp
-
+#######################################
+############### HARDHAT ###############
 deploy:
 	npx hardhat run scripts/deploy.ts --network bsc
 
@@ -51,29 +45,39 @@ deployToken:
 
 deployUpgrade:
 	npx hardhat run scripts/deployUpgrade.ts --network bsc
-
+#######################################
+############### TEST ##################
 check:
 	npm run check
 
 create:
 	npm run create
+#######################################
+############### AI ####################
+hostDatabase:
+	bun apiData
 
+getDatabase:
+	bun getData
+	bun clean
 
 modelAI:
 	python ./src/AI/model/model.py
 
 modelAIPi:
 	bash -c "source venv/bin/activate && python ./src/AI/model/modelPi.py"
-
-# apiMomo:
-# 	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 &"
-
+#######################################
+############### API ###################
 apiMomo:
-	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 & echo $$! > apiMomo.pid"
+	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 &"
 
 apiMomoWin:
 	.\venv\Scripts\activate
 	python ./src/AI/api/app.py
-
+#######################################
+############### PLA-PLA ###############
 moveSsh:
 	scp /Users/legend_k/Downloads/datasets.json kaybot@172.16.1.111:/home/kaybot/Desktop/be-mobox-front-run/src/AI/data
+
+temp:
+	cat /sys/class/thermal/thermal_zone0/temp
