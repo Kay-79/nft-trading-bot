@@ -64,3 +64,7 @@ export const getImplementAddressOfProxy = async (address: string) => {
 export const getDataStorage = async (address: string, slot: string) => {
     return ethersProvider.getStorage(address, slot);
 };
+
+export const hexToString = (hex: string): string => {
+    return Buffer.from(hex.slice(2), "hex").toString();
+};
