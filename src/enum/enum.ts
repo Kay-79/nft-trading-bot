@@ -57,7 +57,7 @@ export enum StakingSelector {
     GET_ADDRESS_TOP_BY_UNKNOWN_INDEX = "0x501bbaec",
     GET_USER_REWARD_INFO = "0x69517310",
     USER_MOMO721_STAKE = "0x90786351",
-    TEST = "0xb6a47d55"
+    TEST = "0x75481cff"
 }
 
 export enum MpSelector {
@@ -83,6 +83,10 @@ export enum Momo721Selector {
     TOKENS_OF_OWNER_BY_INDEX = "0x2f745c59",
     TOKEN_BY_INDEX = "0x4f6ccce7",
     OWNER_OF = "0x6352211e"
+}
+
+export enum MintMomoSelector {
+    TEST = "0xa3beba1e"
 }
 
 export enum Momo1155Selector {

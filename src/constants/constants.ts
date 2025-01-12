@@ -90,6 +90,11 @@ export const STAKING_ADDRESS =
         ? "0x3bD6a582698ECCf6822dB08141818A1a8512c68D"
         : "0x0000000000000000000000000000000000000000";
 
+export const MINT_MOMO_ADDRESS =
+    ENV === Environment.MAINNET
+        ? "0x1da9b6e37f006dD349089dEA21cb8261391593D5"
+        : "0x0000000000000000000000000000000000000000";
+
 export const MOMO721_ADDRESS =
     ENV === Environment.MAINNET
         ? "0x4eeDeDfe89dad70aB8cbf70E4dD140Ff8E6e8ce5"
@@ -168,6 +173,6 @@ export const IP_MAIN = "172.16.1.133";
 
 export const PORT_HOST_DATASET = 3004;
 
-export const API_AI_PRICE = "http://172.16.1.111:5000/predict";
+// export const API_AI_PRICE = "http://172.16.1.111:5000/predict";
 
-// export const API_AI_PRICE = "http://127.0.0.1:5000/predict";
+export const API_AI_PRICE = "http://127.0.0.1:5000/predict";

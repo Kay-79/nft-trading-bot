@@ -1,4 +1,4 @@
-import { STAKING_ADDRESS } from "../../constants/constants";
+import { MINT_MOMO_ADDRESS, STAKING_ADDRESS } from "../../constants/constants";
 import { StakingSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder, getAddress } from "ethers";
@@ -111,6 +111,23 @@ const previewMysteryBox = async (address: string, amount: string) => {
     }
 };
 
+const test = async () => {
+    const abiCoder = new AbiCoder();
+    const encodedData = abiCoder.encode(["uint256[]"], [[41061]]);
+    const data = "0x75481cff" + encodedData.slice(2);
+    try {
+        const result = await ethersProvider.call({
+            from: MINT_MOMO_ADDRESS,
+            to: STAKING_ADDRESS,
+            data: data
+        });
+        // const decodedResult = abiCoder.decode(["uint256[]", "uint256[]", "uint256[]"], result);
+        return result;
+    } catch (error) {
+        return (error as any).message;
+    }
+};
+
 export const stakingUtils = {
     earned,
     ownerOfTokenId,
@@ -120,5 +137,6 @@ export const stakingUtils = {
     getAddressTopByUnknownIndex,
     getUserRewardInfo,
     getUserMomo721Stake,
-    previewMysteryBox
+    previewMysteryBox,
+    test
 };

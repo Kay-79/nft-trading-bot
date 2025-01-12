@@ -1,5 +1,5 @@
-import { MOMO721_ADDRESS, STAKING_ADDRESS } from "../../constants/constants";
-import { Momo721Selector, StakingSelector } from "../../enum/enum";
+import { MOMO721_ADDRESS } from "../../constants/constants";
+import { Momo721Selector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder } from "ethers";
 import { byte32ToAddress } from "../common/utils";
