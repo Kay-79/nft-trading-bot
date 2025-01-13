@@ -30,12 +30,12 @@ export const delayTimeGet: LatestGet = {
 
 export const profitBlock: ProfitConfig = {
     min: 5,
-    percent: 0.85
+    percent: 0.8
 };
 
 export const profitProAI: ProfitConfig = {
     min: 5,
-    percent: 0.85
+    percent: 0.8
 };
 
 export const traders: string[] = [
