@@ -15,6 +15,7 @@ dist
 src/env/.env
 src/AI/data/*.json
 src/AI/model/*.pkl
+src/airdrop/*.json
 
 # Hardhat files
 /cache

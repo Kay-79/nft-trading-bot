@@ -75,8 +75,11 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
     }
     const status = "Status: 🛒";
     const mode = `\nMode:
-        Auction:${modeBot.auction ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
-        Group:${modeBot.auctionGroup ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Normal:${modeBot.auction?.normal ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Pro:${modeBot.auction?.pro ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Bundle:${modeBot.auction?.bundle ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Bep721:${modeBot.auctionGroup?.bep721 ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Crew:${modeBot.auctionGroup?.crew ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
         Box:${modeBot.box ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
         Mex:${modeBot.mexBox ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
         Gem:${modeBot.gem ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}`;

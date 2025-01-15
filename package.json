@@ -40,7 +40,8 @@
         "deposit": "node ./src/tools/deposit",
         "withdraw": "node ./src/tools/withdraw",
         "changeset": "changeset",
-        "version": "changeset version"
+        "version": "changeset version",
+        "airdrop": "bun ./src/airdrop/hunt.ts"
     },
     "keywords": [],
     "author": "",

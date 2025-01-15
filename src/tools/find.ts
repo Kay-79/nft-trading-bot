@@ -74,7 +74,7 @@ const findV2 = async () => {
         let newAuctionsBlock: AuctionGroupDto[] = [];
         //===========================AUCTION===========================
         if (
-            modeBot.auction &&
+            (modeBot.auction?.normal || modeBot.auction?.pro || modeBot.auction?.bundle) &&
             Date.now() / 1000 - (latestGetData.auction ?? 0) > (delayTimeGet.auction ?? 0)
         ) {
             latestGetData.auction = Date.now() / 1000;
@@ -89,7 +89,7 @@ const findV2 = async () => {
         }
         await ranSleep(3, 7);
         if (
-            modeBot.auctionGroup &&
+            (modeBot.auctionGroup?.bep721 || modeBot.auctionGroup?.crew) &&
             Date.now() / 1000 - (latestGetData.auctionGroup ?? 0) > (delayTimeGet.auctionGroup ?? 0)
         ) {
             latestGetData.auctionGroup = Date.now() / 1000;

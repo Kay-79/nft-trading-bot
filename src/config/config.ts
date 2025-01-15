@@ -4,8 +4,15 @@ import { ProfitConfig } from "types/common/ProfitConfig";
 import { LatestGet } from "types/find/LatestGet";
 
 export const modeBot: ModeBot = {
-    auction: true,
-    auctionGroup: true,
+    auction: {
+        normal: true,
+        pro: false,
+        bundle: true
+    },
+    auctionGroup: {
+        bep721: false,
+        crew: false
+    },
     box: false,
     mexBox: false,
     gem: false
