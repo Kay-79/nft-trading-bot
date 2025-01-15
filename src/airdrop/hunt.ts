@@ -1,7 +1,9 @@
 import axios from "axios";
 import { ethers } from "ethers";
 import fs from "fs";
-const JSON_FILE = "./src/airdrop/accounts.json";
+import { ranSleep } from "utilsV2/common/sleep";
+const JSON_FILE_COMPLETE = "./src/airdrop/accountsComplete.json";
+const JSON_FILE_PROGRESS = "./src/airdrop/accountsProgress.json";
 
 interface Airdrop {
     address: string;
@@ -10,16 +12,33 @@ interface Airdrop {
     score: number;
     latestClaim: number;
 }
-const readAccounts = (): Airdrop[] => {
-    if (fs.existsSync(JSON_FILE)) {
-        const data = fs.readFileSync(JSON_FILE, "utf-8");
+interface ClaimResponse {
+    succeed: boolean;
+    score: number;
+}
+const readAccountsComplete = (): Airdrop[] => {
+    if (fs.existsSync(JSON_FILE_COMPLETE)) {
+        const data = fs.readFileSync(JSON_FILE_COMPLETE, "utf-8");
         return JSON.parse(data);
     }
     return [];
 };
-
-const writeAccounts = (accounts: Airdrop[]) => {
-    fs.writeFileSync(JSON_FILE, JSON.stringify(accounts, null, 2));
+const readAccountsProgress = (): Airdrop[] => {
+    if (fs.existsSync(JSON_FILE_PROGRESS)) {
+        const data = fs.readFileSync(JSON_FILE_PROGRESS, "utf-8");
+        return JSON.parse(data);
+    }
+    return [];
+};
+const writeAccountsComplete = (accounts: Airdrop[]) => {
+    const existAccountsComplete = readAccountsComplete();
+    accounts = accounts.concat(existAccountsComplete);
+    console.log(`Total complete accounts: ${accounts.length}`);
+    fs.writeFileSync(JSON_FILE_COMPLETE, JSON.stringify(accounts, null, 2));
+};
+const writeAccountsProgress = (accounts: Airdrop[]) => {
+    console.log(`Total progress accounts: ${accounts.length}`);
+    fs.writeFileSync(JSON_FILE_PROGRESS, JSON.stringify(accounts, null, 2));
 };
 const createNewAccount = (): Airdrop => {
     const privateKey = ethers.Wallet.createRandom().privateKey;
@@ -32,12 +51,6 @@ const createNewAccount = (): Airdrop => {
         latestClaim: 0
     };
 };
-
-interface ClaimResponse {
-    succeed: boolean;
-    score: number;
-}
-
 const claimAirdrop = async (account: Airdrop): Promise<ClaimResponse> => {
     const message = "mobox_momo_server_" + Math.floor(Date.now() / (1000 * 3600));
     const wallet = new ethers.Wallet(account.privateKey);
@@ -56,6 +69,7 @@ const claimAirdrop = async (account: Airdrop): Promise<ClaimResponse> => {
         type: 0
     };
     try {
+        console.log(`Account ${account.address} claim start...`);
         const response = await axios.post("https://nftapi.mobox.io/new_third_annual/claim", data, {
             headers
         });
@@ -72,37 +86,49 @@ const claimAirdrop = async (account: Airdrop): Promise<ClaimResponse> => {
 };
 
 const huntAirdrop = async () => {
-    let accounts = readAccounts();
     while (true) {
-        const now = Math.floor(Date.now() / 1000);
-        let updated = false;
-        for (const account of accounts) {
-            if (!account.complete || now - account.latestClaim > 86400) {
-                const claimResult = await claimAirdrop(account);
-                if (claimResult.succeed) {
-                    account.complete = true;
-                    account.latestClaim = now;
-                    account.score = claimResult.score;
-                    updated = true;
-                }
-            }
+        let accounts: Airdrop[] = readAccountsProgress();
+        if (!Array.isArray(accounts)) {
+            accounts = [];
         }
-        if (accounts.every(acc => acc.complete)) {
-            console.log("All accounts completed. Creating a new account.");
+        let accountsCanClaim = accounts.filter(
+            account => Date.now() / 1000 - account.latestClaim > 3600 * 24
+        );
+        if (accountsCanClaim.length === 0) {
             const newAccount = createNewAccount();
             accounts.push(newAccount);
-            const success = await claimAirdrop(newAccount);
-            if (success) {
-                newAccount.complete = true;
-                newAccount.latestClaim = now;
-                updated = true;
+            accountsCanClaim.push(newAccount);
+            console.log(`Create new account ${newAccount.address}`);
+        }
+        for (let i = 0; i < accountsCanClaim.length; i++) {
+            const account = accountsCanClaim[i];
+            const response = await claimAirdrop(account);
+            if (response.succeed) {
+                account.score += response.score;
+                account.latestClaim = Date.now() / 1000;
+                const isComplete = (score: number) => {
+                    const ranScore = Math.floor(Math.random() * 20);
+                    return score + ranScore >= 50;
+                };
+                if (isComplete(account.score)) {
+                    account.complete = true;
+                }
+                const accountsComplete = accounts.filter(account => account.complete);
+                if (accountsComplete.length > 0) {
+                    writeAccountsComplete(accountsComplete);
+                }
+                accounts = accounts.filter(account => !account.complete);
+                writeAccountsProgress(accounts);
             }
+            console.log(
+                `Account ${account.address} claim end, score: ${account.score}. Sleep 15-30s...`
+            );
+            await ranSleep(15, 30);
         }
-        if (updated) {
-            writeAccounts(accounts);
+        if (accountsCanClaim.length === 0) {
+            console.log("No account can claim, sleep 15-30s...");
+            await ranSleep(15, 30);
         }
-        console.log("Waiting for the next claim cycle...");
-        break;
     }
 };
 
