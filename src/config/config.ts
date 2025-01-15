@@ -6,7 +6,7 @@ import { LatestGet } from "types/find/LatestGet";
 export const modeBot: ModeBot = {
     auction: {
         normal: true,
-        pro: false,
+        pro: true,
         bundle: true
     },
     auctionGroup: {
@@ -37,12 +37,12 @@ export const delayTimeGet: LatestGet = {
 
 export const profitBlock: ProfitConfig = {
     min: 5,
-    percent: 0.8
+    percent: 0.6
 };
 
 export const profitProAI: ProfitConfig = {
     min: 5,
-    percent: 0.8
+    percent: 0.6
 };
 
 export const traders: string[] = [
