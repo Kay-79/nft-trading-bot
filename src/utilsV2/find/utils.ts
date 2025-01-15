@@ -17,10 +17,11 @@ import {
     PRO_BUYER,
     RATE_FEE_MARKET,
     WAIT_BID_PATH,
-    MP_BLOCK_ADDRESS
+    MP_BLOCK_ADDRESS,
+    ENV
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { BidType, BlockType } from "../../enum/enum";
+import { BidType, BlockType, Environment } from "../../enum/enum";
 import axios from "axios";
 import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
 import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
@@ -186,6 +187,10 @@ export const isBreakBatch = (profitAuctions: AuctionDto[], auction: AuctionDto):
 };
 
 export const isProfitable = (profit: number, minProfit: number): boolean => {
+    if (ENV === Environment.TESTNET) {
+        console.log(ENV);
+        return true;
+    }
     return profit >= minProfit;
 };
 
@@ -316,6 +321,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
             (type === BidType.NORMAL && isProAuction(auction)) ||
             (type === BidType.PRO && !isProAuction(auction))
         ) {
+            console.log("Type is not valid");
             continue;
         }
         const { profit, minProfit } = calculateAuctionMetrics(auction);
@@ -403,7 +409,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
             })
         );
     } else {
-        console.log("Profitable auctions length is too long");
+        console.log("Profitable auctions length is not valid");
     }
     return profitableBidAuctions;
 };
