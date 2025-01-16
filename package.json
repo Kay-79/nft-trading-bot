@@ -41,7 +41,8 @@
         "withdraw": "node ./src/tools/withdraw",
         "changeset": "changeset",
         "version": "changeset version",
-        "airdrop": "bun ./src/airdrop/hunt.ts"
+        "airdrop": "bun ./src/airdrop/hunt.ts",
+        "staking": "bun ./src/tools/staking.ts"
     },
     "keywords": [],
     "author": "",

@@ -1,3 +1,4 @@
+import { getDataStorage } from "utilsV2/common/utils";
 import { MINT_MOMO_ADDRESS, STAKING_ADDRESS } from "../../constants/constants";
 import { StakingSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
@@ -71,7 +72,7 @@ const getAddressTopByUnknownIndex = async (n: string): Promise<string> => {
     return getAddress("0x" + result.slice(26));
 };
 
-const getUserRewardInfo = async (address: string): Promise<string> => {
+const getUserRewardInfo = async (address: string): Promise<any> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address"], [address]);
     const data = StakingSelector.GET_USER_REWARD_INFO + encodedData.slice(2);
@@ -80,10 +81,16 @@ const getUserRewardInfo = async (address: string): Promise<string> => {
         data: data
     });
     const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
-    return decodedResult.toString();
+    const userRewardInfo = {
+        userHash: Number(decodedResult[0]),
+        unknown1: Number(decodedResult[1]),
+        unknown2: Number(decodedResult[2]) / 10 ** 18,
+        cacheEarned: Number(decodedResult[3]) / 10 ** 18
+    };
+    return userRewardInfo;
 };
 
-const getUserMomo721Stake = async (address: string): Promise<number> => {
+const getAmountUserMomo721Stake = async (address: string): Promise<number> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address"], [address]);
     const data = StakingSelector.USER_MOMO721_STAKE + encodedData.slice(2);
@@ -100,7 +107,7 @@ const previewMysteryBox = async (address: string, amount: string) => {
     const data = "0x00117210" + encodedData.slice(2);
     try {
         const result = await ethersProvider.call({
-            from: "0x3bD6a582698ECCf6822dB08141818A1a8512c68D",
+            from: STAKING_ADDRESS,
             to: "0x1da9b6e37f006dd349089dea21cb8261391593d5",
             data: data
         });
@@ -109,6 +116,21 @@ const previewMysteryBox = async (address: string, amount: string) => {
     } catch (error) {
         return (error as any).message;
     }
+};
+
+const getTotalHashRate = async () => {
+    const result = await getDataStorage(STAKING_ADDRESS, "0x11");
+    return Number(result);
+};
+
+const getRewardRate = async () => {
+    const result = await getDataStorage(STAKING_ADDRESS, "0x9");
+    return Number(result) / 10 ** 18;
+};
+
+const getRewardPerPeriod = async () => {
+    const result = await getDataStorage(STAKING_ADDRESS, "0xa");
+    return Number(result);
 };
 
 const test = async () => {
@@ -136,7 +158,10 @@ export const stakingUtils = {
     getTokenIdUserByIndex,
     getAddressTopByUnknownIndex,
     getUserRewardInfo,
-    getUserMomo721Stake,
+    getAmountUserMomo721Stake,
     previewMysteryBox,
+    getTotalHashRate,
+    getRewardRate,
+    getRewardPerPeriod,
     test
 };
