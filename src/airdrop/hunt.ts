@@ -96,6 +96,7 @@ const huntAirdrop = async () => {
         let accountsCanClaim = accounts.filter(
             account => Date.now() / 1000 - account.latestClaim > 3600 * 24.05
         );
+        accountsCanClaim = accountsCanClaim.sort(() => Math.random() - 0.5);
         if (accountsCanClaim.length === 0) {
             const newAccount = createNewAccount();
             accounts.push(newAccount);
