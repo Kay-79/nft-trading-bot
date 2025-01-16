@@ -33,11 +33,11 @@ const readAccountsProgress = (): Airdrop[] => {
 const writeAccountsComplete = (accounts: Airdrop[]) => {
     const existAccountsComplete = readAccountsComplete();
     accounts = accounts.concat(existAccountsComplete);
-    console.log(`Total complete accounts: ${accounts.length}`);
+    console.log(`Total complete accounts:`, accounts.length);
     fs.writeFileSync(JSON_FILE_COMPLETE, JSON.stringify(accounts, null, 2));
 };
 const writeAccountsProgress = (accounts: Airdrop[]) => {
-    console.log(`Total progress accounts: ${accounts.length}`);
+    console.log(`Total progress accounts:`, accounts.length);
     fs.writeFileSync(JSON_FILE_PROGRESS, JSON.stringify(accounts, null, 2));
 };
 const createNewAccount = (): Airdrop => {
@@ -73,7 +73,9 @@ const claimAirdrop = async (account: Airdrop): Promise<ClaimResponse> => {
         const response = await axios.post("https://nftapi.mobox.io/new_third_annual/claim", data, {
             headers
         });
-        console.log(`Account ${account.address} claim response:`, response.data);
+        console.log(
+            `Account ${account.address} claim response:\n\tSuccess: ${response.data.succeed}\n\tScore: ${response.data.score}`
+        );
         return response.data as ClaimResponse;
     } catch (error) {
         if (error instanceof Error) {
@@ -92,7 +94,7 @@ const huntAirdrop = async () => {
             accounts = [];
         }
         let accountsCanClaim = accounts.filter(
-            account => Date.now() / 1000 - account.latestClaim > 3600 * 24
+            account => Date.now() / 1000 - account.latestClaim > 3600 * 24.05
         );
         if (accountsCanClaim.length === 0) {
             const newAccount = createNewAccount();
@@ -121,13 +123,13 @@ const huntAirdrop = async () => {
                 writeAccountsProgress(accounts);
             }
             console.log(
-                `Account ${account.address} claim end, score: ${account.score}. Sleep 15-30s...`
+                `Account ${account.address} claim end, score: ${account.score}. Sleep 30-60s...`
             );
-            await ranSleep(15, 30);
+            await ranSleep(30, 60);
         }
         if (accountsCanClaim.length === 0) {
-            console.log("No account can claim, sleep 15-30s...");
-            await ranSleep(15, 30);
+            console.log("No account can claim, sleep 30-60s...");
+            await ranSleep(30, 60);
         }
     }
 };
