@@ -20,7 +20,7 @@ const stakingProfit = async (address: string) => {
         Total reward per day: \t\x1b[33m${shortenNumber(totalRewardPerDay, 0, 2)} MBOX\x1b[0m`);
     console.log(`MBOX price: \t\x1b[33m$${shortenNumber(mboxPrice, 0, 3)}\x1b[0m`);
     console.log(
-        `Total reward:\t\x1b[32m${shortenNumber(earned, 0, 2)} MBOX ~ $${shortenNumber(
+        `Total reward:\t\x1b[32m${shortenNumber(earned, 0, 3)} MBOX ~ $${shortenNumber(
             earned * mboxPrice,
             0,
             3
@@ -30,7 +30,7 @@ const stakingProfit = async (address: string) => {
         `Reward per day:\t\x1b[32m${shortenNumber(
             rewardPerDayOfUser,
             0,
-            2
+            3
         )} MBOX ~ $${shortenNumber(rewardPerDayOfUser * mboxPrice, 0, 3)}\x1b[0m`
     );
 };
