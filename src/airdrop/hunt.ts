@@ -73,9 +73,9 @@ const claimAirdrop = async (account: Airdrop): Promise<ClaimResponse> => {
         const response = await axios.post("https://nftapi.mobox.io/new_third_annual/claim", data, {
             headers
         });
-        console.log(
-            `Account ${account.address} claim response:\n\tSuccess: ${response.data.succeed}\n\tScore: ${response.data.score}`
-        );
+        // console.log(
+        //     `Account ${account.address} claim response:\n\tSuccess: ${response.data.succeed}\n\tScore: ${response.data.score}`
+        // );
         return response.data as ClaimResponse;
     } catch (error) {
         if (error instanceof Error) {
@@ -103,10 +103,14 @@ const huntAirdrop = async () => {
             accountsCanClaim.push(newAccount);
             console.log(`Create new account ${newAccount.address}`);
         }
+        let amount = accountsCanClaim.length;
         for (let i = 0; i < accountsCanClaim.length; i++) {
+            console.log("######################################################################");
+            console.log(`Progress: ${amount}/${accounts.length}`);
             const account = accountsCanClaim[i];
             const response = await claimAirdrop(account);
             if (response.succeed) {
+                amount--;
                 account.score += response.score;
                 account.latestClaim = Date.now() / 1000;
                 const isComplete = (score: number) => {
