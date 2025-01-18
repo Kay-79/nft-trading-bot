@@ -37,7 +37,6 @@ const writeAccountsComplete = (accounts: Airdrop[]) => {
     fs.writeFileSync(JSON_FILE_COMPLETE, JSON.stringify(accounts, null, 2));
 };
 const writeAccountsProgress = (accounts: Airdrop[]) => {
-    console.log(`Total progress accounts:`, accounts.length);
     fs.writeFileSync(JSON_FILE_PROGRESS, JSON.stringify(accounts, null, 2));
 };
 const createNewAccount = (): Airdrop => {
@@ -106,7 +105,7 @@ const huntAirdrop = async () => {
         let amount = accountsCanClaim.length;
         for (let i = 0; i < accountsCanClaim.length; i++) {
             console.log("######################################################################");
-            console.log(`Progress: ${amount}/${accounts.length}`);
+            console.log(`Progress: ${accounts.length - amount}/${accounts.length}`);
             const account = accountsCanClaim[i];
             const response = await claimAirdrop(account);
             if (response.succeed) {
