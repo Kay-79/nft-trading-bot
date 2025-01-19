@@ -97,6 +97,44 @@ const huntAirdrop = async () => {
             const currentDate = new Date().toISOString().slice(0, 10);
             return lastClaimDate !== currentDate;
         });
+        let staticAccounts: { [key: number]: Airdrop[] } = {
+            5: [],
+            10: [],
+            15: [],
+            20: [],
+            25: [],
+            30: [],
+            35: [],
+            40: []
+        };
+        accounts.forEach(account => {
+            if (account.score === 5) {
+                staticAccounts[5].push(account);
+            } else if (account.score === 10) {
+                staticAccounts[10].push(account);
+            } else if (account.score === 15) {
+                staticAccounts[15].push(account);
+            } else if (account.score === 20) {
+                staticAccounts[20].push(account);
+            } else if (account.score === 25) {
+                staticAccounts[25].push(account);
+            } else if (account.score === 30) {
+                staticAccounts[30].push(account);
+            } else if (account.score === 35) {
+                staticAccounts[35].push(account);
+            } else if (account.score === 40) {
+                staticAccounts[40].push(account);
+            }
+        });
+        console.log(`Statistics:
+            5: ${staticAccounts[5].length}
+            10: ${staticAccounts[10].length}
+            15: ${staticAccounts[15].length}
+            20: ${staticAccounts[20].length}
+            25: ${staticAccounts[25].length}
+            30: ${staticAccounts[30].length}
+            35: ${staticAccounts[35].length}
+            40: ${staticAccounts[40].length}`);
         accountsCanClaim = accountsCanClaim.sort(() => Math.random() - 0.5);
         if (accountsCanClaim.length === 0) {
             const newAccount = createNewAccount();
