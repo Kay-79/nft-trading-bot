@@ -72,9 +72,9 @@ const claimAirdrop = async (account: Airdrop): Promise<ClaimResponse> => {
         const response = await axios.post("https://nftapi.mobox.io/new_third_annual/claim", data, {
             headers
         });
-        // console.log(
-        //     `Account ${account.address} claim response:\n\tSuccess: ${response.data.succeed}\n\tScore: ${response.data.score}`
-        // );
+        console.log(
+            `Account ${account.address} claim response:\n\tSuccess: ${response.data.succeed}\n\tScore: ${response.data.score}`
+        );
         return response.data as ClaimResponse;
     } catch (error) {
         if (error instanceof Error) {
@@ -92,9 +92,11 @@ const huntAirdrop = async () => {
         if (!Array.isArray(accounts)) {
             accounts = [];
         }
-        let accountsCanClaim = accounts.filter(
-            account => Date.now() / 1000 - account.latestClaim > 3600 * 24.05
-        );
+        let accountsCanClaim = accounts.filter(account => {
+            const lastClaimDate = new Date(account.latestClaim * 1000).toISOString().slice(0, 10);
+            const currentDate = new Date().toISOString().slice(0, 10);
+            return lastClaimDate !== currentDate;
+        });
         accountsCanClaim = accountsCanClaim.sort(() => Math.random() - 0.5);
         if (accountsCanClaim.length === 0) {
             const newAccount = createNewAccount();
@@ -105,7 +107,7 @@ const huntAirdrop = async () => {
         let amount = accountsCanClaim.length;
         for (let i = 0; i < accountsCanClaim.length; i++) {
             console.log("######################################################################");
-            console.log(`Progress: ${accounts.length - amount}/${accounts.length}`);
+            console.log(`Progress: \x1b[33m${accounts.length - amount}/${accounts.length}\x1b[0m`);
             const account = accountsCanClaim[i];
             const response = await claimAirdrop(account);
             if (response.succeed) {
