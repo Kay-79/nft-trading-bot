@@ -1,7 +1,8 @@
 import axios from "axios";
 import { ethers } from "ethers";
 import fs from "fs";
-import { ranSleep } from "utilsV2/common/sleep";
+import { exit } from "process";
+import { ranSleep, sleep } from "utilsV2/common/sleep";
 const JSON_FILE_COMPLETE = "./src/airdrop/accountsComplete.json";
 const JSON_FILE_PROGRESS = "./src/airdrop/accountsProgress.json";
 
@@ -97,15 +98,19 @@ const huntAirdrop = async () => {
             const currentDate = new Date().toISOString().slice(0, 10);
             return lastClaimDate !== currentDate;
         });
+        console.log(
+            `Last claim date: ${new Date(accountsCanClaim[0].latestClaim * 1000)
+                .toISOString()
+                .slice(0, 10)}`
+        );
+        console.log(`Today: ${new Date().toISOString().slice(0, 10)}`);
         let staticAccounts: { [key: number]: Airdrop[] } = {
             5: [],
             10: [],
             15: [],
             20: [],
             25: [],
-            30: [],
-            35: [],
-            40: []
+            30: []
         };
         accounts.forEach(account => {
             if (account.score === 5) {
@@ -120,10 +125,6 @@ const huntAirdrop = async () => {
                 staticAccounts[25].push(account);
             } else if (account.score === 30) {
                 staticAccounts[30].push(account);
-            } else if (account.score === 35) {
-                staticAccounts[35].push(account);
-            } else if (account.score === 40) {
-                staticAccounts[40].push(account);
             }
         });
         console.log(`Statistics:
@@ -133,10 +134,13 @@ const huntAirdrop = async () => {
             20: ${staticAccounts[20].length}
             25: ${staticAccounts[25].length}
             30: ${staticAccounts[30].length}
-            35: ${staticAccounts[35].length}
-            40: ${staticAccounts[40].length}`);
-        accountsCanClaim = accountsCanClaim.sort(() => Math.random() - 0.5);
+        `);
+        // accountsCanClaim = accountsCanClaim.sort(() => Math.random() - 0.5); // shuffle
+        accountsCanClaim = accountsCanClaim.sort((a, b) => b.score - a.score); // sort by score: high -> low
         if (accountsCanClaim.length === 0) {
+            console.log("No account can claim today, wait tomorrow...");
+            await sleep(1800);
+            continue;
             const newAccount = createNewAccount();
             accounts.push(newAccount);
             accountsCanClaim.push(newAccount);
@@ -147,14 +151,14 @@ const huntAirdrop = async () => {
             console.log("######################################################################");
             console.log(`Progress: \x1b[33m${accounts.length - amount}/${accounts.length}\x1b[0m`);
             const account = accountsCanClaim[i];
-            const response = await claimAirdrop(account);
-            if (response.succeed) {
+            const response =
+                account.score < 30 ? await claimAirdrop(account) : { succeed: true, score: 0 };
+            if (response.succeed || account.score >= 30) {
                 amount--;
                 account.score += response.score;
                 account.latestClaim = Date.now() / 1000;
                 const isComplete = (score: number) => {
-                    const ranScore = Math.floor(Math.random() * 20);
-                    return score + ranScore >= 50;
+                    return score >= 30;
                 };
                 if (isComplete(account.score)) {
                     account.complete = true;
@@ -166,14 +170,12 @@ const huntAirdrop = async () => {
                 accounts = accounts.filter(account => !account.complete);
                 writeAccountsProgress(accounts);
             }
-            console.log(
-                `Account ${account.address} claim end, score: ${account.score}. Sleep 30-60s...`
-            );
+            console.log(`Account ${account.address} claim end, score: ${account.score}. Sleep ...`);
             await ranSleep(30, 60);
         }
         if (accountsCanClaim.length === 0) {
-            console.log("No account can claim, sleep 30-60s...");
-            await ranSleep(30, 60);
+            console.log("No account can claim, sleep ...");
+            await ranSleep(15, 60);
         }
     }
 };
