@@ -139,6 +139,7 @@ const huntAirdrop = async () => {
         accountsCanClaim = accountsCanClaim.sort((a, b) => b.score - a.score); // sort by score: high -> low
         if (accountsCanClaim.length === 0) {
             console.log("No account can claim today, wait tomorrow...");
+            exit(1);
             await sleep(1800);
             continue;
             const newAccount = createNewAccount();
@@ -170,8 +171,12 @@ const huntAirdrop = async () => {
                 accounts = accounts.filter(account => !account.complete);
                 writeAccountsProgress(accounts);
             }
+            if (!response.succeed) {
+                console.error(`Account ${account.address} claim failed, sleep ...`);
+                exit(1);
+            }
             console.log(`Account ${account.address} claim end, score: ${account.score}. Sleep ...`);
-            await ranSleep(30, 60);
+            await ranSleep(5, 15);
         }
         if (accountsCanClaim.length === 0) {
             console.log("No account can claim, sleep ...");
