@@ -98,12 +98,6 @@ const huntAirdrop = async () => {
             const currentDate = new Date().toISOString().slice(0, 10);
             return lastClaimDate !== currentDate;
         });
-        console.log(
-            `Last claim date: ${new Date(accountsCanClaim[0].latestClaim * 1000)
-                .toISOString()
-                .slice(0, 10)}`
-        );
-        console.log(`Today: ${new Date().toISOString().slice(0, 10)}`);
         let staticAccounts: { [key: number]: Airdrop[] } = {
             5: [],
             10: [],
@@ -135,7 +129,17 @@ const huntAirdrop = async () => {
             25: ${staticAccounts[25].length}
             30: ${staticAccounts[30].length}
         `);
-        // accountsCanClaim = accountsCanClaim.sort(() => Math.random() - 0.5); // shuffle
+        if (accountsCanClaim.length === 0) {
+            console.log("No account can claim today, wait tomorrow...");
+            exit(1);
+        }
+        console.log(
+            `Last claim date: ${new Date(accountsCanClaim[0].latestClaim * 1000)
+                .toISOString()
+                .slice(0, 10)}`
+        );
+        console.log(`Today: ${new Date().toISOString().slice(0, 10)}`);
+        accountsCanClaim = accountsCanClaim.sort(() => Math.random() - 0.5); // shuffle/
         accountsCanClaim = accountsCanClaim.sort((a, b) => b.score - a.score); // sort by score: high -> low
         if (accountsCanClaim.length === 0) {
             console.log("No account can claim today, wait tomorrow...");
@@ -178,7 +182,7 @@ const huntAirdrop = async () => {
                 exit(1);
             }
             console.log(`Account ${account.address} claim end, score: ${account.score}. Sleep ...`);
-            await ranSleep(15, 60);
+            await ranSleep(5, 10);
         }
         if (accountsCanClaim.length === 0) {
             console.log("No account can claim, sleep ...");
