@@ -27,8 +27,8 @@ const bidV2 = async () => {
             bidAuctions = [];
         }
         bidAuctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
-        const uptime = bidAuctions[0]?.uptime;
-        if (!uptime /* || Date.now() / 1000 - uptime > 0 */) {
+        const uptime = bidAuctions[0]?.uptime ?? 0;
+        if (Date.now() / 1000 < uptime) {
             await ranSleep(5, 6);
             continue;
         }

@@ -150,7 +150,9 @@ const huntAirdrop = async () => {
         let amount = accountsCanClaim.length;
         for (let i = 0; i < accountsCanClaim.length; i++) {
             console.log("######################################################################");
-            console.log(`Progress: \x1b[33m${accounts.length - amount}/${accounts.length}\x1b[0m`);
+            console.log(
+                `Progress: \x1b[33m${accounts.length - amount + 1}/${accounts.length}\x1b[0m`
+            );
             const account = accountsCanClaim[i];
             const response =
                 account.score < 30 ? await claimAirdrop(account) : { succeed: true, score: 0 };
@@ -176,7 +178,7 @@ const huntAirdrop = async () => {
                 exit(1);
             }
             console.log(`Account ${account.address} claim end, score: ${account.score}. Sleep ...`);
-            await ranSleep(5, 15);
+            await ranSleep(15, 60);
         }
         if (accountsCanClaim.length === 0) {
             console.log("No account can claim, sleep ...");
