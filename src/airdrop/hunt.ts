@@ -182,7 +182,7 @@ const huntAirdrop = async () => {
                 exit(1);
             }
             console.log(`Account ${account.address} claim end, score: ${account.score}. Sleep ...`);
-            await ranSleep(5, 10);
+            await ranSleep(3, 10);
         }
         if (accountsCanClaim.length === 0) {
             console.log("No account can claim, sleep ...");
