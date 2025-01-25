@@ -87,11 +87,11 @@ const findV2 = async () => {
                 await updateWaitBid(profitAuctions);
             }
         }
-        await ranSleep(3, 7);
         if (
             (modeBot.auctionGroup?.bep721 || modeBot.auctionGroup?.crew) &&
             Date.now() / 1000 - (latestGetData.auctionGroup ?? 0) > (delayTimeGet.auctionGroup ?? 0)
         ) {
+            await ranSleep(3, 7);// sleep 3-7s if auctionGroup
             latestGetData.auctionGroup = Date.now() / 1000;
             await getNewAuctionGroups(cacheIds.auctionGroup || []).then(
                 async ([auctionGroups, auctionGroupIds]) => {

@@ -26,6 +26,10 @@ const bidV2 = async () => {
         if (!bidAuctions) {
             bidAuctions = [];
         }
+        if (bidAuctions.length === 0) {
+            await ranSleep(5, 6);
+            continue;
+        }
         bidAuctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
         const uptime = bidAuctions[0]?.uptime ?? 0;
         if (Date.now() / 1000 < uptime) {
@@ -34,7 +38,7 @@ const bidV2 = async () => {
         }
         const sameUpTimeAuctions = bidAuctions.filter(item => item.uptime === uptime);
         bidAuctions = bidAuctions.filter(item => item.uptime !== uptime);
-        if (!sameUpTimeAuctions || sameUpTimeAuctions.length === 0) {
+        if (sameUpTimeAuctions.length === 0) {
             await ranSleep(5, 6);
             continue;
         }
