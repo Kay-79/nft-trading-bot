@@ -27,14 +27,6 @@ export const profitPerTier: TierPrice = {
     6: 500
 };
 
-export const delayTimeGet: LatestGet = {
-    auction: 10,
-    auctionGroup: 60 * 4,
-    box: NaN,
-    mexBox: NaN,
-    gem: NaN
-};
-
 export const profitBlock: ProfitConfig = {
     min: 5,
     percent: 0.6
@@ -43,6 +35,14 @@ export const profitBlock: ProfitConfig = {
 export const profitProAI: ProfitConfig = {
     min: 5,
     percent: 0.6
+};
+
+export const delayTimeGet: LatestGet = {
+    auction: 10,
+    auctionGroup: 60 * 4,
+    box: NaN,
+    mexBox: NaN,
+    gem: NaN
 };
 
 export const traders: string[] = [
