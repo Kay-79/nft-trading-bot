@@ -49,7 +49,7 @@ const findV2 = async () => {
         floorPrices,
         timeLastSetup
     } = initSetup;
-    console.log(`Mode Bot\nAuction: ${modeBot.auction}\nGroup:${modeBot.auctionGroup}`);
+    console.log(`ModeBot: ${JSON.stringify(modeBot)}`);
     while (true) {
         //===========================SETUP===========================
         if (

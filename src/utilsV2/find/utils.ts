@@ -188,7 +188,6 @@ export const isBreakBatch = (profitAuctions: AuctionDto[], auction: AuctionDto):
 
 export const isProfitable = (profit: number, minProfit: number): boolean => {
     if (ENV === Environment.TESTNET) {
-        console.log(ENV);
         return true;
     }
     return profit >= minProfit;

@@ -10,8 +10,8 @@ export const modeBot: ModeBot = {
         bundle: true
     },
     auctionGroup: {
-        bep721: false,
-        crew: false
+        bep721: true,
+        crew: true
     },
     box: false,
     mexBox: false,
@@ -19,16 +19,16 @@ export const modeBot: ModeBot = {
 };
 
 export const profitPerTier: TierPrice = {
-    1: 0.05,
-    2: 0.05,
-    3: 0.05,
+    1: 0.02,
+    2: 0.02,
+    3: 0.02,
     4: 3,
     5: 7,
     6: 500
 };
 
 export const delayTimeGet: LatestGet = {
-    auction: 60,
+    auction: 10,
     auctionGroup: 60 * 4,
     box: NaN,
     mexBox: NaN,
