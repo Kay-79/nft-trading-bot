@@ -1,4 +1,4 @@
-import { API_AI_PRICE, API_MOBOX } from "../constants/constants";
+import { API_AI_PRICE_PREDICT, API_MOBOX } from "../constants/constants";
 import axios from "axios";
 import { traders } from "config/config";
 import { TrainingData } from "types/AI/TrainingData";
@@ -62,12 +62,12 @@ export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => 
 };
 
 export const predictModel = async (inputOne: number[]): Promise<number> => {
-    console.log("Predicting model...", API_AI_PRICE);
+    console.log("Predicting model...", API_AI_PRICE_PREDICT);
     if (inputOne.length === 4) {
         try {
             const params = new URLSearchParams();
             (inputOne ?? []).forEach(value => params.append("input", value.toString()));
-            const response = await axios.get(API_AI_PRICE, {
+            const response = await axios.get(API_AI_PRICE_PREDICT, {
                 params: params
             });
             return response.data.prediction[0];
@@ -88,7 +88,7 @@ export const predictModel = async (inputOne: number[]): Promise<number> => {
         for (const input of dataset.inputs ?? []) {
             const params = new URLSearchParams();
             input.forEach(value => params.append("input", value.toString()));
-            const response = await axios.get(API_AI_PRICE, { params });
+            const response = await axios.get(API_AI_PRICE_PREDICT, { params });
             console.log("Input:\t\t\t", input);
             console.log("Prediction:\t\t", response.data.prediction[0]);
             totalPredicted += Number(response.data.prediction[0]);

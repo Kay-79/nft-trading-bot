@@ -3,7 +3,6 @@ import { TierPrice } from "../../types/common/TierPrice";
 import { bidContract, profitBlock, profitPerTier, profitProAI } from "../../config/config";
 import fs from "fs";
 import {
-    API_AI_PRICE,
     API_BNB_PRICE_COIGEKO,
     API_BNB_PRICE_MOBOX,
     API_MOBOX,
@@ -18,7 +17,8 @@ import {
     RATE_FEE_MARKET,
     WAIT_BID_PATH,
     MP_BLOCK_ADDRESS,
-    ENV
+    ENV,
+    API_AI_PRICE_FOR_BOT
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { BidType, BlockType, Environment } from "../../enum/enum";
@@ -210,7 +210,7 @@ export const getPriceFromAI = async (auction: AuctionDto): Promise<number> => {
                 params.append("input", value.toString());
             }
         });
-        const response = await axios.get(API_AI_PRICE, {
+        const response = await axios.get(API_AI_PRICE_FOR_BOT, {
             params: params
         });
         return response.data.prediction[0][0];
@@ -241,7 +241,7 @@ export const getPriceBlockFromAI = async (auctionGroup: AuctionGroupDto): Promis
                     params.append("input", value.toString());
                 }
             });
-            const response = await axios.get(API_AI_PRICE, {
+            const response = await axios.get(API_AI_PRICE_FOR_BOT, {
                 params: params
             });
             totalPredict += response.data.prediction[0][0];
