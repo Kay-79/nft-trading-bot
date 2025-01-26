@@ -9,6 +9,7 @@ from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.optimizers import Adam
 import joblib
 
+
 def load_data(file_path):
     if not os.path.exists(file_path):
         return None
@@ -25,27 +26,6 @@ data = load_data(file_path)
 
 X = np.array([d["input"] for d in data])
 y = np.array([d["output"] for d in data])
-
-# import matplotlib.pyplot as plt
-# # Lọc các giá trị y lớn hơn 1000
-# large_y_indices = np.where(y > 1100)  # Lấy chỉ số của các giá trị y > 1000
-# large_y_values = y[large_y_indices]  # Lấy giá trị thực tế
-
-# # Log các giá trị này
-# print("Indices of y > 1000:", large_y_indices[0])  # Chỉ số các giá trị lớn hơn 1000
-# print("Values of y > 1000:", large_y_values)       # Giá trị tương ứng
-# print(f"Total count of y > 1000: {len(large_y_values)}")  # Tổng số lượng
-# plt.figure(figsize=(10, 6))  # Tăng kích thước biểu đồ
-# plt.hist(y, bins=20, color='skyblue', edgecolor='black', alpha=0.7)
-# plt.title("Distribution of y", fontsize=16)
-# plt.xlabel("Value of y", fontsize=14)
-# plt.ylabel("Frequency", fontsize=14)
-# plt.grid(axis='y', linestyle='--', alpha=0.7)  # Thêm lưới để dễ quan sát
-# plt.xticks(fontsize=12)
-# plt.yticks(fontsize=12)
-# plt.tight_layout()  # Tự động điều chỉnh khoảng cách để các nhãn không bị tràn
-# plt.show()
-# exit()
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42)

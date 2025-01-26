@@ -65,7 +65,7 @@ modelAI:
 	python ./src/AI/model/model.py
 
 modelAIPi:
-	bash -c "source venv/bin/activate && python ./src/AI/model/modelPi.py"
+	bash -c "source venv/bin/activate && python ./src/AI/model/model.py"
 #######################################
 ############### API ###################
 apiMomo:
