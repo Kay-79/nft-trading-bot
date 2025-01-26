@@ -27,6 +27,7 @@
     },
     "scripts": {
         "debug": "bun ./src/debugs/test.ts",
+        "predict": "bun ./src/debugs/predict.ts",
         "crawl": "bun ./src/AI/crawlingDatasetsRpc.ts",
         "apiData": "bun ./src/AI/api/serverDatasets.ts",
         "getData": "bun ./src/AI/data/getDataset.ts",

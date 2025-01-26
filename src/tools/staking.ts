@@ -36,3 +36,4 @@ const stakingProfit = async (address: string) => {
 };
 
 stakingProfit(PRO_BUYER);
+// stakingProfit("TEST_ADDRESS");
