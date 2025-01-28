@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 import numpy as np
 import joblib
+import time
+import math
 
 model_path = "./src/AI/model/model.pkl"
 scaler_path = "./src/AI/model/scaler.pkl"
@@ -21,6 +23,11 @@ def predict():
             return jsonify({"error": "Invalid input length"}), 400
         if input_data[2] not in [4, 5, 6]:
             return jsonify({"error": "Invalid input value"}), 400
+        if len(input_data) < 5:
+            input_data.append(math.floor(time.time()))
+        else:
+            input_data[4] = math.floor(time.time())
+        print(input_data)
         input_data = np.array(input_data).reshape(1, -1)
         input_data = scaler.transform(input_data)
         prediction = model.predict(input_data)

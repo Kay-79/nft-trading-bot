@@ -12,7 +12,7 @@ const stakingProfit = async (address: string) => {
     const totalRewardPerDay = (rewardPerPeriod * rewardRate) / 360;
     const rewardPerDayOfUser = (userHashRate * totalRewardPerDay) / totalHashRate;
     const mboxPrice = await getTokenPrice("mobox");
-    console.log(`Stake info:
+    console.log(`Stake info: ${address}
         User hash rate: \t\x1b[33m${shortenNumber(userHashRate, 0, 2)} H\x1b[0m
         Total hash rate: \t\x1b[33m${shortenNumber(totalHashRate, 0, 2)} H\x1b[0m
         Reward rate: \t\t\x1b[33m${shortenNumber(rewardRate, 0, 3)} %\x1b[0m
