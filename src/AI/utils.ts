@@ -1,6 +1,7 @@
 import { API_AI_PRICE_PREDICT, API_MOBOX } from "../constants/constants";
 import axios from "axios";
 import { traders } from "config/config";
+import { ethers } from "ethers";
 import { TrainingData } from "types/AI/TrainingData";
 import { RecentSold } from "types/dtos/RecentSold.dto";
 
@@ -81,9 +82,17 @@ export const predictModel = async (inputOne: number[]): Promise<number> => {
         const dataset = datasetsTest[i];
         let totalPredicted = 0;
         console.log("===================================================================");
-        if (dataset.bidder && traders.includes(dataset.bidder))
+        if (
+            dataset.bidder &&
+            (traders.includes(ethers.getAddress(dataset.bidder)) ||
+                traders.includes(dataset.bidder.toLowerCase()))
+        )
             console.log("Bidder is a trader:\t", dataset.bidder);
-        if (dataset.auctor && traders.includes(dataset.auctor))
+        if (
+            dataset.auctor &&
+            (traders.includes(ethers.getAddress(dataset.auctor)) ||
+                traders.includes(dataset.auctor.toLowerCase()))
+        )
             console.log("Auctor is a trader:\t", dataset.auctor);
         for (const input of dataset.inputs ?? []) {
             const params = new URLSearchParams();

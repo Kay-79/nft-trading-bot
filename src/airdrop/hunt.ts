@@ -6,7 +6,7 @@ import { ranSleep, sleep } from "utilsV2/common/sleep";
 const JSON_FILE_COMPLETE = "./src/airdrop/accountsComplete.json";
 const JSON_FILE_PROGRESS = "./src/airdrop/accountsProgress.json";
 
-interface Airdrop {
+export interface Airdrop {
     address: string;
     privateKey: string;
     complete: boolean;
@@ -17,7 +17,7 @@ interface ClaimResponse {
     succeed: boolean;
     score: number;
 }
-const readAccountsComplete = (): Airdrop[] => {
+export const readAccountsComplete = (): Airdrop[] => {
     if (fs.existsSync(JSON_FILE_COMPLETE)) {
         const data = fs.readFileSync(JSON_FILE_COMPLETE, "utf-8");
         return JSON.parse(data);
@@ -191,4 +191,4 @@ const huntAirdrop = async () => {
     }
 };
 
-huntAirdrop();
+// huntAirdrop();

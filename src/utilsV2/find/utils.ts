@@ -355,9 +355,11 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 totalPricePrediction = 0;
             }
         } else {
+            console.log("Check profit again with AI");
             // AI method (check profit again)
             if (type !== BidType.PRO) continue;
             const { profit, minProfit, pricePrediction } = await calculateAuctionMetricsAI(auction);
+            console.log(profit, minProfit, pricePrediction);
             if (isProfitable(profit, minProfit)) {
                 profitableAuctions.push(auction);
                 totalFee += fee;

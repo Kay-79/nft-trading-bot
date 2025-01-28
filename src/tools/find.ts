@@ -82,16 +82,22 @@ const findV2 = async () => {
                 newAuctions = auctions;
                 cacheIds.auction = auctionIds;
             });
-            const profitAuctions = await checkProfitAuctions(newAuctions, floorPrices, bnbPrice);
-            if (profitAuctions.length > 0) {
-                await updateWaitBid(profitAuctions);
+            if (newAuctions.length !== 0) {
+                const profitAuctions = await checkProfitAuctions(
+                    newAuctions,
+                    floorPrices,
+                    bnbPrice
+                );
+                if (profitAuctions.length > 0) {
+                    await updateWaitBid(profitAuctions);
+                }
             }
         }
         if (
             (modeBot.auctionGroup?.bep721 || modeBot.auctionGroup?.crew) &&
             Date.now() / 1000 - (latestGetData.auctionGroup ?? 0) > (delayTimeGet.auctionGroup ?? 0)
         ) {
-            await ranSleep(3, 7);// sleep 3-7s if auctionGroup
+            await ranSleep(3, 7); // sleep 3-7s if auctionGroup
             latestGetData.auctionGroup = Date.now() / 1000;
             await getNewAuctionGroups(cacheIds.auctionGroup || []).then(
                 async ([auctionGroups, auctionGroupIds]) => {
@@ -99,13 +105,15 @@ const findV2 = async () => {
                     cacheIds.auctionGroup = auctionGroupIds;
                 }
             );
-            const profitAuctionsBlock = await checkProfitAuctionGroups(
-                newAuctionsBlock,
-                floorPrices,
-                bnbPrice
-            );
-            if (profitAuctionsBlock.length > 0) {
-                await updateWaitBid(profitAuctionsBlock);
+            if (newAuctionsBlock.length !== 0) {
+                const profitAuctionsBlock = await checkProfitAuctionGroups(
+                    newAuctionsBlock,
+                    floorPrices,
+                    bnbPrice
+                );
+                if (profitAuctionsBlock.length > 0) {
+                    await updateWaitBid(profitAuctionsBlock);
+                }
             }
         }
         //===========================SETUP===========================

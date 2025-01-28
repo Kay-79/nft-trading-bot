@@ -173,6 +173,8 @@ export const IP_MAIN = "172.16.1.133";
 
 export const PORT_HOST_DATASET = 3004;
 
-export const API_AI_PRICE_FOR_BOT = "http://127.0.0.1:5000/predict";
+export const API_AI_PRICE_FOR_BOT = "http://localhost:5000/predict";
 
-export const API_AI_PRICE_PREDICT = "http://192.168.1.11:5000/predict";
+// export const API_AI_PRICE_PREDICT = "http://192.168.1.11:5000/predict";
+
+export const API_AI_PRICE_PREDICT = "http://localhost:5000/predict";
