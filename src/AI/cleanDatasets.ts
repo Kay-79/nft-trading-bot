@@ -26,9 +26,9 @@ export const cleanDatasets = async () => {
             // dataset.output[0] < 1000 &&
             dataset.bidTime - dataset.listTime > 5 * 60
     );
-    for (let i = 0; i < newData.length; i++) {
-        newData[i].input.push(newData[i].bidTime);
-    }
+    // for (let i = 0; i < newData.length; i++) {
+    //     newData[i].input.push(newData[i].bidTime);
+    // }
     fs.writeFileSync(filePath, JSON.stringify(newData, null, 2));
 };
 
