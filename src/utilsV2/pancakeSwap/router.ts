@@ -17,6 +17,5 @@ export const getPriceMboxOnChain = async (block: number) => {
         blockTag: block
     });
     const decodedResult = abiCoder.decode(["uint256[]"], result);
-    console.log(decodedResult);
     return Number(decodedResult[0][2]) / 10 ** 18;
 };

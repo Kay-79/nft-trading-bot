@@ -1,6 +1,7 @@
 import { PRO_BUYER } from "constants/constants";
 import { getTokenPrice } from "utilsV2/coigeko/utils";
 import { shortenNumber } from "utilsV2/common/utils";
+import { getPriceMboxOnChain } from "utilsV2/pancakeSwap/router";
 import { stakingUtils } from "utilsV2/staking/utils";
 
 const stakingProfit = async (address: string) => {
@@ -11,7 +12,8 @@ const stakingProfit = async (address: string) => {
     const totalHashRate = await stakingUtils.getTotalHashRate();
     const totalRewardPerDay = (rewardPerPeriod * rewardRate) / 360;
     const rewardPerDayOfUser = (userHashRate * totalRewardPerDay) / totalHashRate;
-    const mboxPrice = await getTokenPrice("mobox");
+    // const mboxPrice = await getTokenPrice("mobox");
+    const mboxPrice = await getPriceMboxOnChain(-1);
     console.log(`Stake info: ${address}
         User hash rate: \t\x1b[33m${shortenNumber(userHashRate, 0, 2)} H\x1b[0m
         Total hash rate: \t\x1b[33m${shortenNumber(totalHashRate, 0, 2)} H\x1b[0m
