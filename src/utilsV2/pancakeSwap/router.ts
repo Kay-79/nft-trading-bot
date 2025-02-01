@@ -1,13 +1,14 @@
 import { archiveProvider } from "providers/archiveProvider";
-import { AbiCoder } from "ethers";
-import { USDT_ADDRESS } from "constants/constants";
+import { AbiCoder, ethers } from "ethers";
+import { MBOX_ADDRESS, USDT_ADDRESS, WBNB_ADDRESS } from "constants/constants";
 
 const abiCoder = new AbiCoder();
 
 export const getPriceMboxOnChain = async (block: number) => {
+    const amountIn = ethers.parseUnits("1", 18);
     const encodedData = abiCoder.encode(
         ["uint256", "address[]"],
-        ["1000000000000000000", ["0x3203c9e46ca618c8c1ce5dc67e7e9d75f5da2377", USDT_ADDRESS]]
+        [amountIn, [MBOX_ADDRESS, WBNB_ADDRESS, USDT_ADDRESS]]
     );
     const data = "0xd06ca61f" + encodedData.slice(2);
     const result = await archiveProvider.call({
@@ -17,5 +18,5 @@ export const getPriceMboxOnChain = async (block: number) => {
     });
     const decodedResult = abiCoder.decode(["uint256[]"], result);
     console.log(decodedResult);
-    return (Number(decodedResult[0][1]) / 10 ** 18)* 1.025;
+    return Number(decodedResult[0][2]) / 10 ** 18;
 };
