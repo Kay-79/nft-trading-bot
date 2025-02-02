@@ -1,4 +1,4 @@
-import { getDataStorage } from "utilsV2/common/utils";
+import { getDataStorage, getDataStorageHistory } from "utilsV2/common/utils";
 import { MINT_MOMO_ADDRESS, STAKING_ADDRESS } from "../../constants/constants";
 import { StakingSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
@@ -133,6 +133,26 @@ const getRewardPerPeriod = async () => {
     return Number(result);
 };
 
+const getTotalHashRateHistory = async (block: number) => {
+    const result = await getDataStorageHistory(STAKING_ADDRESS, "0x11", block);
+    return Number(result);
+};
+
+const getRewardRateHistory = async (block: number) => {
+    const result = await getDataStorageHistory(STAKING_ADDRESS, "0x9", block);
+    return Number(result) / 10 ** 18;
+};
+
+const getRewardPerPeriodHistory = async (block: number) => {
+    const result = await getDataStorageHistory(STAKING_ADDRESS, "0xa", block);
+    return Number(result);
+};
+
+const getRewardPer1000Hashrate = async () => {
+    const result = await getDataStorage(STAKING_ADDRESS, "0x12");
+    return Number(result);
+};
+
 const test = async () => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["uint256[]"], [[41061]]);
@@ -163,5 +183,9 @@ export const stakingUtils = {
     getTotalHashRate,
     getRewardRate,
     getRewardPerPeriod,
+    getTotalHashRateHistory,
+    getRewardRateHistory,
+    getRewardPerPeriodHistory,
+    getRewardPer1000Hashrate,
     test
 };

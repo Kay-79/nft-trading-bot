@@ -1,10 +1,11 @@
 import { ENV, MP_ADDRESS, TOPIC_BID } from "constants/constants";
 import { fullNodeProvider } from "providers/fullNodeProvider";
-import { byte32ToAddress } from "utilsV2/common/utils";
+import { byte32ToAddress, shortenNumber } from "utilsV2/common/utils";
 import { AbiCoder } from "ethers";
 import { momo721 } from "utilsV2/momo721/utils";
 import fs from "fs";
 import { Environment } from "enum/enum";
+import { getPriceMboxOnChain } from "utilsV2/pancakeSwap/router";
 
 const abiCoder = new AbiCoder();
 
@@ -46,6 +47,8 @@ export const crawlingDatasetsRpc = async () => {
                 Number(decodedResult[2]).toString(),
                 log.blockNumber
             );
+            const mboxPriceHistory = await getPriceMboxOnChain(log.blockNumber);
+            const rewardPer1000Hashrate = 0;
             if (momo721InforHistory.hashrate === 0n || momo721InforHistory.prototype === 6n)
                 continue;
             if (Number(momo721InforHistory.prototype) >= 60000) {
@@ -58,10 +61,13 @@ export const crawlingDatasetsRpc = async () => {
                     Number(momo721InforHistory.hashrate ?? 0),
                     Number(momo721InforHistory.lvHashrate ?? 0),
                     Math.floor(Number(momo721InforHistory.prototype ?? 0) / 1e4),
-                    Number(momo721InforHistory.level ?? 0)
+                    Number(momo721InforHistory.level ?? 0),
+                    timestamp,
+                    shortenNumber(mboxPriceHistory, 0, 3),
+                    rewardPer1000Hashrate
                 ],
                 output: [bidPrice],
-                bidTime: timestamp,
+                // bidTime: timestamp,
                 listTime: Number(decodedResult[5]),
                 bidder: byte32ToAddress(log.topics[2]),
                 auctor: byte32ToAddress(log.topics[1])
