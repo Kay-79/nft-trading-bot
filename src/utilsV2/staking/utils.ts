@@ -3,6 +3,7 @@ import { MINT_MOMO_ADDRESS, STAKING_ADDRESS } from "../../constants/constants";
 import { StakingSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder, getAddress } from "ethers";
+import { sleep } from "utilsV2/common/sleep";
 
 const earned = async (userAddress: string) => {
     const abiCoder = new AbiCoder();
@@ -119,7 +120,7 @@ const previewMysteryBox = async (address: string, amount: string) => {
 };
 
 const getTotalHashRate = async (block: number) => {
-    if (block > 0) {
+    if (block < 0) {
         const result = await getDataStorage(STAKING_ADDRESS, "0x11");
         return Number(result);
     } else {
@@ -129,7 +130,7 @@ const getTotalHashRate = async (block: number) => {
 };
 
 const getRewardRate = async (block: number) => {
-    if (block > 0) {
+    if (block < 0) {
         const result = await getDataStorage(STAKING_ADDRESS, "0x9");
         return Number(result) / 10 ** 18;
     } else {
@@ -139,7 +140,7 @@ const getRewardRate = async (block: number) => {
 };
 
 const getRewardPerPeriod = async (block: number) => {
-    if (block > 0) {
+    if (block < 0) {
         const result = await getDataStorage(STAKING_ADDRESS, "0xa");
         return Number(result);
     } else {
@@ -148,7 +149,16 @@ const getRewardPerPeriod = async (block: number) => {
     }
 };
 
-const getRewardPer1000Hashrate = async () => {};
+const getRewardPer1000Hashrate = async (block: number) => {
+    const rewardRate = await getRewardRate(block);
+    await sleep(0.5);
+    const rewardPerPeriod = await getRewardPerPeriod(block);
+    await sleep(0.5);
+    const totalHashRate = await getTotalHashRate(block);
+    await sleep(0.5);
+    console.log(rewardRate, rewardPerPeriod, totalHashRate);
+    return (1000 * rewardPerPeriod * rewardRate) / (totalHashRate * 360);
+};
 
 const test = async () => {
     const abiCoder = new AbiCoder();

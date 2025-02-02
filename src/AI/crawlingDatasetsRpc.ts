@@ -6,6 +6,7 @@ import { momo721 } from "utilsV2/momo721/utils";
 import fs from "fs";
 import { Environment } from "enum/enum";
 import { getPriceMboxOnChain } from "utilsV2/pancakeSwap/router";
+import { stakingUtils } from "utilsV2/staking/utils";
 
 const abiCoder = new AbiCoder();
 
@@ -47,8 +48,16 @@ export const crawlingDatasetsRpc = async () => {
                 Number(decodedResult[2]).toString(),
                 log.blockNumber
             );
-            const mboxPriceHistory = await getPriceMboxOnChain(log.blockNumber);
-            const rewardPer1000Hashrate = 0;
+            const mboxPriceHistory = shortenNumber(
+                await getPriceMboxOnChain(log.blockNumber),
+                0,
+                4
+            );
+            const rewardPer1000Hashrate = shortenNumber(
+                await stakingUtils.getRewardPer1000Hashrate(log.blockNumber),
+                0,
+                4
+            );
             if (momo721InforHistory.hashrate === 0n || momo721InforHistory.prototype === 6n)
                 continue;
             if (Number(momo721InforHistory.prototype) >= 60000) {
@@ -63,8 +72,8 @@ export const crawlingDatasetsRpc = async () => {
                     Math.floor(Number(momo721InforHistory.prototype ?? 0) / 1e4),
                     Number(momo721InforHistory.level ?? 0),
                     timestamp,
-                    shortenNumber(mboxPriceHistory, 0, 3),
-                    rewardPer1000Hashrate
+                    Number(mboxPriceHistory),
+                    Number(rewardPer1000Hashrate)
                 ],
                 output: [bidPrice],
                 // bidTime: timestamp,

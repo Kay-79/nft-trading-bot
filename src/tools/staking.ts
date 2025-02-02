@@ -23,7 +23,7 @@ const stakingProfit = async (address: string) => {
         Reward 1000H/day: \t\x1b[33m${shortenNumber(
             (1000 * totalRewardPerDay) / totalHashRate,
             0,
-            3
+            4
         )} MBOX\x1b[0m`);
     console.log(`MBOX price: \t\x1b[33m$${shortenNumber(mboxPrice, 0, 5)}\x1b[0m`);
     console.log(
