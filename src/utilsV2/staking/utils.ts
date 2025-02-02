@@ -118,40 +118,37 @@ const previewMysteryBox = async (address: string, amount: string) => {
     }
 };
 
-const getTotalHashRate = async () => {
-    const result = await getDataStorage(STAKING_ADDRESS, "0x11");
-    return Number(result);
+const getTotalHashRate = async (block: number) => {
+    if (block > 0) {
+        const result = await getDataStorage(STAKING_ADDRESS, "0x11");
+        return Number(result);
+    } else {
+        const result = await getDataStorageHistory(STAKING_ADDRESS, "0x11", block);
+        return Number(result);
+    }
 };
 
-const getRewardRate = async () => {
-    const result = await getDataStorage(STAKING_ADDRESS, "0x9");
-    return Number(result) / 10 ** 18;
+const getRewardRate = async (block: number) => {
+    if (block > 0) {
+        const result = await getDataStorage(STAKING_ADDRESS, "0x9");
+        return Number(result) / 10 ** 18;
+    } else {
+        const result = await getDataStorageHistory(STAKING_ADDRESS, "0x9", block);
+        return Number(result) / 10 ** 18;
+    }
 };
 
-const getRewardPerPeriod = async () => {
-    const result = await getDataStorage(STAKING_ADDRESS, "0xa");
-    return Number(result);
+const getRewardPerPeriod = async (block: number) => {
+    if (block > 0) {
+        const result = await getDataStorage(STAKING_ADDRESS, "0xa");
+        return Number(result);
+    } else {
+        const result = await getDataStorageHistory(STAKING_ADDRESS, "0xa", block);
+        return Number(result);
+    }
 };
 
-const getTotalHashRateHistory = async (block: number) => {
-    const result = await getDataStorageHistory(STAKING_ADDRESS, "0x11", block);
-    return Number(result);
-};
-
-const getRewardRateHistory = async (block: number) => {
-    const result = await getDataStorageHistory(STAKING_ADDRESS, "0x9", block);
-    return Number(result) / 10 ** 18;
-};
-
-const getRewardPerPeriodHistory = async (block: number) => {
-    const result = await getDataStorageHistory(STAKING_ADDRESS, "0xa", block);
-    return Number(result);
-};
-
-const getRewardPer1000Hashrate = async () => {
-    const result = await getDataStorage(STAKING_ADDRESS, "0x12");
-    return Number(result);
-};
+const getRewardPer1000Hashrate = async () => {};
 
 const test = async () => {
     const abiCoder = new AbiCoder();
@@ -183,9 +180,6 @@ export const stakingUtils = {
     getTotalHashRate,
     getRewardRate,
     getRewardPerPeriod,
-    getTotalHashRateHistory,
-    getRewardRateHistory,
-    getRewardPerPeriodHistory,
     getRewardPer1000Hashrate,
     test
 };

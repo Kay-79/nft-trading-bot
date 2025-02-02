@@ -3,6 +3,7 @@ import { FunctionFragment } from "../../enum/enum";
 import { bidProvider } from "../../providers/bidProvider";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { getBlockByTimestamp } from "../bid/utils";
+import { archiveProvider } from "providers/archiveProvider";
 
 export const decodeFunctionData = (functionFragment: string, data: string) => {
     return bidProvider.interface.decodeFunctionData(functionFragment, data);
@@ -66,7 +67,7 @@ export const getDataStorage = async (address: string, slot: string) => {
 };
 
 export const getDataStorageHistory = async (address: string, slot: string, block: number) => {
-    return ethersProvider.getStorage(address, slot, block);
+    return archiveProvider.getStorage(address, slot, block);
 };
 
 export const hexToString = (hex: string): string => {

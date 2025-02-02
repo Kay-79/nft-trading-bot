@@ -7,9 +7,9 @@ import { stakingUtils } from "utilsV2/staking/utils";
 const stakingProfit = async (address: string) => {
     const earned = await stakingUtils.earned(address);
     const userHashRate = await stakingUtils.userHashrate(address);
-    const rewardRate = await stakingUtils.getRewardRate();
-    const rewardPerPeriod = await stakingUtils.getRewardPerPeriod();
-    const totalHashRate = await stakingUtils.getTotalHashRate();
+    const rewardRate = await stakingUtils.getRewardRate(-1);
+    const rewardPerPeriod = await stakingUtils.getRewardPerPeriod(-1);
+    const totalHashRate = await stakingUtils.getTotalHashRate(-1);
     const totalRewardPerDay = (rewardPerPeriod * rewardRate) / 360;
     const rewardPerDayOfUser = (userHashRate * totalRewardPerDay) / totalHashRate;
     // const mboxPrice = await getTokenPrice("mobox");
