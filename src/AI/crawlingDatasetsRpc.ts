@@ -8,6 +8,7 @@ import { Environment } from "enum/enum";
 import { getPriceMboxOnChain } from "utilsV2/pancakeSwap/router";
 import { stakingUtils } from "utilsV2/staking/utils";
 import { sleep } from "utilsV2/common/sleep";
+import { ethersProvider } from "providers/ethersProvider";
 
 const abiCoder = new AbiCoder();
 
@@ -17,7 +18,7 @@ export const crawlingDatasetsRpc = async () => {
         return;
     }
     let endBlock = await fullNodeProvider.getBlockNumber();
-    await sleep(1);
+    await sleep(4);
     const lastBlock = JSON.parse(fs.readFileSync("./src/AI/data/lastBlock.json", "utf-8"));
     let startBlock = lastBlock.lastBlock;
     const step = 5000;
@@ -34,7 +35,7 @@ export const crawlingDatasetsRpc = async () => {
             toBlock: toBlock
         };
         const logs = await fullNodeProvider.getLogs(filter);
-        await sleep(1);
+        await sleep(4);
         let rewardPer1000Hashrate = "";
         for (const log of logs) {
             if (log.topics[0] !== TOPIC_BID) continue;
@@ -44,30 +45,29 @@ export const crawlingDatasetsRpc = async () => {
             );
             if (decodedResult[2] === 0n) continue;
             console.log("Processing", decodedResult);
-            const block = await fullNodeProvider.getBlock(log.blockNumber);
-            await sleep(1);
+            const block = await ethersProvider.getBlock(log.blockNumber);
+            await sleep(4);
             if (!block) continue;
             const timestamp = block.timestamp;
-            console.log("Block", log.blockNumber, "timestamp", block.timestamp);
             const momo721InforHistory = await momo721.getMomoInfoHistory(
                 Number(decodedResult[2]).toString(),
                 log.blockNumber
             );
-            await sleep(1);
+            await sleep(4);
             const mboxPriceHistory = shortenNumber(
                 await getPriceMboxOnChain(log.blockNumber),
                 0,
                 4
             );
             if (rewardPer1000Hashrate === "") {
-                await sleep(1);
+                await sleep(4);
                 rewardPer1000Hashrate = shortenNumber(
                     await stakingUtils.getRewardPer1000Hashrate(log.blockNumber),
                     0,
                     4
                 );
             }
-            await sleep(1);
+            await sleep(4);
             if (momo721InforHistory.hashrate === 0n || momo721InforHistory.prototype === 6n)
                 continue;
             if (Number(momo721InforHistory.prototype) >= 60000) {

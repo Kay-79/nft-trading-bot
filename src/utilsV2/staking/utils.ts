@@ -151,11 +151,11 @@ const getRewardPerPeriod = async (block: number) => {
 
 const getRewardPer1000Hashrate = async (block: number) => {
     const rewardRate = await getRewardRate(block);
-    await sleep(0.5);
+    await sleep(5);
     const rewardPerPeriod = await getRewardPerPeriod(block);
-    await sleep(0.5);
+    await sleep(5);
     const totalHashRate = await getTotalHashRate(block);
-    await sleep(0.5);
+    await sleep(5);
     console.log(rewardRate, rewardPerPeriod, totalHashRate);
     return (1000 * rewardPerPeriod * rewardRate) / (totalHashRate * 360);
 };
