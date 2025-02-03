@@ -18,10 +18,10 @@ export const crawlingDatasetsRpc = async () => {
         return;
     }
     let endBlock = await fullNodeProvider.getBlockNumber();
-    await sleep(4);
+    await sleep(1.5);
     const lastBlock = JSON.parse(fs.readFileSync("./src/AI/data/lastBlock.json", "utf-8"));
     let startBlock = lastBlock.lastBlock;
-    const step = 5000;
+    const step = 1000;
     while (startBlock < endBlock) {
         fs.writeFileSync(
             "./src/AI/data/lastBlock.json",
@@ -35,8 +35,9 @@ export const crawlingDatasetsRpc = async () => {
             toBlock: toBlock
         };
         const logs = await fullNodeProvider.getLogs(filter);
-        await sleep(4);
+        await sleep(1.5);
         let rewardPer1000Hashrate = "";
+        let mboxPriceHistory = "";
         for (const log of logs) {
             if (log.topics[0] !== TOPIC_BID) continue;
             const decodedResult = abiCoder.decode(
@@ -46,28 +47,26 @@ export const crawlingDatasetsRpc = async () => {
             if (decodedResult[2] === 0n) continue;
             console.log("Processing", decodedResult);
             const block = await ethersProvider.getBlock(log.blockNumber);
-            await sleep(4);
+            await sleep(1.5);
             if (!block) continue;
             const timestamp = block.timestamp;
             const momo721InforHistory = await momo721.getMomoInfoHistory(
                 Number(decodedResult[2]).toString(),
                 log.blockNumber
             );
-            await sleep(4);
-            const mboxPriceHistory = shortenNumber(
-                await getPriceMboxOnChain(log.blockNumber),
-                0,
-                4
-            );
+            if (mboxPriceHistory === "") {
+                mboxPriceHistory = shortenNumber(await getPriceMboxOnChain(log.blockNumber), 0, 4);
+            }
+            await sleep(1.5);
             if (rewardPer1000Hashrate === "") {
-                await sleep(4);
+                await sleep(1.5);
                 rewardPer1000Hashrate = shortenNumber(
                     await stakingUtils.getRewardPer1000Hashrate(log.blockNumber),
                     0,
                     4
                 );
             }
-            await sleep(4);
+            await sleep(1.5);
             if (momo721InforHistory.hashrate === 0n || momo721InforHistory.prototype === 6n)
                 continue;
             if (Number(momo721InforHistory.prototype) >= 60000) {
@@ -96,15 +95,12 @@ export const crawlingDatasetsRpc = async () => {
         if (datasets.length > 0) {
             let existingData = [];
             const filePath = "./src/AI/data/datasets.json";
-
             if (fs.existsSync(filePath)) {
                 const fileContent = fs.readFileSync(filePath, "utf-8");
                 existingData = fileContent.trim() ? JSON.parse(fileContent) : [];
             }
-
             const newData = JSON.parse(`[${datasets.slice(0, -1)}]`);
             const updatedData = existingData.concat(newData);
-
             fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 2));
         }
         if (logs.length === 0) startBlock = toBlock + 1;

@@ -8,7 +8,7 @@ export const getPriceMboxOnChain = async (block: number) => {
     const amountIn = ethers.parseUnits("1", 18);
     const encodedData = abiCoder.encode(
         ["uint256", "address[]"],
-        [amountIn, [MBOX_ADDRESS, WBNB_ADDRESS, USDT_ADDRESS]]
+        [amountIn, [MBOX_ADDRESS, USDT_ADDRESS]]
     );
     const data = "0xd06ca61f" + encodedData.slice(2);
     const result = await archiveProvider.call({
@@ -17,5 +17,5 @@ export const getPriceMboxOnChain = async (block: number) => {
         blockTag: block
     });
     const decodedResult = abiCoder.decode(["uint256[]"], result);
-    return Number(decodedResult[0][2]) / 10 ** 18;
+    return Number(decodedResult[0][1]) / 10 ** 18;
 };
