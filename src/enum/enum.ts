@@ -13,6 +13,11 @@ export enum BlockType {
     CREW = 1
 }
 
+export enum PredictMode {
+    ALL = "ALL",
+    ONE = "ONE"
+}
+
 export enum AuctionStatus {
     ACTIVE = 3,
     FINISHED = 2,

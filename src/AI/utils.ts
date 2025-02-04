@@ -1,6 +1,7 @@
 import { API_AI_PRICE_PREDICT, API_MOBOX } from "../constants/constants";
 import axios from "axios";
 import { traders } from "config/config";
+import { PredictMode } from "enum/enum";
 import { ethers } from "ethers";
 import { TrainingData } from "types/AI/TrainingData";
 import { RecentSold } from "types/dtos/RecentSold.dto";
@@ -62,16 +63,20 @@ export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => 
     }, []);
 };
 
-export const predictModel = async (inputOne: number[]): Promise<number> => {
+export const predictModel = async (inputOne: number[], predictMode: string) => {
     console.log("Predicting model...", API_AI_PRICE_PREDICT);
-    if (inputOne.length === 4) {
+    if (predictMode === PredictMode.ONE) {
         try {
             const params = new URLSearchParams();
             (inputOne ?? []).forEach(value => params.append("input", value.toString()));
             const response = await axios.get(API_AI_PRICE_PREDICT, {
                 params: params
             });
-            return response.data.prediction[0];
+            console.log("===================================================================");
+            console.log("Input:\t\t\t", inputOne);
+            console.log("Prediction:\t\t", response.data.prediction[0]);
+            console.log("===================================================================");
+            return;
         } catch (error) {
             console.error("Error predicting model:", error);
             throw error;
@@ -96,6 +101,8 @@ export const predictModel = async (inputOne: number[]): Promise<number> => {
             console.log("Auctor is a trader:\t", dataset.auctor);
         for (const input of dataset.inputs ?? []) {
             const params = new URLSearchParams();
+            //add last 3 elements of inputOne to input
+            input.push(...inputOne.slice(-3));
             input.forEach(value => params.append("input", value.toString()));
             const response = await axios.get(API_AI_PRICE_PREDICT, { params });
             console.log("Input:\t\t\t", input);
