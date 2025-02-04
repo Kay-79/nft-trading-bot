@@ -28,7 +28,7 @@ X = np.array([d["input"] for d in data])
 y = np.array([d["output"] for d in data])
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42)
+    X, y, test_size=0.001, random_state=42)
 
 scaler = RobustScaler()
 X_train = scaler.fit_transform(X_train)

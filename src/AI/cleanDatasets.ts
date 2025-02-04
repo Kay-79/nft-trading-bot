@@ -18,7 +18,7 @@ export const cleanDatasets = async () => {
             bidder: string;
             auctor: string;
         }) =>
-            dataset.input.length === 4 &&
+            // dataset.input.length === 4 &&
             dataset.output.length === 1 &&
             !traders.includes(dataset.bidder.toLowerCase()) &&
             !traders.includes(ethers.getAddress(dataset.bidder)) &&
