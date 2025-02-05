@@ -25,7 +25,6 @@ import { BidType, BlockType, Environment } from "../../enum/enum";
 import axios from "axios";
 import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
 import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
-import { console } from "inspector";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;

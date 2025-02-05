@@ -21,7 +21,7 @@ export const crawlingDatasetsRpc = async () => {
     await sleep(1.5);
     const lastBlock = JSON.parse(fs.readFileSync("./src/AI/data/lastBlock.json", "utf-8"));
     let startBlock = lastBlock.lastBlock;
-    const step = 1000;
+    const step = 5000;
     while (startBlock < endBlock) {
         fs.writeFileSync(
             "./src/AI/data/lastBlock.json",
