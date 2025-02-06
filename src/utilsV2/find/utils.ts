@@ -25,6 +25,7 @@ import { BidType, BlockType, Environment } from "../../enum/enum";
 import axios from "axios";
 import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
 import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
+import { sleep } from "utilsV2/common/sleep";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -540,6 +541,7 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
     ];
 
     for (const { tier, amount } of priceConfigs) {
+        await sleep(3);
         floorPrices[tier as keyof TierPrice] = await getPrice(
             tier,
             amount,
