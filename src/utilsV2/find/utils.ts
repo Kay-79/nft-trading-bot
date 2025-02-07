@@ -193,14 +193,21 @@ export const isProfitable = (profit: number, minProfit: number): boolean => {
     return profit >= minProfit;
 };
 
-export const getPriceFromAI = async (auction: AuctionDto): Promise<number> => {
+export const getPriceFromAI = async (
+    auction: AuctionDto,
+    mboxPrice: number,
+    rewardPer1000Hash: number
+): Promise<number> => {
     if (!auction.tokenId || !auction.prototype) return 0;
     if (auction.prototype >= 6 * 10 ** 4) return 0;
     const input = [
         auction.hashrate,
         auction.lvHashrate,
         Math.floor(auction.prototype / 10 ** 4),
-        auction.level
+        auction.level,
+        Date.now() / 1000,
+        mboxPrice,
+        rewardPer1000Hash
     ];
     try {
         const params = new URLSearchParams();
@@ -218,7 +225,11 @@ export const getPriceFromAI = async (auction: AuctionDto): Promise<number> => {
     }
 };
 
-export const getPriceBlockFromAI = async (auctionGroup: AuctionGroupDto): Promise<number> => {
+export const getPriceBlockFromAI = async (
+    auctionGroup: AuctionGroupDto,
+    mboxPrice: number,
+    rewardPer1000Hash: number
+): Promise<number> => {
     if (!auctionGroup.tokens) return 0;
     let inputs: number[][] = [];
     auctionGroup.tokens.forEach(token => {
@@ -226,7 +237,10 @@ export const getPriceBlockFromAI = async (auctionGroup: AuctionGroupDto): Promis
             token.hashrate,
             token.lvHashrate,
             token.prototype !== undefined ? Math.floor(token.prototype / 10 ** 4) : undefined,
-            token.level
+            token.level,
+            Date.now() / 1000,
+            mboxPrice,
+            rewardPer1000Hash
         ].filter(value => value !== undefined) as number[];
         inputs.push(input);
     });
@@ -255,7 +269,9 @@ export const getProfitableBidAuctionsNormalVsPro = async (
     auctions: AuctionDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
-    type: BidType
+    type: BidType,
+    mboxPrice: number,
+    rewardPer1000Hash: number
 ): Promise<BidAuction[]> => {
     auctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableAuctions: AuctionDto[] = [];
@@ -306,7 +322,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 (fee + auction?.nowPrice * 10 ** -9 + GAS_LIMIT_LIST * bnbPrice * 10 ** -9)
             );
         };
-        const minValue = await getPriceFromAI(auction);
+        const minValue = await getPriceFromAI(auction, mboxPrice, rewardPer1000Hash);
         const minProfit = profitProAI.min;
         const profit = calculateProfitPro(minValue, fee, auction, bnbPrice);
         return { profit, minProfit, pricePrediction: minValue };
@@ -556,7 +572,9 @@ export const getProfitableBidAuctionsBlock = async (
     auctionGroups: AuctionGroupDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
-    type: BidType
+    type: BidType,
+    mboxPrice: number,
+    rewardPer1000Hash: number
 ): Promise<BidAuction[]> => {
     if (type !== BidType.GROUP) {
         console.log("Type is not group");
@@ -589,7 +607,7 @@ export const getProfitableBidAuctionsBlock = async (
                         auctionGroup.tokens?.length * GAS_LIMIT_LIST * bnbPrice * 10 ** -9)
                 );
             };
-            let minValue = await getPriceBlockFromAI(auctionGroup);
+            let minValue = await getPriceBlockFromAI(auctionGroup, mboxPrice, rewardPer1000Hash);
             let crewPrice = 0;
             if (auctionGroup.type === BlockType.CREW) {
                 crewPrice += floorPrices[1] ?? 0;

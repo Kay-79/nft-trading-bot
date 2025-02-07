@@ -20,7 +20,9 @@ export const checkProfitAuctionGroups = async (
             auctionGroups,
             floorPrices,
             bnbPrice,
-            BidType.GROUP
+            BidType.GROUP,
+            mboxPrice,
+            rewardPer1000Hash
         ))
     );
     return profitableBidAuctionGroups;

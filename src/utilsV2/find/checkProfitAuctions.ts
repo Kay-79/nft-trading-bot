@@ -38,7 +38,9 @@ export const checkProfitAuctions = async (
             normalAuctions,
             floorPrices,
             bnbPrice,
-            BidType.NORMAL
+            BidType.NORMAL,
+            NaN,
+            NaN
         ))
     );
     profitableBidAuctions.push(
@@ -46,7 +48,9 @@ export const checkProfitAuctions = async (
             proAuctions,
             floorPrices,
             bnbPrice,
-            BidType.PRO
+            BidType.PRO,
+            mboxPrice,
+            rewardPer1000Hash
         ))
     );
     profitableBidAuctions.push(
