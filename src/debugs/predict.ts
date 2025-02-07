@@ -2,10 +2,10 @@ import { predictModel } from "AI/utils";
 import { PredictMode } from "enum/enum";
 
 const getDatasetF = async () => {
-    const price = 0.09615258207969471;
+    const price = 0.1009;
     const reward = 0.12718886956974754;
     const timestamp = Math.floor(Date.now() / 1000);
-    const momoInfo = [210, 954, 4, 7];
+    const momoInfo = [620, 13785, 5, 34];
     momoInfo.push(...[timestamp, price, reward]);
     await predictModel(
         momoInfo,

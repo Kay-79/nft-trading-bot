@@ -46,7 +46,7 @@ export const delayTimeGet: LatestGet = {
 };
 
 export const traders: string[] = [
-    "0x2D02D9fa00eFE096068c733e925035aBB9661e98", //normal traders
+    "0x2D02D9fa00eFE096068c733e925035aBB9661e98", // normal traders
     "0x0e9bc747335a4b01a6194a6c1bb1de54a0a5355c", // pro traders
     "0x8C6d06D614aB70a3AB6fAAf7cFF83102D840458b",
     "0x198D66Dc32310579bF041203c8e9d1cc5baeb941",
@@ -55,7 +55,8 @@ export const traders: string[] = [
     "0x8b5da11bd2955569a6408050246f14b5340f61c8",
     "0xbaf0B0F1D4aE45E71650988f054856da5027558C",
     "0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D",
-    "0x12F5B2f75b873592ac9f7101bC1580AbaB2C0434"
+    "0x12F5B2f75b873592ac9f7101bC1580AbaB2C0434",
+    "0xF6558e2EAd2A38efA452D1FFE2404cc028a415bC"
 ];
 
 export const contracts: string[] = [
