@@ -1,5 +1,11 @@
 # be-mobox-front-run
 
+## 4.10.5
+
+### Patch Changes
+
+-   Pump patch version
+
 ## 4.10.4
 
 ### Patch Changes
