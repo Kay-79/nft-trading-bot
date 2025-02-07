@@ -12,7 +12,9 @@ import { BidType } from "enum/enum";
 export const checkProfitAuctions = async (
     auctions: AuctionDto[],
     floorPrices: TierPrice,
-    bnbPrice: number
+    bnbPrice: number,
+    mboxPrice: number,
+    rewardPer1000Hash: number
 ): Promise<BidAuction[]> => {
     if (!auctions || auctions.length === 0) {
         return [];

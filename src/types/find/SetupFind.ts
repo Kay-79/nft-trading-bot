@@ -7,4 +7,6 @@ export interface SetupFind {
     isFrontRunProHash?: boolean;
     floorPrices?: TierPrice;
     timeLastSetup?: number;
+    mboxPrice?: number;
+    rewardPer1000Hash?: number;
 }

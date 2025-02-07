@@ -47,7 +47,9 @@ const findV2 = async () => {
         isFrontRunPro,
         isFrontRunProHash,
         floorPrices,
-        timeLastSetup
+        timeLastSetup,
+        mboxPrice,
+        rewardPer1000Hash
     } = initSetup;
     console.log(`ModeBot: ${JSON.stringify(modeBot)}`);
     while (true) {
@@ -58,7 +60,9 @@ const findV2 = async () => {
             !isFrontRunPro ||
             !isFrontRunProHash ||
             !floorPrices ||
-            !timeLastSetup
+            !timeLastSetup ||
+            !mboxPrice ||
+            !rewardPer1000Hash
         )
             continue;
         const now = new Date();
@@ -86,7 +90,9 @@ const findV2 = async () => {
                 const profitAuctions = await checkProfitAuctions(
                     newAuctions,
                     floorPrices,
-                    bnbPrice
+                    bnbPrice,
+                    mboxPrice,
+                    rewardPer1000Hash
                 );
                 if (profitAuctions.length > 0) {
                     await updateWaitBid(profitAuctions);
@@ -109,7 +115,9 @@ const findV2 = async () => {
                 const profitAuctionsBlock = await checkProfitAuctionGroups(
                     newAuctionsBlock,
                     floorPrices,
-                    bnbPrice
+                    bnbPrice,
+                    mboxPrice,
+                    rewardPer1000Hash
                 );
                 if (profitAuctionsBlock.length > 0) {
                     await updateWaitBid(profitAuctionsBlock);
