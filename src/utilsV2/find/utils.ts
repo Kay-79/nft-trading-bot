@@ -219,8 +219,11 @@ export const getPriceFromAI = async (
         const response = await axios.get(API_AI_PRICE_FOR_BOT, {
             params: params
         });
+        console.log(input);
+        console.log(`Price prediction ONE: ${response.data.prediction[0][0]}`);
         return response.data.prediction[0][0];
     } catch (error) {
+        console.log(error);
         return 0;
     }
 };
@@ -247,7 +250,6 @@ export const getPriceBlockFromAI = async (
     let totalPredict = 0;
     try {
         for (const input of inputs) {
-            console.log(input);
             const params = new URLSearchParams();
             input.forEach(value => {
                 if (value !== undefined) {
@@ -257,6 +259,8 @@ export const getPriceBlockFromAI = async (
             const response = await axios.get(API_AI_PRICE_FOR_BOT, {
                 params: params
             });
+            console.log(input);
+            console.log(`Price prediction ALL: ${response.data.prediction[0][0]}`);
             totalPredict += response.data.prediction[0][0];
         }
     } catch (error) {
