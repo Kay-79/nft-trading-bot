@@ -1,9 +1,9 @@
 import axios from "axios";
-import { IP_MAIN, PORT_HOST_DATASET } from "constants/constants";
+import { IP_MAC, PORT_HOST_DATASET } from "constants/constants";
 import fs from "fs";
 import path from "path";
 
-const API_URL = `http://${IP_MAIN}:${PORT_HOST_DATASET}/dataset`;
+const API_URL = `http://${IP_MAC}:${PORT_HOST_DATASET}/dataset`;
 const OUTPUT_FILE = "./src/AI/data/moboxDatasets.json";
 
 const fetchAndSaveDataset = async () => {

@@ -18,7 +18,7 @@ import {
     WAIT_BID_PATH,
     MP_BLOCK_ADDRESS,
     ENV,
-    API_AI_PRICE_FOR_BOT
+    API_AI_PRICE_PREDICT_FOR_BOT
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { BidType, BlockType, Environment } from "../../enum/enum";
@@ -216,11 +216,11 @@ export const getPriceFromAI = async (
                 params.append("input", value.toString());
             }
         });
-        const response = await axios.get(API_AI_PRICE_FOR_BOT, {
+        const response = await axios.get(API_AI_PRICE_PREDICT_FOR_BOT, {
             params: params
         });
-        console.log(input);
-        console.log(`Price prediction ONE: ${response.data.prediction[0][0]}`);
+        // console.log(input);
+        // console.log(`Price prediction ONE: ${response.data.prediction[0][0]}`);
         return response.data.prediction[0][0];
     } catch (error) {
         console.log(error);
@@ -256,11 +256,11 @@ export const getPriceBlockFromAI = async (
                     params.append("input", value.toString());
                 }
             });
-            const response = await axios.get(API_AI_PRICE_FOR_BOT, {
+            const response = await axios.get(API_AI_PRICE_PREDICT_FOR_BOT, {
                 params: params
             });
-            console.log(input);
-            console.log(`Price prediction ALL: ${response.data.prediction[0][0]}`);
+            // console.log(input);
+            // console.log(`Price prediction ALL: ${response.data.prediction[0][0]}`);
             totalPredict += response.data.prediction[0][0];
         }
     } catch (error) {
@@ -375,11 +375,11 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 totalPricePrediction = 0;
             }
         } else {
-            console.log("Check profit again with AI");
+            // console.log("Check profit again with AI");
             // AI method (check profit again)
             if (type !== BidType.PRO) continue;
             const { profit, minProfit, pricePrediction } = await calculateAuctionMetricsAI(auction);
-            console.log(profit, minProfit, pricePrediction);
+            // console.log(profit, minProfit, pricePrediction);
             if (isProfitable(profit, minProfit)) {
                 profitableAuctions.push(auction);
                 totalFee += fee;
@@ -639,7 +639,7 @@ export const getProfitableBidAuctionsBlock = async (
         const totalMinProfit = minProfit;
         const totalPricePrediction = pricePrediction;
         const totalPrice = auctionGroup.price;
-        console.log(profit, minProfit, pricePrediction);
+        // console.log(profit, minProfit, pricePrediction);
         // Block method
         if (isProfitable(totalProfit, totalMinProfit)) {
             profitableBidAuctions.push(
