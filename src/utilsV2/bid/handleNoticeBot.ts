@@ -20,6 +20,8 @@ import packageJson from "../../../package.json";
 
 const noticeBot = async (message: string) => {
     try {
+        const version = `\n_${ENV}-v${packageJson.version}_`;
+        message = `${message}${version}`;
         await axios.post(`https://api.telegram.org/${API_TELEGRAM}/sendMessage`, {
             chat_id: `@${CHATID_MOBOX}`,
             text: message,
@@ -84,9 +86,8 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
         Mex:${modeBot.mexBox ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
         Gem:${modeBot.gem ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}`;
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
-    const platform = `\nPlatform: ${ENV}`;
-    const version = `\nVersion: ${packageJson.version}`;
-    const message = `${status}${mode}${contract}${platform}${version}`;
+
+    const message = `${status}${mode}${contract}`;
     try {
         await noticeBot(message);
     } catch (error) {
