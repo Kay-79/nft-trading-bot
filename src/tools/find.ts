@@ -8,6 +8,8 @@ import { updateWaitBid } from "../utilsV2/find/utils";
 import {
     CACHE_BNB_PRICE,
     CACHE_TIER_PRICE,
+    CACHE_MBOX_PRICE,
+    CACHE_REWARD_PER_1000_HASH,
     ENV,
     TIME_DELAY_NOTICE_STATUS_BOT,
     TIME_DELAY_SETUP_FIND
@@ -40,7 +42,12 @@ const findV2 = async () => {
         mexBox: [],
         gem: []
     };
-    let initSetup: SetupFind = await setup(CACHE_BNB_PRICE, CACHE_TIER_PRICE);
+    let initSetup: SetupFind = await setup(
+        CACHE_BNB_PRICE,
+        CACHE_TIER_PRICE,
+        CACHE_MBOX_PRICE,
+        CACHE_REWARD_PER_1000_HASH
+    );
     let {
         bnbPrice,
         isFrontRunNormal,
@@ -126,7 +133,7 @@ const findV2 = async () => {
         }
         //===========================SETUP===========================
         if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
-            initSetup = await setup(bnbPrice, floorPrices);
+            initSetup = await setup(bnbPrice, floorPrices, mboxPrice, rewardPer1000Hash);
             ({
                 bnbPrice,
                 isFrontRunNormal,

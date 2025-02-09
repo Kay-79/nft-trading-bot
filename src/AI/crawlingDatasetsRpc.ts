@@ -1,4 +1,10 @@
-import { ENV, MP_ADDRESS, TOPIC_BID } from "constants/constants";
+import {
+    CACHE_MBOX_PRICE,
+    CACHE_REWARD_PER_1000_HASH,
+    ENV,
+    MP_ADDRESS,
+    TOPIC_BID
+} from "constants/constants";
 import { fullNodeProvider } from "providers/fullNodeProvider";
 import { byte32ToAddress, shortenNumber } from "utilsV2/common/utils";
 import { AbiCoder } from "ethers";
@@ -22,6 +28,8 @@ export const crawlingDatasetsRpc = async () => {
     const lastBlock = JSON.parse(fs.readFileSync("./src/AI/data/lastBlock.json", "utf-8"));
     let startBlock = lastBlock.lastBlock;
     const step = 5000;
+    let cacheMboxPrice = CACHE_MBOX_PRICE;
+    let cacheRewardPer1000Hash = CACHE_REWARD_PER_1000_HASH;
     while (startBlock < endBlock) {
         fs.writeFileSync(
             "./src/AI/data/lastBlock.json",
@@ -55,16 +63,25 @@ export const crawlingDatasetsRpc = async () => {
                 log.blockNumber
             );
             if (mboxPriceHistory === "") {
-                mboxPriceHistory = shortenNumber(await getPriceMboxOnChain(log.blockNumber), 0, 4);
+                mboxPriceHistory = shortenNumber(
+                    await getPriceMboxOnChain(log.blockNumber, cacheMboxPrice),
+                    0,
+                    4
+                );
+                cacheMboxPrice = Number(mboxPriceHistory);
             }
             await sleep(1.5);
             if (rewardPer1000Hashrate === "") {
                 await sleep(1.5);
                 rewardPer1000Hashrate = shortenNumber(
-                    await stakingUtils.getRewardPer1000Hashrate(log.blockNumber),
+                    await stakingUtils.getRewardPer1000Hashrate(
+                        log.blockNumber,
+                        cacheRewardPer1000Hash
+                    ),
                     0,
                     4
                 );
+                cacheRewardPer1000Hash = Number(rewardPer1000Hashrate);
             }
             await sleep(1.5);
             if (momo721InforHistory.hashrate === 0n || momo721InforHistory.prototype === 6n)

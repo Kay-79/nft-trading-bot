@@ -145,8 +145,6 @@ export const PRIVATE_KEY_BID_PRO =
         ? process.env.PRIVATE_KEY_BID_PRO_MAINNET || "0x"
         : process.env.PRIVATE_KEY_BID_PRO_TESTNET || "0x";
 
-export const CACHE_BNB_PRICE = 600;
-
 export const API_BNB_PRICE_COIGEKO =
     "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd";
 
@@ -155,6 +153,12 @@ export const API_BNB_PRICE_MOBOX = "https://priceapi.mobox.io/kline/usdt?coins=[
 export const TIME_DELAY_SETUP_FIND = 1800; //30mins
 
 export const MIN_TIME_GET_PRICE = 600; //10mins
+
+export const CACHE_BNB_PRICE = 999;
+
+export const CACHE_MBOX_PRICE = 0.1;
+
+export const CACHE_REWARD_PER_1000_HASH = 0.127;
 
 export const CACHE_TIER_PRICE: TierPrice = {
     1: 0,

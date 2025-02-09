@@ -149,15 +149,20 @@ const getRewardPerPeriod = async (block: number) => {
     }
 };
 
-const getRewardPer1000Hashrate = async (block: number) => {
-    const rewardRate = await getRewardRate(block);
-    await sleep(1);
-    const rewardPerPeriod = await getRewardPerPeriod(block);
-    await sleep(1);
-    const totalHashRate = await getTotalHashRate(block);
-    await sleep(1);
-    console.log(rewardRate, rewardPerPeriod, totalHashRate);
-    return (1000 * rewardPerPeriod * rewardRate) / (totalHashRate * 360);
+const getRewardPer1000Hashrate = async (block: number, cacheRewardPer1000Hash: number) => {
+    try {
+        const rewardRate = await getRewardRate(block);
+        await sleep(1);
+        const rewardPerPeriod = await getRewardPerPeriod(block);
+        await sleep(1);
+        const totalHashRate = await getTotalHashRate(block);
+        await sleep(1);
+        console.log(rewardRate, rewardPerPeriod, totalHashRate);
+        return (1000 * rewardPerPeriod * rewardRate) / (totalHashRate * 360);
+    } catch (error) {
+        console.log("error getRewardPer1000Hashrate", error);
+        return cacheRewardPer1000Hash;
+    }
 };
 
 const test = async () => {
