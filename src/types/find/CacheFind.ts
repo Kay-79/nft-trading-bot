@@ -2,6 +2,6 @@ export interface CacheFind {
     auction: string[];
     auctionGroup: string[];
     box: string[];
-    mexBox: string[];
+    mecBox: string[];
     gem: string[];
 }

@@ -13,6 +13,6 @@ export interface ModeBot {
     auction?: AuctionMode;
     auctionGroup?: AuctionGroupMode;
     box?: boolean;
-    mexBox?: boolean;
+    mecBox?: boolean;
     gem?: boolean;
 }

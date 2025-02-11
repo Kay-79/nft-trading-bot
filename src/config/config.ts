@@ -14,7 +14,7 @@ export const modeBot: ModeBot = {
         crew: true
     },
     box: false,
-    mexBox: false,
+    mecBox: false,
     gem: false
 };
 
@@ -41,7 +41,7 @@ export const delayTimeGet: LatestGet = {
     auction: 10,
     auctionGroup: 60 * 4,
     box: NaN,
-    mexBox: NaN,
+    mecBox: NaN,
     gem: NaN
 };
 

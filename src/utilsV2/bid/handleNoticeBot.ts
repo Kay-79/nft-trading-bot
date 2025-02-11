@@ -83,7 +83,7 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
         Bep721:${modeBot.auctionGroup?.bep721 ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
         Crew:${modeBot.auctionGroup?.crew ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
         Box:${modeBot.box ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
-        Mex:${modeBot.mexBox ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
+        Mex:${modeBot.mecBox ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}
         Gem:${modeBot.gem ? ModeBotStatus.ENABLE : ModeBotStatus.DISABLE}`;
     const contract = `\nContract: ${shortenAddress(bidContract)}`;
 

@@ -32,14 +32,14 @@ const findV2 = async () => {
         auction: 0,
         auctionGroup: 0,
         box: 0,
-        mexBox: 0,
+        mecBox: 0,
         gem: 0
     };
     let cacheIds: CacheFind = {
         auction: [],
         auctionGroup: [],
         box: [],
-        mexBox: [],
+        mecBox: [],
         gem: []
     };
     let initSetup: SetupFind = await setup(
