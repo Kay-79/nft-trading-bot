@@ -20,7 +20,7 @@ export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDt
                 cacheIdsCheck.push(auction.index + auction.uptime + auction.auctor);
             }
         });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         console.log(`Error get new auctions, waiting for next loop...`);
         return [newAuctions, cacheIdsCheck];

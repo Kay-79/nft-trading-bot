@@ -20,7 +20,7 @@ const bidV2 = async () => {
         let bidAuctions: BidAuction[] = [];
         try {
             bidAuctions = await getBidAuctions();
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
             bidAuctions = [];
         }
@@ -51,7 +51,7 @@ const bidV2 = async () => {
         if (IS_FRONT_RUNNING) {
             try {
                 await frontRunBidAuction(sameUpTimeAuctions); // Comming soon
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
             } catch (error) {}
         } else {
             try {

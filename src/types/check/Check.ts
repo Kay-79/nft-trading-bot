@@ -6,5 +6,4 @@ export interface Check {
     isContract: boolean;
     listings: AuctionDto[];
     bids: BidAuction[];
-
 }

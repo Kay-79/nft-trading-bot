@@ -90,7 +90,7 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
     const message = `${status}${mode}${contract}`;
     try {
         await noticeBot(message);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return latestNotice;
     }
@@ -129,7 +129,7 @@ export const noticeBotFind = async (
     const message = `${status}${floorPrices}${bnbNow}${budgetNormalMess}${budgetProMess}${feeBidderMess}${feeProMess}${feeChangeMess}`;
     try {
         await noticeBot(message);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return latestNotice;
     }

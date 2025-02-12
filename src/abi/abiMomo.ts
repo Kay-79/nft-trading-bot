@@ -46,7 +46,7 @@ export const abiMomo = [
             { name: "earned", type: "uint256" },
             { name: "earned", type: "uint256" },
             { name: "earned", type: "uint256" },
-            { name: "earned", type: "uint256" },
+            { name: "earned", type: "uint256" }
         ],
         payable: false,
         stateMutability: "view",

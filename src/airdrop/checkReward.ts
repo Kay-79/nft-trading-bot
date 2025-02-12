@@ -15,8 +15,7 @@ const checkReward = async () => {
     const addressesCheck: Airdrop[] = readAccountsComplete();
     console.log(`Total complete accounts:`, addressesCheck.length);
     for (let j = 0; j < addressesCheck.length; j++) {
-        const previewMomo = await stakingUtils.previewMysteryBox
-        
+        const previewMomo = await stakingUtils.previewMysteryBox;
     }
 };
 

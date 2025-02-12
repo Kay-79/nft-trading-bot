@@ -3,7 +3,6 @@ import { archiveProvider } from "@/providers/archiveProvider";
 import { ethersProvider } from "@/providers/ethersProvider";
 import { AbiCoder, ethers } from "ethers";
 
-
 const abiCoder = new AbiCoder();
 /**
  * Get price of MBOX in USDT on chain

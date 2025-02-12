@@ -15,7 +15,10 @@ export const setup = async (
     await sleep(2);
     const mboxPrice = await getPriceMboxOnChain(-1, cacheMboxPrice);
     await sleep(2);
-    const rewardPer1000Hash = await stakingUtils.getRewardPer1000Hashrate(-1, cacheRewardPer1000Hash);
+    const rewardPer1000Hash = await stakingUtils.getRewardPer1000Hashrate(
+        -1,
+        cacheRewardPer1000Hash
+    );
     const floorPrices = await getTierPrice(cacheTierPrice);
     return {
         bnbPrice: bnbPrice,

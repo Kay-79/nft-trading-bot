@@ -26,7 +26,7 @@ export const getNewAuctionGroups = async (
                 );
             }
         });
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         console.log(`Error get new auctions, waiting for next loop...`);
         return [newAuctionGroups, cacheIdsCheck];
