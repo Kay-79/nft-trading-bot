@@ -4,17 +4,17 @@ import {
     ENV,
     MP_ADDRESS,
     TOPIC_BID
-} from "constants/constants";
-import { fullNodeProvider } from "providers/fullNodeProvider";
-import { byte32ToAddress, shortenNumber } from "utilsV2/common/utils";
+} from "@/constants/constants";
+import { fullNodeProvider } from "@/providers/fullNodeProvider";
+import { byte32ToAddress, shortenNumber } from "@/utilsV2/common/utils";
 import { AbiCoder } from "ethers";
-import { momo721 } from "utilsV2/momo721/utils";
+import { momo721 } from "@/utilsV2/momo721/utils";
 import fs from "fs";
-import { Environment } from "enum/enum";
-import { getPriceMboxOnChain } from "utilsV2/pancakeSwap/router";
-import { stakingUtils } from "utilsV2/staking/utils";
-import { sleep } from "utilsV2/common/sleep";
-import { ethersProvider } from "providers/ethersProvider";
+import { Environment } from "@/enum/enum";
+import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
+import { stakingUtils } from "@/utilsV2/staking/utils";
+import { sleep } from "@/utilsV2/common/sleep";
+import { ethersProvider } from "@/providers/ethersProvider";
 
 const abiCoder = new AbiCoder();
 
@@ -23,7 +23,7 @@ export const crawlingDatasetsRpc = async () => {
         console.log("Testnet not supported");
         return;
     }
-    let endBlock = await fullNodeProvider.getBlockNumber();
+    const endBlock = await fullNodeProvider.getBlockNumber();
     await sleep(1.5);
     const lastBlock = JSON.parse(fs.readFileSync("./src/AI/data/lastBlock.json", "utf-8"));
     let startBlock = lastBlock.lastBlock;
