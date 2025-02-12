@@ -1,7 +1,8 @@
-import { archiveProvider } from "providers/archiveProvider";
+import { MBOX_ADDRESS, USDT_ADDRESS } from "@/constants/constants";
+import { archiveProvider } from "@/providers/archiveProvider";
+import { ethersProvider } from "@/providers/ethersProvider";
 import { AbiCoder, ethers } from "ethers";
-import { MBOX_ADDRESS, USDT_ADDRESS, WBNB_ADDRESS } from "constants/constants";
-import { ethersProvider } from "providers/ethersProvider";
+
 
 const abiCoder = new AbiCoder();
 /**

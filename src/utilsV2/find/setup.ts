@@ -1,9 +1,9 @@
-import { sleep } from "utilsV2/common/sleep";
 import { TierPrice } from "../../types/common/TierPrice";
 import { SetupFind } from "../../types/find/SetupFind";
+import { sleep } from "../common/sleep";
+import { getPriceMboxOnChain } from "../pancakeSwap/router";
+import { stakingUtils } from "../staking/utils";
 import { getBnbPrice, getTierPrice } from "./utils";
-import { getPriceMboxOnChain } from "utilsV2/pancakeSwap/router";
-import { stakingUtils } from "utilsV2/staking/utils";
 
 export const setup = async (
     cacheBnbPrice: number,

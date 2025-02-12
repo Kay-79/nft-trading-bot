@@ -1,9 +1,6 @@
 import fs from "fs";
-import { BidAuction } from "../../types/bid/BidAuction";
-import { ethersProvider } from "../../providers/ethersProvider";
-import { RawTransaction } from "../../types/transaction/Transaction";
-import { bidProvider } from "../../providers/bidProvider";
-import { AuctionGroupStatus, AuctionStatus, BidType, FunctionFragment } from "../../enum/enum";
+import { Transaction } from "ethereumjs-tx";
+import { BidAuction } from "@/types/bid/BidAuction";
 import {
     GAS_LIMIT_BID,
     GAS_LIMIT_BID_BLOCK,
@@ -14,23 +11,26 @@ import {
     TIME_DISABLE_BID,
     TIME_ENABLE_BID_AUCTION,
     WAIT_BID_PATH
-} from "../../constants/constants";
-import { AuctionDto } from "../../types/dtos/Auction.dto";
+} from "@/constants/constants";
+import { RawTransaction } from "@/types/transaction/Transaction";
+import { AuctionGroupStatus, AuctionStatus, BidType, FunctionFragment } from "@/enum/enum";
+import { bidProvider } from "@/providers/bidProvider";
+import { AuctionDto } from "@/types/dtos/Auction.dto";
+import { ethersProvider } from "@/providers/ethersProvider";
 import { sleep } from "../common/sleep";
 import { noticeBotCancel, noticeBotInsufficient, noticeErrorBid } from "./handleNoticeBot";
-import { Transaction } from "ethereumjs-tx";
 import { chainInfor } from "./normalBidAuction";
 import { mpUtils } from "../mp/utils";
-import { erc20Provider } from "../../providers/erc20Provider";
-import { bidContract } from "config/config";
-import { mpBlockUtils } from "utilsV2/mpBlock/utils";
-import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
+import { AuctionGroupDto } from "@/types/dtos/AuctionGroup.dto";
+import { mpBlockUtils } from "../mpBlock/utils";
+import { bidContract } from "@/config/config";
+import { erc20Provider } from "@/providers/erc20Provider";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
         const bidAuctions = JSON.parse(fs.readFileSync(WAIT_BID_PATH, "utf8")).data;
         return bidAuctions;
-    } catch (error) {
+    } catch {
         return [];
     }
 };
@@ -271,7 +271,7 @@ export const delay40Blocks = async (bidAuctions: BidAuction[]): Promise<boolean>
 
 export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffer[]> => {
     const serializedTxs: Buffer[] = [];
-    let nonce = {
+    const nonce = {
         NORMAL: 0,
         PRO: 0,
         BUNDLE: 0,
@@ -400,8 +400,8 @@ export const isExistAuctionGroup = async (auctionGroup: AuctionGroupDto): Promis
 };
 
 export const getPayableBidAuctions = async (bidAuctions: BidAuction[]): Promise<BidAuction[]> => {
-    let payableBidAuctions: BidAuction[] = [];
-    let outOfStockBidAuctions: BidAuction[] = [];
+    const payableBidAuctions: BidAuction[] = [];
+    const outOfStockBidAuctions: BidAuction[] = [];
     for (let i = 0; i < bidAuctions.length; i++) {
         const bidAuction = bidAuctions[i];
         if (!bidAuction.buyer || !bidAuction.totalPrice || !bidAuction.type) {

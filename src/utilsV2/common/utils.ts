@@ -1,9 +1,8 @@
-import { time } from "console";
-import { FunctionFragment } from "../../enum/enum";
-import { bidProvider } from "../../providers/bidProvider";
-import { ethersProvider } from "../../providers/ethersProvider";
+import { FunctionFragment } from "@/enum/enum";
+import { bidProvider } from "@/providers/bidProvider";
+import { ethersProvider } from "@/providers/ethersProvider";
 import { getBlockByTimestamp } from "../bid/utils";
-import { archiveProvider } from "providers/archiveProvider";
+import { archiveProvider } from "@/providers/archiveProvider";
 
 export const decodeFunctionData = (functionFragment: string, data: string) => {
     return bidProvider.interface.decodeFunctionData(functionFragment, data);
@@ -32,7 +31,7 @@ export const checkDelayBlockTransaction = async (txHash: string): Promise<number
     try {
         prams = decodeFunctionData(FunctionFragment.BID, tx.data);
         timeStamp = prams[2];
-    } catch (error) {
+    } catch {
         prams = decodeFunctionData(FunctionFragment.BID_BATCH, tx.data);
         timeStamp = prams[2][0];
     }
@@ -50,7 +49,7 @@ export const byte32ToAddress = (byte32: string) => {
 };
 
 export const getImplementAddressOfProxy = async (address: string) => {
-    let implementAddress = byte32ToAddress(
+    const implementAddress = byte32ToAddress(
         await ethersProvider.getStorage(
             address,
             "0x360894A13BA1A3210667C828492DB98DCA3E2076CC3735A920A3CA505D382BBC"

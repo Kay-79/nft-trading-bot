@@ -7,7 +7,7 @@ import {
     getProfitableBidAuctionsNormalVsPro,
     getProfitableBidAuctionsBundle
 } from "./utils";
-import { BidType } from "enum/enum";
+import { BidType } from "@/enum/enum";
 
 export const checkProfitAuctions = async (
     auctions: AuctionDto[],
@@ -19,10 +19,10 @@ export const checkProfitAuctions = async (
     if (!auctions || auctions.length === 0) {
         return [];
     }
-    let profitableBidAuctions: BidAuction[] = [];
-    let normalAuctions: AuctionDto[] = [];
-    let proAuctions: AuctionDto[] = [];
-    let bundleAuctions: AuctionDto[] = [];
+    const profitableBidAuctions: BidAuction[] = [];
+    const normalAuctions: AuctionDto[] = [];
+    const proAuctions: AuctionDto[] = [];
+    const bundleAuctions: AuctionDto[] = [];
     for (let i = 0; i < auctions.length; i++) {
         const auction = auctions[i];
         if (isProAuction(auction)) {

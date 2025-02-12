@@ -17,25 +17,25 @@ import {
 import { setup } from "../utilsV2/find/setup";
 import { SetupFind } from "../types/find/SetupFind";
 import { noticeBotFind } from "../utilsV2/bid/handleNoticeBot";
-import { checkProfitAuctions } from "utilsV2/find/checkProfitAuctions";
-import { CacheFind } from "types/find/CacheFind";
-import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
-import { getNewAuctionGroups } from "utilsV2/find/getNewAuctionGroups";
-import { delayTimeGet, modeBot } from "config/config";
-import { checkProfitAuctionGroups } from "utilsV2/find/checkProfitAuctionGroups";
-import { LatestGet } from "types/find/LatestGet";
+import { LatestGet } from "@/types/find/LatestGet";
+import { CacheFind } from "@/types/find/CacheFind";
+import { AuctionGroupDto } from "@/types/dtos/AuctionGroup.dto";
+import { delayTimeGet, modeBot } from "@/config/config";
+import { checkProfitAuctions } from "@/utilsV2/find/checkProfitAuctions";
+import { getNewAuctionGroups } from "@/utilsV2/find/getNewAuctionGroups";
+import { checkProfitAuctionGroups } from "@/utilsV2/find/checkProfitAuctionGroups";
 
 const findV2 = async () => {
     console.log("Starting findV2...", ENV);
     let latestNotice = new Date().getHours() - TIME_DELAY_NOTICE_STATUS_BOT;
-    let latestGetData: LatestGet = {
+    const latestGetData: LatestGet = {
         auction: 0,
         auctionGroup: 0,
         box: 0,
         mecBox: 0,
         gem: 0
     };
-    let cacheIds: CacheFind = {
+    const cacheIds: CacheFind = {
         auction: [],
         auctionGroup: [],
         box: [],
@@ -140,7 +140,9 @@ const findV2 = async () => {
                 isFrontRunPro,
                 isFrontRunProHash,
                 floorPrices,
-                timeLastSetup
+                timeLastSetup,
+                mboxPrice,
+                rewardPer1000Hash
             } = initSetup);
         }
         await ranSleep(15, 30);

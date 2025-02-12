@@ -1,9 +1,10 @@
-import { MP_ADDRESS } from "../../constants/constants";
-import { MpSelector } from "../../enum/enum";
-import { ethersProvider } from "../../providers/ethersProvider";
+import { MP_ADDRESS } from "@/constants/constants";
+import { MpSelector } from "@/enum/enum";
+import { archiveProvider } from "@/providers/archiveProvider";
+import { ethersProvider } from "@/providers/ethersProvider";
+import { OrderInfo } from "@/types/dtos/OrderInfo.dto";
 import { AbiCoder } from "ethers";
-import { OrderInfo } from "../../types/dtos/OrderInfo.dto";
-import { archiveProvider } from "providers/archiveProvider";
+
 
 const getListedMomos = async (user: string) => {
     const abiCoder = new AbiCoder();
@@ -38,7 +39,7 @@ const getOrder = async (user: string, index: string): Promise<OrderInfo> => {
         ],
         result
     );
-    let orderInforesult: OrderInfo = {
+    const orderInforesult: OrderInfo = {
         status: decodeData[0],
         startPrice: decodeData[1],
         endPrice: decodeData[2],
@@ -73,7 +74,7 @@ const getOrderHistory = async (user: string, index: string, block: number): Prom
         ],
         result
     );
-    let orderInforesult: OrderInfo = {
+    const orderInforesult: OrderInfo = {
         status: decodeData[0],
         startPrice: decodeData[1],
         endPrice: decodeData[2],

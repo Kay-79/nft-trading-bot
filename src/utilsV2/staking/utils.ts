@@ -1,9 +1,9 @@
-import { getDataStorage, getDataStorageHistory } from "utilsV2/common/utils";
 import { MINT_MOMO_ADDRESS, STAKING_ADDRESS } from "../../constants/constants";
 import { StakingSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder, getAddress } from "ethers";
-import { sleep } from "utilsV2/common/sleep";
+import { getDataStorage, getDataStorageHistory } from "../common/utils";
+import { sleep } from "../common/sleep";
 
 const earned = async (userAddress: string) => {
     const abiCoder = new AbiCoder();
@@ -36,7 +36,7 @@ const tokensOfOwner = async (address: string): Promise<string> => {
         data: data
     });
     const decodedResult = abiCoder.decode(["uint256[]"], result);
-    const nfts721 = decodedResult[0].map((x: any) => x.toString());
+    const nfts721 = decodedResult[0].map((x: bigint) => x.toString());
     return nfts721;
 };
 
@@ -73,7 +73,7 @@ const getAddressTopByUnknownIndex = async (n: string): Promise<string> => {
     return getAddress("0x" + result.slice(26));
 };
 
-const getUserRewardInfo = async (address: string): Promise<any> => {
+const getUserRewardInfo = async (address: string) => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address"], [address]);
     const data = StakingSelector.GET_USER_REWARD_INFO + encodedData.slice(2);
@@ -115,7 +115,10 @@ const previewMysteryBox = async (address: string, amount: string) => {
         const decodedResult = abiCoder.decode(["uint256[]", "uint256[]", "uint256[]"], result);
         return decodedResult;
     } catch (error) {
-        return (error as any).message;
+        if (error instanceof Error) {
+            return error.message;
+        }
+        return String(error);
     }
 };
 
@@ -178,7 +181,7 @@ const test = async () => {
         // const decodedResult = abiCoder.decode(["uint256[]", "uint256[]", "uint256[]"], result);
         return result;
     } catch (error) {
-        return (error as any).message;
+        return (error as Error).message;
     }
 };
 

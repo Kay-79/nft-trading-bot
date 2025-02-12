@@ -24,8 +24,7 @@ import { BidAuction } from "../../types/bid/BidAuction";
 import { BidType, BlockType, Environment } from "../../enum/enum";
 import axios from "axios";
 import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
-import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
-import { sleep } from "utilsV2/common/sleep";
+import { AuctionGroupDto } from "@/types/dtos/AuctionGroup.dto";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -164,7 +163,7 @@ export const updateWaitBid = async (profitableAuctions: BidAuction[]) => {
     let waitBid: BidAuction[] = [];
     try {
         waitBid = JSON.parse(fs.readFileSync(WAIT_BID_PATH, "utf8")).data;
-    } catch (error) {
+    } catch {
         waitBid = [];
     }
     if (!waitBid) {
@@ -222,8 +221,8 @@ export const getPriceFromAI = async (
         // console.log(input);
         // console.log(`Price prediction ONE: ${response.data.prediction[0][0]}`);
         return response.data.prediction[0][0];
-    } catch (error) {
-        console.log(error);
+    } catch {
+        console.log("Error get price from AI");
         return 0;
     }
 };
@@ -234,9 +233,9 @@ export const getPriceBlockFromAI = async (
     rewardPer1000Hash: number
 ): Promise<number> => {
     if (!auctionGroup.tokens) return 0;
-    let inputs: number[][] = [];
+    const inputs: number[][] = [];
     auctionGroup.tokens.forEach(token => {
-        let input = [
+        const input = [
             token.hashrate,
             token.lvHashrate,
             token.prototype !== undefined ? Math.floor(token.prototype / 10 ** 4) : undefined,
