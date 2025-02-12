@@ -3,6 +3,7 @@
 import { useTheme } from "@/context/ThemeContext";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { useState, useEffect } from "react";
+import { darkTheme } from "@/config/theme";
 
 const ThemeToggle = () => {
     const { theme, toggleTheme } = useTheme();
@@ -19,10 +20,10 @@ const ThemeToggle = () => {
     return (
         <div
             onClick={toggleTheme}
-            className="flex items-center justify-center p-2 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+            className="flex items-center justify-center p-1 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
         >
-            {theme === "dark" ? (
-                <FaMoon className="text-2xl text-gray-800" />
+            {theme === darkTheme ? (
+                <FaMoon className="text-2xl text-gray-500" />
             ) : (
                 <FaSun className="text-2xl text-gray-200" />
             )}
