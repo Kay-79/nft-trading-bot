@@ -1,9 +1,9 @@
 export interface OrderBlockInfo {
-    orderId?: BigInt;
-    price?: BigInt;
-    status?: BigInt;
-    index?: BigInt;
-    uptime?: BigInt;
-    tokenIds?: BigInt[];
-    ids?: BigInt[];
+    orderId?: bigint;
+    price?: bigint;
+    status?: bigint;
+    index?: bigint;
+    uptime?: bigint;
+    tokenIds?: bigint[];
+    ids?: bigint[];
 }

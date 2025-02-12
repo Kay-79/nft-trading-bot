@@ -4,7 +4,7 @@ import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder } from "ethers";
 import { byte32ToAddress } from "../common/utils";
 import { Momo721Info } from "../../types/dtos/Momo721Info.dto";
-import { archiveProvider } from "providers/archiveProvider";
+import { archiveProvider } from "@/providers/archiveProvider";
 
 const getMomoInfo = async (n: string): Promise<Momo721Info> => {
     const abiCoder = new AbiCoder();

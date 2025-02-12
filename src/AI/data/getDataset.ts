@@ -1,5 +1,5 @@
 import axios from "axios";
-import { IP_MAC, PORT_HOST_DATASET } from "constants/constants";
+import { IP_MAC, PORT_HOST_DATASET } from "@/constants/constants";
 import fs from "fs";
 import path from "path";
 

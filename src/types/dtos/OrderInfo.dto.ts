@@ -1,10 +1,10 @@
 export interface OrderInfo {
-    status?: BigInt;
-    startPrice?: BigInt;
-    endPrice?: BigInt;
-    uptime?: BigInt;
-    durationDays?: BigInt;
-    tokenId?: BigInt;
-    ids?: BigInt[];
-    amounts?: BigInt[];
+    status?: bigint;
+    startPrice?: bigint;
+    endPrice?: bigint;
+    uptime?: bigint;
+    durationDays?: bigint;
+    tokenId?: bigint;
+    ids?: bigint[];
+    amounts?: bigint[];
 }

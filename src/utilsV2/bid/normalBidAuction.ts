@@ -19,7 +19,7 @@ export const normalBidAuction = async (bidAuctionsSameTime: BidAuction[]) => {
     if (!bidAuctionsSameTime || bidAuctionsSameTime.length === 0) {
         return;
     }
-    let payableBidAuctions = await getPayableBidAuctions(bidAuctionsSameTime);
+    const payableBidAuctions = await getPayableBidAuctions(bidAuctionsSameTime);
     if (!payableBidAuctions || payableBidAuctions.length === 0) {
         console.log("Error getPayableBidAuctions");
         return;

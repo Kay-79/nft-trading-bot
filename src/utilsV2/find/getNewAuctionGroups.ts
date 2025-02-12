@@ -1,11 +1,11 @@
 import axios from "axios";
 import { API_MOBOX } from "../../constants/constants";
-import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
+import { AuctionGroupDto } from "@/types/dtos/AuctionGroup.dto";
 
 export const getNewAuctionGroups = async (
     cacheIdsCheck: string[]
 ): Promise<[AuctionGroupDto[], string[]]> => {
-    let newAuctionGroups: AuctionGroupDto[] = [];
+    const newAuctionGroups: AuctionGroupDto[] = [];
     try {
         const data = await axios.get(
             `${API_MOBOX}/auction_group/list_v2?page=1&limit=${15}&sort=-time`
@@ -26,6 +26,7 @@ export const getNewAuctionGroups = async (
                 );
             }
         });
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         console.log(`Error get new auctions, waiting for next loop...`);
         return [newAuctionGroups, cacheIdsCheck];

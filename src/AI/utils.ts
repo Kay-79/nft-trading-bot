@@ -1,13 +1,13 @@
 import { API_AI_PRICE_PREDICT, API_MOBOX } from "../constants/constants";
 import axios from "axios";
-import { traders } from "config/config";
-import { PredictMode } from "enum/enum";
+import { traders } from "@/config/config";
+import { PredictMode } from "@/enum/enum";
 import { ethers } from "ethers";
-import { TrainingData } from "types/AI/TrainingData";
-import { RecentSold } from "types/dtos/RecentSold.dto";
+import { TrainingData } from "@/types/AI/TrainingData";
+import { RecentSold } from "@/types/dtos/RecentSold.dto";
 
 export const getTrainingData = async (): Promise<TrainingData[]> => {
-    let trainingData: TrainingData[] = [];
+    const trainingData: TrainingData[] = [];
     const res1 = await axios.get(`${API_MOBOX}/auction/transactions/top50`);
     const rawDatasets: RecentSold[] = [...res1.data.list];
     const res2 = await axios.get(`${API_MOBOX}/auction/logs_new`, {
@@ -18,7 +18,7 @@ export const getTrainingData = async (): Promise<TrainingData[]> => {
     });
     rawDatasets.push(...res2.data.list);
     const finalDatasets = [];
-    let cachesChecked: string[] = [];
+    const cachesChecked: string[] = [];
     for (const dataset of rawDatasets) {
         if (!dataset.tx || !dataset.tokens || !dataset.tokens[0]) continue;
         if (

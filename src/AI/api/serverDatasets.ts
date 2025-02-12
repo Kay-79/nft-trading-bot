@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import fs from "fs";
-import { PORT_HOST_DATASET } from "constants/constants";
+import { PORT_HOST_DATASET } from "@/constants/constants";
 
 const app = express();
 const PORT = PORT_HOST_DATASET;
@@ -11,6 +11,7 @@ const data = fs.readFileSync(filePath, "utf-8");
 app.use(cors());
 app.use(express.json());
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 app.get("/dataset", (req: any, res: any) => {
     console.log("GET /dataset");
     try {

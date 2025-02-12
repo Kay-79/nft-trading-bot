@@ -1,5 +1,5 @@
 import fs from "fs";
-import { traders } from "config/config";
+import { traders } from "@/config/config";
 import { ethers } from "ethers";
 
 export const cleanDatasets = async () => {
@@ -9,7 +9,7 @@ export const cleanDatasets = async () => {
         const fileContent = fs.readFileSync(filePath, "utf-8");
         existingData = fileContent.trim() ? JSON.parse(fileContent) : [];
     }
-    let newData = existingData.filter(
+    const newData = existingData.filter(
         (dataset: {
             input: number[];
             output: number[];

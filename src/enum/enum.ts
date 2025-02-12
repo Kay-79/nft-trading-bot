@@ -53,7 +53,6 @@ export enum BidStatus {
 export enum StakingSelector {
     UNKNOWN_1 = "0x390c5f07", //unknow function selector
     UNKNOWN_2 = "0xd1728859", //get time unknown
-    UNKNOWN_3 = "0x501bbaec", //get time unknown
     EARNED = "0x008cc262",
     OWNER_OF_TOKEN_ID = "0x0eb9441f",
     TOKENS_OF_OWNER = "0x8462151c",

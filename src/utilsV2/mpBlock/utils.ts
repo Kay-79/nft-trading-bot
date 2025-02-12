@@ -2,7 +2,7 @@ import { MP_BLOCK_ADDRESS } from "../../constants/constants";
 import { MpBlockSelector } from "../../enum/enum";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder } from "ethers";
-import { OrderBlockInfo } from "types/dtos/OrderBlockInfo.dto";
+import { OrderBlockInfo } from "@/types/dtos/OrderBlockInfo.dto";
 
 const getListedMomos = async (user: string) => {
     const abiCoder = new AbiCoder();
@@ -36,7 +36,7 @@ const getOrderBlock = async (user: string, index: string): Promise<OrderBlockInf
         ],
         result
     );
-    let orderBlockInforesult: OrderBlockInfo = {
+    const orderBlockInforesult: OrderBlockInfo = {
         orderId: decodeData[0],
         price: decodeData[1],
         status: decodeData[2],

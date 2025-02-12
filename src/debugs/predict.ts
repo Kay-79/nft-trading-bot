@@ -1,5 +1,6 @@
-import { predictModel } from "AI/utils";
-import { PredictMode } from "enum/enum";
+import { predictModel } from "@/AI/utils";
+import { PredictMode } from "@/enum/enum";
+
 
 const getDatasetF = async () => {
     const price = 0.124;

@@ -1,9 +1,9 @@
 export interface Momo721Info {
-    prototype?: BigInt;
-    quality?: BigInt;
-    category?: BigInt;
-    level?: BigInt;
-    specialty?: BigInt;
-    hashrate?: BigInt;
-    lvHashrate?: BigInt;
+    prototype?: bigint;
+    quality?: bigint;
+    category?: bigint;
+    level?: bigint;
+    specialty?: bigint;
+    hashrate?: bigint;
+    lvHashrate?: bigint;
 }

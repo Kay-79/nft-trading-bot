@@ -1,7 +1,7 @@
 import { BidType } from "../../enum/enum";
 import { AuctionDto } from "../dtos/Auction.dto";
 import { TierPrice } from "../common/TierPrice";
-import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
+import { AuctionGroupDto } from "../dtos/AuctionGroup.dto";
 
 export interface BidAuction {
     id?: string;

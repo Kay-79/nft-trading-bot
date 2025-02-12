@@ -1,7 +1,8 @@
-import { ModeBot } from "types/common/ModeBot";
-import { TierPrice } from "../types/common/TierPrice";
-import { ProfitConfig } from "types/common/ProfitConfig";
-import { LatestGet } from "types/find/LatestGet";
+import { ModeBot } from "@/types/common/ModeBot";
+import { ProfitConfig } from "@/types/common/ProfitConfig";
+import { TierPrice } from "@/types/common/TierPrice";
+import { LatestGet } from "@/types/find/LatestGet";
+
 
 export const modeBot: ModeBot = {
     auction: {

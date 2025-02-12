@@ -1,5 +1,5 @@
-import { BidAuction } from "types/bid/BidAuction";
-import { AuctionDto } from "types/dtos/Auction.dto";
+import { BidAuction } from "../bid/BidAuction";
+import { AuctionDto } from "../dtos/Auction.dto";
 
 export interface Check {
     address: string;

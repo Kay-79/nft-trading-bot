@@ -90,6 +90,7 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
     const message = `${status}${mode}${contract}`;
     try {
         await noticeBot(message);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return latestNotice;
     }
@@ -115,6 +116,7 @@ export const noticeBotFind = async (
     const status = "Status: 🔎";
     const floorPrices = minPrice
         ? `\nFloor: $${Object.entries(minPrice)
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               .map(([key, value]) => `${shortenNumber(Number(value), 0, 1)}`)
               .join(", $")}`
         : "";
@@ -127,6 +129,7 @@ export const noticeBotFind = async (
     const message = `${status}${floorPrices}${bnbNow}${budgetNormalMess}${budgetProMess}${feeBidderMess}${feeProMess}${feeChangeMess}`;
     try {
         await noticeBot(message);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return latestNotice;
     }
@@ -184,6 +187,7 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
         .join(", $")}`;
     const floorPrices = bidAuctions[0].minPrice
         ? `\nFloor: $${Object.entries(bidAuctions[0]?.minPrice)
+              // eslint-disable-next-line @typescript-eslint/no-unused-vars
               .map(([key, value]) => `${shortenNumber(Number(value), 0, 1)}`)
               .join(", $")}`
         : "";
