@@ -3,7 +3,6 @@ import { ProfitConfig } from "@/types/common/ProfitConfig";
 import { TierPrice } from "@/types/common/TierPrice";
 import { LatestGet } from "@/types/find/LatestGet";
 
-
 export const modeBot: ModeBot = {
     auction: {
         normal: true,
@@ -30,12 +29,12 @@ export const profitPerTier: TierPrice = {
 
 export const profitBlock: ProfitConfig = {
     min: 5,
-    percent: 0.65
+    percent: 0.5
 };
 
 export const profitProAI: ProfitConfig = {
     min: 5,
-    percent: 0.65
+    percent: 0.5
 };
 
 export const delayTimeGet: LatestGet = {
