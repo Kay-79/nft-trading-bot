@@ -25,6 +25,7 @@ import { BidType, BlockType, Environment } from "../../enum/enum";
 import axios from "axios";
 import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
 import { AuctionGroupDto } from "@/types/dtos/AuctionGroup.dto";
+import { sleep } from "../common/sleep";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -262,6 +263,7 @@ export const getPriceBlockFromAI = async (
             // console.log(`Price prediction ALL: ${response.data.prediction[0][0]}`);
             totalPredict += response.data.prediction[0][0];
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return 0;
     }
@@ -278,7 +280,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
 ): Promise<BidAuction[]> => {
     auctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableAuctions: AuctionDto[] = [];
-    let profitableBidAuctions: BidAuction[] = [];
+    const profitableBidAuctions: BidAuction[] = [];
     let totalProfit = 0;
     let totalMinProfit = 0;
     let totalFee = 0;
@@ -439,7 +441,7 @@ export const getProfitableBidAuctionsBundle = (
     floorPrices: TierPrice,
     bnbPrice: number
 ): BidAuction[] => {
-    let profitableBidAuctions: BidAuction[] = [];
+    const profitableBidAuctions: BidAuction[] = [];
     for (let i = 0; i < bundleAuctions.length; i++) {
         const auction = bundleAuctions[i];
         let profit = 0;
@@ -507,7 +509,7 @@ export const getBnbPrice = async (cacheBnbPrice: number): Promise<number> => {
 };
 
 export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice> => {
-    let floorPrices = cacheTierPrice;
+    const floorPrices = cacheTierPrice;
     const getPrice = async (
         prototype: number,
         amountCheck: number,
@@ -567,7 +569,9 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
             floorPrices[tier as keyof TierPrice] ?? 0
         );
     }
-    floorPrices[6] ?? 0 > 1000 ? (floorPrices[6] = 900) : {};
+    if ((floorPrices[6] ?? 0) > 1000) {
+        floorPrices[6] = 900;
+    }
     return floorPrices;
 };
 
@@ -584,7 +588,7 @@ export const getProfitableBidAuctionsBlock = async (
         return [];
     }
     auctionGroups.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
-    let profitableBidAuctions: BidAuction[] = [];
+    const profitableBidAuctions: BidAuction[] = [];
     for (let i = 0; i < auctionGroups.length; i++) {
         const auctionGroup = auctionGroups[i];
         if (!auctionGroup.tokens || auctionGroup.tokens.length === 0 || !auctionGroup.price) {
@@ -610,7 +614,7 @@ export const getProfitableBidAuctionsBlock = async (
                         auctionGroup.tokens?.length * GAS_LIMIT_LIST * bnbPrice * 10 ** -9)
                 );
             };
-            let minValue = await getPriceBlockFromAI(auctionGroup, mboxPrice, rewardPer1000Hash);
+            const minValue = await getPriceBlockFromAI(auctionGroup, mboxPrice, rewardPer1000Hash);
             let crewPrice = 0;
             if (auctionGroup.type === BlockType.CREW) {
                 crewPrice += floorPrices[1] ?? 0;
@@ -619,7 +623,6 @@ export const getProfitableBidAuctionsBlock = async (
                 if (auctionGroup.tokens) {
                     crewPrice *= auctionGroup.tokens.length;
                 }
-                crewPrice;
             }
             const minProfit = profitBlock.min;
             const profit = calculateProfitBlock(

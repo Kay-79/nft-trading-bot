@@ -1,8 +1,8 @@
+import { AuctionGroupDto } from "@/types/dtos/AuctionGroup.dto";
 import { BidAuction } from "../../types/bid/BidAuction";
-import { AuctionGroupDto } from "types/dtos/AuctionGroup.dto";
 import { TierPrice } from "../../types/common/TierPrice";
 import { getProfitableBidAuctionsBlock } from "./utils";
-import { BidType } from "enum/enum";
+import { BidType } from "@/enum/enum";
 
 export const checkProfitAuctionGroups = async (
     auctionGroups: AuctionGroupDto[],
@@ -14,7 +14,7 @@ export const checkProfitAuctionGroups = async (
     if (!auctionGroups || auctionGroups.length === 0) {
         return [];
     }
-    let profitableBidAuctionGroups: BidAuction[] = [];
+    const profitableBidAuctionGroups: BidAuction[] = [];
     profitableBidAuctionGroups.push(
         ...(await getProfitableBidAuctionsBlock(
             auctionGroups,
