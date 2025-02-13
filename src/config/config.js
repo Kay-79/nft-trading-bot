@@ -87,7 +87,7 @@ const config = {
         minUnique: 0,
         minRare: 0
     },
-    limitBlockUpdate: 5000,
+    limitBlockUpdate: 2000,
     timeBid: 131.0,
     accBuy: "0x2D02D9fa00eFE096068c733e925035aBB9661e98"
 };
