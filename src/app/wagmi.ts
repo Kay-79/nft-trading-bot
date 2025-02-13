@@ -3,7 +3,7 @@ import { arbitrum, base, mainnet, optimism, polygon, sepolia } from "wagmi/chain
 
 export const config = getDefaultConfig({
     appName: "RainbowKit demo",
-    projectId: "YOUR_PROJECT_ID",
+    projectId: "21fef48091f12692cad574a6f7753643",
     chains: [
         mainnet,
         polygon,
