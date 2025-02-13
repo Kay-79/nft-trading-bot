@@ -36,7 +36,7 @@ export interface ThemeContextProps {
 }
 
 export const ThemeContext = createContext<ThemeContextProps>({
-    theme: customLightTheme, // Default theme
+    theme: customDarkTheme, // Default theme
     setTheme: () => {} // Dummy function
 });
 
