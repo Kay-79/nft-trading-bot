@@ -1,28 +1,29 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { ThemeContext, customDarkTheme, customLightTheme } from "@/config/theme";
 
 const ThemeToggle = () => {
+    const { theme, setTheme } = useContext(ThemeContext);
     const [mounted, setMounted] = useState(false);
-    const [theme, setTheme] = useState("light");
 
     useEffect(() => {
-        setTheme(localStorage.getItem("theme") || "light");
         setMounted(true);
     }, []);
 
-    useEffect(() => {
-        if (mounted) {
-            localStorage.setItem("theme", theme);
-            document.documentElement.setAttribute("data-theme", theme);
-        }
-    }, [theme, mounted]);
+    if (!mounted) {
+        return null;
+    }
 
     const toggleTheme = () => {
-        setTheme(theme === "light" ? "dark" : "light");
+        setTheme(theme.mode === "light" ? customDarkTheme : customLightTheme);
     };
 
-    return <button onClick={toggleTheme}>{theme === "light" ? "Dark" : "Light"} Mode</button>;
+    return (
+        <button onClick={toggleTheme}>
+            {theme.mode === "light" ? "Dark" : "Light"} Mode
+        </button>
+    );
 };
 
 export default ThemeToggle;

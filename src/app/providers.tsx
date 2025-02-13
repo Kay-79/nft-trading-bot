@@ -1,19 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { wagmiConfig } from "./wagmi";
-import { ThemeProvider } from "next-themes";
+import { ThemeContext, customLightTheme, ThemeConfig } from "@/config/theme";
 
 const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
+    const [theme, setTheme] = useState<ThemeConfig>(customLightTheme);
     const rainbowKitTheme = darkTheme();
+
+    useEffect(() => {
+        document.body.style.backgroundColor = theme.backgroundColor;
+        document.body.style.color = theme.textColor;
+    }, [theme]);
+
     return (
-        <QueryClientProvider client={queryClient}>
-            <ThemeProvider attribute="data-theme" defaultTheme="system" enableSystem={true}>
+        <ThemeContext.Provider value={{ theme, setTheme }}>
+            <QueryClientProvider client={queryClient}>
                 {wagmiConfig ? (
                     <WagmiProvider config={wagmiConfig}>
                         <RainbowKitProvider theme={rainbowKitTheme}>{children}</RainbowKitProvider>
@@ -21,7 +28,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 ) : (
                     <RainbowKitProvider theme={rainbowKitTheme}>{children}</RainbowKitProvider>
                 )}
-            </ThemeProvider>
-        </QueryClientProvider>
+            </QueryClientProvider>
+        </ThemeContext.Provider>
     );
 }
