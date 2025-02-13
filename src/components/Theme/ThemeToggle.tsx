@@ -3,6 +3,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext, customDarkTheme, customLightTheme } from "@/config/theme";
 import ThemedButton from "./ThemedButton";
+import { FaSun, FaMoon } from "react-icons/fa";
 
 const ThemeToggle = () => {
     const { theme, setTheme } = useContext(ThemeContext);
@@ -20,7 +21,11 @@ const ThemeToggle = () => {
         setTheme(theme.mode === "light" ? customDarkTheme : customLightTheme);
     };
 
-    return <ThemedButton onClick={toggleTheme}>{theme.mode} Mode</ThemedButton>;
+    return (
+        <ThemedButton onClick={toggleTheme}>
+            {theme.mode === "light" ? <FaMoon /> : <FaSun />}
+        </ThemedButton>
+    );
 };
 
 export default ThemeToggle;

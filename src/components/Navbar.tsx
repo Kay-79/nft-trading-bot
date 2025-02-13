@@ -1,10 +1,26 @@
 import React from "react";
 import ThemeToggle from "./Theme/ThemeToggle";
+import { useTheme } from "@/config/theme";
 
 const Navbar = () => {
+    const { theme } = useTheme();
+
     return (
-        <nav className="bg-white dark:bg-gray-800 p-4 flex items-center justify-between">
-            <div className="text-black dark:text-white font-bold">My Website</div>
+        <nav
+            style={{
+                backgroundColor: theme.primaryColor,
+                color: theme.buttonTextColor,
+                padding: "10px 20px",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                position: "fixed",
+                width: "100%",
+                top: 0,
+                zIndex: 1000
+            }}
+        >
+            <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Mobox Profit Bot</div>
             <ThemeToggle />
         </nav>
     );
