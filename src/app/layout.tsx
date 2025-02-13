@@ -10,11 +10,17 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     const { theme } = useTheme();
 
     return (
-        <html lang="en">
+        <html lang="en" style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }}>
             <body style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }}>
-                <Navbar />
                 <Providers>
-                    <div style={{ backgroundColor: theme.backgroundColor, color: theme.textColor, minHeight: '100vh' }}>
+                    <Navbar />
+                    <div
+                        style={{
+                            backgroundColor: theme.backgroundColor,
+                            color: theme.textColor,
+                            minHeight: "100vh"
+                        }}
+                    >
                         {children}
                     </div>
                 </Providers>

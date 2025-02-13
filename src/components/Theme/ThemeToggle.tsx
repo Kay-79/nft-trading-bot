@@ -2,6 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext, customDarkTheme, customLightTheme } from "@/config/theme";
+import ThemedButton from "./ThemedButton";
 
 const ThemeToggle = () => {
     const { theme, setTheme } = useContext(ThemeContext);
@@ -19,11 +20,7 @@ const ThemeToggle = () => {
         setTheme(theme.mode === "light" ? customDarkTheme : customLightTheme);
     };
 
-    return (
-        <button onClick={toggleTheme}>
-            {theme.mode === "light" ? "Dark" : "Light"} Mode
-        </button>
-    );
+    return <ThemedButton onClick={toggleTheme}>{theme.mode} Mode</ThemedButton>;
 };
 
 export default ThemeToggle;
