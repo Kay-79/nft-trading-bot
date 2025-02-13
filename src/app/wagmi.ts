@@ -7,7 +7,7 @@ let wagmiConfig: RainbowKitConfig | null;
 if (typeof window !== "undefined") {
     wagmiConfig = getDefaultConfig({
         appName: "RainbowKit demo",
-        projectId: "21fef48091f12692cad574a6f7753643",
+        projectId: "e97ae58b9c8f8f7811ba85f2f0f9f3f9",
         chains: [
             mainnet,
             polygon,
