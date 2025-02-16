@@ -27,7 +27,7 @@ export const crawlingDatasetsRpc = async () => {
     await sleep(1.5);
     const lastBlock = JSON.parse(fs.readFileSync("./src/AI/data/lastBlock.json", "utf-8"));
     let startBlock = lastBlock.lastBlock;
-    const step = 5000;
+    const step = 1000;
     let cacheMboxPrice = CACHE_MBOX_PRICE;
     let cacheRewardPer1000Hash = CACHE_REWARD_PER_1000_HASH;
     while (startBlock < endBlock) {
