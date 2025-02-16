@@ -46,7 +46,7 @@
         "debug": "bun ./src/debugs/test.ts",
         "predictOne": "bun ./src/AI/predict/predictOne.ts",
         "predictAll": "bun ./src/AI/predict/predictAll.ts",
-        "predictPro": "bun ./src/AI/predict/predictAll.ts",
+        "predictPro": "bun ./src/AI/predict/predictPro.ts",
         "crawl": "bun ./src/AI/crawlingDatasetsRpc.ts",
         "apiData": "bun ./src/AI/api/serverDatasets.ts",
         "getData": "bun ./src/AI/data/getDataset.ts",

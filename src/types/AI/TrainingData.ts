@@ -6,4 +6,5 @@ export interface TrainingData {
     listTime?: number;
     bidder?: string;
     auctor?: string;
+    price?: number;
 }

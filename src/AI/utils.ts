@@ -1,11 +1,20 @@
-import { API_AI_PRICE_PREDICT, API_MOBOX, PRO_BUYER } from "../constants/constants";
+import {
+    API_AI_PRICE_PREDICT,
+    API_MOBOX,
+    CACHE_MBOX_PRICE,
+    CACHE_REWARD_PER_1000_HASH,
+    PRO_BUYER
+} from "../constants/constants";
 import axios from "axios";
 import { traders } from "@/config/config";
 import { PredictMode } from "@/enum/enum";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
 import { RecentSold } from "@/types/dtos/RecentSold.dto";
-import { mpUtils } from "@/utilsV2/mp/utils";
+import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
+import { stakingUtils } from "@/utilsV2/staking/utils";
+import fs from "fs";
+import { AuctionDto } from "@/types/dtos/Auction.dto";
 
 export const getTrainingData = async (): Promise<TrainingData[]> => {
     const trainingData: TrainingData[] = [];
@@ -123,8 +132,99 @@ export const predictModelOne = async (inputOne: number[]) => {
     return predictModel(inputOne, PredictMode.ONE);
 };
 
-export const predictListingsPro = async (price: number, rewardPer1000Hash: number) => {
-    const timestamp = Math.floor(Date.now() / 1000);
-    const momoListings = await mpUtils.getListedProMomos(PRO_BUYER);
-    console.log(momoListings);
+export const getMboxPriceAndRewardDelay5m = async (): Promise<{
+    mboxPrice: number;
+    reward: number;
+}> => {
+    let cache;
+    if (fs.existsSync("./src/AI/predict/cache.json")) {
+        cache = fs.readFileSync("./src/AI/predict/cache.json", "utf-8");
+    } else {
+        console.log("Create new cache file");
+        cache = JSON.stringify({ mboxPrice: 0, reward: 0, latestCheck: 0 });
+    }
+    const cacheJson = JSON.parse(cache);
+    const timestamp = cacheJson.latestCheck;
+    if (Date.now() / 1000 - timestamp > 5 * 60) {
+        const mboxPrice = await getPriceMboxOnChain(-1, CACHE_MBOX_PRICE);
+        const reward = await stakingUtils.getRewardPer1000Hashrate(-1, CACHE_REWARD_PER_1000_HASH);
+        fs.writeFileSync(
+            "./src/AI/predict/cache.json",
+            JSON.stringify({ mboxPrice, reward, timestamp: Date.now() / 1000 })
+        );
+        return { mboxPrice, reward };
+    }
+    return { mboxPrice: cacheJson.mboxPrice, reward: cacheJson.reward };
+};
+
+export const preprocessListingsData = (listingsPro: AuctionDto[]): TrainingData[] => {
+    if (!listingsPro || listingsPro.length === 0) return [];
+    return listingsPro.reduce<TrainingData[]>((acc, listing) => {
+        if (!listing.tokenId || !listing.nowPrice) return acc;
+        const input = [
+            listing.hashrate ?? 0,
+            listing.lvHashrate ?? 0,
+            Math.floor((listing.prototype ?? 0) / 10 ** 4),
+            listing.level ?? 0
+        ];
+        const inputs =
+            listing.ids?.map((id, index) => {
+                if (!id || !listing.amounts || !listing.amounts[index]) return [0, 0, 0, 0];
+                return [
+                    listing.hashrate ?? 0,
+                    listing.lvHashrate ?? 0,
+                    Math.floor((listing.prototype ?? 0) / 10 ** 4),
+                    listing.level ?? 0
+                ];
+            }) ?? [];
+        const price = Number((listing.nowPrice / 10 ** 9).toFixed(2));
+        const bidTime = listing.uptime;
+        const listTime = listing.uptime;
+        const bidder = listing.auctor;
+        const auctor = listing.auctor;
+        acc.push({ input, inputs, bidTime, listTime, bidder, auctor, price });
+        return acc;
+    }, []);
+};
+
+export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrate: number) => {
+    const data = await axios.get(
+        `${API_MOBOX}/auction/list/BNB/${PRO_BUYER}?sort=-time&page=1&limit=128`
+    );
+    const listingsPro = data?.data?.list || [];
+    const trainingData = preprocessListingsData(listingsPro);
+    for (const data of trainingData) {
+        let totalPredicted = 0;
+        console.log("===================================================================");
+        console.log(`PRO AUCTOR:\t\t ${data.auctor}`);
+        if (data.inputs && data.inputs.length > 0) {
+            for (const input of data.inputs ?? []) {
+                const params = new URLSearchParams();
+                console.log("Input:\t\t\t", input);
+                input.push(Math.floor(Date.now() / 1000), mboxPrice, rewardPer1000Hashrate);
+                input.forEach(value => params.append("input", value.toString()));
+                const response = await axios.get(API_AI_PRICE_PREDICT, { params });
+                console.log("Input:\t\t\t", input);
+                console.log("Prediction:\t\t", response.data.prediction[0]);
+                totalPredicted += Number(response.data.prediction[0]);
+            }
+        } else {
+            const params = new URLSearchParams();
+            const input = data.input;
+            console.log("Input:\t\t\t", input);
+            if (input) {
+                input.push(Math.floor(Date.now() / 1000), mboxPrice, rewardPer1000Hashrate);
+                input.forEach(value => params.append("input", value.toString()));
+                const response = await axios.get(API_AI_PRICE_PREDICT, { params });
+                console.log("Prediction:\t\t", response.data.prediction[0]);
+                totalPredicted += Number(response.data.prediction[0]);
+            }
+        }
+        if (data.price) {
+            console.log("Total price:\t\t", data.price);
+        }
+        console.log("Total predicted:\t", totalPredicted);
+        console.log("===================================================================");
+    }
+    return 0;
 };

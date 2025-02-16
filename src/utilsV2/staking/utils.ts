@@ -152,6 +152,13 @@ const getRewardPerPeriod = async (block: number) => {
     }
 };
 
+/**
+ * Get reward per 1000 hashrate
+ * @param block
+ * if block > 0, get reward at block
+ * if block <= 0, get reward at latest block
+ * @return reward per 1000 hashrate
+ */
 const getRewardPer1000Hashrate = async (block: number, cacheRewardPer1000Hash: number) => {
     try {
         const rewardRate = await getRewardRate(block);

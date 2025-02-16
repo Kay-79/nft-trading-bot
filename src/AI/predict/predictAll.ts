@@ -1,13 +1,13 @@
-import { predictModel } from "@/AI/utils";
+import { getMboxPriceAndRewardDelay5m, predictModel } from "@/AI/utils";
 import { PredictMode } from "@/enum/enum";
 
-const getDatasetF = async () => {
-    const price = 0.12839;
-    const reward = 0.1256;
-    const timestamp = Math.floor(Date.now() / 1000);
-    const momoInfo = [39, 321, 4, 9];
-    momoInfo.push(...[timestamp, price, reward]);
+const predictAll = async () => {
+    const data = await getMboxPriceAndRewardDelay5m();
+    const mboxPrice = data.mboxPrice;
+    const reward = data.reward;
+    const momoInfo = [0, 0, 0, 0];
+    momoInfo.push(...[Math.floor(Date.now() / 1000), mboxPrice, reward]);
     await predictModel(momoInfo, PredictMode.ALL);
 };
 
-getDatasetF();
+predictAll();
