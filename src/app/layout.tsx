@@ -20,13 +20,15 @@ function RootLayout({ children }: { children: React.ReactNode }) {
                             backgroundColor: theme.backgroundColor,
                             color: theme.textColor,
                             minHeight: "100vh",
+                            display: "flex",
+                            flexDirection: "column",
                             paddingTop: "60px", // Ensure content doesn't overlap with Header
-                            paddingBottom: "50px" // Ensure content doesn't overlap with footer
+                            boxSizing: "border-box" // Ensure padding is included in the element's total width and height
                         }}
                     >
-                        {children}
+                        <main style={{ flex: 1 }}>{children}</main>
+                        <Footer />
                     </div>
-                    <Footer />
                 </Providers>
             </body>
         </html>

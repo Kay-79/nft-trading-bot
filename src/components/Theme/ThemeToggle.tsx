@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { ThemeContext, customDarkTheme, customLightTheme } from "@/config/theme";
-import ThemedButton from "./ThemedButton";
 import { FaSun, FaMoon } from "react-icons/fa";
 
 const ThemeToggle = () => {
@@ -22,9 +21,9 @@ const ThemeToggle = () => {
     };
 
     return (
-        <ThemedButton onClick={toggleTheme}>
+        <div onClick={toggleTheme} style={{ cursor: "pointer", marginLeft: "12px" }}>
             {theme.mode === "light" ? <FaMoon /> : <FaSun />}
-        </ThemedButton>
+        </div>
     );
 };
 

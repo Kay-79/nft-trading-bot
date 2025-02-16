@@ -10,8 +10,8 @@ const Header = () => {
     return (
         <nav
             style={{
-                backgroundColor: theme.primaryColor,
-                color: theme.buttonTextColor,
+                backgroundColor: theme.headerBackgroundColor,
+                color: theme.headerTextColor,
                 padding: "10px 20px",
                 display: "flex",
                 justifyContent: "space-between",
@@ -19,6 +19,7 @@ const Header = () => {
                 position: "fixed",
                 width: "100%",
                 top: 0,
+                boxSizing: "border-box" // Ensure padding is included in the element's total width and height
             }}
         >
             <div style={{ display: "flex", alignItems: "center" }}>
@@ -29,9 +30,17 @@ const Header = () => {
                     height={40}
                     style={{ marginRight: "10px" }}
                 />
-                <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Mobox Profit Bot</div>
+                <div style={{ fontSize: "2rem", fontWeight: "bolder" }}>Mobox Profit Bot</div>
             </div>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    flex: 1,
+                    justifyContent: "center",
+                    fontSize: "1.2rem"
+                }}
+            >
                 <a
                     href="#home"
                     style={{
@@ -62,8 +71,10 @@ const Header = () => {
                 >
                     Contact
                 </a>
-                <ThemeToggle />
+            </div>
+            <div style={{ display: "flex", alignItems: "center" }}>
                 <ConnectWallet />
+                <ThemeToggle />
             </div>
         </nav>
     );
