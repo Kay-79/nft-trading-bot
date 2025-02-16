@@ -1,5 +1,5 @@
 import fs from "fs";
-import { traders } from "@/config/config";
+import { proTraders } from "@/config/config";
 import { ethers } from "ethers";
 
 export const cleanDatasets = async () => {
@@ -20,8 +20,8 @@ export const cleanDatasets = async () => {
         }) =>
             // dataset.input.length === 7 &&
             dataset.output.length === 1 &&
-            !traders.includes(dataset.bidder.toLowerCase()) &&
-            !traders.includes(ethers.getAddress(dataset.bidder)) &&
+            !proTraders.includes(dataset.bidder.toLowerCase()) &&
+            !proTraders.includes(ethers.getAddress(dataset.bidder)) &&
             // dataset.output[0] > 7 &&
             // dataset.output[0] < 1000 &&
             dataset.bidTime - dataset.listTime > 5 * 60

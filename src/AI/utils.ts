@@ -6,7 +6,7 @@ import {
     PRO_BUYER
 } from "../constants/constants";
 import axios from "axios";
-import { traders } from "@/config/config";
+import { noodTraders, proTraders } from "@/config/config";
 import { PredictMode } from "@/enum/enum";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
@@ -97,18 +97,19 @@ export const predictModel = async (inputOne: number[], predictMode: string) => {
         const dataset = datasetsTest[i];
         let totalPredicted = 0;
         console.log("===================================================================");
-        if (
-            dataset.bidder &&
-            (traders.includes(ethers.getAddress(dataset.bidder)) ||
-                traders.includes(dataset.bidder.toLowerCase()))
-        )
-            console.log("Bidder is a trader:\t", dataset.bidder);
-        if (
-            dataset.auctor &&
-            (traders.includes(ethers.getAddress(dataset.auctor)) ||
-                traders.includes(dataset.auctor.toLowerCase()))
-        )
-            console.log("Auctor is a trader:\t", dataset.auctor);
+        const checkTrader = (address: string, traders: string[], type: string) => {
+            if (traders.includes(ethers.getAddress(address)) || traders.includes(address.toLowerCase())) {
+            console.log(`${type}\t\t`, address);
+            }
+        };
+        if (dataset.bidder) {
+            checkTrader(dataset.bidder, proTraders, "Bidder (Pro)");
+            checkTrader(dataset.bidder, noodTraders, "Bidder (Nood)");
+        }
+        if (dataset.auctor) {
+            checkTrader(dataset.auctor, proTraders, "Auctor (Pro)");
+            checkTrader(dataset.auctor, noodTraders, "Auctor (Nood)");
+        }
         for (const input of dataset.inputs ?? []) {
             const params = new URLSearchParams();
             //add last 3 elements of inputOne to input
@@ -226,7 +227,7 @@ export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrat
         }
         if (data.price) {
             totalPriceAll += data.price;
-            console.log("Total price:\t\t", data.price);
+            console.log("Price listing:\t\t", data.price);
         }
         console.log("Total predicted:\t", totalPredicted);
         console.log("===================================================================");
