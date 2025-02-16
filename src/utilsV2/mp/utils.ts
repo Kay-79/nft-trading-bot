@@ -5,7 +5,7 @@ import { ethersProvider } from "@/providers/ethersProvider";
 import { OrderInfo } from "@/types/dtos/OrderInfo.dto";
 import { AbiCoder } from "ethers";
 
-const getListedMomos = async (user: string) => {
+const getListedProMomos = async (user: string): Promise<string[]> => {
     const abiCoder = new AbiCoder();
     const encodedAddress = abiCoder.encode(["address"], [user]);
     const data = MpSelector.GET_LISTED_MOMOS + encodedAddress.slice(2);
@@ -14,7 +14,7 @@ const getListedMomos = async (user: string) => {
         data: data
     });
     const decodeData = abiCoder.decode(["uint256[]", "uint256[]", "uint256[]"], result);
-    return decodeData.toString();
+    return decodeData[2].toString().split(",");
 };
 
 const getOrder = async (user: string, index: string): Promise<OrderInfo> => {
@@ -87,7 +87,7 @@ const getOrderHistory = async (user: string, index: string, block: number): Prom
 };
 
 export const mpUtils = {
-    getListedMomos,
+    getListedProMomos,
     getOrder,
     getOrderHistory
 };

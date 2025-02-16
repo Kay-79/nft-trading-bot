@@ -4,7 +4,7 @@ import { ethersProvider } from "../../providers/ethersProvider";
 import { AbiCoder } from "ethers";
 import { OrderBlockInfo } from "@/types/dtos/OrderBlockInfo.dto";
 
-const getListedMomos = async (user: string) => {
+const getListedProMomos = async (user: string) => {
     const abiCoder = new AbiCoder();
     const encodedAddress = abiCoder.encode(["address"], [user]);
     const data = MpBlockSelector.GET_LISTED_MOMOS + encodedAddress.slice(2);
@@ -49,6 +49,6 @@ const getOrderBlock = async (user: string, index: string): Promise<OrderBlockInf
 };
 
 export const mpBlockUtils = {
-    getListedMomos,
+    getListedProMomos,
     getOrderBlock
 };

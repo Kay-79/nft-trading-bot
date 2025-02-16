@@ -7,11 +7,7 @@ const getDatasetF = async () => {
     const timestamp = Math.floor(Date.now() / 1000);
     const momoInfo = [39, 321, 4, 9];
     momoInfo.push(...[timestamp, price, reward]);
-    await predictModel(
-        momoInfo,
-        // PredictMode.ONE
-        PredictMode.ALL
-    );
+    await predictModel(momoInfo, PredictMode.ONE);
 };
 
 getDatasetF();

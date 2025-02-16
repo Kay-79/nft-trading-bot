@@ -1,10 +1,11 @@
-import { API_AI_PRICE_PREDICT, API_MOBOX } from "../constants/constants";
+import { API_AI_PRICE_PREDICT, API_MOBOX, PRO_BUYER } from "../constants/constants";
 import axios from "axios";
 import { traders } from "@/config/config";
 import { PredictMode } from "@/enum/enum";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
 import { RecentSold } from "@/types/dtos/RecentSold.dto";
+import { mpUtils } from "@/utilsV2/mp/utils";
 
 export const getTrainingData = async (): Promise<TrainingData[]> => {
     const trainingData: TrainingData[] = [];
@@ -116,4 +117,14 @@ export const predictModel = async (inputOne: number[], predictMode: string) => {
         console.log("===================================================================");
     }
     return 0;
+};
+
+export const predictModelOne = async (inputOne: number[]) => {
+    return predictModel(inputOne, PredictMode.ONE);
+};
+
+export const predictListingsPro = async (price: number, rewardPer1000Hash: number) => {
+    const timestamp = Math.floor(Date.now() / 1000);
+    const momoListings = await mpUtils.getListedProMomos(PRO_BUYER);
+    console.log(momoListings);
 };
