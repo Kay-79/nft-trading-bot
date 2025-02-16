@@ -188,6 +188,8 @@ export const preprocessListingsData = (listingsPro: AuctionDto[]): TrainingData[
 };
 
 export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrate: number) => {
+    let totalPriceAll = 0;
+    let totalPredictedAll = 0;
     const data = await axios.get(
         `${API_MOBOX}/auction/list/BNB/${PRO_BUYER}?sort=-time&page=1&limit=128`
     );
@@ -207,6 +209,7 @@ export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrat
                 console.log("Input:\t\t\t", input);
                 console.log("Prediction:\t\t", response.data.prediction[0]);
                 totalPredicted += Number(response.data.prediction[0]);
+                totalPredictedAll += Number(response.data.prediction[0]);
             }
         } else {
             const params = new URLSearchParams();
@@ -218,13 +221,16 @@ export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrat
                 const response = await axios.get(API_AI_PRICE_PREDICT, { params });
                 console.log("Prediction:\t\t", response.data.prediction[0]);
                 totalPredicted += Number(response.data.prediction[0]);
+                totalPredictedAll += Number(response.data.prediction[0]);
             }
         }
         if (data.price) {
+            totalPriceAll += data.price;
             console.log("Total price:\t\t", data.price);
         }
         console.log("Total predicted:\t", totalPredicted);
         console.log("===================================================================");
     }
-    return 0;
+    console.log("Total price all:\t", totalPriceAll);
+    console.log("Total predicted all:\t", totalPredictedAll);
 };
