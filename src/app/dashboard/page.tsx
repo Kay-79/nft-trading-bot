@@ -8,12 +8,15 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { RecentSold } from "@/types/dtos/RecentSold.dto";
 import { Momo721 } from "@/types/dtos/Momo721";
 import { useTheme } from "@/config/theme";
+import FilterPanel from "@/components/Dashboard/FilterPanel";
 
 const DashboardPage = () => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
     const [activities, setActivities] = useState<RecentSold[]>([]);
     const [inventory, setInventory] = useState<Momo721[]>([]);
-    const [view, setView] = useState<"list" | "card">("list");
+    const [filteredListings, setFilteredListings] = useState<AuctionDto[]>([]);
+    const [filteredActivities, setFilteredActivities] = useState<RecentSold[]>([]);
+    const [filteredInventory, setFilteredInventory] = useState<Momo721[]>([]);
     const [selectedSection, setSelectedSection] = useState<"listings" | "activities" | "inventory">(
         "listings"
     );
@@ -30,74 +33,123 @@ const DashboardPage = () => {
             setListings(listingsData);
             setActivities(activitiesData);
             setInventory(inventoryData);
+            setFilteredListings(listingsData);
+            setFilteredActivities(activitiesData);
+            setFilteredInventory(inventoryData);
         };
 
         fetchData();
     }, []);
+
+    interface Filter {
+        minPrice: number;
+        minHashrate: number;
+    }
+
+    const applyFilter = (filter: Filter) => {
+        // Apply filter logic here
+        setFilteredListings(
+            listings.filter(
+                listing => listing.startPrice !== undefined && listing.startPrice >= filter.minPrice
+            )
+        );
+        setFilteredActivities(
+            activities.filter(
+                activity => activity.bidPrice !== undefined && activity.bidPrice >= filter.minPrice
+            )
+        );
+        setFilteredInventory(
+            inventory.filter(
+                item => item.hashrate !== undefined && item.hashrate >= filter.minHashrate
+            )
+        );
+    };
 
     return (
         <div
             style={{
                 padding: "20px",
                 backgroundColor: theme.backgroundColor,
-                color: theme.textColor
+                color: theme.textColor,
+                minHeight: "100vh", // Ensure the container takes up the full height of the viewport
+                display: "flex",
+                flexDirection: "row"
             }}
         >
-            <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Dashboard</h1>
-            <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                <button
-                    onClick={() => setView(view === "list" ? "card" : "list")}
-                    style={{
-                        padding: "10px 20px",
-                        backgroundColor: theme.buttonBackgroundColor,
-                        color: theme.buttonTextColor,
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        marginRight: "10px"
-                    }}
-                >
-                    Toggle View
-                </button>
-                <select
-                    value={selectedSection}
-                    onChange={e =>
-                        setSelectedSection(
-                            e.target.value as "listings" | "activities" | "inventory"
-                        )
-                    }
-                    style={{
-                        padding: "10px 20px",
-                        backgroundColor: theme.buttonBackgroundColor,
-                        color: theme.buttonTextColor,
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer"
-                    }}
-                >
-                    <option value="listings">Listings</option>
-                    <option value="activities">Activities</option>
-                    <option value="inventory">Inventory</option>
-                </select>
+            <div style={{ width: "250px", marginRight: "20px" }}>
+                <FilterPanel applyFilter={applyFilter} />
             </div>
-            {selectedSection === "listings" && (
-                <div style={{ marginBottom: "40px" }}>
-                    <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Listings</h2>
-                    <Listings listings={listings} view={view} />
+            <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                <div style={{ textAlign: "center", marginBottom: "20px" }}>
+                    <label
+                        onClick={() => setSelectedSection("listings")}
+                        style={{
+                            padding: "10px 20px",
+                            backgroundColor:
+                                selectedSection === "listings"
+                                    ? theme.buttonBackgroundColor
+                                    : "transparent",
+                            color: theme.textColor,
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            marginRight: "10px"
+                        }}
+                    >
+                        Listings
+                    </label>
+                    <label
+                        onClick={() => setSelectedSection("activities")}
+                        style={{
+                            padding: "10px 20px",
+                            backgroundColor:
+                                selectedSection === "activities"
+                                    ? theme.buttonBackgroundColor
+                                    : "transparent",
+                            color: theme.textColor,
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            marginRight: "10px"
+                        }}
+                    >
+                        Activities
+                    </label>
+                    <label
+                        onClick={() => setSelectedSection("inventory")}
+                        style={{
+                            padding: "10px 20px",
+                            backgroundColor:
+                                selectedSection === "inventory"
+                                    ? theme.buttonBackgroundColor
+                                    : "transparent",
+                            color: theme.textColor,
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        Inventory
+                    </label>
                 </div>
-            )}
-            {selectedSection === "activities" && (
-                <div style={{ marginBottom: "40px" }}>
-                    <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Activities</h2>
-                    <Activities activities={activities} view={view} />
+                <div style={{ flex: 1 }}>
+                    {selectedSection === "listings" && (
+                        <div style={{ marginBottom: "40px" }}>
+                            <Listings listings={filteredListings} view="list" />
+                        </div>
+                    )}
+                    {selectedSection === "activities" && (
+                        <div style={{ marginBottom: "40px" }}>
+                            <Activities activities={filteredActivities} view="list" />
+                        </div>
+                    )}
+                    {selectedSection === "inventory" && (
+                        <div>
+                            <Inventory inventory={filteredInventory} view="list" />
+                        </div>
+                    )}
                 </div>
-            )}
-            {selectedSection === "inventory" && (
-                <div>
-                    <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Inventory</h2>
-                    <Inventory inventory={inventory} view={view} />
-                </div>
-            )}
+            </div>
         </div>
     );
 };
