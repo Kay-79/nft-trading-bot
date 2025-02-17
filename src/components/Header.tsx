@@ -27,7 +27,8 @@ const Header = () => {
                 position: "fixed",
                 width: "100%",
                 top: 0,
-                boxSizing: "border-box" // Ensure padding is included in the element's total width and height
+                boxSizing: "border-box", // Ensure padding is included in the element's total width and height
+                flexWrap: "wrap" // Allow wrapping for smaller screens
             }}
         >
             {/* Logo and title */}
@@ -50,7 +51,8 @@ const Header = () => {
                     alignItems: "center",
                     flex: 1,
                     justifyContent: "center",
-                    fontSize: "1.2rem"
+                    fontSize: "1.2rem",
+                    flexWrap: "wrap" // Allow wrapping for smaller screens
                 }}
             >
                 <Link href="/" passHref style={{ margin: "0 10px" }}>
@@ -70,6 +72,17 @@ const Header = () => {
                 <ConnectWallet />
                 <ThemeToggle />
             </div>
+            <style jsx>{`
+                @media (max-width: 768px) {
+                    nav {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                    div {
+                        justify-content: flex-start;
+                    }
+                }
+            `}</style>
         </nav>
     );
 };
