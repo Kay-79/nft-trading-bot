@@ -25,11 +25,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         localStorage.setItem("theme", JSON.stringify(theme));
         document.body.style.backgroundColor = theme.backgroundColor;
         document.body.style.color = theme.textColor;
-        const buttons = document.querySelectorAll("button");
-        buttons.forEach(button => {
-            button.style.backgroundColor = theme.buttonBackgroundColor;
-            button.style.color = theme.buttonTextColor;
-        });
     }, [theme]);
 
     return (

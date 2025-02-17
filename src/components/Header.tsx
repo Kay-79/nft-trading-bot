@@ -1,18 +1,26 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link"; // Import Link component from Next.js
 import ThemeToggle from "./Theme/ThemeToggle";
 import { useTheme } from "@/config/theme";
 import { ConnectWallet } from "./ConnectWallet";
 
+/**
+ * @description Header component for the application.
+ * @returns {JSX.Element}
+ */
 const Header = () => {
+    // Access the current theme
     const { theme } = useTheme();
 
     return (
+        // Navigation bar with dynamic background and text color based on the theme
         <nav
             style={{
                 backgroundColor: theme.headerBackgroundColor,
                 color: theme.headerTextColor,
                 padding: "10px 20px",
+                margin: "0px 0", // Add margin to the navigation bar
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -22,16 +30,20 @@ const Header = () => {
                 boxSizing: "border-box" // Ensure padding is included in the element's total width and height
             }}
         >
-            <div style={{ display: "flex", alignItems: "center" }}>
-                <Image
-                    src="/images/logo.png"
-                    alt="Logo"
-                    width={40}
-                    height={40}
-                    style={{ marginRight: "10px" }}
-                />
-                <div style={{ fontSize: "2rem", fontWeight: "bolder" }}>Mobox Profit Bot</div>
-            </div>
+            {/* Logo and title */}
+            <Link href="/" passHref>
+                <div style={{ display: "flex", alignItems: "center" }}>
+                    <Image
+                        src="/images/logo.png"
+                        alt="Logo"
+                        width={40}
+                        height={40}
+                        style={{ marginRight: "10px" }}
+                    />
+                    <div style={{ fontSize: "2rem", fontWeight: "bolder" }}>Mobox Profit Bot</div>
+                </div>
+            </Link>
+            {/* Navigation links */}
             <div
                 style={{
                     display: "flex",
@@ -41,33 +53,18 @@ const Header = () => {
                     fontSize: "1.2rem"
                 }}
             >
-                <a
-                    href="#home"
-                    style={{
-                        margin: "0 10px",
-                        textDecoration: "none"
-                    }}
-                >
+                <Link href="/" passHref style={{ margin: "0 10px" }}>
                     Home
-                </a>
-                <a
-                    href="#features"
-                    style={{
-                        margin: "0 10px",
-                        textDecoration: "none"
-                    }}
-                >
+                </Link>
+                <Link href="#features" passHref style={{ margin: "0 10px" }}>
                     Features
-                </a>
-                <a
-                    href="#contact"
-                    style={{
-                        margin: "0 10px",
-                        textDecoration: "none"
-                    }}
-                >
+                </Link>
+                <Link href="#contact" passHref style={{ margin: "0 10px" }}>
                     Contact
-                </a>
+                </Link>
+                <Link href="/about" passHref style={{ margin: "0 10px" }}>
+                    About
+                </Link>
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
                 <ConnectWallet />

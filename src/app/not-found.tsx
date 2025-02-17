@@ -20,10 +20,6 @@ export default function NotFound() {
             <Link
                 href="/"
                 className="px-6 py-3 rounded-md"
-                style={{
-                    backgroundColor: theme.buttonBackgroundColor,
-                    color: theme.buttonTextColor
-                }}
             >
                 Return Home
             </Link>
