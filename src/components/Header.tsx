@@ -55,14 +55,14 @@ const Header = () => {
                     flexWrap: "wrap" // Allow wrapping for smaller screens
                 }}
             >
-                <Link href="/" passHref style={{ margin: "0 10px" }}>
-                    Home
-                </Link>
-                <Link href="#features" passHref style={{ margin: "0 10px" }}>
-                    Features
+                <Link href="/dashboard" passHref style={{ margin: "0 10px" }}>
+                    Dashboard
                 </Link>
                 <Link href="#contact" passHref style={{ margin: "0 10px" }}>
                     Contact
+                </Link>
+                <Link href="/plans" passHref style={{ margin: "0 10px" }}>
+                    Pricing
                 </Link>
                 <Link href="/about" passHref style={{ margin: "0 10px" }}>
                     About
