@@ -45,7 +45,6 @@ const Header = () => {
                     href="#home"
                     style={{
                         margin: "0 10px",
-                        color: theme.buttonTextColor,
                         textDecoration: "none"
                     }}
                 >
@@ -55,7 +54,6 @@ const Header = () => {
                     href="#features"
                     style={{
                         margin: "0 10px",
-                        color: theme.buttonTextColor,
                         textDecoration: "none"
                     }}
                 >
@@ -65,7 +63,6 @@ const Header = () => {
                     href="#contact"
                     style={{
                         margin: "0 10px",
-                        color: theme.buttonTextColor,
                         textDecoration: "none"
                     }}
                 >

@@ -7,8 +7,8 @@ export interface ThemeConfig {
     secondaryColor: string;
     backgroundColor: string;
     textColor: string;
-    buttonBackgroundColor: string;
-    buttonTextColor: string;
+    // buttonBackgroundColor: string;
+    // buttonTextColor: string;
     headerBackgroundColor?: string;
     headerTextColor?: string;
     footerBackgroundColor?: string;
@@ -21,8 +21,8 @@ export const customLightTheme: ThemeConfig = {
     secondaryColor: "#2ecc71", // Green
     backgroundColor: "#ecf0f1", // Light Grey
     textColor: "#2c3e50", // Dark Grey
-    buttonBackgroundColor: "#e74c3c", // Red
-    buttonTextColor: "#ffffff", // White
+    // buttonBackgroundColor: "#e74c3c", // Red
+    // buttonTextColor: "#ffffff", // White
     headerBackgroundColor: "#3498db", // Blue
     headerTextColor: "#ffffff", // White
     footerBackgroundColor: "#3498db", // Blue
@@ -35,8 +35,8 @@ export const customDarkTheme: ThemeConfig = {
     secondaryColor: "#27ae60", // Dark Green
     backgroundColor: "#2c3e50", // Dark Grey
     textColor: "#ecf0f1", // Light Grey
-    buttonBackgroundColor: "#c0392b", // Dark Red
-    buttonTextColor: "#ffffff", // White
+    // buttonBackgroundColor: "#c0392b", // Dark Red
+    // buttonTextColor: "#ffffff", // White
     headerBackgroundColor: "#2980b9", // Dark Blue
     headerTextColor: "#ffffff", // White
     footerBackgroundColor: "#2980b9", // Dark Blue

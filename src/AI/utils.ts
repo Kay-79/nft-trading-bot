@@ -98,17 +98,20 @@ export const predictModel = async (inputOne: number[], predictMode: string) => {
         let totalPredicted = 0;
         console.log("===================================================================");
         const checkTrader = (address: string, traders: string[], type: string) => {
-            if (traders.includes(ethers.getAddress(address)) || traders.includes(address.toLowerCase())) {
-            console.log(`${type}\t\t`, address);
+            if (
+                traders.includes(ethers.getAddress(address)) ||
+                traders.includes(address.toLowerCase())
+            ) {
+                console.log(`${type}\t\t`, address);
             }
         };
         if (dataset.bidder) {
-            checkTrader(dataset.bidder, proTraders, "Bidder (Pro)");
-            checkTrader(dataset.bidder, noodTraders, "Bidder (Nood)");
+            checkTrader(dataset.bidder, proTraders, "Bidder (Pro):");
+            checkTrader(dataset.bidder, noodTraders, "Bidder (Nood):");
         }
         if (dataset.auctor) {
-            checkTrader(dataset.auctor, proTraders, "Auctor (Pro)");
-            checkTrader(dataset.auctor, noodTraders, "Auctor (Nood)");
+            checkTrader(dataset.auctor, proTraders, "Auctor (Pro):");
+            checkTrader(dataset.auctor, noodTraders, "Auctor (Nood):");
         }
         for (const input of dataset.inputs ?? []) {
             const params = new URLSearchParams();
