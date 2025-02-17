@@ -14,23 +14,25 @@ const DashboardPage = () => {
     const [activities, setActivities] = useState<RecentSold[]>([]);
     const [inventory, setInventory] = useState<Momo721[]>([]);
     const [view, setView] = useState<"list" | "card">("list");
+    const [selectedSection, setSelectedSection] = useState<"listings" | "activities" | "inventory">(
+        "listings"
+    );
     const { theme } = useTheme();
 
     useEffect(() => {
-        // Fetch listings data from API
-        fetch("/api/listings")
-            .then(response => response.json())
-            .then(data => setListings(data));
+        const fetchData = async () => {
+            const [listingsData, activitiesData, inventoryData] = await Promise.all([
+                fetch("/api/listings").then(response => response.json()),
+                fetch("/api/activities").then(response => response.json()),
+                fetch("/api/inventory").then(response => response.json())
+            ]);
 
-        // Fetch activities data from API
-        fetch("/api/activities")
-            .then(response => response.json())
-            .then(data => setActivities(data));
+            setListings(listingsData);
+            setActivities(activitiesData);
+            setInventory(inventoryData);
+        };
 
-        // Fetch inventory data from API
-        fetch("/api/inventory")
-            .then(response => response.json())
-            .then(data => setInventory(data));
+        fetchData();
     }, []);
 
     return (
@@ -51,24 +53,51 @@ const DashboardPage = () => {
                         color: theme.buttonTextColor,
                         border: "none",
                         borderRadius: "5px",
-                        cursor: "pointer"
+                        cursor: "pointer",
+                        marginRight: "10px"
                     }}
                 >
                     Toggle View
                 </button>
+                <select
+                    value={selectedSection}
+                    onChange={e =>
+                        setSelectedSection(
+                            e.target.value as "listings" | "activities" | "inventory"
+                        )
+                    }
+                    style={{
+                        padding: "10px 20px",
+                        backgroundColor: theme.buttonBackgroundColor,
+                        color: theme.buttonTextColor,
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer"
+                    }}
+                >
+                    <option value="listings">Listings</option>
+                    <option value="activities">Activities</option>
+                    <option value="inventory">Inventory</option>
+                </select>
             </div>
-            <div style={{ marginBottom: "40px" }}>
-                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Listings</h2>
-                <Listings listings={listings} view={view} />
-            </div>
-            <div style={{ marginBottom: "40px" }}>
-                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Activities</h2>
-                <Activities activities={activities} view={view} />
-            </div>
-            <div>
-                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Inventory</h2>
-                <Inventory inventory={inventory} view={view} />
-            </div>
+            {selectedSection === "listings" && (
+                <div style={{ marginBottom: "40px" }}>
+                    <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Listings</h2>
+                    <Listings listings={listings} view={view} />
+                </div>
+            )}
+            {selectedSection === "activities" && (
+                <div style={{ marginBottom: "40px" }}>
+                    <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Activities</h2>
+                    <Activities activities={activities} view={view} />
+                </div>
+            )}
+            {selectedSection === "inventory" && (
+                <div>
+                    <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Inventory</h2>
+                    <Inventory inventory={inventory} view={view} />
+                </div>
+            )}
         </div>
     );
 };
