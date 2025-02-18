@@ -29,7 +29,6 @@ const DashboardPage = () => {
                 fetch("/api/activities").then(response => response.json()),
                 fetch("/api/inventory").then(response => response.json())
             ]);
-
             setListings(listingsData);
             setActivities(activitiesData);
             setInventory(inventoryData);
