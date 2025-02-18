@@ -6,7 +6,7 @@ import {
     PRO_BUYER
 } from "../constants/constants";
 import axios from "axios";
-import { noodTraders, proTraders } from "@/config/config";
+import { newbieBidders, proBidders } from "@/config/config";
 import { PredictMode } from "@/enum/enum";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
@@ -106,12 +106,12 @@ export const predictModel = async (inputOne: number[], predictMode: string) => {
             }
         };
         if (dataset.bidder) {
-            checkTrader(dataset.bidder, proTraders, "Bidder (Pro):");
-            checkTrader(dataset.bidder, noodTraders, "Bidder (Nood):");
+            checkTrader(dataset.bidder, proBidders, "Bidder (Pro):");
+            checkTrader(dataset.bidder, newbieBidders, "Bidder (newbie):");
         }
         if (dataset.auctor) {
-            checkTrader(dataset.auctor, proTraders, "Auctor (Pro):");
-            checkTrader(dataset.auctor, noodTraders, "Auctor (Nood):");
+            checkTrader(dataset.auctor, proBidders, "Auctor (Pro):");
+            checkTrader(dataset.auctor, newbieBidders, "Auctor (newbie):");
         }
         for (const input of dataset.inputs ?? []) {
             const params = new URLSearchParams();

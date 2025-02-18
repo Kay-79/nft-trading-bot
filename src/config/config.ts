@@ -45,8 +45,7 @@ export const delayTimeGet: LatestGet = {
     gem: NaN
 };
 
-export const proTraders: string[] = [
-    "0x2D02D9fa00eFE096068c733e925035aBB9661e98", // normal
+export const proBidders: string[] = [
     "0x0e9bc747335a4b01a6194a6c1bb1de54a0a5355c", // pro traders
     "0x8C6d06D614aB70a3AB6fAAf7cFF83102D840458b",
     "0x198D66Dc32310579bF041203c8e9d1cc5baeb941",
@@ -56,10 +55,13 @@ export const proTraders: string[] = [
     "0xbaf0B0F1D4aE45E71650988f054856da5027558C",
     "0xF05b880600e41Fd2f72A2F191eD3bF7e79bA383D",
     "0x12F5B2f75b873592ac9f7101bC1580AbaB2C0434",
-    "0xF6558e2EAd2A38efA452D1FFE2404cc028a415bC"
+    "0xF6558e2EAd2A38efA452D1FFE2404cc028a415bC",
+    "0x4114463f52401b22c8127bc76bc7ec129928ca97"
 ];
 
-export const noodTraders: string[] = ["0xF91116A59E7a004030fDB42070e3E8A97912591a"];
+export const newbieBidders: string[] = ["0xF91116A59E7a004030fDB42070e3E8A97912591a"];
+
+export const newbieAucthors: string[] = ["0x3cf0689468a046c3f353F41a71bBeF2c5F486980"];
 
 export const contracts: string[] = [
     "0x179815260f9265950286918fa34b624071E09D68", // getReward()
