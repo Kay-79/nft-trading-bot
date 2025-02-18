@@ -49,12 +49,16 @@ const DashboardPage = () => {
         // Apply filter logic here
         setFilteredListings(
             listings.filter(
-                listing => listing.startPrice !== undefined && listing.startPrice >= filter.minPrice
+                listing =>
+                    listing.startPrice !== undefined &&
+                    listing.startPrice / 10 ** 9 >= filter.minPrice
             )
         );
         setFilteredActivities(
             activities.filter(
-                activity => activity.bidPrice !== undefined && activity.bidPrice >= filter.minPrice
+                activity =>
+                    activity.bidPrice !== undefined &&
+                    activity.bidPrice / 10 ** 9 >= filter.minPrice
             )
         );
         setFilteredInventory(
@@ -134,7 +138,7 @@ const DashboardPage = () => {
                 <div style={{ flex: 1 }}>
                     {selectedSection === "listings" && (
                         <div style={{ marginBottom: "40px" }}>
-                            <Listings listings={filteredListings} view="list" />
+                            <Listings listings={filteredListings} />
                         </div>
                     )}
                     {selectedSection === "activities" && (

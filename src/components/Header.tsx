@@ -28,7 +28,8 @@ const Header = () => {
                 width: "100%",
                 top: 0,
                 boxSizing: "border-box", // Ensure padding is included in the element's total width and height
-                flexWrap: "wrap" // Allow wrapping for smaller screens
+                flexWrap: "wrap", // Allow wrapping for smaller screens
+                zIndex: 1000 // Ensure the header stays above other elements
             }}
         >
             {/* Logo and title */}
