@@ -11,6 +11,7 @@ const stakingProfit = async (address: string) => {
     const userHashRate = await stakingUtils.userHashrate(address);
     const rewardPerDayOfUser = (userHashRate * rewardPer1000Hash) / 1000;
     console.log(`Stake info: ${address}\nReward 1000H/day: \t\x1b[33m${shortenNumber(rewardPer1000Hash, 0, 4)} MBOX\x1b[0m`);
+    console.log(`User hashrate: \t\t\x1b[33m${shortenNumber(userHashRate, 0, 3)} H/s\x1b[0m`);
     console.log(`MBOX price: \t\t\x1b[33m$${shortenNumber(mboxPrice, 0, 5)}\x1b[0m`);
     console.log(
         `Total reward:\t\x1b[32m${shortenNumber(earned, 0, 3)} MBOX ~ $${shortenNumber(

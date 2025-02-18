@@ -3,6 +3,7 @@ import { Momo721 } from "./Momo721";
 export interface RecentSold {
     auctor?: string;
     bidder?: string;
+    type?: number;
     bidPrice?: number;
     ids?: string[];
     amounts?: string[];

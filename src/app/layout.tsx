@@ -12,6 +12,9 @@ function RootLayout({ children }: { children: React.ReactNode }) {
 
     return (
         <html lang="en" style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }}>
+            <head>
+                <title>Mobox Profit Bot</title>
+            </head>
             <body style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }}>
                 <Providers>
                     <Header />
