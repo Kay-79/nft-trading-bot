@@ -210,17 +210,11 @@ export const getPriceFromAI = async (
         rewardPer1000Hash
     ];
     try {
-        const params = new URLSearchParams();
-        input.forEach(value => {
-            if (value !== undefined) {
-                params.append("input", value.toString());
-            }
+        const response = await axios.post(API_AI_PRICE_PREDICT_FOR_BOT, {
+            input: input
         });
-        const response = await axios.get(API_AI_PRICE_PREDICT_FOR_BOT, {
-            params: params
-        });
-        // console.log(input);
-        // console.log(`Price prediction ONE: ${response.data.prediction[0][0]}`);
+        console.log(input);
+        console.log(`Price prediction ONE: ${response.data.prediction[0][0]}`);
         return response.data.prediction[0][0];
     } catch {
         console.log("Error get price from AI");
@@ -250,17 +244,11 @@ export const getPriceBlockFromAI = async (
     let totalPredict = 0;
     try {
         for (const input of inputs) {
-            const params = new URLSearchParams();
-            input.forEach(value => {
-                if (value !== undefined) {
-                    params.append("input", value.toString());
-                }
+            const response = await axios.post(API_AI_PRICE_PREDICT_FOR_BOT, {
+                input: input
             });
-            const response = await axios.get(API_AI_PRICE_PREDICT_FOR_BOT, {
-                params: params
-            });
-            // console.log(input);
-            // console.log(`Price prediction ALL: ${response.data.prediction[0][0]}`);
+            console.log(input);
+            console.log(`Price prediction ALL: ${response.data.prediction[0][0]}`);
             totalPredict += response.data.prediction[0][0];
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
