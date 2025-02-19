@@ -4,7 +4,8 @@ import { useTheme } from "@/config/theme";
 import Image from "next/image";
 import { shortenNumber } from "@/utils/shorten";
 import axios from "axios";
-import { useAccount, useWriteContract } from "wagmi";
+import { useAccount } from "wagmi";
+import { transfer } from "@/services/mpContract";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -16,59 +17,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [price, setPrice] = useState<number>(shortenNumber(listing.nowPrice || 0, 9, 3));
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const { address } = useAccount();
-    const { writeContract } = useWriteContract();
-    const abi = [
-        {
-            constant: false,
-            inputs: [
-                {
-                    name: "_from",
-                    type: "address"
-                },
-                {
-                    name: "_to",
-                    type: "address"
-                },
-                {
-                    name: "_value",
-                    type: "uint256"
-                }
-            ],
-            name: "transferFrom",
-            outputs: [
-                {
-                    name: "",
-                    type: "bool"
-                }
-            ],
-            payable: false,
-            stateMutability: "nonpayable",
-            type: "function"
-        },
-        {
-            constant: false,
-            inputs: [
-                {
-                    name: "_to",
-                    type: "address"
-                },
-                {
-                    name: "_value",
-                    type: "uint256"
-                }
-            ],
-            name: "transfer",
-            outputs: [
-                {
-                    name: "",
-                    type: "bool"
-                }
-            ],
-            payable: false,
-            stateMutability: "nonpayable",
-            type: "function"
-        }
-    ];
     const handleAdjustPrice = async () => {
         console.log("Adjusting Price", address);
     };
@@ -94,7 +42,11 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     };
 
     const handleTransferClick = async () => {
-        
+        if (address) {
+            await transfer(address, "0x99999841c9da62600956ff709aD03A39875f3766", 1);
+        } else {
+            console.error("Address is undefined");
+        }
     };
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
