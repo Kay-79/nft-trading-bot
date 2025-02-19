@@ -4,6 +4,7 @@ import { useTheme } from "@/config/theme";
 import Image from "next/image";
 import { shortenNumber } from "@/utils/shorten";
 import axios from "axios";
+import { useAccount } from "wagmi";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -14,10 +15,11 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const { theme } = useTheme();
     const [price, setPrice] = useState<number>(shortenNumber(listing.nowPrice || 0, 9, 3));
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
+    const { address } = useAccount();
 
-    const handleAdjustPrice = () => {
-        // Implement adjust price logic here
+    const handleAdjustPrice = async () => {
         console.log("Adjust Price:", price);
+        console.log("Address:", address);
     };
 
     const handleCancel = () => {
@@ -35,7 +37,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             });
             const predicted = response.data.prediction[0];
             setPredictedPrice(shortenNumber(predicted, 0, 3));
-            console.log("Predict Price:", predicted);
         } catch (error) {
             console.error("Failed to fetch prediction data:", error);
         }
