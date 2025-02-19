@@ -77,10 +77,8 @@ export const predictModel = async (inputOne: number[], predictMode: string) => {
     console.log("Predicting model...", API_AI_PRICE_PREDICT);
     if (predictMode === PredictMode.ONE) {
         try {
-            const params = new URLSearchParams();
-            (inputOne ?? []).forEach(value => params.append("input", value.toString()));
-            const response = await axios.get(API_AI_PRICE_PREDICT, {
-                params: params
+            const response = await axios.post(API_AI_PRICE_PREDICT, {
+                input: inputOne
             });
             console.log("===================================================================");
             console.log("Input:\t\t\t", inputOne);
@@ -114,17 +112,22 @@ export const predictModel = async (inputOne: number[], predictMode: string) => {
             checkTrader(dataset.auctor, newbieBidders, "Auctor (newbie):");
         }
         for (const input of dataset.inputs ?? []) {
-            const params = new URLSearchParams();
-            //add last 3 elements of inputOne to input
+            // add last 3 elements of inputOne to input
             input.push(...inputOne.slice(-3));
-            input.forEach(value => params.append("input", value.toString()));
-            const response = await axios.get(API_AI_PRICE_PREDICT, { params });
-            console.log("Input:\t\t\t", input);
-            console.log("Prediction:\t\t", response.data.prediction[0]);
-            totalPredicted += Number(response.data.prediction[0]);
+            try {
+                const response = await axios.post(API_AI_PRICE_PREDICT, {
+                    input: input
+                });
+                console.log("Input:\t\t\t", input);
+                console.log("Prediction:\t\t", response.data.prediction[0]);
+                totalPredicted += Number(response.data.prediction[0]);
+            } catch (error) {
+                console.error("Error predicting model:", error);
+                throw error;
+            }
         }
         if (dataset.output) {
-            console.log("Total pirce:\t\t", dataset.output[0]);
+            console.log("Total price:\t\t", dataset.output[0]);
         }
         console.log("Total predicted:\t", totalPredicted);
         console.log("===================================================================");
@@ -205,27 +208,36 @@ export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrat
         console.log(`PRO AUCTOR:\t\t ${data.auctor}`);
         if (data.inputs && data.inputs.length > 0) {
             for (const input of data.inputs ?? []) {
-                const params = new URLSearchParams();
                 console.log("Input:\t\t\t", input);
                 input.push(Math.floor(Date.now() / 1000), mboxPrice, rewardPer1000Hashrate);
-                input.forEach(value => params.append("input", value.toString()));
-                const response = await axios.get(API_AI_PRICE_PREDICT, { params });
-                console.log("Input:\t\t\t", input);
-                console.log("Prediction:\t\t", response.data.prediction[0]);
-                totalPredicted += Number(response.data.prediction[0]);
-                totalPredictedAll += Number(response.data.prediction[0]);
+                try {
+                    const response = await axios.post(API_AI_PRICE_PREDICT, {
+                        input: input
+                    });
+                    console.log("Prediction:\t\t", response.data.prediction[0]);
+                    totalPredicted += Number(response.data.prediction[0]);
+                    totalPredictedAll += Number(response.data.prediction[0]);
+                } catch (error) {
+                    console.error("Error predicting model:", error);
+                    throw error;
+                }
             }
         } else {
-            const params = new URLSearchParams();
             const input = data.input;
             console.log("Input:\t\t\t", input);
             if (input) {
                 input.push(Math.floor(Date.now() / 1000), mboxPrice, rewardPer1000Hashrate);
-                input.forEach(value => params.append("input", value.toString()));
-                const response = await axios.get(API_AI_PRICE_PREDICT, { params });
-                console.log("Prediction:\t\t", response.data.prediction[0]);
-                totalPredicted += Number(response.data.prediction[0]);
-                totalPredictedAll += Number(response.data.prediction[0]);
+                try {
+                    const response = await axios.post(API_AI_PRICE_PREDICT, {
+                        input: input
+                    });
+                    console.log("Prediction:\t\t", response.data.prediction[0]);
+                    totalPredicted += Number(response.data.prediction[0]);
+                    totalPredictedAll += Number(response.data.prediction[0]);
+                } catch (error) {
+                    console.error("Error predicting model:", error);
+                    throw error;
+                }
             }
         }
         if (data.price) {

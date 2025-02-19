@@ -13,10 +13,10 @@ scaler = joblib.load(scaler_path)
 app = Flask(__name__)
 
 
-@app.route('/predict', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
     try:
-        input_data = request.args.getlist('input', type=float)
+        input_data = request.json.get('input')
         if not input_data:
             return jsonify({"error": "Invalid input"}), 400
         if len(input_data) != 7:
