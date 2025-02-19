@@ -84,7 +84,7 @@ export const predictModel = async (inputOne: number[], predictMode: string) => {
             console.log("Input:\t\t\t", inputOne);
             console.log("Prediction:\t\t", response.data.prediction[0]);
             console.log("===================================================================");
-            return;
+            return response.data.prediction[0];
         } catch (error) {
             console.error("Error predicting model:", error);
             throw error;

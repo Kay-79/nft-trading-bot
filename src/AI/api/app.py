@@ -1,8 +1,7 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import numpy as np
 import joblib
-import time
-import math
 
 model_path = "./src/AI/model/model.pkl"
 scaler_path = "./src/AI/model/scaler.pkl"
@@ -11,6 +10,7 @@ model = joblib.load(model_path)
 scaler = joblib.load(scaler_path)
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS
 
 
 @app.route('/predict', methods=['POST'])

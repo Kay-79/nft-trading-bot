@@ -3,6 +3,7 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { useTheme } from "@/config/theme";
 import Image from "next/image";
 import { shortenNumber } from "@/utils/shorten";
+import axios from "axios";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -24,11 +25,20 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         console.log("Cancel Listing");
     };
 
-    const handlePredict = () => {
-        // Implement predict logic here
-        const predicted = price * 1.1; // Example prediction logic
-        setPredictedPrice(shortenNumber(predicted, 0, 3));
-        console.log("Predict Price:", predicted);
+    const handlePredict = async () => {
+        try {
+            const response = await axios.post("/api/predictOne", {
+                hashrate: listing.hashrate ?? 0,
+                lvHashrate: listing.lvHashrate ?? 0,
+                prototype: listing.prototype ?? 0,
+                level: listing.level ?? 0
+            });
+            const predicted = response.data.prediction[0];
+            setPredictedPrice(shortenNumber(predicted, 0, 3));
+            console.log("Predict Price:", predicted);
+        } catch (error) {
+            console.error("Failed to fetch prediction data:", error);
+        }
     };
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
