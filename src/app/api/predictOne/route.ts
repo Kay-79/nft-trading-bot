@@ -18,7 +18,7 @@ export async function POST(request: Request) {
             reward
         ];
         const prediction = await predictModel(input, PredictMode.ONE);
-        return NextResponse.json({ prediction: [prediction] });
+        return NextResponse.json({ prediction: prediction[0] });
     } catch {
         return NextResponse.json(
             { error: "Failed to fetch MBOX price and reward data" },

@@ -4,7 +4,7 @@ import { useTheme } from "@/config/theme";
 import Image from "next/image";
 import { shortenNumber } from "@/utils/shorten";
 import axios from "axios";
-import { useAccount } from "wagmi";
+import { useAccount, useWriteContract } from "wagmi";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -16,10 +16,61 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [price, setPrice] = useState<number>(shortenNumber(listing.nowPrice || 0, 9, 3));
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const { address } = useAccount();
-
+    const { writeContract } = useWriteContract();
+    const abi = [
+        {
+            constant: false,
+            inputs: [
+                {
+                    name: "_from",
+                    type: "address"
+                },
+                {
+                    name: "_to",
+                    type: "address"
+                },
+                {
+                    name: "_value",
+                    type: "uint256"
+                }
+            ],
+            name: "transferFrom",
+            outputs: [
+                {
+                    name: "",
+                    type: "bool"
+                }
+            ],
+            payable: false,
+            stateMutability: "nonpayable",
+            type: "function"
+        },
+        {
+            constant: false,
+            inputs: [
+                {
+                    name: "_to",
+                    type: "address"
+                },
+                {
+                    name: "_value",
+                    type: "uint256"
+                }
+            ],
+            name: "transfer",
+            outputs: [
+                {
+                    name: "",
+                    type: "bool"
+                }
+            ],
+            payable: false,
+            stateMutability: "nonpayable",
+            type: "function"
+        }
+    ];
     const handleAdjustPrice = async () => {
-        console.log("Adjust Price:", price);
-        console.log("Address:", address);
+        console.log("Adjusting Price", address);
     };
 
     const handleCancel = () => {
@@ -35,11 +86,15 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                 prototype: listing.prototype ?? 0,
                 level: listing.level ?? 0
             });
-            const predicted = response.data.prediction[0];
+            const predicted = response.data.prediction;
             setPredictedPrice(shortenNumber(predicted, 0, 3));
         } catch (error) {
             console.error("Failed to fetch prediction data:", error);
         }
+    };
+
+    const handleTransferClick = async () => {
+        
     };
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -144,6 +199,19 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         }}
                     >
                         Predict
+                    </button>
+                    <button
+                        onClick={handleTransferClick}
+                        style={{
+                            padding: "10px 20px",
+                            backgroundColor: theme.buttonBackgroundColor,
+                            color: theme.buttonTextColor,
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        Transfer
                     </button>
                 </div>
                 <button
