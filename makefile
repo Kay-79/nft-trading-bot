@@ -12,7 +12,7 @@ killFind:
 	kill -9 $(shell ps aux | grep find | grep -v grep | awk '{print $$2}')
 
 change:
-	nohup npm run change > /dev/null 2>&1 &
+	nohup bun change > /dev/null 2>&1 &
 
 killChange:
 	kill -9 $(shell ps aux | grep change | grep -v grep | awk '{print $$2}')

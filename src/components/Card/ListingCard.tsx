@@ -21,7 +21,7 @@ const getBackgroundColor = (prototype: number): string => {
         case "4":
             return "#3e1f58";
         case "5":
-            return "bg-purple-500";
+            return "#5F4E12";
         case "6":
             return "bg-pink-500";
         default:

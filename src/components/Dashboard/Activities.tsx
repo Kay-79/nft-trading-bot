@@ -16,9 +16,9 @@ const Activities: React.FC<ActivitiesProps> = ({ activities, view }) => {
                 gap: "20px"
             }}
         >
-            {activities.map(activity => (
+            {activities.map((activity, index) => (
                 <div
-                    key={activity.tx}
+                    key={`${activity.tx}-${index}`}
                     style={{
                         padding: "20px",
                         border: "1px solid #ccc",
