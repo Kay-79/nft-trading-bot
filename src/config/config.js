@@ -21,7 +21,7 @@ const config = {
     // },
     rpcs: {
         bid: "https://bsc-dataseed1.bnbchain.org",
-        change: "https://bsc-dataseed1.bnbchain.org",
+        change: "https://bsc-dataseed.binance.org/",
         check: "https://bsc-dataseed1.bnbchain.org",
         // create: "https://bnb.rpc.subquery.network/public",
         create: "https://go.getblock.io/970d05bb6ae946339226221d29d5934e",
