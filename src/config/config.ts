@@ -75,4 +75,4 @@ export const contracts: string[] = [
     "0x5Af0F366B44161AF0c412adA0c2840CFbd8e6A81"
 ];
 
-export const bidContract = "0x2D02D9fa00eFE096068c733e925035aBB9661e98";
+export const bidContract = "0x5Af0F366B44161AF0c412adA0c2840CFbd8e6A81";
