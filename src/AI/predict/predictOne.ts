@@ -5,7 +5,7 @@ const predictOne = async () => {
     const data = await getMboxPriceAndRewardDelay5m();
     const mboxPrice = data.mboxPrice;
     const reward = data.reward;
-    const momoInfo = [290, 3362, 4, 19];
+    const momoInfo = [480, 13677, 5, 40];
     momoInfo.push(...[Math.floor(Date.now() / 1000), mboxPrice, reward]);
     await predictModel(momoInfo, PredictMode.ONE);
 };

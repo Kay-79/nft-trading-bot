@@ -37,14 +37,14 @@ killAll:
 	make killApiMomo
 #######################################
 ############### HARDHAT ###############
-deploy:
-	npx hardhat run scripts/deploy.ts --network bsc
+deployBid:
+	npx hardhat run scripts/deployBid.ts --network bsc
 
 deployToken:
 	npx hardhat run scripts/deployToken.ts --network bsc
 
-deployUpgrade:
-	npx hardhat run scripts/deployUpgrade.ts --network bsc
+deployBidUpgrade:
+	npx hardhat run scripts/deployBidUpgrade.ts --network bsc
 #######################################
 ############### TEST ##################
 check:
