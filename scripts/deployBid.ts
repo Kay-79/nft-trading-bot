@@ -1,6 +1,6 @@
 import { ethers } from "hardhat";
 import { sleep } from "../src/utilsV2/common/sleep";
-import { NORMAL_BUYER, USDT_ADDRESS } from "../src/constants/constants";
+import { MP_ADDRESS, USDT_ADDRESS } from "../src/constants/constants";
 
 async function main() {
     const BidContract = await ethers.getContractFactory("Bid");
@@ -10,7 +10,7 @@ async function main() {
     await sleep(10);
     console.log("=====Approving BID=====");
     await sleep(10);
-    await BID.approve(NORMAL_BUYER, USDT_ADDRESS);
+    await BID.approve(MP_ADDRESS, USDT_ADDRESS);
     console.log("BID approved");
 }
 
