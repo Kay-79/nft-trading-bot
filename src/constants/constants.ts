@@ -60,6 +60,8 @@ export const GAS_LIMIT_BID_BLOCK = 2000000;
 
 export const GAS_LIMIT_LIST = 54166; // 325000 / 6;
 
+export const GAS_LIMIT_CHANGE = 57865;
+
 export const RATE_FEE_MARKET = 0.05;
 
 export const RPC_URL =
