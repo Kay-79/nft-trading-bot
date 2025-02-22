@@ -54,7 +54,8 @@ const config = {
         ["0x2D02D9fa00eFE096068c733e925035aBB9661e98", "_2_D_0", true], // version 3
         ["0x5Af0F366B44161AF0c412adA0c2840CFbd8e6A81", "_5_A_f", true],
         ["0x2D34E0171db021b2e0A0ECb4eA298DBE708a6C68", "_2_D_3", true],
-        ["0xbad9ecD57d69E4b16073936c8453FD4b0F7D31Fd", "_b_a_d", true]
+        ["0xbad9ecD57d69E4b16073936c8453FD4b0F7D31Fd", "_b_a_d", true],
+        ["0x1Cf2c4119A6e65C3053be65103b5e276506449eB", "_1_C_f", true]
     ],
     timeDelays: {
         //in hours
