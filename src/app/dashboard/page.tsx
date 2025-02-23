@@ -9,6 +9,7 @@ import { RecentSold } from "@/types/dtos/RecentSold.dto";
 import { Momo721 } from "@/types/dtos/Momo721";
 import { useTheme } from "@/config/theme";
 import FilterPanel from "@/components/Dashboard/FilterPanel";
+import Loading from "@/components/Loading/Loading";
 
 const DashboardPage = () => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
@@ -172,7 +173,7 @@ const DashboardPage = () => {
                 </div>
                 <div style={{ flex: 1 }}>
                     {loading ? (
-                        <div style={{ textAlign: "center", marginTop: "20px" }}>Loading...</div>
+                        <Loading />
                     ) : (
                         <>
                             {selectedSection === "listings" && (
