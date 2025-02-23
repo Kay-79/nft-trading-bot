@@ -5,6 +5,7 @@ import Image from "next/image";
 import { shortenNumber } from "@/utils/shorten";
 import axios from "axios";
 import { useAccount } from "wagmi";
+import { useErrorHandler } from "@/hooks/useErrorHandler";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -16,16 +17,28 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [price, setPrice] = useState<number>(shortenNumber(listing.nowPrice || 0, 9, 3));
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const { address } = useAccount();
+    const { error, handleError } = useErrorHandler();
+
+    const resetError = () => {
+        handleError(null as unknown as Error); // Reset error state
+    };
+
     const handleAdjustPrice = async () => {
+        resetError();
         console.log("Adjusting Price", address);
     };
 
     const handleCancel = () => {
-        // Implement cancel logic here
-        console.log("Cancel Listing");
+        resetError();
+        try {
+            throw new Error("An example error");
+        } catch (err) {
+            handleError(err as Error);
+        }
     };
 
     const handlePredict = async () => {
+        resetError();
         try {
             const response = await axios.post("/api/predictOne", {
                 hashrate: listing.hashrate ?? 0,
@@ -36,7 +49,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             const predicted = response.data.prediction;
             setPredictedPrice(shortenNumber(predicted, 0, 3));
         } catch (error) {
-            console.error("Failed to fetch prediction data:", error);
+            handleError(error as Error);
         }
     };
 
@@ -44,6 +57,11 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         if (e.target === e.currentTarget) {
             onClose();
         }
+    };
+
+    const handleClose = () => {
+        onClose();
+        resetError();
     };
 
     return (
@@ -103,6 +121,9 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                 {predictedPrice !== null && (
                     <p style={{ marginBottom: "20px" }}>Predicted Price: {predictedPrice} USDT</p>
                 )}
+                {error && (
+                    <div style={{ color: "red", marginBottom: "20px" }}>Error: {error.message}</div>
+                )}
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                     <button
                         onClick={handleAdjustPrice}
@@ -145,7 +166,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     </button>
                 </div>
                 <button
-                    onClick={onClose}
+                    onClick={handleClose}
                     style={{
                         padding: "10px 20px",
                         backgroundColor: theme.buttonBackgroundColor,

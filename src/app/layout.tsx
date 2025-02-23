@@ -6,6 +6,8 @@ import { Providers } from "./providers";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useTheme } from "@/config/theme";
+import React from "react";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
     const { theme } = useTheme();
@@ -18,20 +20,22 @@ function RootLayout({ children }: { children: React.ReactNode }) {
             <body style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }}>
                 <Providers>
                     <Header />
-                    <div
-                        style={{
-                            backgroundColor: theme.backgroundColor,
-                            color: theme.textColor,
-                            minHeight: "100vh",
-                            display: "flex",
-                            flexDirection: "column",
-                            paddingTop: "60px", // Ensure content doesn't overlap with Header
-                            boxSizing: "border-box" // Ensure padding is included in the element's total width and height
-                        }}
-                    >
-                        <main style={{ flex: 1 }}>{children}</main>
-                        <Footer />
-                    </div>
+                    <ErrorBoundary>
+                        <div
+                            style={{
+                                backgroundColor: theme.backgroundColor,
+                                color: theme.textColor,
+                                minHeight: "100vh",
+                                display: "flex",
+                                flexDirection: "column",
+                                paddingTop: "60px", // Ensure content doesn't overlap with Header
+                                boxSizing: "border-box" // Ensure padding is included in the element's total width and height
+                            }}
+                        >
+                            <main style={{ flex: 1 }}>{children}</main>
+                            <Footer />
+                        </div>
+                    </ErrorBoundary>
                 </Providers>
             </body>
         </html>
