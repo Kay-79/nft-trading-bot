@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { useTheme } from "@/config/theme";
 import Image from "next/image";
-import { shortenNumber } from "@/utils/shorten";
+import { shortenNumber, shortenAddress } from "@/utils/shorten";
 import axios from "axios";
 // import { useAccount } from "wagmi";
 import { useErrorHandler } from "@/hooks/useErrorHandler";
@@ -19,7 +19,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const { error, handleError } = useErrorHandler();
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
-    const backgroundColor = getBackgroundColor(listing.prototype || 0);
 
     const resetError = () => {
         handleError(null); // Reset error state
@@ -81,6 +80,16 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             ? `/images/MOMO/${(listing.ids ?? [])[currentImageIndex]}.png`
             : `/images/MOMO/${listing.prototype}.png`;
 
+    const backgroundColor =
+        listing.ids && listing.ids.length > 1
+            ? getBackgroundColor(Number((listing.ids ?? [])[currentImageIndex]))
+            : getBackgroundColor(listing.prototype || 0);
+
+    const prototype =
+        listing.ids && listing.ids.length > 1
+            ? (listing.ids ?? [])[currentImageIndex]
+            : listing.prototype || 0;
+
     return (
         <div
             style={{
@@ -118,6 +127,22 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         borderRadius: "10px"
                     }}
                 >
+                    <div
+                        className="flex justify-between items-center"
+                        style={{ marginBottom: "20px" }}
+                    >
+                        <span className="text-sm flex items-center gap-1">
+                            <span className="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs">
+                                Lv. {listing.level}
+                            </span>
+                        </span>
+                        <div className="text-right">
+                            <p className="text-lg font-bold">{listing.lvHashrate}</p>
+                            <p className="text-xs text-gray-300">
+                                {(listing.hashrate || 0) > 5 ? `Lv. 1 - ${listing.hashrate}` : ""}
+                            </p>
+                        </div>
+                    </div>
                     {listing.ids && listing.ids.length > 1 && (
                         <button
                             onClick={handlePrevImage}
@@ -157,15 +182,21 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                             &gt;
                         </button>
                     )}
-                </div>
-                {listing.ids && listing.ids.length > 1 && (
-                    <p style={{ textAlign: "center", marginBottom: "20px" }}>
-                        Quantity: {listing.amounts?.[currentImageIndex] ?? 1}
+                    {listing.ids && listing.ids.length > 1 && (
+                        <p style={{ textAlign: "center", marginBottom: "20px" }}>
+                            Quantity: {listing.amounts?.[currentImageIndex] ?? 1}
+                        </p>
+                    )}
+                    <p className="text-center text-lg font-semibold">{prototype}</p>
+                    <p className="text-center text-lg font-semibold">
+                        {shortenAddress(listing.auctor || "")}
                     </p>
-                )}
-                <p>Level: {listing.level}</p>
-                <p>Hashrate: {listing.hashrate}</p>
-                <p>Duration: {listing.durationDays} days</p>
+                    <div className="flex justify-between items-center mt-4">
+                        <span className="text-green-400 font-bold text-lg">
+                            {shortenNumber(listing.nowPrice || 0, 9, 3)} USDT
+                        </span>
+                    </div>
+                </div>
                 <div style={{ marginBottom: "20px" }}>
                     <label style={{ display: "block", marginBottom: "10px" }}>Price (USDT)</label>
                     <input
