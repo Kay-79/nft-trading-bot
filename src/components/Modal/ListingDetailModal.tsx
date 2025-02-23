@@ -5,7 +5,6 @@ import Image from "next/image";
 import { shortenNumber } from "@/utils/shorten";
 import axios from "axios";
 import { useAccount } from "wagmi";
-import { transfer } from "@/services/mpContract";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -38,14 +37,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             setPredictedPrice(shortenNumber(predicted, 0, 3));
         } catch (error) {
             console.error("Failed to fetch prediction data:", error);
-        }
-    };
-
-    const handleTransferClick = async () => {
-        if (address) {
-            await transfer(address, "0x99999841c9da62600956ff709aD03A39875f3766", 1);
-        } else {
-            console.error("Address is undefined");
         }
     };
 
@@ -151,19 +142,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         }}
                     >
                         Predict
-                    </button>
-                    <button
-                        onClick={handleTransferClick}
-                        style={{
-                            padding: "10px 20px",
-                            backgroundColor: theme.buttonBackgroundColor,
-                            color: theme.buttonTextColor,
-                            border: "none",
-                            borderRadius: "5px",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Transfer
                     </button>
                 </div>
                 <button

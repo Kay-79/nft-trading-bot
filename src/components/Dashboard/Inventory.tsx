@@ -1,5 +1,6 @@
 import React from "react";
 import { Momo721 } from "@/types/dtos/Momo721";
+import InventoryCard from "@/components/Card/InventoryCard";
 
 interface InventoryProps {
     inventory: Momo721[];
@@ -10,30 +11,22 @@ const Inventory: React.FC<InventoryProps> = ({ inventory, view }) => {
     return (
         <div
             style={{
-                display: "flex",
-                flexDirection: view === "list" ? "column" : "row",
-                flexWrap: "wrap",
+                display: "grid",
+                gridTemplateColumns: view === "list" ? "1fr" : "repeat(3, 1fr)",
                 gap: "20px",
+                justifyContent: "center"
             }}
         >
             {inventory.map(item => (
-                <div
-                    key={item.tokenId}
-                    style={{
-                        padding: "20px",
-                        border: "1px solid #ccc",
-                        borderRadius: "10px",
-                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                        width: view === "list" ? "100%" : "calc(33.333% - 20px)"
-                    }}
-                >
-                    <h3>{item.prototype}</h3>
-                    <p>Hashrate: {item.hashrate}</p>
-                    <p>Level: {item.level}</p>
-                    <p>Quality: {item.quality}</p>
-                    {/* Add more fields as needed */}
-                </div>
+                <InventoryCard key={item.tokenId} item={item} />
             ))}
+            <style jsx>{`
+                @media (max-width: 768px) {
+                    div {
+                        grid-template-columns: 1fr;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
