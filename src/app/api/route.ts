@@ -15,8 +15,6 @@ function handleApiError(error: Error) {
 
 export async function GET() {
   try {
-    // Your API logic here
-    throw new Error('Example API error');
     return NextResponse.json({ message: 'Success' });
   } catch (error: unknown) {
     return handleApiError(error as Error);
