@@ -62,6 +62,8 @@ const DashboardPage = () => {
                         comparison = (a.hashrate || 0) - (b.hashrate || 0);
                     } else if (filter.sort === "level") {
                         comparison = (a.level || 0) - (b.level || 0);
+                    } else if (filter.sort === "uptime") {
+                        comparison = (a.uptime || 0) - (b.uptime || 0);
                     }
                     return filter.sortOrder === "asc" ? comparison : -comparison;
                 })

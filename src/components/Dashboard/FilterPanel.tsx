@@ -113,6 +113,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
                         <option value="price">Price</option>
                         <option value="hashrate">Hashrate</option>
                         <option value="level">Level</option>
+                        <option value="uptime">Uptime</option>
                     </select>
                 </div>
                 <div style={{ flex: 1 }}>

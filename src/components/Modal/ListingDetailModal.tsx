@@ -29,7 +29,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         console.log("Adjusting Price");
     };
 
-    const handleCancel = () => {
+    const handleDelist = () => {
         resetError();
         try {
             throw new Error("An example error");
@@ -60,10 +60,10 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         }
     };
 
-    const handleClose = () => {
-        onClose();
-        resetError();
-    };
+    // const handleClose = () => {
+    //     onClose();
+    //     resetError();
+    // };
 
     const handleNextImage = () => {
         setCurrentImageIndex(prevIndex => (prevIndex + 1) % (listing.ids?.length ?? 1));
@@ -235,7 +235,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         Adjust
                     </button>
                     <button
-                        onClick={handleCancel}
+                        onClick={handleDelist}
                         style={{
                             flex: 1,
                             padding: "10px 20px",
@@ -246,7 +246,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                             cursor: "pointer"
                         }}
                     >
-                        Cancel
+                        Delist
                     </button>
                     {listing.hashrate && listing.hashrate > 10 && (
                         <button
@@ -265,7 +265,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         </button>
                     )}
                 </div>
-                <button
+                {/* <button
                     onClick={handleClose}
                     style={{
                         padding: "10px 20px",
@@ -279,7 +279,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     }}
                 >
                     Close
-                </button>
+                </button> */}
             </div>
         </div>
     );
