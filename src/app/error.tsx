@@ -1,26 +1,48 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
+import React from "react";
+import { useTheme } from "@/config/theme";
 
-interface ErrorProps {
-  error: Error & { digest?: string };
-  reset: () => void;
+interface ErrorPageProps {
+    error: Error;
+    reset: () => void;
 }
 
-export default function Error({ error, reset }: ErrorProps) {
-  useEffect(() => {
-    // Log the error to the console
-    console.error(error);
-  }, [error]);
+const ErrorPage: React.FC<ErrorPageProps> = ({ error, reset }) => {
+    const { theme } = useTheme();
 
-  return (
-    <div>
-      <h2>Something went wrong!</h2>
-      <button
-        onClick={() => reset()}
-      >
-        Try again
-      </button>
-    </div>
-  );
-}
+    return (
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100vh",
+                backgroundColor: theme.backgroundColor,
+                color: theme.textColor,
+                padding: "20px",
+                textAlign: "center"
+            }}
+        >
+            <h1>Something went wrong</h1>
+            <p>{error.message}</p>
+            <button
+                onClick={reset}
+                style={{
+                    padding: "10px 20px",
+                    backgroundColor: theme.buttonBackgroundColor,
+                    color: theme.buttonTextColor,
+                    border: "none",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    marginTop: "20px"
+                }}
+            >
+                Try Again
+            </button>
+        </div>
+    );
+};
+
+export default ErrorPage;

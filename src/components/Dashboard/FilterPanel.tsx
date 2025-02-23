@@ -2,16 +2,31 @@ import React, { useState } from "react";
 import { useTheme } from "@/config/theme";
 
 interface FilterPanelProps {
-    applyFilter: (filter: { minPrice: number; minHashrate: number }) => void;
+    applyFilter: (filter: {
+        minPrice: number;
+        minHashrate: number;
+        search: string;
+        sort: string;
+    }) => void;
 }
 
 const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
     const { theme } = useTheme();
     const [minPrice, setMinPrice] = useState<number>(0);
     const [minHashrate, setMinHashrate] = useState<number>(0);
+    const [search, setSearch] = useState<string>("");
+    const [sort, setSort] = useState<string>("");
 
     const handleApplyFilter = () => {
-        applyFilter({ minPrice, minHashrate });
+        applyFilter({ minPrice, minHashrate, search, sort });
+    };
+
+    const handleResetAll = () => {
+        setMinPrice(0);
+        setMinHashrate(0);
+        setSearch("");
+        setSort("");
+        applyFilter({ minPrice: 0, minHashrate: 0, search: "", sort: "" });
     };
 
     return (
@@ -60,21 +75,74 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
                     }}
                 />
             </div>
-            <button
-                onClick={handleApplyFilter}
-                style={{
-                    padding: "10px 20px",
-                    backgroundColor: theme.buttonBackgroundColor,
-                    color: theme.buttonTextColor,
-                    border: "none",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    display: "block",
-                    margin: "0 auto"
-                }}
-            >
-                Apply Filter
-            </button>
+            <div style={{ marginBottom: "20px" }}>
+                <label style={{ display: "block", marginBottom: "10px" }}>Search</label>
+                <input
+                    type="text"
+                    value={search}
+                    onChange={e => setSearch(e.target.value)}
+                    style={{
+                        width: "100%",
+                        padding: "10px",
+                        borderRadius: "5px",
+                        border: `1px solid ${theme.textColor}`,
+                        backgroundColor: theme.backgroundColor,
+                        color: theme.textColor
+                    }}
+                />
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+                <label style={{ display: "block", marginBottom: "10px" }}>Sort By</label>
+                <select
+                    value={sort}
+                    onChange={e => setSort(e.target.value)}
+                    style={{
+                        width: "100%",
+                        padding: "10px",
+                        borderRadius: "5px",
+                        border: `1px solid ${theme.textColor}`,
+                        backgroundColor: theme.backgroundColor,
+                        color: theme.textColor
+                    }}
+                >
+                    <option value="">Select</option>
+                    <option value="price">Price</option>
+                    <option value="hashrate">Hashrate</option>
+                    <option value="level">Level</option>
+                </select>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
+                <button
+                    onClick={handleApplyFilter}
+                    style={{
+                        flex: 1,
+                        padding: "10px 20px",
+                        backgroundColor: theme.buttonBackgroundColor,
+                        color: theme.buttonTextColor,
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        textAlign: "center"
+                    }}
+                >
+                    Apply
+                </button>
+                <button
+                    onClick={handleResetAll}
+                    style={{
+                        flex: 1,
+                        padding: "10px 20px",
+                        backgroundColor: theme.buttonBackgroundColor,
+                        color: theme.buttonTextColor,
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        textAlign: "center"
+                    }}
+                >
+                    Reset
+                </button>
+            </div>
         </div>
     );
 };

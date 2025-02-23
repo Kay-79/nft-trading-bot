@@ -73,6 +73,8 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
                     />
                 </div>
 
+                <p className="text-center text-lg font-semibold">{listing.prototype || 0}</p>
+
                 {/* Name */}
                 <p className="text-center text-lg font-semibold">
                     {shortenAddress(listing.auctor || "")}
