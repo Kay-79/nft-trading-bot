@@ -43,16 +43,26 @@ const DashboardPage = () => {
     interface Filter {
         minPrice: number;
         minHashrate: number;
+        search: string;
+        sort: string;
     }
 
     const applyFilter = (filter: Filter) => {
-        // Apply filter logic here
         setFilteredListings(
-            listings.filter(
-                listing =>
-                    listing.startPrice !== undefined &&
-                    listing.startPrice / 10 ** 9 >= filter.minPrice
-            )
+            listings
+                .filter(listing => (listing.nowPrice || 0) >= filter.minPrice)
+                .filter(listing => (listing.hashrate || 0) >= filter.minHashrate)
+                .filter(listing => (listing.prototype || 0).toString().includes(filter.search))
+                .sort((a, b) => {
+                    if (filter.sort === "price") {
+                        return (a.nowPrice || 0) - (b.nowPrice || 0);
+                    } else if (filter.sort === "hashrate") {
+                        return (a.hashrate || 0) - (b.hashrate || 0);
+                    } else if (filter.sort === "level") {
+                        return (a.level || 0) - (b.level || 0);
+                    }
+                    return 0;
+                })
         );
         setFilteredActivities(
             activities.filter(
