@@ -8,6 +8,7 @@ import { useErrorHandler } from "@/hooks/useErrorHandler";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import { mpContractService } from "@/services/mpContract";
 import { useAccount } from "wagmi";
+import { ConnectWallet } from "@/components/ConnectWallet";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -165,7 +166,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     <div
                         style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
                     >
-                        <Image src={imageSrc} alt="Avatar" width={100} height={100} />
+                        <Image src={imageSrc} alt="Avatar" width={100} height={100} priority />
                     </div>
                     {listing.ids && listing.ids.length > 1 && (
                         <button
@@ -222,66 +223,59 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     <div style={{ color: "red", marginBottom: "20px" }}>Error: {error.message}</div>
                 )}
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                    <button
-                        onClick={handleAdjustPrice}
-                        style={{
-                            flex: 1,
-                            padding: "10px 20px",
-                            backgroundColor: theme.buttonBackgroundColor,
-                            color: theme.buttonTextColor,
-                            border: "none",
-                            borderRadius: "5px",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Adjust
-                    </button>
-                    <button
-                        onClick={handleDelist}
-                        style={{
-                            flex: 1,
-                            padding: "10px 20px",
-                            backgroundColor: theme.buttonBackgroundColor,
-                            color: theme.buttonTextColor,
-                            border: "none",
-                            borderRadius: "5px",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Delist
-                    </button>
-                    {listing.hashrate && listing.hashrate > 10 && (
-                        <button
-                            onClick={handlePredict}
-                            style={{
-                                flex: 1,
-                                padding: "10px 20px",
-                                backgroundColor: theme.buttonBackgroundColor,
-                                color: theme.buttonTextColor,
-                                border: "none",
-                                borderRadius: "5px",
-                                cursor: "pointer"
-                            }}
-                        >
-                            Predict
-                        </button>
+                    {address ? (
+                        <>
+                            <button
+                                onClick={handleAdjustPrice}
+                                style={{
+                                    flex: 1,
+                                    padding: "10px 20px",
+                                    backgroundColor: theme.buttonBackgroundColor,
+                                    color: theme.buttonTextColor,
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                Adjust
+                            </button>
+                            <button
+                                onClick={handleDelist}
+                                style={{
+                                    flex: 1,
+                                    padding: "10px 20px",
+                                    backgroundColor: theme.buttonBackgroundColor,
+                                    color: theme.buttonTextColor,
+                                    border: "none",
+                                    borderRadius: "5px",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                Delist
+                            </button>
+                            {listing.hashrate && listing.hashrate > 10 && (
+                                <button
+                                    onClick={handlePredict}
+                                    style={{
+                                        flex: 1,
+                                        padding: "10px 20px",
+                                        backgroundColor: theme.buttonBackgroundColor,
+                                        color: theme.buttonTextColor,
+                                        border: "none",
+                                        borderRadius: "5px",
+                                        cursor: "pointer"
+                                    }}
+                                >
+                                    Predict
+                                </button>
+                            )}
+                        </>
+                    ) : (
+                        <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
+                            <ConnectWallet />
+                        </div>
                     )}
                 </div>
-                {/* <button
-                    onClick={handleClose}
-                    style={{
-                        padding: "10px 20px",
-                        backgroundColor: theme.buttonBackgroundColor,
-                        color: theme.buttonTextColor,
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        display: "block",
-                        margin: "20px auto 0"
-                    }}
-                >
-                    Close
-                </button> */}
             </div>
         </div>
     );

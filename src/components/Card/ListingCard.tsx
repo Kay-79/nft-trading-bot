@@ -51,6 +51,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
                         alt="Avatar"
                         width={100}
                         height={100}
+                        priority
                     />
                 </div>
 

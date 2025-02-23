@@ -4,9 +4,7 @@ import { wagmiConfig } from "@/app/wagmi";
 import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { ethers } from "ethers";
-
-const PRO_BUYER = process.env.NEXT_PUBLIC_PRO_BUYER;
-const MP_ADDRESS = process.env.NEXT_PUBLIC_MP_ADDRESS;
+import { ENV, MP_ADDRESS, PRO_BUYER } from "@/constants/constants";
 
 const transfer = async (from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
@@ -38,7 +36,8 @@ const ajustPricePro = async (
     if (!wagmiConfig) {
         throw new Error("wagmiConfig is null");
     }
-    if (from === undefined || from !== PRO_BUYER) {
+    console.log("Current env:", ENV);
+    if (from?.toLocaleLowerCase() !== PRO_BUYER.toLocaleLowerCase()) {
         console.log(from);
         console.log(PRO_BUYER);
         console.log(MP_ADDRESS);
