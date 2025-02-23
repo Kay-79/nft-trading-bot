@@ -7,6 +7,7 @@ interface FilterPanelProps {
         minHashrate: number;
         search: string;
         sort: string;
+        sortOrder: string;
     }) => void;
 }
 
@@ -16,9 +17,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
     const [minHashrate, setMinHashrate] = useState<number>(0);
     const [search, setSearch] = useState<string>("");
     const [sort, setSort] = useState<string>("");
+    const [sortOrder, setSortOrder] = useState<string>("asc");
 
     const handleApplyFilter = () => {
-        applyFilter({ minPrice, minHashrate, search, sort });
+        applyFilter({ minPrice, minHashrate, search, sort, sortOrder });
     };
 
     const handleResetAll = () => {
@@ -26,7 +28,8 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
         setMinHashrate(0);
         setSearch("");
         setSort("");
-        applyFilter({ minPrice: 0, minHashrate: 0, search: "", sort: "" });
+        setSortOrder("asc");
+        applyFilter({ minPrice: 0, minHashrate: 0, search: "", sort: "", sortOrder: "asc" });
     };
 
     return (
@@ -91,25 +94,45 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
                     }}
                 />
             </div>
-            <div style={{ marginBottom: "20px" }}>
-                <label style={{ display: "block", marginBottom: "10px" }}>Sort By</label>
-                <select
-                    value={sort}
-                    onChange={e => setSort(e.target.value)}
-                    style={{
-                        width: "100%",
-                        padding: "10px",
-                        borderRadius: "5px",
-                        border: `1px solid ${theme.textColor}`,
-                        backgroundColor: theme.backgroundColor,
-                        color: theme.textColor
-                    }}
-                >
-                    <option value="">Select</option>
-                    <option value="price">Price</option>
-                    <option value="hashrate">Hashrate</option>
-                    <option value="level">Level</option>
-                </select>
+            <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
+                <div style={{ flex: 1 }}>
+                    <label style={{ display: "block", marginBottom: "10px" }}>Sort By</label>
+                    <select
+                        value={sort}
+                        onChange={e => setSort(e.target.value)}
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: `1px solid ${theme.textColor}`,
+                            backgroundColor: theme.backgroundColor,
+                            color: theme.textColor
+                        }}
+                    >
+                        <option value="">Select</option>
+                        <option value="price">Price</option>
+                        <option value="hashrate">Hashrate</option>
+                        <option value="level">Level</option>
+                    </select>
+                </div>
+                <div style={{ flex: 1 }}>
+                    <label style={{ display: "block", marginBottom: "10px" }}>Sort Order</label>
+                    <select
+                        value={sortOrder}
+                        onChange={e => setSortOrder(e.target.value)}
+                        style={{
+                            width: "100%",
+                            padding: "10px",
+                            borderRadius: "5px",
+                            border: `1px solid ${theme.textColor}`,
+                            backgroundColor: theme.backgroundColor,
+                            color: theme.textColor
+                        }}
+                    >
+                        <option value="asc">Asc</option>
+                        <option value="desc">Desc</option>
+                    </select>
+                </div>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
                 <button

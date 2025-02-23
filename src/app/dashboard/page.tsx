@@ -45,6 +45,7 @@ const DashboardPage = () => {
         minHashrate: number;
         search: string;
         sort: string;
+        sortOrder: string;
     }
 
     const applyFilter = (filter: Filter) => {
@@ -54,14 +55,15 @@ const DashboardPage = () => {
                 .filter(listing => (listing.hashrate || 0) >= filter.minHashrate)
                 .filter(listing => (listing.prototype || 0).toString().includes(filter.search))
                 .sort((a, b) => {
+                    let comparison = 0;
                     if (filter.sort === "price") {
-                        return (a.nowPrice || 0) - (b.nowPrice || 0);
+                        comparison = (a.nowPrice || 0) - (b.nowPrice || 0);
                     } else if (filter.sort === "hashrate") {
-                        return (a.hashrate || 0) - (b.hashrate || 0);
+                        comparison = (a.hashrate || 0) - (b.hashrate || 0);
                     } else if (filter.sort === "level") {
-                        return (a.level || 0) - (b.level || 0);
+                        comparison = (a.level || 0) - (b.level || 0);
                     }
-                    return 0;
+                    return filter.sortOrder === "asc" ? comparison : -comparison;
                 })
         );
         setFilteredActivities(

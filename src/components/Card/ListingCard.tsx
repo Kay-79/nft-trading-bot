@@ -83,12 +83,38 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
                 {/* Price */}
                 <div className="flex justify-between items-center mt-4">
                     <span className="text-green-400 font-bold text-lg">
-                        {shortenNumber(listing.nowPrice || 0, 9, 2)} USDT
+                        {shortenNumber(listing.nowPrice || 0, 9, 3)} USDT
                     </span>
                     <button className="bg-green-500 text-black p-2 rounded-full hover:bg-green-600">
                         <FiShoppingCart size={20} />
                     </button>
                 </div>
+
+                {/* Item Count */}
+                {listing.ids && listing.ids.length > 1 && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            right: "10px",
+                            top: "50%",
+                            transform: "translateY(-50%)"
+                        }}
+                    >
+                        {listing.ids.map((id, index) => (
+                            <span
+                                key={index}
+                                style={{
+                                    display: "block",
+                                    width: "8px",
+                                    height: "8px",
+                                    backgroundColor: "white",
+                                    borderRadius: "50%",
+                                    margin: "2px 0"
+                                }}
+                            ></span>
+                        ))}
+                    </div>
+                )}
             </div>
             {isModalOpen && <ListingDetailModal listing={listing} onClose={handleCloseModal} />}
         </>

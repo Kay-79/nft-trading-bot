@@ -17,6 +17,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [price, setPrice] = useState<number>(shortenNumber(listing.nowPrice || 0, 9, 3));
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const { error, handleError } = useErrorHandler();
+    const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
 
     const resetError = () => {
         handleError(null); // Reset error state
@@ -63,6 +64,21 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         resetError();
     };
 
+    const handleNextImage = () => {
+        setCurrentImageIndex(prevIndex => (prevIndex + 1) % (listing.ids?.length ?? 1));
+    };
+
+    const handlePrevImage = () => {
+        setCurrentImageIndex(
+            prevIndex => (prevIndex - 1 + (listing.ids?.length ?? 1)) % (listing.ids?.length ?? 1)
+        );
+    };
+
+    const imageSrc =
+        listing.ids && listing.ids.length > 1
+            ? `/images/MOMO/${(listing.ids ?? [])[currentImageIndex]}.png`
+            : `/images/MOMO/${listing.prototype}.png`;
+
     return (
         <div
             style={{
@@ -90,14 +106,52 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                 }}
             >
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Listing Details</h2>
-                <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                    <Image
-                        src={`/images/MOMO/${listing.prototype}.png`}
-                        alt="Avatar"
-                        width={100}
-                        height={100}
-                    />
+                <div style={{ textAlign: "center", marginBottom: "20px", position: "relative" }}>
+                    {listing.ids && listing.ids.length > 1 && (
+                        <button
+                            onClick={handlePrevImage}
+                            style={{
+                                position: "absolute",
+                                left: "10px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                backgroundColor: "transparent",
+                                border: "none",
+                                cursor: "pointer",
+                                color: theme.textColor
+                            }}
+                        >
+                            &lt;
+                        </button>
+                    )}
+                    <div
+                        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                    >
+                        <Image src={imageSrc} alt="Avatar" width={100} height={100} />
+                    </div>
+                    {listing.ids && listing.ids.length > 1 && (
+                        <button
+                            onClick={handleNextImage}
+                            style={{
+                                position: "absolute",
+                                right: "10px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                backgroundColor: "transparent",
+                                border: "none",
+                                cursor: "pointer",
+                                color: theme.textColor
+                            }}
+                        >
+                            &gt;
+                        </button>
+                    )}
                 </div>
+                {listing.ids && listing.ids.length > 1 && (
+                    <p style={{ textAlign: "center", marginBottom: "20px" }}>
+                        Quantity: {listing.amounts?.[currentImageIndex] ?? 1}
+                    </p>
+                )}
                 <p>Level: {listing.level}</p>
                 <p>Hashrate: {listing.hashrate}</p>
                 <p>Duration: {listing.durationDays} days</p>
@@ -117,16 +171,17 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         }}
                     />
                 </div>
-                {predictedPrice !== null && (
+                {predictedPrice !== null && (listing.hashrate ?? 0) > 10 && (
                     <p style={{ marginBottom: "20px" }}>Predicted Price: {predictedPrice} USDT</p>
                 )}
                 {error && (
                     <div style={{ color: "red", marginBottom: "20px" }}>Error: {error.message}</div>
                 )}
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
                     <button
                         onClick={handleAdjustPrice}
                         style={{
+                            flex: 1,
                             padding: "10px 20px",
                             backgroundColor: theme.buttonBackgroundColor,
                             color: theme.buttonTextColor,
@@ -140,6 +195,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     <button
                         onClick={handleCancel}
                         style={{
+                            flex: 1,
                             padding: "10px 20px",
                             backgroundColor: theme.buttonBackgroundColor,
                             color: theme.buttonTextColor,
@@ -150,19 +206,22 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     >
                         Cancel
                     </button>
-                    <button
-                        onClick={handlePredict}
-                        style={{
-                            padding: "10px 20px",
-                            backgroundColor: theme.buttonBackgroundColor,
-                            color: theme.buttonTextColor,
-                            border: "none",
-                            borderRadius: "5px",
-                            cursor: "pointer"
-                        }}
-                    >
-                        Predict
-                    </button>
+                    {listing.hashrate && listing.hashrate > 10 && (
+                        <button
+                            onClick={handlePredict}
+                            style={{
+                                flex: 1,
+                                padding: "10px 20px",
+                                backgroundColor: theme.buttonBackgroundColor,
+                                color: theme.buttonTextColor,
+                                border: "none",
+                                borderRadius: "5px",
+                                cursor: "pointer"
+                            }}
+                        >
+                            Predict
+                        </button>
+                    )}
                 </div>
                 <button
                     onClick={handleClose}
