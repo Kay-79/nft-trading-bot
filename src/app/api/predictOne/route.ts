@@ -21,7 +21,7 @@ export async function POST(request: Request) {
         return NextResponse.json({ prediction: prediction[0] });
     } catch {
         return NextResponse.json(
-            { error: "Failed to fetch MBOX price and reward data" },
+            { error: "An error occurred while processing your request." },
             { status: 500 }
         );
     }
