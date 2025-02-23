@@ -4,7 +4,7 @@ import { useTheme } from "@/config/theme";
 import Image from "next/image";
 import { shortenNumber } from "@/utils/shorten";
 import axios from "axios";
-import { useAccount } from "wagmi";
+// import { useAccount } from "wagmi";
 import { useErrorHandler } from "@/hooks/useErrorHandler";
 
 interface ListingDetailModalProps {
@@ -16,16 +16,15 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const { theme } = useTheme();
     const [price, setPrice] = useState<number>(shortenNumber(listing.nowPrice || 0, 9, 3));
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
-    const { address } = useAccount();
     const { error, handleError } = useErrorHandler();
 
     const resetError = () => {
-        handleError(null as unknown as Error); // Reset error state
+        handleError(null); // Reset error state
     };
 
     const handleAdjustPrice = async () => {
         resetError();
-        console.log("Adjusting Price", address);
+        console.log("Adjusting Price");
     };
 
     const handleCancel = () => {

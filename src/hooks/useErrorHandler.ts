@@ -3,8 +3,10 @@ import { useState } from "react";
 export const useErrorHandler = () => {
     const [error, setError] = useState<Error | null>(null);
 
-    const handleError = (error: Error) => {
-        console.error(error);
+    const handleError = (error: Error | null) => {
+        if (error) {
+            console.error(error);
+        }
         setError(error);
     };
 
