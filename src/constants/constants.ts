@@ -4,6 +4,8 @@ import { GasPrices } from "../types/gas/GasPrices";
 
 export const ENV = process.env.ENV || Environment.TESTNET; // Default TESTNET
 
+console.log("Current ENV:", ENV); // Add this line to debug the value of ENV
+
 export const TOPIC_BID = process.env.TOPIC_BID || "default_topic";
 
 export const TOPIC_CANCEL = process.env.TOPIC_CANCEL || "default_topic";

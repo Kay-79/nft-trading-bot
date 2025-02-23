@@ -4,9 +4,10 @@ import { useTheme } from "@/config/theme";
 import Image from "next/image";
 import { shortenNumber, shortenAddress } from "@/utils/shorten";
 import axios from "axios";
-// import { useAccount } from "wagmi";
 import { useErrorHandler } from "@/hooks/useErrorHandler";
 import { getBackgroundColor } from "@/utils/colorUtils";
+import { mpContractService } from "@/services/mpContract";
+import { useAccount } from "wagmi";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -19,13 +20,14 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const { error, handleError } = useErrorHandler();
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+    const { address } = useAccount();
 
     const resetError = () => {
         handleError(null); // Reset error state
     };
 
     const handleAdjustPrice = async () => {
-        resetError();
+        await mpContractService.ajustPricePro(listing, address, price);
         console.log("Adjusting Price");
     };
 
