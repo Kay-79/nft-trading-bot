@@ -6,6 +6,7 @@ import { shortenNumber } from "@/utils/shorten";
 import axios from "axios";
 // import { useAccount } from "wagmi";
 import { useErrorHandler } from "@/hooks/useErrorHandler";
+import { getBackgroundColor } from "@/utils/colorUtils";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -18,6 +19,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const { error, handleError } = useErrorHandler();
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+    const backgroundColor = getBackgroundColor(listing.prototype || 0);
 
     const resetError = () => {
         handleError(null); // Reset error state
@@ -106,7 +108,16 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                 }}
             >
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Listing Details</h2>
-                <div style={{ textAlign: "center", marginBottom: "20px", position: "relative" }}>
+                <div
+                    style={{
+                        textAlign: "center",
+                        marginBottom: "20px",
+                        position: "relative",
+                        backgroundColor: backgroundColor, // Set background color for image container
+                        padding: "10px",
+                        borderRadius: "10px"
+                    }}
+                >
                     {listing.ids && listing.ids.length > 1 && (
                         <button
                             onClick={handlePrevImage}
