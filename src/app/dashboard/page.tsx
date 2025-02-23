@@ -20,25 +20,42 @@ const DashboardPage = () => {
     const [selectedSection, setSelectedSection] = useState<"listings" | "activities" | "inventory">(
         "listings"
     );
+    const [loading, setLoading] = useState<boolean>(false);
     const { theme } = useTheme();
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const [listingsData, activitiesData, inventoryData] = await Promise.all([
-                fetch("/api/listings").then(response => response.json()),
-                fetch("/api/activities").then(response => response.json()),
-                fetch("/api/inventory").then(response => response.json())
-            ]);
-            setListings(listingsData);
-            setActivities(activitiesData);
-            setInventory(inventoryData);
-            setFilteredListings(listingsData);
-            setFilteredActivities(activitiesData);
-            setFilteredInventory(inventoryData);
-        };
+    const fetchListings = async () => {
+        setLoading(true);
+        const listingsData = await fetch("/api/listings").then(response => response.json());
+        setListings(listingsData);
+        setFilteredListings(listingsData);
+        setLoading(false);
+    };
 
-        fetchData();
-    }, []);
+    const fetchActivities = async () => {
+        setLoading(true);
+        const activitiesData = await fetch("/api/activities").then(response => response.json());
+        setActivities(activitiesData);
+        setFilteredActivities(activitiesData);
+        setLoading(false);
+    };
+
+    const fetchInventory = async () => {
+        setLoading(true);
+        const inventoryData = await fetch("/api/inventory").then(response => response.json());
+        setInventory(inventoryData);
+        setFilteredInventory(inventoryData);
+        setLoading(false);
+    };
+
+    useEffect(() => {
+        if (selectedSection === "listings" && listings.length === 0) {
+            fetchListings();
+        } else if (selectedSection === "activities" && activities.length === 0) {
+            fetchActivities();
+        } else if (selectedSection === "inventory" && inventory.length === 0) {
+            fetchInventory();
+        }
+    }, [selectedSection, activities.length, inventory.length, listings.length]);
 
     interface Filter {
         minPrice: number;
@@ -82,6 +99,10 @@ const DashboardPage = () => {
         );
     };
 
+    const handleSectionChange = (section: "listings" | "activities" | "inventory") => {
+        setSelectedSection(section);
+    };
+
     return (
         <div
             style={{
@@ -99,7 +120,7 @@ const DashboardPage = () => {
             <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <div style={{ textAlign: "center", marginBottom: "20px" }}>
                     <label
-                        onClick={() => setSelectedSection("listings")}
+                        onClick={() => handleSectionChange("listings")}
                         style={{
                             padding: "10px 20px",
                             backgroundColor:
@@ -116,7 +137,7 @@ const DashboardPage = () => {
                         Listings
                     </label>
                     <label
-                        onClick={() => setSelectedSection("activities")}
+                        onClick={() => handleSectionChange("activities")}
                         style={{
                             padding: "10px 20px",
                             backgroundColor:
@@ -133,7 +154,7 @@ const DashboardPage = () => {
                         Activities
                     </label>
                     <label
-                        onClick={() => setSelectedSection("inventory")}
+                        onClick={() => handleSectionChange("inventory")}
                         style={{
                             padding: "10px 20px",
                             backgroundColor:
@@ -150,20 +171,26 @@ const DashboardPage = () => {
                     </label>
                 </div>
                 <div style={{ flex: 1 }}>
-                    {selectedSection === "listings" && (
-                        <div style={{ marginBottom: "40px" }}>
-                            <Listings listings={filteredListings} />
-                        </div>
-                    )}
-                    {selectedSection === "activities" && (
-                        <div style={{ marginBottom: "40px" }}>
-                            <Activities activities={filteredActivities} view="list" />
-                        </div>
-                    )}
-                    {selectedSection === "inventory" && (
-                        <div>
-                            <Inventory inventory={filteredInventory} view="list" />
-                        </div>
+                    {loading ? (
+                        <div style={{ textAlign: "center", marginTop: "20px" }}>Loading...</div>
+                    ) : (
+                        <>
+                            {selectedSection === "listings" && (
+                                <div style={{ marginBottom: "40px" }}>
+                                    <Listings listings={filteredListings} />
+                                </div>
+                            )}
+                            {selectedSection === "activities" && (
+                                <div style={{ marginBottom: "40px" }}>
+                                    <Activities activities={filteredActivities} view="list" />
+                                </div>
+                            )}
+                            {selectedSection === "inventory" && (
+                                <div>
+                                    <Inventory inventory={filteredInventory} view="list" />
+                                </div>
+                            )}
+                        </>
                     )}
                 </div>
             </div>
