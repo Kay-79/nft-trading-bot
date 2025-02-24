@@ -22,6 +22,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const { error, handleError } = useErrorHandler();
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const { address } = useAccount();
+    const [showAdjustInput, setShowAdjustInput] = useState<boolean>(false);
 
     const resetError = () => {
         handleError(null); // Reset error state
@@ -30,6 +31,14 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const handleAdjustPrice = async () => {
         await mpContractService.ajustPricePro(listing, address, price);
         console.log("Adjusting Price");
+    };
+
+    const handleAdjustClick = () => {
+        if (showAdjustInput) {
+            handleAdjustPrice();
+        } else {
+            setShowAdjustInput(true);
+        }
     };
 
     const handleDelist = () => {
@@ -200,22 +209,27 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         </span>
                     </div>
                 </div>
-                <div style={{ marginBottom: "20px" }}>
-                    <label style={{ display: "block", marginBottom: "10px" }}>Price (USDT)</label>
-                    <input
-                        type="number"
-                        value={price}
-                        onChange={e => setPrice(Number(e.target.value))}
-                        style={{
-                            width: "100%",
-                            padding: "10px",
-                            borderRadius: "5px",
-                            border: `1px solid ${theme.textColor}`,
-                            backgroundColor: theme.backgroundColor,
-                            color: theme.textColor
-                        }}
-                    />
-                </div>
+                {showAdjustInput && (
+                    <div style={{ marginBottom: "20px" }}>
+                        <label style={{ display: "block", marginBottom: "10px" }}>
+                            Price (USDT)
+                        </label>
+                        <input
+                            type="number"
+                            value={price}
+                            onChange={e => setPrice(Number(e.target.value))}
+                            onWheel={e => e.currentTarget.blur()}
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                borderRadius: "5px",
+                                border: `1px solid ${theme.textColor}`,
+                                backgroundColor: theme.backgroundColor,
+                                color: theme.textColor
+                            }}
+                        />
+                    </div>
+                )}
                 {predictedPrice !== null && (listing.hashrate ?? 0) > 10 && (
                     <p style={{ marginBottom: "20px" }}>Predicted Price: {predictedPrice} USDT</p>
                 )}
@@ -225,37 +239,9 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
                     {address ? (
                         <>
-                            <button
-                                onClick={handleAdjustPrice}
-                                style={{
-                                    flex: 1,
-                                    padding: "10px 20px",
-                                    backgroundColor: theme.buttonBackgroundColor,
-                                    color: theme.buttonTextColor,
-                                    border: "none",
-                                    borderRadius: "5px",
-                                    cursor: "pointer"
-                                }}
-                            >
-                                Adjust
-                            </button>
-                            <button
-                                onClick={handleDelist}
-                                style={{
-                                    flex: 1,
-                                    padding: "10px 20px",
-                                    backgroundColor: theme.buttonBackgroundColor,
-                                    color: theme.buttonTextColor,
-                                    border: "none",
-                                    borderRadius: "5px",
-                                    cursor: "pointer"
-                                }}
-                            >
-                                Delist
-                            </button>
-                            {listing.hashrate && listing.hashrate > 10 && (
+                            {showAdjustInput ? (
                                 <button
-                                    onClick={handlePredict}
+                                    onClick={handleAdjustClick}
                                     style={{
                                         flex: 1,
                                         padding: "10px 20px",
@@ -266,8 +252,55 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                         cursor: "pointer"
                                     }}
                                 >
-                                    Predict
+                                    Confirm
                                 </button>
+                            ) : (
+                                <>
+                                    <button
+                                        onClick={handleAdjustClick}
+                                        style={{
+                                            flex: 1,
+                                            padding: "10px 20px",
+                                            backgroundColor: theme.buttonBackgroundColor,
+                                            color: theme.buttonTextColor,
+                                            border: "none",
+                                            borderRadius: "5px",
+                                            cursor: "pointer"
+                                        }}
+                                    >
+                                        Adjust
+                                    </button>
+                                    <button
+                                        onClick={handleDelist}
+                                        style={{
+                                            flex: 1,
+                                            padding: "10px 20px",
+                                            backgroundColor: theme.buttonBackgroundColor,
+                                            color: theme.buttonTextColor,
+                                            border: "none",
+                                            borderRadius: "5px",
+                                            cursor: "pointer"
+                                        }}
+                                    >
+                                        Delist
+                                    </button>
+                                    {listing.hashrate && listing.hashrate > 10 && (
+                                        <button
+                                            onClick={handlePredict}
+                                            style={{
+                                                flex: 1,
+                                                padding: "10px 20px",
+                                                backgroundColor: theme.buttonBackgroundColor,
+                                                color: theme.buttonTextColor,
+                                                border: "none",
+                                                borderRadius: "5px",
+                                                cursor: "pointer"
+                                            }}
+                                        >
+                                            Predict
+                                        </button>
+                                    )}
+                                </>
                             )}
                         </>
                     ) : (
