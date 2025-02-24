@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { useTheme } from "@/config/theme";
 import Image from "next/image";
@@ -9,7 +9,7 @@ import { getBackgroundColor } from "@/utils/colorUtils";
 import { mpContractService } from "@/services/mpContract";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
-import { AiOutlineRobot } from "react-icons/ai"; // Import AI icon
+import { RiAiGenerate2 } from "react-icons/ri";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -66,13 +66,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             handleError(error as Error);
         }
     }, [listing, resetError, handleError]);
-
-    // Trigger prediction on component mount
-    useEffect(() => {
-        if (listing.hashrate && listing.hashrate > 10) {
-            handlePredict();
-        }
-    }, [listing, handlePredict]);
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
@@ -184,17 +177,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
                     >
                         <Image src={imageSrc} alt="Avatar" width={100} height={100} priority />
-                        {listing.hashrate && listing.hashrate > 10 && (
-                            <AiOutlineRobot
-                                onClick={handlePredict}
-                                style={{
-                                    marginLeft: "10px",
-                                    cursor: "pointer",
-                                    color: theme.textColor
-                                }}
-                                size={24}
-                            />
-                        )}
                     </div>
                     {listing.ids && listing.ids.length > 1 && (
                         <button
@@ -226,11 +208,22 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         <span className="text-green-400 font-bold text-lg">
                             {shortenNumber(listing.nowPrice || 0, 9, 3)} USDT
                         </span>
-                        {predictedPrice !== null && (
-                            <span className="text-blue-400 font-bold text-lg">
-                                AI: {predictedPrice} USDT
-                            </span>
-                        )}
+                        {(listing.tokenId ?? 0) > 0 &&
+                            (predictedPrice !== null ? (
+                                <span className="text-blue-400 font-bold text-lg">
+                                    AI: {predictedPrice} USDT
+                                </span>
+                            ) : (
+                                <RiAiGenerate2
+                                    onClick={handlePredict}
+                                    style={{
+                                        marginLeft: "10px",
+                                        cursor: "pointer",
+                                        color: theme.textColor
+                                    }}
+                                    size={24}
+                                />
+                            ))}
                     </div>
                 </div>
                 {showAdjustInput && (
