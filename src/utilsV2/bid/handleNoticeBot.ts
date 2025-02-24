@@ -65,7 +65,7 @@ export const noticeProfitAuction = async (
     const amount = bidAuction.type === BidType.PRO ? `\nAmount: ${bidAuction.amount}` : "";
     const tokenId =
         bidAuction.type === BidType.PRO ? `\nTokenId: ${bidAuction.auctions[0].tokenId}` : "";
-    const txInfo = txHash ? `\nTx info: [here](${EXPLORER_URL}${txHash})` : "";
+    const txInfo = txHash ? `\nTx info: [here](${EXPLORER_URL}/tx/${txHash})` : "";
     const message = `${status}${profit}${bidType}${totalPrice}${amounts}${amount}${ids}${tokenId}${txInfo}`;
     await noticeBot(message);
 };

@@ -21,7 +21,7 @@ export const TOPPICS: string[] = [TOPIC_BID, TOPIC_CANCEL, TOPIC_CHANGE, TOPIC_H
 export const API_MOBOX = "https://nftapi.mobox.io";
 
 export const EXPLORER_URL =
-    ENV === Environment.MAINNET ? "https://bscscan.com/tx/" : "https://testnet.bscscan.com/tx/";
+    ENV === Environment.MAINNET ? "https://bscscan.com" : "https://testnet.bscscan.com";
 
 export const API_TELEGRAM = process.env.API_TELEGRAM || "default_api";
 
