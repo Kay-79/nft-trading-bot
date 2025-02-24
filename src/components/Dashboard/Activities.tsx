@@ -1,5 +1,6 @@
 import React from "react";
 import { RecentSold } from "@/types/dtos/RecentSold.dto";
+import ActivityRow from "@/components/Row/ActivityRow";
 
 interface ActivitiesProps {
     activities: RecentSold[];
@@ -17,22 +18,7 @@ const Activities: React.FC<ActivitiesProps> = ({ activities, view }) => {
             }}
         >
             {activities.map((activity, index) => (
-                <div
-                    key={`${activity.tx}-${index}`}
-                    style={{
-                        padding: "20px",
-                        border: "1px solid #ccc",
-                        borderRadius: "10px",
-                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                        width: view === "list" ? "100%" : "calc(33.333% - 20px)"
-                    }}
-                >
-                    <h3>{activity.auctor}</h3>
-                    <p>Bidder: {activity.bidder}</p>
-                    <p>Bid Price: {activity.bidPrice}</p>
-                    <p>Transaction: {activity.tx}</p>
-                    {/* Add more fields as needed */}
-                </div>
+                <ActivityRow key={`${activity.tx}-${index}`} activity={activity} />
             ))}
         </div>
     );
