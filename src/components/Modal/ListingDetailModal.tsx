@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { useTheme } from "@/config/theme";
 import Image from "next/image";
@@ -9,6 +9,7 @@ import { getBackgroundColor } from "@/utils/colorUtils";
 import { mpContractService } from "@/services/mpContract";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
+import { AiOutlineRobot } from "react-icons/ai"; // Import AI icon
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -24,9 +25,9 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const { address } = useAccount();
     const [showAdjustInput, setShowAdjustInput] = useState<boolean>(false);
 
-    const resetError = () => {
+    const resetError = useCallback(() => {
         handleError(null); // Reset error state
-    };
+    }, [handleError]);
 
     const handleAdjustPrice = async () => {
         await mpContractService.ajustPricePro(listing, address, price);
@@ -50,7 +51,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         }
     };
 
-    const handlePredict = async () => {
+    const handlePredict = useCallback(async () => {
         resetError();
         try {
             const response = await axios.post("/api/predictOne", {
@@ -64,7 +65,14 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         } catch (error) {
             handleError(error as Error);
         }
-    };
+    }, [listing, resetError, handleError]);
+
+    // Trigger prediction on component mount
+    useEffect(() => {
+        if (listing.hashrate && listing.hashrate > 10) {
+            handlePredict();
+        }
+    }, [listing, handlePredict]);
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
@@ -176,6 +184,17 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
                     >
                         <Image src={imageSrc} alt="Avatar" width={100} height={100} priority />
+                        {listing.hashrate && listing.hashrate > 10 && (
+                            <AiOutlineRobot
+                                onClick={handlePredict}
+                                style={{
+                                    marginLeft: "10px",
+                                    cursor: "pointer",
+                                    color: theme.textColor
+                                }}
+                                size={24}
+                            />
+                        )}
                     </div>
                     {listing.ids && listing.ids.length > 1 && (
                         <button
@@ -207,6 +226,11 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         <span className="text-green-400 font-bold text-lg">
                             {shortenNumber(listing.nowPrice || 0, 9, 3)} USDT
                         </span>
+                        {predictedPrice !== null && (
+                            <span className="text-blue-400 font-bold text-lg">
+                                AI: {predictedPrice} USDT
+                            </span>
+                        )}
                     </div>
                 </div>
                 {showAdjustInput && (
@@ -229,9 +253,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                             }}
                         />
                     </div>
-                )}
-                {predictedPrice !== null && (listing.hashrate ?? 0) > 10 && (
-                    <p style={{ marginBottom: "20px" }}>Predicted Price: {predictedPrice} USDT</p>
                 )}
                 {error && (
                     <div style={{ color: "red", marginBottom: "20px" }}>Error: {error.message}</div>
@@ -284,22 +305,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                     >
                                         Delist
                                     </button>
-                                    {listing.hashrate && listing.hashrate > 10 && (
-                                        <button
-                                            onClick={handlePredict}
-                                            style={{
-                                                flex: 1,
-                                                padding: "10px 20px",
-                                                backgroundColor: theme.buttonBackgroundColor,
-                                                color: theme.buttonTextColor,
-                                                border: "none",
-                                                borderRadius: "5px",
-                                                cursor: "pointer"
-                                            }}
-                                        >
-                                            Predict
-                                        </button>
-                                    )}
                                 </>
                             )}
                         </>
