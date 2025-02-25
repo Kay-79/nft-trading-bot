@@ -5,12 +5,12 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider, darkTheme, lightTheme, Theme } from "@rainbow-me/rainbowkit";
 import { wagmiConfig } from "./wagmi";
-import { ThemeContext, customDarkTheme, ThemeConfig } from "@/config/theme";
+import { ThemeContext, customDarkTheme, customLightTheme, ThemeConfig } from "@/config/theme";
 
 const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
-    const [theme, setTheme] = useState<ThemeConfig>(customDarkTheme);
+    const [theme, setTheme] = useState<ThemeConfig>(customDarkTheme || customLightTheme);
 
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme");

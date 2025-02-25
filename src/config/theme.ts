@@ -72,4 +72,4 @@ export const ThemeContext = createContext<ThemeContextProps>({
     setTheme: () => {} // Dummy function
 });
 
-export const useTheme = () => useContext(ThemeContext);
+export const useTheme = (): ThemeContextProps => useContext(ThemeContext);

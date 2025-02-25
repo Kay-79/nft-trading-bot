@@ -75,11 +75,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         }
     };
 
-    // const handleClose = () => {
-    //     onClose();
-    //     resetError();
-    // };
-
     const handleNextImage = () => {
         setCurrentImageIndex(prevIndex => (prevIndex + 1) % (listing.ids?.length ?? 1));
     };
