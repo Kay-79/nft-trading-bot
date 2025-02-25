@@ -9,6 +9,10 @@ export interface ThemeConfig {
     textColor: string;
     buttonBackgroundColor: string;
     buttonTextColor: string;
+    primaryButtonBackgroundColor: string; // New property for primary button background color
+    primaryButtonTextColor: string; // New property for primary button text color
+    secondaryButtonBackgroundColor: string; // New property for secondary button background color
+    secondaryButtonTextColor: string; // New property for secondary button text color
     headerBackgroundColor?: string;
     headerTextColor?: string;
     footerBackgroundColor?: string;
@@ -23,6 +27,10 @@ export const customLightTheme: ThemeConfig = {
     textColor: "#2c3e50", // Dark Grey
     buttonBackgroundColor: "#1abc9c", // New Button Background Color (Turquoise)
     buttonTextColor: "#ffffff", // White
+    primaryButtonBackgroundColor: "#007bff", // Slightly Blue
+    primaryButtonTextColor: "#ffffff", // White
+    secondaryButtonBackgroundColor: "transparent", // Transparent
+    secondaryButtonTextColor: "#dc3545", // Slightly Red
     headerBackgroundColor: "#3498db", // Blue
     headerTextColor: "#ffffff", // White
     footerBackgroundColor: "#3498db", // Blue
@@ -35,8 +43,12 @@ export const customDarkTheme: ThemeConfig = {
     secondaryColor: "#27ae60", // Dark Green
     backgroundColor: "#2c3e50", // Dark Grey
     textColor: "#ecf0f1", // Light Grey
-    buttonBackgroundColor: "#16a085", // New Button Background Color (Dark Turquoise)
+    buttonBackgroundColor: "#66a085", // New Button Background Color (Dark Turquoise)
     buttonTextColor: "#ffffff", // White
+    primaryButtonBackgroundColor: "#0056b3", // Slightly Dark Blue
+    primaryButtonTextColor: "#ffffff", // White
+    secondaryButtonBackgroundColor: "transparent", // Transparent
+    secondaryButtonTextColor: "#c82333", // Slightly Dark Red
     headerBackgroundColor: "#2980b9", // Dark Blue
     headerTextColor: "#ffffff", // White
     footerBackgroundColor: "#2980b9", // Dark Blue

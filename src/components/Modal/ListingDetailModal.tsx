@@ -10,6 +10,8 @@ import { mpContractService } from "@/services/mpContract";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
 import { RiAiGenerate2 } from "react-icons/ri";
+import PrimaryButton from "@/components/Button/PrimaryButton";
+import SecondaryButton from "@/components/Button/SecondaryButton";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -254,50 +256,17 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     {address ? (
                         <>
                             {showAdjustInput ? (
-                                <button
-                                    onClick={handleAdjustClick}
-                                    style={{
-                                        flex: 1,
-                                        padding: "10px 20px",
-                                        backgroundColor: theme.buttonBackgroundColor,
-                                        color: theme.buttonTextColor,
-                                        border: "none",
-                                        borderRadius: "5px",
-                                        cursor: "pointer"
-                                    }}
-                                >
+                                <PrimaryButton onClick={handleAdjustClick} style={{ flex: 1 }}>
                                     Confirm
-                                </button>
+                                </PrimaryButton>
                             ) : (
                                 <>
-                                    <button
-                                        onClick={handleAdjustClick}
-                                        style={{
-                                            flex: 1,
-                                            padding: "10px 20px",
-                                            backgroundColor: theme.buttonBackgroundColor,
-                                            color: theme.buttonTextColor,
-                                            border: "none",
-                                            borderRadius: "5px",
-                                            cursor: "pointer"
-                                        }}
-                                    >
+                                    <PrimaryButton onClick={handleAdjustClick} style={{ flex: 1 }}>
                                         Adjust
-                                    </button>
-                                    <button
-                                        onClick={handleDelist}
-                                        style={{
-                                            flex: 1,
-                                            padding: "10px 20px",
-                                            backgroundColor: theme.buttonBackgroundColor,
-                                            color: theme.buttonTextColor,
-                                            border: "none",
-                                            borderRadius: "5px",
-                                            cursor: "pointer"
-                                        }}
-                                    >
+                                    </PrimaryButton>
+                                    <SecondaryButton onClick={handleDelist} style={{ flex: 1 }}>
                                         Delist
-                                    </button>
+                                    </SecondaryButton>
                                 </>
                             )}
                         </>
