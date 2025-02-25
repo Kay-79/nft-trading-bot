@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Image from "next/image";
-// import { FiShoppingCart } from "react-icons/fi";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import ListingDetailModal from "@/components/Modal/ListingDetailModal";
@@ -14,13 +13,13 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const backgroundColor = getBackgroundColor(listing.prototype || 0);
 
-    const handleClick = () => {
+    const handleClick = useCallback(() => {
         setIsModalOpen(true);
-    };
+    }, []);
 
-    const handleCloseModal = () => {
+    const handleCloseModal = useCallback(() => {
         setIsModalOpen(false);
-    };
+    }, []);
 
     return (
         <>
@@ -67,10 +66,6 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
                     <span className="text-green-400 font-bold text-lg">
                         {shortenNumber(listing.nowPrice || 0, 9, 3)} USDT
                     </span>
-                    {/* <button className="bg-green-500 text-black p-2 rounded-full hover:bg-green-600">
-                        <FiShoppingCart size={20} />
-                    </button> */}
-
                 </div>
 
                 {/* Item Count */}
@@ -104,4 +99,4 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
     );
 };
 
-export default ListingCard;
+export default React.memo(ListingCard);
