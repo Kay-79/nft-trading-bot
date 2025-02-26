@@ -40,6 +40,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         if (showAdjustInput) {
             handleAdjustPrice();
         } else {
+            setPrice(predictedPrice ?? 0); // Set default price
             setShowAdjustInput(true);
         }
     };
@@ -147,7 +148,12 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                             </span>
                         </span>
                         <div className="text-right">
-                            <p className="text-lg font-bold" style={{ color: customDarkTheme.textColor }}>{listing.lvHashrate}</p>
+                            <p
+                                className="text-lg font-bold"
+                                style={{ color: customDarkTheme.textColor }}
+                            >
+                                {listing.lvHashrate}
+                            </p>
                             <p className="text-xs" style={{ color: customDarkTheme.textColor }}>
                                 {(listing.hashrate || 0) > 5 ? `Lv. 1 - ${listing.hashrate}` : ""}
                             </p>
