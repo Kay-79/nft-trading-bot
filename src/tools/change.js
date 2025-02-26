@@ -452,4 +452,4 @@ if (configJson.minDecreasePrice > 0.2) {
     console.warn("minDecreasePrice must be greater than 0.2");
     exit();
 }
-loopCheck(5000);
+loopCheck(1);
