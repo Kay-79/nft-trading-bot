@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
-import { useTheme } from "@/config/theme";
+import { customDarkTheme, useTheme } from "@/config/theme";
 import Image from "next/image";
 import { shortenNumber, shortenAddress } from "@/utils/shorten";
 import axios from "axios";
@@ -147,8 +147,8 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                             </span>
                         </span>
                         <div className="text-right">
-                            <p className="text-lg font-bold">{listing.lvHashrate}</p>
-                            <p className="text-xs text-gray-300">
+                            <p className="text-lg font-bold" style={{ color: customDarkTheme.textColor }}>{listing.lvHashrate}</p>
+                            <p className="text-xs" style={{ color: customDarkTheme.textColor }}>
                                 {(listing.hashrate || 0) > 5 ? `Lv. 1 - ${listing.hashrate}` : ""}
                             </p>
                         </div>
@@ -164,7 +164,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                 backgroundColor: "transparent",
                                 border: "none",
                                 cursor: "pointer",
-                                color: theme.textColor
+                                color: customDarkTheme.textColor
                             }}
                         >
                             &lt;
@@ -186,19 +186,33 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                 backgroundColor: "transparent",
                                 border: "none",
                                 cursor: "pointer",
-                                color: theme.textColor
+                                color: customDarkTheme.textColor
                             }}
                         >
                             &gt;
                         </button>
                     )}
                     {listing.ids && listing.ids.length > 1 && (
-                        <p style={{ textAlign: "center", marginBottom: "20px" }}>
+                        <p
+                            style={{
+                                textAlign: "center",
+                                marginBottom: "20px",
+                                color: customDarkTheme.textColor
+                            }}
+                        >
                             Quantity: {listing.amounts?.[currentImageIndex] ?? 1}
                         </p>
                     )}
-                    <p className="text-center text-lg font-semibold">{prototype}</p>
-                    <p className="text-center text-lg font-semibold">
+                    <p
+                        className="text-center text-lg font-semibold"
+                        style={{ color: customDarkTheme.textColor }}
+                    >
+                        {prototype}
+                    </p>
+                    <p
+                        className="text-center text-lg font-semibold"
+                        style={{ color: customDarkTheme.textColor }}
+                    >
                         {shortenAddress(listing.auctor || "")}
                     </p>
                     <div className="flex justify-between items-center mt-4">
@@ -216,7 +230,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                     style={{
                                         marginLeft: "10px",
                                         cursor: "pointer",
-                                        color: theme.textColor
+                                        color: customDarkTheme.textColor
                                     }}
                                     size={24}
                                 />
