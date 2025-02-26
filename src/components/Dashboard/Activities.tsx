@@ -21,7 +21,7 @@ const Activities: React.FC<ActivitiesProps> = ({ activities, view }) => {
                     minWidth: "400px"
                 }}
             >
-                <span style={{ flex: 3 }}>Item</span>
+                <span style={{ flex: 3 }}>Items</span>
                 <span style={{ flex: 2 }}>Buyer</span>
                 <span style={{ flex: 2 }}>Seller</span>
                 <span style={{ flex: 2 }}>Price</span>
