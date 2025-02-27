@@ -35,11 +35,14 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
     return (
         <div
             style={{
+                position: "fixed", // Make the panel fixed
+                top: "20px", // Adjust the top position as needed
+                left: "20px", // Adjust the left position as needed
+                width: "250px", // Set a fixed width
                 backgroundColor: theme.backgroundColor,
                 color: theme.textColor,
                 padding: "20px",
                 borderRadius: "10px",
-                marginBottom: "20px",
                 boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)"
             }}
         >

@@ -10,9 +10,7 @@ export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDt
         );
         const auctionsList = data?.data?.list || [];
         console.log(`Get new auctions: ${auctionsList.length}`);
-        let count = 0;
         auctionsList.forEach((auction: AuctionDto) => {
-            console.log(count++);
             if (
                 auction.index !== undefined &&
                 auction.index !== null &&
@@ -22,7 +20,6 @@ export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDt
             ) {
                 newAuctions.push(auction);
                 cacheIdsCheck.push(auction.index + auction.uptime + auction.auctor);
-                console.log(`New auction: ${count}`);
             }
         });
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

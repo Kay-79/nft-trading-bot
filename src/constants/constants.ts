@@ -199,6 +199,4 @@ export const PORT_HOST_DATASET = 3004;
 
 export const API_AI_PRICE_PREDICT_FOR_BOT = `http://${IP_AI_PREDICT}:5000/predict`;
 
-// export const API_AI_PRICE_PREDICT = "http://192.168.1.11:5000/predict";
-
 export const API_AI_PRICE_PREDICT = "http://localhost:5000/predict";

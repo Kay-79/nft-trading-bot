@@ -108,16 +108,15 @@ const DashboardPage = () => {
         <div
             style={{
                 padding: "20px",
+                paddingLeft: "290px", // Adjust padding to accommodate the fixed FilterPanel
                 backgroundColor: theme.backgroundColor,
                 color: theme.textColor,
-                minHeight: "100vh", // Ensure the container takes up the full height of the viewport
+                minHeight: "100vh",
                 display: "flex",
-                flexDirection: "row"
+                flexDirection: "column"
             }}
         >
-            <div style={{ width: "250px", marginRight: "20px" }}>
-                <FilterPanel applyFilter={applyFilter} />
-            </div>
+            <FilterPanel applyFilter={applyFilter} />
             <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <div style={{ textAlign: "center", marginBottom: "20px" }}>
                     <label
