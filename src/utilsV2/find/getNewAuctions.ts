@@ -9,15 +9,20 @@ export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDt
             `${API_MOBOX}/auction/search_v2/BNB?page=1&limit=${25}&category=&vType=&sort=-time&pType=`
         );
         const auctionsList = data?.data?.list || [];
+        console.log(`Get new auctions: ${auctionsList.length}`);
+        let count = 0;
         auctionsList.forEach((auction: AuctionDto) => {
+            console.log(count++);
             if (
-                auction.index &&
+                auction.index !== undefined &&
+                auction.index !== null &&
                 auction.uptime &&
                 auction.auctor &&
                 !cacheIdsCheck.includes(auction.index + auction.uptime + auction.auctor) // Cant use tx for check new auction (batch auction same tx)
             ) {
                 newAuctions.push(auction);
                 cacheIdsCheck.push(auction.index + auction.uptime + auction.auctor);
+                console.log(`New auction: ${count}`);
             }
         });
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
