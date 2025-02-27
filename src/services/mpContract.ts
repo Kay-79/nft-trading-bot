@@ -4,7 +4,7 @@ import { wagmiConfig } from "@/app/wagmi";
 import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { ethers } from "ethers";
-import { ENV, MP_ADDRESS, PRO_BUYER } from "@/constants/constants";
+import { MP_ADDRESS } from "@/constants/constants";
 
 const transfer = async (from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
@@ -28,20 +28,16 @@ const transfer = async (from: string, to: string, amount: number) => {
     });
 };
 
-const ajustPricePro = async (
-    listing: AuctionDto,
+const ajustPrice = async (
+    listing: AuctionDto, // useAccount()
     from: `0x${string}` | undefined,
     newPrice: number
 ) => {
     if (!wagmiConfig) {
         throw new Error("wagmiConfig is null");
     }
-    console.log("Current env:", ENV);
-    if (from?.toLocaleLowerCase() !== PRO_BUYER.toLocaleLowerCase()) {
-        console.log(from);
-        console.log(PRO_BUYER);
-        console.log(MP_ADDRESS);
-        throw new Error("You are not the owner of the listing");
+    if (from?.toLocaleLowerCase() !== (listing.auctor || "").toLocaleLowerCase()) {
+        throw new Error("You are not the owner of the listing!");
     }
     const price = ethers.parseUnits(newPrice.toString(), 18);
     return await writeContract(wagmiConfig, {
@@ -54,5 +50,5 @@ const ajustPricePro = async (
 
 export const mpContractService = {
     transfer,
-    ajustPricePro
+    ajustPrice
 };

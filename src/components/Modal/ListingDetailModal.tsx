@@ -32,7 +32,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     }, [handleError]);
 
     const handleAdjustPrice = async () => {
-        await mpContractService.ajustPricePro(listing, address, price);
+        await mpContractService.ajustPrice(listing, address, price);
         console.log("Adjusting Price");
     };
 
@@ -249,9 +249,15 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                             Price (USDT)
                         </label>
                         <input
-                            type="number"
-                            value={price}
-                            onChange={e => setPrice(Number(e.target.value))}
+                            type="text"
+                            value={price || ""}
+                            placeholder="0"
+                            onChange={e => {
+                                const value = e.target.value;
+                                if (!isNaN(Number(value)) || value === "") {
+                                    setPrice(Number(value));
+                                }
+                            }}
                             onWheel={e => e.currentTarget.blur()}
                             style={{
                                 width: "100%",
