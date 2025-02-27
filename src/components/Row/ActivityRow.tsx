@@ -1,16 +1,27 @@
-import React, { JSX } from "react";
+import React, { JSX, useState } from "react";
 import Image from "next/image";
 import { RecentSold } from "@/types/dtos/RecentSold.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import { FaExternalLinkAlt } from "react-icons/fa";
 import { EXPLORER_URL } from "@/constants/constants";
 import { getBackgroundColor } from "@/utils/colorUtils";
+import HoverOnShowActivitiesDetail from "@/components/Hover/HoverOnShowActivitiesDetail";
 
 interface ActivityRowProps {
     activity: RecentSold;
 }
 
 const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
+    const [hoveredItem, setHoveredItem] = useState<number | null>(null);
+
+    const handleMouseEnter = (index: number) => {
+        setHoveredItem(index);
+    };
+
+    const handleMouseLeave = () => {
+        setHoveredItem(null);
+    };
+
     const renderImages = () => {
         const images: JSX.Element[] = [];
         if (activity.ids && activity.ids.length > 0) {
@@ -31,6 +42,8 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                             alignItems: "center",
                             justifyContent: "center"
                         }}
+                        onMouseEnter={() => handleMouseEnter(index)}
+                        onMouseLeave={handleMouseLeave}
                     >
                         <span
                             style={{
@@ -55,6 +68,19 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                             height={40}
                             priority
                         />
+                        {hoveredItem === index && (
+                            <div
+                                style={{ position: "absolute", top: "0", left: "100%", zIndex: 10 }}
+                            >
+                                <HoverOnShowActivitiesDetail
+                                    item={{
+                                        prototype: Number(id),
+                                        level: 1,
+                                        tokenId: Number(id)
+                                    }}
+                                />
+                            </div>
+                        )}
                     </div>
                 );
             });
@@ -76,6 +102,8 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                             alignItems: "center",
                             justifyContent: "center"
                         }}
+                        onMouseEnter={() => handleMouseEnter(index)}
+                        onMouseLeave={handleMouseLeave}
                     >
                         <Image
                             src={`/images/MOMO/${token.prototype}.png`}
@@ -84,6 +112,13 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                             height={40}
                             priority
                         />
+                        {hoveredItem === index && (
+                            <div
+                                style={{ position: "absolute", top: "0", left: "100%", zIndex: 10 }}
+                            >
+                                <HoverOnShowActivitiesDetail item={token} />
+                            </div>
+                        )}
                     </div>
                 );
             });

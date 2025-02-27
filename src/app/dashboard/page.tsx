@@ -10,6 +10,7 @@ import { Momo721 } from "@/types/dtos/Momo721";
 import { useTheme } from "@/config/theme";
 import FilterPanel from "@/components/Dashboard/FilterPanel";
 import Loading from "@/components/Loading/Loading";
+import { shortenNumber } from "@/utils/shorten";
 
 const DashboardPage = () => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
@@ -69,7 +70,7 @@ const DashboardPage = () => {
     const applyFilter = (filter: Filter) => {
         setFilteredListings(
             listings
-                .filter(listing => (listing.nowPrice || 0) >= filter.minPrice)
+                .filter(listing => shortenNumber(listing.nowPrice || 0, 9, 3) >= filter.minPrice)
                 .filter(listing => (listing.hashrate || 0) >= filter.minHashrate)
                 .filter(listing => (listing.prototype || 0).toString().includes(filter.search))
                 .sort((a, b) => {

@@ -50,10 +50,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
             <div style={{ marginBottom: "20px" }}>
                 <label style={{ display: "block", marginBottom: "10px" }}>Minimum Price</label>
                 <input
-                    type="number"
-                    value={minPrice}
-                    onChange={e => setMinPrice(Number(e.target.value))}
+                    type="text"
+                    value={minPrice || ""}
+                    onChange={e => {
+                        const value = e.target.value;
+                        if (!isNaN(Number(value)) || value === "") {
+                            setMinPrice(Number(value));
+                        }
+                    }}
                     onWheel={e => e.currentTarget.blur()} // Disable scroll wheel input change
+                    placeholder="0" // Add placeholder
                     style={{
                         width: "100%",
                         padding: "10px",
@@ -67,10 +73,16 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
             <div style={{ marginBottom: "20px" }}>
                 <label style={{ display: "block", marginBottom: "10px" }}>Minimum Hashrate</label>
                 <input
-                    type="number"
-                    value={minHashrate}
-                    onChange={e => setMinHashrate(Number(e.target.value))}
+                    type="text"
+                    value={minHashrate || ""}
+                    onChange={e => {
+                        const value = e.target.value;
+                        if (!isNaN(Number(value)) || value === "") {
+                            setMinHashrate(Number(value));
+                        }
+                    }}
                     onWheel={e => e.currentTarget.blur()} // Disable scroll wheel input change
+                    placeholder="0" // Add placeholder
                     style={{
                         width: "100%",
                         padding: "10px",
