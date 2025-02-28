@@ -2,6 +2,7 @@ import React from "react";
 import { Momo721 } from "@/types/dtos/Momo721";
 import { useTheme } from "@/config/theme";
 import Image from "next/image";
+import { RiCloseLine } from "react-icons/ri";
 
 interface InventoryDetailModalProps {
     item: Momo721;
@@ -40,9 +41,25 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                     padding: "20px",
                     borderRadius: "10px",
                     width: "80%",
-                    maxWidth: "500px"
+                    maxWidth: "500px",
+                    position: "relative" // Add relative positioning for the close button
                 }}
             >
+                <button
+                    onClick={onClose}
+                    style={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        backgroundColor: "transparent",
+                        border: "none",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        color: theme.textColor
+                    }}
+                >
+                    <RiCloseLine size={24} /> {/* Use the close icon */}
+                </button>
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Inventory Details</h2>
                 <div style={{ textAlign: "center", marginBottom: "20px" }}>
                     <Image

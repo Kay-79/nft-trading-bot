@@ -9,7 +9,7 @@ import { getBackgroundColor } from "@/utils/colorUtils";
 import { mpContractService } from "@/services/mpContract";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
-import { RiAiGenerate2 } from "react-icons/ri";
+import { RiAiGenerate2, RiCloseLine } from "react-icons/ri";
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import SecondaryButton from "@/components/Button/SecondaryButton";
 
@@ -124,9 +124,25 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     padding: "20px",
                     borderRadius: "10px",
                     width: "80%",
-                    maxWidth: "500px"
+                    maxWidth: "500px",
+                    position: "relative" // Add relative positioning for the close button
                 }}
             >
+                <button
+                    onClick={onClose}
+                    style={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        backgroundColor: "transparent",
+                        border: "none",
+                        fontSize: "20px",
+                        cursor: "pointer",
+                        color: theme.textColor
+                    }}
+                >
+                    <RiCloseLine size={24} /> {/* Use the close icon */}
+                </button>
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Listing Details</h2>
                 <div
                     style={{
