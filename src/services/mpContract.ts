@@ -17,24 +17,30 @@ const transfer = async (from: string, to: string, amount: number) => {
         functionName: "balanceOf",
         args: [from]
     });
-    if (balance ?? 0 < amount) {
+    const decimals = (await readContract(wagmiConfig, {
+        abi: abiERC20,
+        address: "0x190B955CE93deDACA9E3Dcc06BF19BF025B194C6",
+        functionName: "decimals"
+    })) as number;
+    const amountInWei = ethers.parseUnits(amount.toString(), decimals.toString());
+    if (balance ?? 0 < amountInWei) {
         throw new Error("Insufficient balance");
     }
     return await writeContract(wagmiConfig, {
         abi: abiERC20,
         address: "0x190B955CE93deDACA9E3Dcc06BF19BF025B194C6",
         functionName: "transfer",
-        args: [to, amount]
+        args: [to, amountInWei]
     });
 };
 
-const ajustPrice = async (
-    listing: AuctionDto, // useAccount()
-    from: `0x${string}` | undefined,
+const changePrice = async (
+    listing: AuctionDto,
+    from: `0x${string}` | undefined, // useAccount()
     newPrice: number
 ) => {
     if (!wagmiConfig) {
-        throw new Error("wagmiConfig is null");
+        throw new Error("Please connect your wallet first!");
     }
     if (from?.toLocaleLowerCase() !== (listing.auctor || "").toLocaleLowerCase()) {
         throw new Error("You are not the owner of the listing!");
@@ -50,5 +56,5 @@ const ajustPrice = async (
 
 export const mpContractService = {
     transfer,
-    ajustPrice
+    changePrice
 };

@@ -32,7 +32,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     }, [handleError]);
 
     const handleAdjustPrice = async () => {
-        await mpContractService.ajustPrice(listing, address, price);
+        await mpContractService.changePrice(listing, address, price);
         console.log("Adjusting Price");
     };
 
