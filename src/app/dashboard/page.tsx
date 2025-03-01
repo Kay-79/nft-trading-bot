@@ -11,6 +11,7 @@ import { useTheme } from "@/config/theme";
 import FilterPanel from "@/components/Dashboard/FilterPanel";
 import Loading from "@/components/Loading/Loading";
 import { shortenNumber } from "@/utils/shorten";
+import { FaArrowUp } from "react-icons/fa"; // Added FaArrowUp import
 
 const DashboardPage = () => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
@@ -24,6 +25,7 @@ const DashboardPage = () => {
     );
     const [loading, setLoading] = useState<boolean>(false);
     const { theme } = useTheme();
+    const [showScrollTop, setShowScrollTop] = useState<boolean>(false); // Added state for scroll top button
 
     const fetchListings = async () => {
         setLoading(true);
@@ -58,6 +60,18 @@ const DashboardPage = () => {
             fetchInventory();
         }
     }, [selectedSection, activities.length, inventory.length, listings.length]);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setShowScrollTop(window.scrollY > 200);
+        };
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
     interface Filter {
         minPrice: number;
@@ -195,6 +209,29 @@ const DashboardPage = () => {
                     )}
                 </div>
             </div>
+            {showScrollTop && (
+                <button
+                    onClick={scrollToTop}
+                    style={{
+                        position: "fixed",
+                        bottom: "50px",
+                        right: "10px",
+                        backgroundColor: theme.buttonBackgroundColor,
+                        color: theme.textColor,
+                        border: "none",
+                        borderRadius: "50%",
+                        width: "40px",
+                        height: "40px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        cursor: "pointer",
+                        boxShadow: "0 2px 10px rgba(0, 0, 0, 0.2)"
+                    }}
+                >
+                    <FaArrowUp />
+                </button>
+            )}
         </div>
     );
 };

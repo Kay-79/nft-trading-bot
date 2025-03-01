@@ -2,7 +2,7 @@ import React, { JSX, useState } from "react";
 import Image from "next/image";
 import { RecentSold } from "@/types/dtos/RecentSold.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { FaExternalLinkAlt, FaUsers } from "react-icons/fa"; // Added FaUsers import
 import { EXPLORER_URL } from "@/constants/constants";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import HoverOnShowActivitiesDetail from "@/components/Hover/HoverOnShowActivitiesDetail";
@@ -24,6 +24,36 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
 
     const renderImages = () => {
         const images: JSX.Element[] = [];
+        const renderIcon = () => {
+            if (activity.type === 1) {
+                return (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "-10px",
+                            right: "15px",
+                            width: "15px",
+                            height: "15px",
+                            borderRadius: "50%",
+                            backgroundColor: "black",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 2
+                        }}
+                    >
+                        <FaUsers
+                            style={{
+                                color: "white",
+                                fontSize: "12px"
+                            }}
+                        />
+                    </div>
+                );
+            }
+            return null;
+        };
+
         if (activity.ids && activity.ids.length > 0) {
             activity.ids.forEach((id, index) => {
                 if (index > 0 && index % 6 === 0) {
@@ -45,6 +75,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                         onMouseEnter={() => handleMouseEnter(index)}
                         onMouseLeave={handleMouseLeave}
                     >
+                        {renderIcon()}
                         <span
                             style={{
                                 position: "absolute",
@@ -105,6 +136,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                         onMouseEnter={() => handleMouseEnter(index)}
                         onMouseLeave={handleMouseLeave}
                     >
+                        {renderIcon()}
                         <Image
                             src={`/images/MOMO/${token.prototype}.png`}
                             alt={`MOMO ${token.prototype}`}
