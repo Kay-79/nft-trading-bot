@@ -21,7 +21,7 @@ def load_data(file_path):
         return None
 
 
-file_path = "./src/AI/data/moboxDatasets.json"
+file_path = "./src/AI/data/datasets.json"
 data = load_data(file_path)
 
 X = np.array([d["input"] for d in data])

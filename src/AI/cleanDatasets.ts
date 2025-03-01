@@ -3,7 +3,7 @@ import { newbieBidders, proBidders, newbieAucthors } from "@/config/config";
 import { ethers } from "ethers";
 
 export const cleanDatasets = async () => {
-    const filePath = "./src/AI/data/moboxDatasets.json";
+    const filePath = "./src/AI/data/datasets.json";
     let existingData = [];
     if (fs.existsSync(filePath)) {
         const fileContent = fs.readFileSync(filePath, "utf-8");
@@ -20,8 +20,8 @@ export const cleanDatasets = async () => {
             bidTime: number;
             listTime: number;
         }) => {
-            const bidderAddress = ethers.getAddress(dataset.bidder.trim()); // Chuẩn hóa bidder address
-            const auctorAddress = ethers.getAddress(dataset.auctor.trim()); // Chuẩn hóa aucthor address
+            const bidderAddress = ethers.getAddress(dataset.bidder.trim());
+            const auctorAddress = ethers.getAddress(dataset.auctor.trim());
             const isNotnewbieAuctor = !newbieAuctorsNormalized.has(auctorAddress);
             const isNotProTrader = !proTradersNormalized.has(bidderAddress);
             const isNotnewbieTrader = !newbieTradersNormalized.has(bidderAddress);

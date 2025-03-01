@@ -4,7 +4,7 @@ import fs from "fs";
 import path from "path";
 
 const API_URL = `http://${IP_MAC}:${PORT_HOST_DATASET}/dataset`;
-const OUTPUT_FILE = "./src/AI/data/moboxDatasets.json";
+const OUTPUT_FILE = "./src/AI/data/datasets.json";
 
 const fetchAndSaveDataset = async () => {
     try {
