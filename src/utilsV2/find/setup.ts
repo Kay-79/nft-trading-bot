@@ -1,5 +1,5 @@
 import { TierPrice } from "../../types/common/TierPrice";
-import { SetupFind } from "../../types/find/SetupFind";
+import { SetupBot } from "../../types/common/SetupBot";
 import { sleep } from "../common/sleep";
 import { getPriceMboxOnChain } from "../pancakeSwap/router";
 import { stakingUtils } from "../staking/utils";
@@ -10,7 +10,7 @@ export const setup = async (
     cacheTierPrice: TierPrice,
     cacheMboxPrice: number,
     cacheRewardPer1000Hash: number
-): Promise<SetupFind> => {
+): Promise<SetupBot> => {
     const bnbPrice = await getBnbPrice(cacheBnbPrice);
     await sleep(2);
     const mboxPrice = await getPriceMboxOnChain(-1, cacheMboxPrice);

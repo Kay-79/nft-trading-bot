@@ -9,7 +9,6 @@ export const getNewAutions = async (cacheIdsCheck: string[]): Promise<[AuctionDt
             `${API_MOBOX}/auction/search_v2/BNB?page=1&limit=${25}&category=&vType=&sort=-time&pType=`
         );
         const auctionsList = data?.data?.list || [];
-        console.log(`Get new auctions: ${auctionsList.length}`);
         auctionsList.forEach((auction: AuctionDto) => {
             if (
                 auction.index !== undefined &&

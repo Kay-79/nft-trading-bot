@@ -156,6 +156,8 @@ export const API_BNB_PRICE_MOBOX = "https://priceapi.mobox.io/kline/usdt?coins=[
 
 export const TIME_DELAY_SETUP_FIND = 1800; //30mins
 
+export const TIME_DELAY_SETUP_CHANGE = 1800; //30mins
+
 export const MIN_TIME_GET_PRICE = 600; //10mins
 
 export const CACHE_BNB_PRICE = 999;

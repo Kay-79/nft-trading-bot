@@ -15,7 +15,7 @@ import {
     TIME_DELAY_SETUP_FIND
 } from "../constants/constants";
 import { setup } from "../utilsV2/find/setup";
-import { SetupFind } from "../types/find/SetupFind";
+import { SetupBot } from "../types/common/SetupBot";
 import { noticeBotFind } from "../utilsV2/bid/handleNoticeBot";
 import { LatestGet } from "@/types/find/LatestGet";
 import { CacheFind } from "@/types/find/CacheFind";
@@ -42,7 +42,7 @@ const findV2 = async () => {
         mecBox: [],
         gem: []
     };
-    let initSetup: SetupFind = await setup(
+    let initSetup: SetupBot = await setup(
         CACHE_BNB_PRICE,
         CACHE_TIER_PRICE,
         CACHE_MBOX_PRICE,

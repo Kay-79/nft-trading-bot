@@ -261,3 +261,21 @@ export const noticeBotCancel = async (bidAuction: BidAuction) => {
     const message = `${status}${profit}${auctor}${auctorGroup}`;
     await noticeBot(message);
 };
+
+export const noticeBotChange = async () => {
+    if (ENV === Environment.TESTNET) {
+        console.log("Notice bot change testnet");
+        return 0;
+    }
+    const status = "Change: 🔄";
+    const message = `${status}`;
+    try {
+        await noticeBot(message);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+        return 0;
+    }
+    const now = new Date();
+    const currentHour = now.getHours();
+    return currentHour - (currentHour % 4);
+};

@@ -213,8 +213,8 @@ export const getPriceFromAI = async (
         const response = await axios.post(API_AI_PRICE_PREDICT_FOR_BOT, {
             input: input
         });
-        console.log(input);
-        console.log(`Price prediction ONE: ${response.data.prediction[0][0]}`);
+        // console.log(input);
+        // console.log(`Price prediction ONE: ${response.data.prediction[0][0]}`);
         return response.data.prediction[0][0];
     } catch {
         console.log("Error get price from AI");
@@ -247,8 +247,8 @@ export const getPriceBlockFromAI = async (
             const response = await axios.post(API_AI_PRICE_PREDICT_FOR_BOT, {
                 input: input
             });
-            console.log(input);
-            console.log(`Price prediction ALL: ${response.data.prediction[0][0]}`);
+            // console.log(input);
+            // console.log(`Price prediction ALL: ${response.data.prediction[0][0]}`);
             totalPredict += response.data.prediction[0][0];
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

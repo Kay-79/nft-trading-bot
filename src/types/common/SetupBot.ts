@@ -1,6 +1,6 @@
-import { TierPrice } from "../common/TierPrice";
+import { TierPrice } from "./TierPrice";
 
-export interface SetupFind {
+export interface SetupBot {
     bnbPrice?: number;
     isFrontRunNormal?: boolean;
     isFrontRunPro?: boolean;
