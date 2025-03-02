@@ -1,9 +1,9 @@
 import axios from "axios";
 import { AuctionDto } from "../../types/dtos/Auction.dto";
-import { API_MOBOX } from "../../constants/constants";
-import { contracts } from "@/config/config";
-import { ranSleep } from "../common/sleep";
-import { shortenAddress } from "../common/utils";
+import { API_MOBOX, PRO_BUYER } from "../../constants/constants";
+// import { contracts } from "@/config/config";
+// import { ranSleep } from "../common/sleep";
+// import { shortenAddress } from "../common/utils";
 
 const getListAutions = async (address: string): Promise<AuctionDto[]> => {
     try {
@@ -20,11 +20,13 @@ const getListAutions = async (address: string): Promise<AuctionDto[]> => {
 
 export const getAllMyAuctions = async (): Promise<AuctionDto[]> => {
     let allAuctions: AuctionDto[] = [];
-    for (const contract of contracts) {
-        console.log(`Getting auctions from ${shortenAddress(contract)}`);
-        await ranSleep(30, 100);
-        const listAuctions = await getListAutions(contract);
-        allAuctions = allAuctions.concat(listAuctions);
-    }
+    // for (const contract of contracts) {
+    //     console.log(`Getting auctions from ${shortenAddress(contract)}`);
+    //     await ranSleep(30, 100);
+    //     const listAuctions = await getListAutions(contract);
+    //     allAuctions = allAuctions.concat(listAuctions);
+    // }
+    const listAuctions = await getListAutions(PRO_BUYER);
+    allAuctions = allAuctions.concat(listAuctions);
     return allAuctions;
 };

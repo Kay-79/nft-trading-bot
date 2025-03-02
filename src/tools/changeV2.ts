@@ -12,6 +12,10 @@ import { setup } from "../utilsV2/find/setup";
 import { SetupBot } from "@/types/common/SetupBot";
 import { getAllMyAuctions } from "@/utilsV2/change/getAllMyAuctions";
 import { sortVsFilterAuctions } from "@/utilsV2/change/sortVsFilterAuctions";
+import { ranSleep } from "@/utilsV2/common/sleep";
+import { isExistAuction } from "@/utilsV2/bid/utils";
+import { getPriceChangeDecisionBundle, getPriceChangeDecisionNormal, getPriceChangeDecisionPro } from "@/utilsV2/change/getPriceChangeDecision";
+import { isBundleAuction, isProAuction } from "@/utilsV2/find/utils";
 
 const change = async () => {
     console.log("Starting change...", ENV);
@@ -33,17 +37,6 @@ const change = async () => {
         rewardPer1000Hash
     } = initSetup;
     while (true) {
-        if (
-            !bnbPrice ||
-            !isFrontRunNormal ||
-            !isFrontRunPro ||
-            !isFrontRunProHash ||
-            !floorPrices ||
-            !timeLastSetup ||
-            !mboxPrice ||
-            !rewardPer1000Hash
-        )
-            continue;
         const myAuctions = sortVsFilterAuctions(await getAllMyAuctions());
         for (const auction of myAuctions) {
             const now = new Date();
@@ -66,9 +59,35 @@ const change = async () => {
                     rewardPer1000Hash
                 } = initSetup);
             }
-            console.log(auction);
-            // check and change auction
+            if (
+                !bnbPrice ||
+                !isFrontRunNormal ||
+                !isFrontRunPro ||
+                !isFrontRunProHash ||
+                !floorPrices ||
+                !timeLastSetup ||
+                !mboxPrice ||
+                !rewardPer1000Hash
+            )
+                continue;
+            if (!(await isExistAuction(auction))) {
+                console.log("Not exist, maybe changed or bought");
+                continue;
+            }
+            if (isProAuction(auction)) {
+                if (await getPriceChangeDecisionPro(auction, floorPrices)) {
+                }
+            } else if (isBundleAuction(auction)) {
+                if (await getPriceChangeDecisionBundle(auction, floorPrices)) {
+                }
+            } else {
+                if (await getPriceChangeDecisionNormal(auction, floorPrices)) {
+                }
+            }
+
+            await ranSleep(5 * 60, 10 * 60);
         }
+        await ranSleep(20 * 60, 30 * 60);
     }
 };
 
