@@ -232,14 +232,17 @@ export const delay40Blocks = async (bidAuctions: BidAuction[]): Promise<boolean>
             if (
                 !bidAuctions[0].auctions ||
                 !bidAuctions[0].auctions[0] ||
-                !isExistAuction(bidAuctions[0].auctions[0])
+                !(await isExistAuction(bidAuctions[0].auctions[0]))
             ) {
                 await noticeBotCancel(bidAuctions[0]);
                 return false;
             }
             break;
         case BidType.GROUP:
-            if (!bidAuctions[0].auctionGroup || !isExistAuctionGroup(bidAuctions[0].auctionGroup)) {
+            if (
+                !bidAuctions[0].auctionGroup ||
+                !(await isExistAuctionGroup(bidAuctions[0].auctionGroup))
+            ) {
                 await noticeBotCancel(bidAuctions[0]);
                 return false;
             }
