@@ -12,7 +12,7 @@ import { ConnectWallet } from "@/components/ConnectWallet";
 import { RiAiGenerate2, RiCloseLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import SecondaryButton from "@/components/Button/SecondaryButton";
-import LoadingButton from "@/components/Button/LoadingButton"; // Import LoadingButton
+import LoadingButton from "@/components/Button/LoadingButton";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -154,7 +154,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         textAlign: "center",
                         marginBottom: "20px",
                         position: "relative",
-                        backgroundColor: backgroundColor, // Set background color for image container
+                        backgroundColor: backgroundColor,
                         padding: "10px",
                         borderRadius: "10px"
                     }}
@@ -249,7 +249,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         {(listing.tokenId ?? 0) > 0 &&
                             (predictedPrice !== null ? (
                                 <span className="text-blue-400 font-bold text-lg">
-                                    AI: {predictedPrice} USDT
+                                    {predictedPrice} USDT
                                 </span>
                             ) : (
                                 <LoadingButton onClick={handlePredict} loading={loadingPredict}>
