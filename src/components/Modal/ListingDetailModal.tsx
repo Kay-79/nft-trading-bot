@@ -9,7 +9,7 @@ import { getBackgroundColor } from "@/utils/colorUtils";
 import { mpContractService } from "@/services/mpContract";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
-import { RiAiGenerate2, RiCloseLine } from "react-icons/ri";
+import { RiAiGenerate2, RiCloseLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import SecondaryButton from "@/components/Button/SecondaryButton";
 
@@ -141,7 +141,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         color: theme.textColor
                     }}
                 >
-                    <RiCloseLine size={24} /> {/* Use the close icon */}
+                    <RiCloseLine size={24} />
                 </button>
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Listing Details</h2>
                 <div
@@ -189,7 +189,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                 color: customDarkTheme.textColor
                             }}
                         >
-                            &lt;
+                            <RiArrowLeftSLine size={24} />
                         </button>
                     )}
                     <div
@@ -211,7 +211,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                 color: customDarkTheme.textColor
                             }}
                         >
-                            &gt;
+                            <RiArrowRightSLine size={24} />
                         </button>
                     )}
                     {listing.ids && listing.ids.length > 1 && (
