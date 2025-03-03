@@ -38,7 +38,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
                     <div className="text-right">
                         <p className="text-lg font-bold">{listing.lvHashrate}</p>
                         <p className="text-xs text-gray-300">
-                            {(listing.hashrate || 0) > 5 ? `Lv. 1 - ${listing.hashrate}` : ""}
+                            {(listing.hashrate || 0) > 5 ? `Lv. 1 - ${listing.hashrate}` : <br />}
                         </p>
                     </div>
                 </div>
@@ -56,19 +56,16 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
 
                 <p className="text-center text-lg font-semibold">{listing.prototype || 0}</p>
 
-                {/* Name */}
                 <p className="text-center text-lg font-semibold">
                     {shortenAddress(listing.auctor || "")}
                 </p>
 
-                {/* Price */}
                 <div className="flex justify-between items-center mt-4">
                     <span className="text-green-400 font-bold text-lg">
                         {shortenNumber(listing.nowPrice || 0, 9, 3)} USDT
                     </span>
                 </div>
 
-                {/* Item Count */}
                 {listing.ids && listing.ids.length > 1 && (
                     <div
                         style={{

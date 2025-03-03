@@ -12,6 +12,7 @@ import { ConnectWallet } from "@/components/ConnectWallet";
 import { RiAiGenerate2, RiCloseLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import SecondaryButton from "@/components/Button/SecondaryButton";
+import LoadingButton from "@/components/Button/LoadingButton"; // Import LoadingButton
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -26,6 +27,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const { address } = useAccount();
     const [showAdjustInput, setShowAdjustInput] = useState<boolean>(false);
+    const [loadingPredict, setLoadingPredict] = useState<boolean>(false); // Add loading state
 
     const resetError = useCallback(() => {
         handleError(null); // Reset error state
@@ -56,6 +58,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
 
     const handlePredict = useCallback(async () => {
         resetError();
+        setLoadingPredict(true); // Set loading state to true
         try {
             const response = await axios.post("/api/predictOne", {
                 hashrate: listing.hashrate ?? 0,
@@ -67,6 +70,8 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             setPredictedPrice(shortenNumber(predicted, 0, 3));
         } catch (error) {
             handleError(error as Error);
+        } finally {
+            setLoadingPredict(false); // Set loading state to false
         }
     }, [listing, resetError, handleError]);
 
@@ -247,15 +252,9 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                     AI: {predictedPrice} USDT
                                 </span>
                             ) : (
-                                <RiAiGenerate2
-                                    onClick={handlePredict}
-                                    style={{
-                                        marginLeft: "10px",
-                                        cursor: "pointer",
-                                        color: customDarkTheme.textColor
-                                    }}
-                                    size={24}
-                                />
+                                <LoadingButton onClick={handlePredict} loading={loadingPredict}>
+                                    <RiAiGenerate2 size={24} />
+                                </LoadingButton>
                             ))}
                     </div>
                 </div>

@@ -3,6 +3,7 @@ import { getMboxPriceAndRewardDelay5m, predictModel } from "@/AI/utils";
 import { PredictMode } from "@/enum/enum";
 
 export async function POST(request: Request) {
+    await new Promise(resolve => setTimeout(resolve, 10000));
     try {
         const { hashrate, lvHashrate, prototype, level } = await request.json();
         const data = await getMboxPriceAndRewardDelay5m();
