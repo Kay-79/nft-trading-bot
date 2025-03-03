@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Listings from "@/components/Dashboard/Listings";
 import Activities from "@/components/Dashboard/Activities";
 import Inventory from "@/components/Dashboard/Inventory";
+import Markets from "@/components/Dashboard/Markets";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { RecentSold } from "@/types/dtos/RecentSold.dto";
 import { Momo721 } from "@/types/dtos/Momo721";
@@ -17,12 +18,14 @@ const DashboardPage = () => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
     const [activities, setActivities] = useState<RecentSold[]>([]);
     const [inventory, setInventory] = useState<Momo721[]>([]);
+    const [markets, setMarkets] = useState<AuctionDto[]>([]);
     const [filteredListings, setFilteredListings] = useState<AuctionDto[]>([]);
     const [filteredActivities, setFilteredActivities] = useState<RecentSold[]>([]);
     const [filteredInventory, setFilteredInventory] = useState<Momo721[]>([]);
-    const [selectedSection, setSelectedSection] = useState<"listings" | "activities" | "inventory">(
-        "listings"
-    );
+    const [filteredMarkets, setFilteredMarkets] = useState<AuctionDto[]>([]);
+    const [selectedSection, setSelectedSection] = useState<
+        "listings" | "activities" | "inventory" | "markets"
+    >("listings");
     const [loading, setLoading] = useState<boolean>(false);
     const { theme } = useTheme();
     const [showScrollTop, setShowScrollTop] = useState<boolean>(false); // Added state for scroll top button
@@ -51,6 +54,14 @@ const DashboardPage = () => {
         setLoading(false);
     };
 
+    const fetchMarkets = async () => {
+        setLoading(true);
+        const marketsData = await fetch("/api/markets").then(response => response.json());
+        setMarkets(marketsData);
+        setFilteredMarkets(marketsData);
+        setLoading(false);
+    };
+
     useEffect(() => {
         if (selectedSection === "listings" && listings.length === 0) {
             fetchListings();
@@ -58,8 +69,10 @@ const DashboardPage = () => {
             fetchActivities();
         } else if (selectedSection === "inventory" && inventory.length === 0) {
             fetchInventory();
+        } else if (selectedSection === "markets" && markets.length === 0) {
+            fetchMarkets();
         }
-    }, [selectedSection, activities.length, inventory.length, listings.length]);
+    }, [selectedSection, activities.length, inventory.length, listings.length, markets.length]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -115,7 +128,7 @@ const DashboardPage = () => {
         );
     };
 
-    const handleSectionChange = (section: "listings" | "activities" | "inventory") => {
+    const handleSectionChange = (section: "listings" | "activities" | "inventory" | "markets") => {
         setSelectedSection(section);
     };
 
@@ -184,6 +197,22 @@ const DashboardPage = () => {
                     >
                         Inventory
                     </label>
+                    <label
+                        onClick={() => handleSectionChange("markets")}
+                        style={{
+                            padding: "10px 20px",
+                            backgroundColor:
+                                selectedSection === "markets"
+                                    ? theme.buttonBackgroundColor
+                                    : "transparent",
+                            color: theme.textColor,
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        Markets
+                    </label>
                 </div>
                 <div style={{ flex: 1 }}>
                     {loading ? (
@@ -203,6 +232,11 @@ const DashboardPage = () => {
                             {selectedSection === "inventory" && (
                                 <div>
                                     <Inventory inventory={filteredInventory} view="list" />
+                                </div>
+                            )}
+                            {selectedSection === "markets" && (
+                                <div style={{ marginBottom: "40px" }}>
+                                    <Markets markets={filteredMarkets} />
                                 </div>
                             )}
                         </>
