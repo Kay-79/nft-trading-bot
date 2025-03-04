@@ -21,6 +21,7 @@ import {
 } from "@/utilsV2/change/getChangeDecision";
 import { isBundleAuction, isProAuction } from "@/utilsV2/find/utils";
 import { ChangeDecision } from "@/types/change/ChangeDecision";
+import { changeAuction } from "@/utilsV2/change/changeAuction";
 
 const change = async () => {
     console.log("Starting change...", ENV);
@@ -79,13 +80,19 @@ const change = async () => {
                 console.log("Not exist, maybe changed or bought");
                 continue;
             }
-            let shouldChange: ChangeDecision;
+            let changeDecision: ChangeDecision;
             if (isProAuction(auction)) {
-                shouldChange = await getChangeDecisionPro(auction, floorPrices);
+                changeDecision = await getChangeDecisionPro(auction, floorPrices);
             } else if (isBundleAuction(auction)) {
-                shouldChange = await getChangeDecisionBundle(auction, floorPrices);
+                changeDecision = await getChangeDecisionBundle(auction, floorPrices);
             } else {
-                shouldChange = await getChangeDecisionNormal(auction, floorPrices);
+                changeDecision = await getChangeDecisionNormal(auction, floorPrices);
+            }
+            if (changeDecision.shouldChange) {
+                console.log(
+                    `Change auction ${auction.prototype} from ${auction.nowPrice} to ${changeDecision.newPrice}`
+                );
+                await changeAuction(auction, changeDecision.newPrice);
             }
             await ranSleep(5 * 60, 10 * 60);
         }
