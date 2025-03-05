@@ -19,7 +19,7 @@ import {
     getChangeDecisionPro,
     getChangeDecisionBundle
 } from "@/utilsV2/change/getChangeDecision";
-import { isBundleAuction, isProAuction } from "@/utilsV2/find/utils";
+import { isBundleAuction, isNormalAuction, isProAuction } from "@/utilsV2/find/utils";
 import { ChangeDecision } from "@/types/change/ChangeDecision";
 import { changeAuction } from "@/utilsV2/change/changeAuction";
 import { shortenNumber } from "@/utils/shorten";
@@ -100,13 +100,13 @@ const change = async () => {
                 changeDecision = await getChangeDecisionPro(auction, floorPrices);
             } else if (isBundleAuction(auction) && modeChange.bundle) {
                 changeDecision = await getChangeDecisionBundle(auction, floorPrices);
-            } else {
+            } else if (isNormalAuction(auction)) {
                 if (!modeChange.normal) {
                     console.log("Normal mode is disabled");
                     changeDecision = await getChangeDecisionNormal(auction, floorPrices);
                 }
             }
-            if (changeDecision.shouldChange) {
+            if (changeDecision.shouldChange && changeDecision.newPrice) {
                 console.log(
                     `Change auction ${auction.prototype} from ${auction.nowPrice} to ${changeDecision.newPrice}`
                 );

@@ -5,7 +5,8 @@ import {
     isBundleAuction,
     isProAuction,
     getProfitableBidAuctionsNormalVsPro,
-    getProfitableBidAuctionsBundle
+    getProfitableBidAuctionsBundle,
+    isNormalAuction
 } from "./utils";
 import { BidType } from "@/enum/enum";
 
@@ -29,7 +30,7 @@ export const checkProfitAuctions = async (
             proAuctions.push(auction);
         } else if (isBundleAuction(auction)) {
             bundleAuctions.push(auction);
-        } else {
+        } else if (isNormalAuction(auction)) {
             normalAuctions.push(auction);
         }
     }

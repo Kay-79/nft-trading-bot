@@ -36,7 +36,7 @@ export const isBundleAuction = (auction: AuctionDto): boolean => {
         : false;
 };
 export const isNormalAuction = (auction: AuctionDto): boolean => {
-    return !isProAuction(auction) && !isBundleAuction(auction);
+    return auction.amounts?.length === 1 && Number(auction.amounts?.[0]) === 1;
 };
 
 export const getMinValueType = (
