@@ -2,10 +2,11 @@ import { ChangeDecision } from "@/types/change/ChangeDecision";
 import { TierPrice } from "@/types/common/TierPrice";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { sleep } from "../common/sleep";
-import { modeChange, contracts } from "@/config/config";
+import { contracts } from "@/config/config";
 import { getAuctionsByPrototype } from "./utils";
 import { ethers } from "ethers";
 import { shortenNumber } from "@/utils/shorten";
+import { modeChange, priceDelta } from "@/config/changeConfig";
 
 export const getChangeDecisionPro = async (
     auction: AuctionDto,
@@ -62,11 +63,13 @@ export const getChangeDecisionNormal = async (
     } else {
         changeDecision.shouldChange = true;
         changeDecision.newPrice = shortenNumber(auctionLowestPrice.nowPrice, 9, 3);
+        if (changeDecision.newPrice < floorPrices[Math.floor(auction.prototype / 10 ** 4)]) {
+            changeDecision.newPrice =
+                floorPrices[Math.floor(auction.prototype / 10 ** 4)] - priceDelta;
+        }
         if (changeDecision.newPrice >= auction.nowPrice) {
             changeDecision.shouldChange = false;
             console.log("Lowest price is higher than current price");
-        }
-        if (changeDecision.newPrice < floorPrices[Math.floor(auction.prototype / 1000)]) {
         }
         return changeDecision;
     }

@@ -23,7 +23,7 @@ import { isBundleAuction, isNormalAuction, isProAuction } from "@/utilsV2/find/u
 import { ChangeDecision } from "@/types/change/ChangeDecision";
 import { changeAuction } from "@/utilsV2/change/changeAuction";
 import { shortenNumber } from "@/utils/shorten";
-import { modeChange } from "@/config/config";
+import { modeChange } from "@/config/changeConfig";
 
 const change = async () => {
     console.log("Starting change...", ENV);
