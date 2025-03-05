@@ -6,7 +6,12 @@ import { contracts } from "@/config/config";
 import { getAuctionsByPrototype } from "./utils";
 import { ethers } from "ethers";
 import { shortenNumber } from "@/utils/shorten";
-import { modeChange, priceDelta } from "@/config/changeConfig";
+import {
+    minTimeListedToChange,
+    modeChange,
+    priceDelta,
+    priceThreshold
+} from "@/config/changeConfig";
 
 export const getChangeDecisionPro = async (
     auction: AuctionDto,
@@ -35,44 +40,64 @@ export const getChangeDecisionNormal = async (
         shouldChange: false,
         newPrice: 0
     };
-    if (!auction.prototype || !auction.nowPrice) {
+
+    if (!auction.prototype || !auction.nowPrice || !auction.uptime) {
         console.log("No prototype");
         return changeDecision;
     }
+
     if (!modeChange.normal) {
         console.log("Normal mode is disabled");
         return changeDecision;
     }
+
     if (!auction.uptime && floorPrices) {
         console.log("No uptime, maybe changed or bought");
+        return changeDecision;
     }
-    await sleep(1);
+
     const auctionsSamePrototype = await getAuctionsByPrototype(auction.prototype);
-    auctionsSamePrototype.sort((a, b) => (a.nowPrice ?? 0) - (b.nowPrice ?? 0));
-    const auctionLowestPrice = auctionsSamePrototype[0];
-    if (!auctionLowestPrice.auctor || !auctionLowestPrice.nowPrice) {
+    const auctionLowestPrice = auctionsSamePrototype
+        .filter(a => a.nowPrice)
+        .sort((a, b) => (a.nowPrice ?? 0) - (b.nowPrice ?? 0))[0];
+
+    if (!auctionLowestPrice?.auctor || !auctionLowestPrice.nowPrice) {
         console.log("No auctor");
         return changeDecision;
     }
+
+    if (auction.uptime < minTimeListedToChange) {
+        console.log("Auction uptime is less than 2 hours");
+        return changeDecision;
+    }
+
     if (
         contracts.includes(auctionLowestPrice.auctor.toLowerCase()) ||
         contracts.includes(ethers.getAddress(auctionLowestPrice.auctor))
     ) {
         console.log("Lowest price is from your contract");
         return changeDecision;
-    } else {
-        changeDecision.shouldChange = true;
-        changeDecision.newPrice = shortenNumber(auctionLowestPrice.nowPrice, 9, 3);
-        if (changeDecision.newPrice < floorPrices[Math.floor(auction.prototype / 10 ** 4)]) {
-            changeDecision.newPrice =
-                floorPrices[Math.floor(auction.prototype / 10 ** 4)] - priceDelta;
-        }
-        if (changeDecision.newPrice >= auction.nowPrice) {
-            changeDecision.shouldChange = false;
-            console.log("Lowest price is higher than current price");
-        }
-        return changeDecision;
     }
+
+    changeDecision.shouldChange = true;
+    changeDecision.newPrice = shortenNumber(auctionLowestPrice.nowPrice, 9, 3) - priceDelta;
+
+    const floorPrice = floorPrices[Math.floor(auction.prototype / 10 ** 4)];
+    console.log("Floor price", floorPrice);
+    if (
+        changeDecision.newPrice < floorPrice ||
+        Math.abs(changeDecision.newPrice - floorPrice) < priceThreshold
+    ) {
+        console.log("New price is lower than floor price");
+        changeDecision.newPrice = shortenNumber(floorPrice - priceDelta, 0, 3);
+    }
+
+    if (changeDecision.newPrice >= auction.nowPrice) {
+        changeDecision.shouldChange = false;
+        console.log("Lowest price is higher than current price");
+    }
+
+    return changeDecision;
 };
 
 export const getChangeDecisionBundle = async (

@@ -48,6 +48,7 @@ const change = async () => {
     while (true) {
         const myAuctions = sortVsFilterAuctions(await getAllMyAuctions());
         for (const auction of myAuctions) {
+            console.log(`### Auction ${auction.prototype} ###`);
             const now = new Date();
             const currentHour = now.getHours();
             if (currentHour === 17 && !hasNotified) {
@@ -92,24 +93,16 @@ const change = async () => {
                 await ranSleep(5, 10);
                 continue;
             }
-            let changeDecision: ChangeDecision = {
-                shouldChange: false,
-                newPrice: 999
-            };
-            if (isProAuction(auction) && modeChange.pro) {
-                changeDecision = await getChangeDecisionPro(auction, floorPrices);
-            } else if (isBundleAuction(auction) && modeChange.bundle) {
-                changeDecision = await getChangeDecisionBundle(auction, floorPrices);
-            } else if (isNormalAuction(auction)) {
-                if (!modeChange.normal) {
-                    console.log("Normal mode is disabled");
-                    changeDecision = await getChangeDecisionNormal(auction, floorPrices);
-                }
-            }
+            const changeDecision: ChangeDecision =
+                isProAuction(auction) && modeChange.pro
+                    ? await getChangeDecisionPro(auction, floorPrices)
+                    : isBundleAuction(auction) && modeChange.bundle
+                    ? await getChangeDecisionBundle(auction, floorPrices)
+                    : isNormalAuction(auction) && modeChange.normal
+                    ? await getChangeDecisionNormal(auction, floorPrices)
+                    : { shouldChange: false, newPrice: 0 };
+
             if (changeDecision.shouldChange && changeDecision.newPrice) {
-                console.log(
-                    `Change auction ${auction.prototype} from ${auction.nowPrice} to ${changeDecision.newPrice}`
-                );
                 await changeAuction(auction, changeDecision.newPrice);
             } else {
                 console.log(
@@ -120,7 +113,8 @@ const change = async () => {
                     )}`
                 );
             }
-            await ranSleep(5 * 60, 10 * 60);
+            // await ranSleep(5 * 60, 10 * 60);
+            await ranSleep(5, 10);
         }
         await ranSleep(20 * 60, 30 * 60);
     }

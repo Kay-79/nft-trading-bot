@@ -8,3 +8,7 @@ export const modeChange: ModeChange = {
 };
 
 export const priceDelta = 0.005;
+
+export const priceThreshold = 0.15;
+
+export const minTimeListedToChange = 2 * 60 * 60;
