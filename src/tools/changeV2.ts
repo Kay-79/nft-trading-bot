@@ -44,7 +44,7 @@ const change = async () => {
         mboxPrice,
         rewardPer1000Hash
     } = initSetup;
-    let hasNotified = false; // Add a flag to track notification
+    let hasNotified = false;
     while (true) {
         const myAuctions = sortVsFilterAuctions(await getAllMyAuctions());
         for (const auction of myAuctions) {
@@ -52,10 +52,10 @@ const change = async () => {
             const currentHour = now.getHours();
             if (currentHour === 17 && !hasNotified) {
                 latestNotice = await noticeBotChange();
-                hasNotified = true; // Set the flag to true after notification
+                hasNotified = true;
                 console.log("Notice bot change", latestNotice);
             } else if (currentHour !== 17) {
-                hasNotified = false; // Reset the flag if the hour is not 17
+                hasNotified = false;
             }
             if (timeLastSetup && Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_CHANGE) {
                 if (bnbPrice && floorPrices && mboxPrice && rewardPer1000Hash) {

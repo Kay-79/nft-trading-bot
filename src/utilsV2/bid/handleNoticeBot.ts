@@ -271,8 +271,7 @@ export const noticeBotChange = async () => {
     const message = `${status}`;
     try {
         await noticeBot(message);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (error) {
+    } catch {
         return 0;
     }
     const now = new Date();
