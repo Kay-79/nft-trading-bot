@@ -1,4 +1,5 @@
 import { ModeBot } from "@/types/common/ModeBot";
+import { ModeChange } from "@/types/common/ModeChange";
 import { ProfitConfig } from "@/types/common/ProfitConfig";
 import { TierPrice } from "@/types/common/TierPrice";
 import { LatestGet } from "@/types/find/LatestGet";
@@ -16,6 +17,13 @@ export const modeBot: ModeBot = {
     box: false,
     mecBox: false,
     gem: false
+};
+
+export const modeChange: ModeChange = {
+    normal: true,
+    pro: false,
+    bundle: false,
+    block: false
 };
 
 export const profitPerTier: TierPrice = {

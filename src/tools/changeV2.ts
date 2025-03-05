@@ -22,6 +22,8 @@ import {
 import { isBundleAuction, isProAuction } from "@/utilsV2/find/utils";
 import { ChangeDecision } from "@/types/change/ChangeDecision";
 import { changeAuction } from "@/utilsV2/change/changeAuction";
+import { shortenNumber } from "@/utils/shorten";
+import { modeChange } from "@/config/config";
 
 const change = async () => {
     console.log("Starting change...", ENV);
@@ -47,8 +49,9 @@ const change = async () => {
         for (const auction of myAuctions) {
             const now = new Date();
             const currentHour = now.getHours();
-            if (Math.abs(currentHour - latestNotice) >= TIME_DELAY_NOTICE_STATUS_BOT) {
+            if (currentHour === 17) {
                 latestNotice = await noticeBotChange();
+                console.log("Notice bot change", latestNotice);
             }
             if (timeLastSetup && Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_CHANGE) {
                 if (bnbPrice && floorPrices && mboxPrice && rewardPer1000Hash) {
@@ -76,23 +79,42 @@ const change = async () => {
                 !rewardPer1000Hash
             )
                 continue;
-            if (!(await isExistAuction(auction))) {
-                console.log("Not exist, maybe changed or bought");
+            if (!auction.nowPrice) {
+                console.log("No now price, maybe changed or bought");
                 continue;
             }
-            let changeDecision: ChangeDecision;
-            if (isProAuction(auction)) {
+            if (!(await isExistAuction(auction))) {
+                console.log("Not exist, maybe changed or bought");
+                await ranSleep(5, 10);
+                continue;
+            }
+            let changeDecision: ChangeDecision = {
+                shouldChange: false,
+                newPrice: 999
+            };
+            if (isProAuction(auction) && modeChange.pro) {
                 changeDecision = await getChangeDecisionPro(auction, floorPrices);
-            } else if (isBundleAuction(auction)) {
+            } else if (isBundleAuction(auction) && modeChange.bundle) {
                 changeDecision = await getChangeDecisionBundle(auction, floorPrices);
             } else {
-                changeDecision = await getChangeDecisionNormal(auction, floorPrices);
+                if (!modeChange.normal) {
+                    console.log("Normal mode is disabled");
+                    changeDecision = await getChangeDecisionNormal(auction, floorPrices);
+                }
             }
             if (changeDecision.shouldChange) {
                 console.log(
                     `Change auction ${auction.prototype} from ${auction.nowPrice} to ${changeDecision.newPrice}`
                 );
                 await changeAuction(auction, changeDecision.newPrice);
+            } else {
+                console.log(
+                    `No need to change auction ${auction.prototype}, price: ${shortenNumber(
+                        auction.nowPrice,
+                        9,
+                        3
+                    )}`
+                );
             }
             await ranSleep(5 * 60, 10 * 60);
         }

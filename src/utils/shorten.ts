@@ -3,7 +3,7 @@
  * @param value - The number to shorten.
  * @param decimals - The number of decimals to shorten to.
  * @param round - The number of decimals to round to.
- * @returns The shortened number.
+ * @returns The shortened number, type number.
  */
 export const shortenNumber = (value: number, decimals: number, round: number): number => {
     const result = value / 10 ** decimals;

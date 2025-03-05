@@ -1,37 +1,62 @@
 import { ChangeDecision } from "@/types/change/ChangeDecision";
 import { TierPrice } from "@/types/common/TierPrice";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
+import { sleep } from "../common/sleep";
+import { modeChange } from "@/config/config";
 
-export const getChangeDecisionPro = (
+export const getChangeDecisionPro = async (
     auction: AuctionDto,
     floorPrices: TierPrice
 ): Promise<ChangeDecision> => {
-    let changeDecision: ChangeDecision = {
+    const changeDecision: ChangeDecision = {
         shouldChange: false,
-        newPrice: 0
+        newPrice: 999
     };
-    if (!auction.uptime) {
-        return Promise.resolve(changeDecision);
+    if (!modeChange.pro) {
+        console.log("Pro mode is disabled");
+        return changeDecision;
     }
-    if (Date.now()/1000 - auction.uptime){}
+    if (!auction.uptime && floorPrices) {
+        console.log("No uptime, maybe changed or bought");
+    }
+    await sleep(1);
+    return changeDecision;
 };
 
-export const getChangeDecisionNormal = (
+export const getChangeDecisionNormal = async (
     auction: AuctionDto,
     floorPrices: TierPrice
 ): Promise<ChangeDecision> => {
-    let changeDecision: ChangeDecision = {
+    const changeDecision: ChangeDecision = {
         shouldChange: false,
-        newPrice: 0
+        newPrice: 999
     };
+    if (!modeChange.normal) {
+        console.log("Normal mode is disabled");
+        return changeDecision;
+    }
+    if (!auction.uptime && floorPrices) {
+        console.log("No uptime, maybe changed or bought");
+    }
+    await sleep(1);
+    return changeDecision;
 };
 
-export const getChangeDecisionBundle = (
+export const getChangeDecisionBundle = async (
     auction: AuctionDto,
     floorPrices: TierPrice
 ): Promise<ChangeDecision> => {
-    let changeDecision: ChangeDecision = {
+    const changeDecision: ChangeDecision = {
         shouldChange: false,
-        newPrice: 0
+        newPrice: 999
     };
+    if (!modeChange.bundle) {
+        console.log("Bundle mode is disabled");
+        return changeDecision;
+    }
+    if (!auction.uptime && floorPrices) {
+        console.log("No uptime, maybe changed or bought");
+    }
+    await sleep(1);
+    return changeDecision;
 };
