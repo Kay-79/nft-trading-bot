@@ -66,7 +66,7 @@ export const getChangeDecisionNormal = async (
         return changeDecision;
     }
 
-    if (auction.uptime < minTimeListedToChange) {
+    if (Date.now() / 1000 - auction.uptime < minTimeListedToChange) {
         console.log("Auction uptime is less than 2 hours");
         return changeDecision;
     }

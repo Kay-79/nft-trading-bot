@@ -79,6 +79,8 @@ export const MIN_GAS_PRICE_NORMAL = ENV === Environment.MAINNET ? 1.0001 : 6;
 
 export const MIN_GAS_PRICE_PRO = ENV === Environment.MAINNET ? 3.002 : 6;
 
+export const MIN_GAS_PRICE_CHANGE = ENV === Environment.MAINNET ? 1.0001 : 6;
+
 export const MP_ADDRESS =
     ENV === Environment.MAINNET
         ? "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2"
@@ -148,6 +150,11 @@ export const PRIVATE_KEY_BID_PRO =
     ENV === Environment.MAINNET
         ? process.env.PRIVATE_KEY_BID_PRO_MAINNET || "0x"
         : process.env.PRIVATE_KEY_BID_PRO_TESTNET || "0x";
+
+export const PRIVATE_KEY_CHANGE =
+    ENV === Environment.MAINNET
+        ? process.env.PRIVATE_KEY_CHANGE_MAINNET || "0x"
+        : process.env.PRIVATE_KEY_CHANGE_TESTNET || "0x";
 
 export const API_BNB_PRICE_COIGEKO =
     "https://api.coingecko.com/api/v3/simple/price?ids=binancecoin&vs_currencies=usd";
