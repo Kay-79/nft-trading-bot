@@ -7,7 +7,8 @@ import { getAuctionsByPrototype } from "./utils";
 import { ethers } from "ethers";
 import { shortenNumber } from "@/utils/shorten";
 import {
-    minTimeListedToChange,
+    minTimeListedMyAuctionToChange,
+    minTimeListedOtherAuctionToChange,
     modeChange,
     priceDelta,
     priceThreshold
@@ -61,12 +62,17 @@ export const getChangeDecisionNormal = async (
         .filter(a => a.nowPrice)
         .sort((a, b) => (a.nowPrice ?? 0) - (b.nowPrice ?? 0))[0];
 
-    if (!auctionLowestPrice?.auctor || !auctionLowestPrice.nowPrice) {
-        console.log("No auctor");
+    if (!auctionLowestPrice?.auctor || !auctionLowestPrice.nowPrice || !auctionLowestPrice.uptime) {
+        console.log("No lowest price");
         return changeDecision;
     }
 
-    if (Date.now() / 1000 - auction.uptime < minTimeListedToChange) {
+    if (Date.now() / 1000 - auction.uptime < minTimeListedMyAuctionToChange) {
+        console.log("Auction uptime is less than 2 hours");
+        return changeDecision;
+    }
+
+    if (Date.now() / 1000 - auctionLowestPrice.uptime < minTimeListedOtherAuctionToChange) {
         console.log("Auction uptime is less than 2 hours");
         return changeDecision;
     }
