@@ -11,6 +11,7 @@ import {
     minTimeListedOtherAuctionToChange,
     modeChange,
     priceDelta,
+    priceDeltaMin,
     priceThreshold
 } from "@/config/changeConfig";
 
@@ -68,12 +69,12 @@ export const getChangeDecisionNormal = async (
     }
 
     if (Date.now() / 1000 - auction.uptime < minTimeListedMyAuctionToChange) {
-        console.log("Auction uptime is less than 2 hours");
+        console.log("Require minTimeListedMyAuctionToChange");
         return changeDecision;
     }
 
     if (Date.now() / 1000 - auctionLowestPrice.uptime < minTimeListedOtherAuctionToChange) {
-        console.log("Auction uptime is less than 2 hours");
+        console.log("Require minTimeListedOtherAuctionToChange");
         return changeDecision;
     }
 
@@ -99,7 +100,7 @@ export const getChangeDecisionNormal = async (
         Math.abs(changeDecision.newPrice - floorPrice) < priceThreshold
     ) {
         console.log("New price is lower than floor price");
-        changeDecision.newPrice = shortenNumber(floorPrice - priceDelta, 0, 3);
+        changeDecision.newPrice = shortenNumber(floorPrice - priceDeltaMin, 0, 3);
     }
 
     if (changeDecision.newPrice >= auction.nowPrice) {
