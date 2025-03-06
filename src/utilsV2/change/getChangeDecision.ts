@@ -80,7 +80,11 @@ export const getChangeDecisionNormal = async (
     }
 
     changeDecision.shouldChange = true;
-    changeDecision.newPrice = shortenNumber(auctionLowestPrice.nowPrice, 9, 3) - priceDelta;
+    changeDecision.newPrice = shortenNumber(
+        auctionLowestPrice.nowPrice - priceDelta * 10 ** 9,
+        9,
+        3
+    );
 
     const floorPrice = floorPrices[Math.floor(auction.prototype / 10 ** 4)];
     console.log("Floor price", floorPrice);
