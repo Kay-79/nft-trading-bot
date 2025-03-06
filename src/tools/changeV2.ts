@@ -120,8 +120,7 @@ const change = async () => {
                     )}`
                 );
             }
-            await ranSleep(5, 10);
-            // await ranSleep(5 * 60, 10 * 60);
+            await ranSleep(5 * 60, 10 * 60);
         }
         await ranSleep(20 * 60, 30 * 60);
     }
