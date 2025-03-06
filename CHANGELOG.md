@@ -1,5 +1,11 @@
 # mobox-profit-bot
 
+## 5.1.21
+
+### Patch Changes
+
+-   Pump patch version
+
 ## 5.1.20
 
 ### Patch Changes
