@@ -85,8 +85,12 @@ const change = async () => {
                 !timeLastSetup ||
                 !mboxPrice ||
                 !rewardPer1000Hash
-            )
+            ) {
+                console.log("Setup failed, waiting for next loop...");
+                mboxPrice = CACHE_MBOX_PRICE;
+                rewardPer1000Hash = CACHE_REWARD_PER_1000_HASH;
                 continue;
+            }
             if (!auction.nowPrice) {
                 console.log("No now price, maybe changed or bought");
                 continue;

@@ -75,11 +75,11 @@ export const RPC_URL_ARCHIVE = process.env.MORALIST_RPC_ARCHIVE_NODE || "default
 
 export const RPC_URL_FULL_NODE = process.env.GET_BLOCK_RPC_FULL_NODE || "default_rpc_full_node";
 
-export const MIN_GAS_PRICE_NORMAL = ENV === Environment.MAINNET ? 1.0001 : 6;
+export const MIN_GAS_PRICE_NORMAL = ENV === Environment.MAINNET ? 1.0001 : 10;
 
-export const MIN_GAS_PRICE_PRO = ENV === Environment.MAINNET ? 3.002 : 6;
+export const MIN_GAS_PRICE_PRO = ENV === Environment.MAINNET ? 3.002 : 10;
 
-export const MIN_GAS_PRICE_CHANGE = ENV === Environment.MAINNET ? 1.0001 : 6;
+export const MIN_GAS_PRICE_CHANGE = ENV === Environment.MAINNET ? 1.0001 : 10;
 
 export const MP_ADDRESS =
     ENV === Environment.MAINNET
