@@ -3,10 +3,6 @@ import { ethersProvider } from "../../providers/ethersProvider";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { noticeProfitAuction } from "./handleNoticeBot";
 
-process.on("unhandledRejection", (reason, promise) => {
-    console.error("Custom Unhandled Rejection at:", promise, "reason:", reason);
-});
-
 export const sendTransaction = async (serializedTx: Buffer, bidAuction: BidAuction) => {
     try {
         const txHash = await ethersProvider.send("eth_sendRawTransaction", [

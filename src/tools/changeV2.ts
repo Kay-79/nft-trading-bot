@@ -1,3 +1,6 @@
+process.on("unhandledRejection", (reason, promise) => {
+    console.error("Custom Unhandled Rejection at:", promise, "reason:", reason);
+});
 import { noticeBotChange } from "@/utilsV2/bid/handleNoticeBot";
 import {
     CACHE_BNB_PRICE,
@@ -113,8 +116,8 @@ const change = async () => {
                     )}`
                 );
             }
-            // await ranSleep(5 * 60, 10 * 60);
             await ranSleep(5, 10);
+            // await ranSleep(5 * 60, 10 * 60);
         }
         await ranSleep(20 * 60, 30 * 60);
     }

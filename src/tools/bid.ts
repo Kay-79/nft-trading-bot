@@ -1,3 +1,6 @@
+process.on("unhandledRejection", (reason, promise) => {
+    console.error("Custom Unhandled Rejection at:", promise, "reason:", reason);
+});
 import { BidAuction } from "../types/bid/BidAuction";
 import { ranSleep } from "../utilsV2/common/sleep";
 import { normalBidAuction } from "../utilsV2/bid/normalBidAuction";

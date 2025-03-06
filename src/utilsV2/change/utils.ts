@@ -19,3 +19,4 @@ export const getAuctionsByPrototype = async (prototype: number): Promise<Auction
         return [];
     }
 };
+
