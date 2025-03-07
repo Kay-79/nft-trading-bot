@@ -12,7 +12,9 @@ import { ConnectWallet } from "@/components/ConnectWallet";
 import { RiAiGenerate2, RiCloseLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import SecondaryButton from "@/components/Button/SecondaryButton";
+import LoadingButtonIcon from "@/components/Button/LoadingButtonIcon";
 import LoadingButton from "@/components/Button/LoadingButton";
+import { toast } from "react-toastify";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -28,14 +30,24 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const { address } = useAccount();
     const [showAdjustInput, setShowAdjustInput] = useState<boolean>(false);
     const [loadingPredict, setLoadingPredict] = useState<boolean>(false); // Add loading state
+    const [loadingAdjust, setLoadingAdjust] = useState<boolean>(false); // Add loading state for adjust button
 
     const resetError = useCallback(() => {
         handleError(null); // Reset error state
     }, [handleError]);
 
     const handleAdjustPrice = async () => {
-        await mpContractService.changePrice(listing, address, price);
-        console.log("Adjusting Price");
+        setLoadingAdjust(true); // Set loading state to true
+        try {
+            await mpContractService.changePrice(listing, address, price);
+            toast.success("Price adjusted successfully!");
+        } catch (error) {
+            handleError(error as Error);
+            toast.error("Failed to adjust price");
+            setLoadingAdjust(false);
+        }
+        setLoadingAdjust(false);
+        onClose();
     };
 
     const handleAdjustClick = () => {
@@ -68,8 +80,10 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             });
             const predicted = response.data.prediction;
             setPredictedPrice(shortenNumber(predicted, 0, 3));
+            toast.success("Prediction successful!"); // Ensure toast notification is displayed
         } catch (error) {
             handleError(error as Error);
+            toast.error("Prediction failed!"); // Ensure error toast notification is displayed
         } finally {
             setLoadingPredict(false); // Set loading state to false
         }
@@ -252,9 +266,9 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                     {predictedPrice} USDT
                                 </span>
                             ) : (
-                                <LoadingButton onClick={handlePredict} loading={loadingPredict}>
+                                <LoadingButtonIcon onClick={handlePredict} loading={loadingPredict}>
                                     <RiAiGenerate2 size={24} />
-                                </LoadingButton>
+                                </LoadingButtonIcon>
                             ))}
                     </div>
                 </div>
@@ -292,9 +306,14 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     {address ? (
                         <>
                             {showAdjustInput ? (
-                                <PrimaryButton onClick={handleAdjustClick} style={{ flex: 1 }}>
-                                    Confirm
-                                </PrimaryButton>
+                                <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
+                                    <LoadingButton
+                                        onClick={handleAdjustClick}
+                                        loading={loadingAdjust}
+                                    >
+                                        Confirm
+                                    </LoadingButton>
+                                </div>
                             ) : (
                                 <>
                                     <PrimaryButton onClick={handleAdjustClick} style={{ flex: 1 }}>

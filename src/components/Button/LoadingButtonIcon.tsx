@@ -1,8 +1,8 @@
+import { customDarkTheme } from "@/config/theme";
 import React from "react";
 import { RiLoader4Line } from "react-icons/ri";
-import { useTheme } from "@/config/theme";
 
-interface LoadingButtonProps {
+interface LoadingButtonIconProps {
     onClick: () => void;
     loading: boolean;
     children: React.ReactNode;
@@ -10,14 +10,12 @@ interface LoadingButtonProps {
     style?: React.CSSProperties;
 }
 
-const LoadingButton: React.FC<LoadingButtonProps> = ({
+const LoadingButtonIcon: React.FC<LoadingButtonIconProps> = ({
     onClick,
     loading,
     children,
-    disabled,
-    style
+    disabled
 }) => {
-    const { theme } = useTheme();
     return (
         <button
             onClick={onClick}
@@ -26,14 +24,10 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                cursor: loading ? "not-allowed" : "pointer",
-                position: "relative",
                 padding: "10px 20px",
-                backgroundColor: theme.primaryButtonBackgroundColor,
-                color: theme.primaryButtonTextColor,
-                border: "none",
-                borderRadius: "5px",
-                ...style
+                color: customDarkTheme.textColor,
+                cursor: loading ? "not-allowed" : "pointer",
+                position: "relative"
             }}
         >
             {loading ? (
@@ -60,4 +54,4 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
     );
 };
 
-export default LoadingButton;
+export default LoadingButtonIcon;
