@@ -70,7 +70,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
 
     const handlePredict = useCallback(async () => {
         resetError();
-        setLoadingPredict(true); // Set loading state to true
+        setLoadingPredict(true); 
         try {
             const response = await axios.post("/api/predictOne", {
                 hashrate: listing.hashrate ?? 0,
@@ -80,12 +80,11 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             });
             const predicted = response.data.prediction;
             setPredictedPrice(shortenNumber(predicted, 0, 3));
-            toast.success("Prediction successful!"); // Ensure toast notification is displayed
         } catch (error) {
             handleError(error as Error);
-            toast.error("Prediction failed!"); // Ensure error toast notification is displayed
+            toast.error("Prediction failed!"); 
         } finally {
-            setLoadingPredict(false); // Set loading state to false
+            setLoadingPredict(false); 
         }
     }, [listing, resetError, handleError]);
 

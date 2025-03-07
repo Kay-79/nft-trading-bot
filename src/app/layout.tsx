@@ -8,6 +8,8 @@ import Footer from "@/components/Footer";
 import { useTheme } from "@/config/theme";
 import React from "react";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function RootLayout({ children }: { children: React.ReactNode }) {
     const { theme } = useTheme();
@@ -36,6 +38,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
                             <Footer />
                         </div>
                     </ErrorBoundary>
+                    <ToastContainer />
                 </Providers>
             </body>
         </html>
