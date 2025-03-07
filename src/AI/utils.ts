@@ -112,7 +112,6 @@ export const predictModel = async (inputOne: number[], predictMode: string) => {
             checkTrader(dataset.auctor, newbieBidders, "Auctor (newbie):");
         }
         for (const input of dataset.inputs ?? []) {
-            // add last 3 elements of inputOne to input
             input.push(...inputOne.slice(-3));
             try {
                 const response = await axios.post(API_AI_PRICE_PREDICT, {

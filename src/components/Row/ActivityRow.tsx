@@ -2,10 +2,11 @@ import React, { JSX, useState } from "react";
 import Image from "next/image";
 import { RecentSold } from "@/types/dtos/RecentSold.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
-import { FaExternalLinkAlt, FaUsers } from "react-icons/fa"; // Added FaUsers import
+import { FaExternalLinkAlt, FaUsers } from "react-icons/fa";
 import { EXPLORER_URL } from "@/constants/constants";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import HoverOnShowActivitiesDetail from "@/components/Hover/HoverOnShowActivitiesDetail";
+import { formatDistanceToNow } from "date-fns";
 
 interface ActivityRowProps {
     activity: RecentSold;
@@ -176,7 +177,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
             <span style={{ flex: 2 }}>{shortenAddress(activity.auctor || "")}</span>
             <span style={{ flex: 2 }}>{shortenNumber(activity.bidPrice || 0, 9, 3)} USDT</span>
             <span style={{ display: "flex", flex: 2 }}>
-                {new Date((activity.crtime || 0) * 1000).toLocaleString()}
+                {formatDistanceToNow(new Date((activity.crtime || 0) * 1000), { addSuffix: true })}
                 <a
                     href={`${EXPLORER_URL}/tx/${activity.tx}`}
                     target="_blank"

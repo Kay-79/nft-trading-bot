@@ -11,8 +11,7 @@ const data = fs.readFileSync(filePath, "utf-8");
 app.use(cors());
 app.use(express.json());
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-app.get("/dataset", (req: any, res: any) => {
+app.get("/dataset", (req: express.Request, res: express.Response) => {
     console.log("GET /dataset");
     try {
         res.json(JSON.parse(data));

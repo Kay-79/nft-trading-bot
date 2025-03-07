@@ -191,4 +191,3 @@ const huntAirdrop = async () => {
     }
 };
 
-// huntAirdrop();
