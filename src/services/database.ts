@@ -1,24 +1,19 @@
-import { Inventory } from "../types/dtos/Inventory.dto";
-import { MongoClient, Db } from "mongodb";
-import { DATABASE_URL } from "@/constants/constants";
+import { connectMongo } from "@/utils/connectMongo";
+import { InventoryDto } from "../types/dtos/Inventory.dto";
 import { InventoryType } from "@/enum/enum";
 
-const url = DATABASE_URL;
-const dbName = "MoboxProfitBot";
-
-let db: Db | null = null;
-const connectToDatabase = async (): Promise<Db> => {
-    if (db) return db;
-    const client = new MongoClient(url);
-    await client.connect();
-    db = client.db(dbName);
-    console.log("Connected to MongoDB");
-    return db;
-};
-
-export const updateInventory = async (inventory: Inventory, type: InventoryType): Promise<void> => {
-    const database = await connectToDatabase();
-    await database
-        .collection("inventories")
-        .updateOne({ type }, { $set: inventory }, { upsert: true, bypassDocumentValidation: true });
+export const updateInventory = async (inventory: InventoryDto, type: InventoryType): Promise<void> => {
+    try {
+        const database = await connectMongo();
+        await database
+            .collection("inventories")
+            .updateOne(
+                { prototype: inventory.prototype, owner: inventory.owner, type },
+                { $set: { ...inventory } },
+                { upsert: true }
+            );
+        return;
+    } catch (error) {
+        console.error(error);
+    }
 };

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { Momo721 } from "@/types/dtos/Momo721";
 import InventoryDetailModal from "@/components/Modal/InventoryDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
+import { InventoryDto } from "@/types/dtos/Inventory.dto";
 
 interface InventoryCardProps {
-    item: Momo721;
+    item: InventoryDto;
 }
 
 const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {

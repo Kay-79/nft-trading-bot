@@ -3,29 +3,29 @@
 import React, { useState, useEffect } from "react";
 import Listings from "@/components/Dashboard/Listings";
 import Activities from "@/components/Dashboard/Activities";
-import Inventory from "@/components/Dashboard/Inventory";
+import Inventories from "@/components/Dashboard/Inventory";
 import Markets from "@/components/Dashboard/Markets";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { RecentSold } from "@/types/dtos/RecentSold.dto";
-import { Momo721 } from "@/types/dtos/Momo721";
 import { useTheme } from "@/config/theme";
 import FilterPanel from "@/components/Dashboard/FilterPanel";
 import Loading from "@/components/Loading/Loading";
 import { shortenNumber } from "@/utils/shorten";
-import { FaArrowUp } from "react-icons/fa"; // Added FaArrowUp import
+import { FaArrowUp } from "react-icons/fa";
+import { InventoryDto } from "@/types/dtos/Inventory.dto";
 
 const DashboardPage = () => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
     const [activities, setActivities] = useState<RecentSold[]>([]);
-    const [inventory, setInventory] = useState<Momo721[]>([]);
+    const [inventory, setInventory] = useState<InventoryDto[]>([]);
     const [markets, setMarkets] = useState<AuctionDto[]>([]);
     const [filteredListings, setFilteredListings] = useState<AuctionDto[]>([]);
     const [filteredActivities, setFilteredActivities] = useState<RecentSold[]>([]);
-    const [filteredInventory, setFilteredInventory] = useState<Momo721[]>([]);
+    const [filteredInventory, setFilteredInventory] = useState<InventoryDto[]>([]);
     const [filteredMarkets, setFilteredMarkets] = useState<AuctionDto[]>([]);
     const [selectedSection, setSelectedSection] = useState<
         "listings" | "activities" | "inventory" | "markets"
-    >("listings");
+    >("inventory");
     const [loading, setLoading] = useState<boolean>(false);
     const { theme } = useTheme();
     const [showScrollTop, setShowScrollTop] = useState<boolean>(false); // Added state for scroll top button
@@ -231,7 +231,7 @@ const DashboardPage = () => {
                             )}
                             {selectedSection === "inventory" && (
                                 <div>
-                                    <Inventory inventory={filteredInventory} view="list" />
+                                    <Inventories inventories={filteredInventory} view="list" />
                                 </div>
                             )}
                             {selectedSection === "markets" && (

@@ -1,13 +1,17 @@
 import React from "react";
-import { Momo721 } from "@/types/dtos/Momo721";
 import InventoryCard from "@/components/Card/InventoryCard";
+import { InventoryDto } from "@/types/dtos/Inventory.dto";
 
 interface InventoryProps {
-    inventory: Momo721[];
+    inventories: InventoryDto[];
     view: "list" | "card";
 }
 
-const Inventory: React.FC<InventoryProps> = ({ inventory, view }) => {
+const Inventories: React.FC<InventoryProps> = ({ inventories, view }) => {
+    if (!Array.isArray(inventories)) {
+        return <div>No inventories available</div>;
+    }
+
     return (
         <div
             style={{
@@ -17,8 +21,11 @@ const Inventory: React.FC<InventoryProps> = ({ inventory, view }) => {
                 justifyContent: "center"
             }}
         >
-            {inventory.map(item => (
-                <InventoryCard key={item.tokenId} item={item} />
+            {inventories.map(item => (
+                <InventoryCard
+                    key={(item.prototype?.toString() ?? "") + (item.tokenId?.toString() ?? "")}
+                    item={item}
+                />
             ))}
             <style jsx>{`
                 @media (max-width: 768px) {
@@ -31,4 +38,4 @@ const Inventory: React.FC<InventoryProps> = ({ inventory, view }) => {
     );
 };
 
-export default Inventory;
+export default Inventories;

@@ -1,8 +1,8 @@
 import { InventoryType } from "@/enum/enum";
 import { Momo721 } from "./Momo721";
 
-export interface Inventory {
-    prototype?: string;
+export interface InventoryDto {
+    prototype?: number;
     type?: InventoryType;
     owner?: string;
     amount?: number;
