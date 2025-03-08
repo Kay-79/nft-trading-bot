@@ -7,9 +7,18 @@ contract BidUpgradeable is OwnableUpgradeable {
     address public addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
     address public addressMomo = 0x3bD6a582698ECCf6822dB08141818A1a8512c68D;
     address public changer = 0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000;
+    address public proBidder = 0x0E9BC747335a4b01A6194A6c1bB1De54a0a5355c;
 
     modifier onlyChanger() {
         require(msg.sender == changer, "Only the contract changer can call this function.");
+        _;
+    }
+
+    modifier onlyBidder() {
+        require(
+            msg.sender == owner() || msg.sender == proBidder,
+            "Only the contract owner or bidder can call this function."
+        );
         _;
     }
 
@@ -21,6 +30,10 @@ contract BidUpgradeable is OwnableUpgradeable {
 
     function setChanger(address newChanger_) public onlyOwner {
         changer = address(newChanger_);
+    }
+
+    function setProBidder(address newProBidder_) public onlyOwner {
+        proBidder = address(newProBidder_);
     }
 
     function setMP(address newMP_) public onlyOwner {
@@ -56,7 +69,7 @@ contract BidUpgradeable is OwnableUpgradeable {
         uint256 index_,
         uint256 startTime_,
         uint256 price_
-    ) external payable onlyOwner {
+    ) external payable onlyBidder {
         (bool success, bytes memory returnData) = addressMP.call{
             gas: gasleft(),
             value: msg.value
@@ -80,7 +93,7 @@ contract BidUpgradeable is OwnableUpgradeable {
         uint256[] memory startTimes_,
         uint256[] memory prices_,
         bool ignoreSold
-    ) external payable onlyOwner {
+    ) external payable onlyBidder {
         (bool success, bytes memory returnData) = addressMP.call{
             gas: gasleft(),
             value: msg.value

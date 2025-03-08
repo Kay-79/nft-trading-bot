@@ -44,13 +44,6 @@ const config = {
         ["0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000", "_1_0_1", true],
         ["0x55555D4de8df0c455C2Ff368253388FE669a8888", "_5_8_1", true],
         ["0x0E9BC747335a4b01A6194A6c1bB1De54a0a5355c", "_0_E_9", true],
-        ["0x179815260f9265950286918fa34b624071E09D68", "_1_7_9", true], // getReward()
-        ["0xfa11AA3953B46c12dC1fB5c880912A80BF52203A", "_f_a_1", true],
-        ["0x891016f99BA622F8556bE12B4EA336157aA6cb20", "_8_9_1", true],
-        ["0xb8C5744D347A74484925E19F588719C846616405", "_b_8_C", true],
-        ["0x838e781DC9F070922F66f0BE415d15168bB04825", "_8_3_8", true],
-        ["0x79791a6D45C4bCcaBf56dF64403d84EEFc4065EC", "_7_9_7", true],
-        ["0x3A2887CEE9096cc90A00619F5fAFA5eeE8FC0e32", "_3_A_2", true],
         ["0x2D02D9fa00eFE096068c733e925035aBB9661e98", "_2_D_0", true], // version 3
         ["0x5Af0F366B44161AF0c412adA0c2840CFbd8e6A81", "_5_A_f", true],
         ["0x2D34E0171db021b2e0A0ECb4eA298DBE708a6C68", "_2_D_3", true],
