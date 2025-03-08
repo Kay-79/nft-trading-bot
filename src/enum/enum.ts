@@ -8,6 +8,11 @@ export enum BidType {
     GEM = "GEM" // 🔜
 }
 
+export enum InventoryType {
+    NORMAL = "NORMAL",
+    PRO = "PRO"
+}
+
 export enum BlockType {
     BEP721 = 0,
     CREW = 1
