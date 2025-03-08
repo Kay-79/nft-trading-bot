@@ -209,3 +209,5 @@ export const PORT_HOST_DATASET = 3004;
 export const API_AI_PRICE_PREDICT_FOR_BOT = `http://${IP_AI_PREDICT}:5000/predict`;
 
 export const API_AI_PRICE_PREDICT = "http://localhost:5000/predict";
+
+export const DATABASE_URL = process.env.DATABASE_URL || "mongodb://localhost:27017";
