@@ -22,10 +22,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventories, view }) => {
             }}
         >
             {inventories.map(item => (
-                <InventoryCard
-                    key={(item.prototype?.toString() ?? "") + (item.tokenId?.toString() ?? "")}
-                    item={item}
-                />
+                <InventoryCard key={item.id + (item.tokenId?.toString() ?? "")} item={item} />
             ))}
             <style jsx>{`
                 @media (max-width: 768px) {

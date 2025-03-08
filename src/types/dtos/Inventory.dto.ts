@@ -1,8 +1,7 @@
 import { InventoryType } from "@/enum/enum";
-import { Momo721 } from "./Momo721";
 
 export interface InventoryDto {
-    prototype: number;
+    id: string;
     type?: InventoryType;
     owner?: string;
     amount?: number;
@@ -13,5 +12,5 @@ export interface InventoryDto {
     specialty?: number;
     hashrate?: number;
     lvHashrate?: number;
-    tokens?: Momo721[];
+    prototype: number;
 }
