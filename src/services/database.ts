@@ -1,19 +1,49 @@
-import { connectMongo } from "@/utils/connectMongo";
+import { closeMongoConnection, connectMongo } from "@/utils/connectMongo";
 import { InventoryDto } from "../types/dtos/Inventory.dto";
 import { InventoryType } from "@/enum/enum";
 
-export const updateInventory = async (inventory: InventoryDto, type: InventoryType): Promise<void> => {
+export const updateInventory = async (
+    inventory: InventoryDto,
+    type: InventoryType
+): Promise<void> => {
     try {
+        console.log("Connecting to MongoDB...");
         const database = await connectMongo();
-        await database
-            .collection("inventories")
-            .updateOne(
-                { prototype: inventory.prototype, owner: inventory.owner, type },
+        console.log("Updating inventory...");
+        const existingInventory = await database.collection("inventories").findOne({
+            id: inventory.id,
+            prototype: inventory.prototype,
+            owner: inventory.owner,
+            type
+        });
+        if (existingInventory) {
+            await database.collection("inventories").updateOne(
+                {
+                    id: inventory.id,
+                    prototype: inventory.prototype,
+                    owner: inventory.owner,
+                    type
+                },
+                { $inc: { amount: 1 } }
+            );
+            console.log("Normal inventory amount incremented successfully");
+        } else {
+            await database.collection("inventories").updateOne(
+                {
+                    id: inventory.id,
+                    prototype: inventory.prototype,
+                    owner: inventory.owner,
+                    type
+                },
                 { $set: { ...inventory } },
                 { upsert: true }
             );
-        return;
+            console.log("Normal inventory updated successfully");
+        }
     } catch (error) {
-        console.error(error);
+        console.error("Error updating inventory:", error);
+    } finally {
+        console.log("Closing MongoDB connection...");
+        await closeMongoConnection();
     }
 };

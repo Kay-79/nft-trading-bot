@@ -2,8 +2,9 @@ import { InventoryType } from "@/enum/enum";
 
 export interface InventoryDto {
     id: string;
-    type?: InventoryType;
+    prototype: number;
     owner?: string;
+    type?: InventoryType;
     amount?: number;
     tokenId?: number;
     quality?: number;
@@ -12,5 +13,4 @@ export interface InventoryDto {
     specialty?: number;
     hashrate?: number;
     lvHashrate?: number;
-    prototype: number;
 }
