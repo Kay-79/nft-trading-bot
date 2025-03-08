@@ -36,7 +36,8 @@ const nextConfig: NextConfig = {
         CHANGER_TESTNET: process.env.CHANGER_TESTNET,
         NORMAL_BUYER_MAINNET: process.env.NORMAL_BUYER_MAINNET,
         PRO_BUYER_MAINNET: process.env.PRO_BUYER_MAINNET,
-        CHANGER_MAINNET: process.env.CHANGER_MAINNET
+        CHANGER_MAINNET: process.env.CHANGER_MAINNET,
+        MONGO_URI: process.env.MONGO_URI
     }
 };
 
