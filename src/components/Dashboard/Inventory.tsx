@@ -7,7 +7,7 @@ interface InventoryProps {
     view: "list" | "card";
 }
 
-const Inventories: React.FC<InventoryProps> = ({ inventories, view }) => {
+const Inventory: React.FC<InventoryProps> = ({ inventories, view }) => {
     if (!Array.isArray(inventories)) {
         return <div>No inventories available</div>;
     }
@@ -38,4 +38,4 @@ const Inventories: React.FC<InventoryProps> = ({ inventories, view }) => {
     );
 };
 
-export default Inventories;
+export default Inventory;
