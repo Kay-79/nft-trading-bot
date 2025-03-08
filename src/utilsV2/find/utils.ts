@@ -11,7 +11,7 @@ import {
     MIN_GAS_PRICE_NORMAL,
     MIN_GAS_PRICE_PRO,
     MIN_TIME_GET_PRICE,
-    MP_ADDRESS,
+    // MP_ADDRESS,
     NORMAL_BUYER,
     PRO_BUYER,
     RATE_FEE_MARKET,
@@ -114,7 +114,7 @@ export const setupBidAuction = ({
             break;
         case BidType.PRO:
             buyer = PRO_BUYER;
-            contractAddress = MP_ADDRESS;
+            contractAddress = bidContract;
             minGasPrice = MIN_GAS_PRICE_PRO;
             maxGasPrice = MIN_GAS_PRICE_PRO;
             uptime = auctions[0]?.uptime ?? 0;
