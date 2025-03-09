@@ -1,6 +1,6 @@
 import React, { JSX, useState } from "react";
 import Image from "next/image";
-import { RecentSoldDto } from "@/types/dtos/RecentSoldDto.dto";
+import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import { FaExternalLinkAlt, FaUsers } from "react-icons/fa";
 import { EXPLORER_URL } from "@/constants/constants";

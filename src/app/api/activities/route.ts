@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { RecentSoldDto } from "@/types/dtos/RecentSoldDto.dto";
+import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
 import { PRO_BUYER } from "@/constants/constants";
 
 export async function GET() {

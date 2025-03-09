@@ -10,7 +10,7 @@ import { newbieBidders, proBidders } from "@/config/config";
 import { PredictMode } from "@/enum/enum";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
-import { RecentSoldDto } from "@/types/dtos/RecentSoldDto.dto";
+import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
 import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
 import { stakingUtils } from "@/utilsV2/staking/utils";
 import fs from "fs";

@@ -1,5 +1,5 @@
 import React from "react";
-import { RecentSoldDto } from "@/types/dtos/RecentSoldDto.dto";
+import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
 import ActivityRow from "@/components/Row/ActivityRow";
 
 interface ActivitiesProps {

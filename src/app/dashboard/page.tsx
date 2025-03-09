@@ -6,7 +6,7 @@ import Activities from "@/components/Dashboard/Activities";
 import Inventories from "@/components/Dashboard/Inventory";
 import Markets from "@/components/Dashboard/Markets";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
-import { RecentSoldDto } from "@/types/dtos/RecentSoldDto.dto";
+import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
 import { useTheme } from "@/config/theme";
 import FilterPanel from "@/components/Dashboard/FilterPanel";
 import Loading from "@/components/Loading/Loading";
