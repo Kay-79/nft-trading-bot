@@ -14,6 +14,7 @@ import {
     priceDeltaMin,
     priceThreshold
 } from "@/config/changeConfig";
+import { isExistAuction } from "../bid/utils";
 
 export const getChangeDecisionPro = async (
     auction: AuctionDto,
@@ -62,7 +63,10 @@ export const getChangeDecisionNormal = async (
     const auctionLowestPrice = auctionsSamePrototype
         .filter(a => a.nowPrice)
         .sort((a, b) => (a.nowPrice ?? 0) - (b.nowPrice ?? 0))[0];
-
+    if (!(await isExistAuction(auctionLowestPrice))) {
+        console.log("No lowest price");
+        return changeDecision;
+    }
     if (!auctionLowestPrice?.auctor || !auctionLowestPrice.nowPrice || !auctionLowestPrice.uptime) {
         console.log("No lowest price");
         return changeDecision;
@@ -103,7 +107,7 @@ export const getChangeDecisionNormal = async (
         changeDecision.newPrice = shortenNumber(floorPrice - priceDeltaMin, 0, 3);
     }
 
-    if (changeDecision.newPrice >= auction.nowPrice) {
+    if (changeDecision.newPrice >= shortenNumber(auction.nowPrice, 9, 3)) {
         changeDecision.shouldChange = false;
         console.log("Lowest price is higher than current price");
     }
