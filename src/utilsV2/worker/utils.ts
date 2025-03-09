@@ -3,7 +3,9 @@ import { Db } from "mongodb";
 
 export const handleBidEvent = async (db: Db, log: Log) => {
     // Update inventory in database
-    await db.collection("inventory").updateOne(
+    console.log("Bid event detected");
+    console.log("Log data:", log.data);
+    await db.collection("inventories").updateOne(
         {
             /* query criteria */
         },
@@ -17,7 +19,9 @@ export const handleBidEvent = async (db: Db, log: Log) => {
 
 export const handleListingEvent = async (db: Db, log: Log) => {
     // Update listing in database
-    await db.collection("listing").updateOne(
+    console.log("Listing event detected");
+    console.log("Log data:", log.data);
+    await db.collection("listings").updateOne(
         {
             /* query criteria */
         },
