@@ -1,6 +1,6 @@
 import React, { JSX, useState } from "react";
 import Image from "next/image";
-import { RecentSold } from "@/types/dtos/RecentSold.dto";
+import { RecentSoldDto } from "@/types/dtos/RecentSoldDto.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import { FaExternalLinkAlt, FaUsers } from "react-icons/fa";
 import { EXPLORER_URL } from "@/constants/constants";
@@ -9,7 +9,7 @@ import HoverOnShowActivitiesDetail from "@/components/Hover/HoverOnShowActivitie
 import { formatDistanceToNow } from "date-fns";
 
 interface ActivityRowProps {
-    activity: RecentSold;
+    activity: RecentSoldDto;
 }
 
 const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {

@@ -25,7 +25,7 @@ import { checkProfitAuctions } from "@/utilsV2/find/checkProfitAuctions";
 import { getNewAuctionGroups } from "@/utilsV2/find/getNewAuctionGroups";
 import { checkProfitAuctionGroups } from "@/utilsV2/find/checkProfitAuctionGroups";
 
-const findV2 = async () => {
+const find = async () => {
     console.log("Starting findV2...", ENV);
     let latestNotice = new Date().getHours() - TIME_DELAY_NOTICE_STATUS_BOT;
     const latestGetData: LatestGet = {
@@ -149,4 +149,4 @@ const findV2 = async () => {
     }
 };
 
-findV2();
+find();

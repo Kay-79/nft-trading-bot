@@ -10,7 +10,7 @@ import { newbieBidders, proBidders } from "@/config/config";
 import { PredictMode } from "@/enum/enum";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
-import { RecentSold } from "@/types/dtos/RecentSold.dto";
+import { RecentSoldDto } from "@/types/dtos/RecentSoldDto.dto";
 import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
 import { stakingUtils } from "@/utilsV2/staking/utils";
 import fs from "fs";
@@ -19,7 +19,7 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 export const getTrainingData = async (): Promise<TrainingData[]> => {
     const trainingData: TrainingData[] = [];
     const res1 = await axios.get(`${API_MOBOX}/auction/transactions/top50`);
-    const rawDatasets: RecentSold[] = [...res1.data.list];
+    const rawDatasets: RecentSoldDto[] = [...res1.data.list];
     const res2 = await axios.get(`${API_MOBOX}/auction/logs_new`, {
         params: {
             limit: 100,
@@ -43,7 +43,7 @@ export const getTrainingData = async (): Promise<TrainingData[]> => {
     return trainingData;
 };
 
-export const preprocessRawData = (rawDatasets: RecentSold[]): TrainingData[] => {
+export const preprocessRawData = (rawDatasets: RecentSoldDto[]): TrainingData[] => {
     if (!rawDatasets || rawDatasets.length === 0) return [];
     return rawDatasets.reduce<TrainingData[]>((acc, dataset) => {
         if (!dataset.tokens || !dataset.bidPrice) return acc;

@@ -3,7 +3,7 @@ import { PRO_BUYER } from "@/constants/constants";
 import { shortenNumber } from "@/utilsV2/common/utils";
 import { stakingUtils } from "@/utilsV2/staking/utils";
 
-const stakingProfit = async (address: string) => {
+const staking = async (address: string) => {
     const data = await getMboxPriceAndRewardDelay5m();
     const mboxPrice = data.mboxPrice;
     const rewardPer1000Hash = data.reward;
@@ -35,5 +35,5 @@ const stakingProfit = async (address: string) => {
     );
 };
 
-stakingProfit(PRO_BUYER);
-// stakingProfit("TEST_ADDRESS");
+staking(PRO_BUYER);
+// staking("TEST_ADDRESS");

@@ -59,6 +59,7 @@
         "bid": "bun ./src/tools/bid.ts",
         "create": "node ./src/tools/create",
         "change": "bun ./src/tools/change.ts",
+        "worker": "bun ./src/tools/worker.ts",
         "transfer": "node ./src/tools/transfer",
         "deposit": "node ./src/tools/deposit",
         "withdraw": "node ./src/tools/withdraw",

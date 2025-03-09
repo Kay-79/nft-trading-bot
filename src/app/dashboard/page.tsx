@@ -6,7 +6,7 @@ import Activities from "@/components/Dashboard/Activities";
 import Inventories from "@/components/Dashboard/Inventory";
 import Markets from "@/components/Dashboard/Markets";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
-import { RecentSold } from "@/types/dtos/RecentSold.dto";
+import { RecentSoldDto } from "@/types/dtos/RecentSoldDto.dto";
 import { useTheme } from "@/config/theme";
 import FilterPanel from "@/components/Dashboard/FilterPanel";
 import Loading from "@/components/Loading/Loading";
@@ -16,11 +16,11 @@ import { InventoryDto } from "@/types/dtos/Inventory.dto";
 
 const DashboardPage = () => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
-    const [activities, setActivities] = useState<RecentSold[]>([]);
+    const [activities, setActivities] = useState<RecentSoldDto[]>([]);
     const [inventory, setInventory] = useState<InventoryDto[]>([]);
     const [markets, setMarkets] = useState<AuctionDto[]>([]);
     const [filteredListings, setFilteredListings] = useState<AuctionDto[]>([]);
-    const [filteredActivities, setFilteredActivities] = useState<RecentSold[]>([]);
+    const [filteredActivities, setFilteredActivities] = useState<RecentSoldDto[]>([]);
     const [filteredInventory, setFilteredInventory] = useState<InventoryDto[]>([]);
     const [filteredMarkets, setFilteredMarkets] = useState<AuctionDto[]>([]);
     const [selectedSection, setSelectedSection] = useState<

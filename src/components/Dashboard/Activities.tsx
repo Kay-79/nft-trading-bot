@@ -1,9 +1,9 @@
 import React from "react";
-import { RecentSold } from "@/types/dtos/RecentSold.dto";
+import { RecentSoldDto } from "@/types/dtos/RecentSoldDto.dto";
 import ActivityRow from "@/components/Row/ActivityRow";
 
 interface ActivitiesProps {
-    activities: RecentSold[];
+    activities: RecentSoldDto[];
     view: "list" | "card";
 }
 

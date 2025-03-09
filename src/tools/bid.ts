@@ -9,7 +9,7 @@ import { frontRunBidAuction } from "../utilsV2/bid/frontRunBidAuction";
 import { getBidAuctions, saveBidAuctions } from "../utilsV2/bid/utils";
 import { noticeBotBid } from "../utilsV2/bid/handleNoticeBot";
 
-const bidV2 = async () => {
+const bid = async () => {
     console.log("Starting bidV2...", ENV);
     let latestNotice = new Date().getHours();
     latestNotice = await noticeBotBid(latestNotice);
@@ -68,4 +68,4 @@ const bidV2 = async () => {
     }
 };
 
-bidV2();
+bid();
