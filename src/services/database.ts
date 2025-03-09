@@ -1,4 +1,5 @@
-import { closeMongoConnection, connectMongo } from "@/utils/connectMongo";
+// import { closeMongoConnection } from "@/utils/connectMongo";
+import { connectMongo } from "@/utils/connectMongo";
 import { InventoryDto } from "../types/dtos/Inventory.dto";
 import { InventoryType } from "@/enum/enum";
 
@@ -42,8 +43,5 @@ export const updateInventory = async (
         }
     } catch (error) {
         console.error("Error updating inventory:", error);
-    } finally {
-        console.log("Closing MongoDB connection...");
-        await closeMongoConnection();
     }
 };
