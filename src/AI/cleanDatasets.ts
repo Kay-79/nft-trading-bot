@@ -1,5 +1,5 @@
 import fs from "fs";
-import { newbieBidders, proBidders, newbieAucthors } from "@/config/config";
+import { newbieBidders, proBidders, newbieAuctors } from "@/config/config";
 import { ethers } from "ethers";
 
 export const cleanDatasets = async () => {
@@ -11,7 +11,7 @@ export const cleanDatasets = async () => {
     }
     const proTradersNormalized = new Set(proBidders.map(addr => ethers.getAddress(addr)));
     const newbieTradersNormalized = new Set(newbieBidders.map(addr => ethers.getAddress(addr)));
-    const newbieAuctorsNormalized = new Set(newbieAucthors.map(addr => ethers.getAddress(addr)));
+    const newbieAuctorsNormalized = new Set(newbieAuctors.map(addr => ethers.getAddress(addr)));
     const newData = existingData.filter(
         (dataset: {
             bidder: string;

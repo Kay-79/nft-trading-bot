@@ -61,7 +61,7 @@ export const proBidders: string[] = [
 
 export const newbieBidders: string[] = ["0xF91116A59E7a004030fDB42070e3E8A97912591a"];
 
-export const newbieAucthors: string[] = ["0x3cf0689468a046c3f353F41a71bBeF2c5F486980"];
+export const newbieAuctors: string[] = ["0x3cf0689468a046c3f353F41a71bBeF2c5F486980"];
 
 export const contracts: string[] = [
     "0x2D02D9fa00eFE096068c733e925035aBB9661e98", // version 3
