@@ -44,10 +44,8 @@ const worker = async () => {
         console.log("No synced block found. Starting from block 0");
         const newSynced: SyncedDto = { block: 0, tx: "" };
         await db.collection("synced").insertOne(newSynced);
-    } else {
-        console.log("Starting from block:", synced.block);
     }
-    let startBlock = synced ? synced.block : 0;
+    let startBlock = synced ? synced.block + 1 : 0;
     while (true) {
         const endBlock = await fullNodeProvider.getBlockNumber();
         if (startBlock >= endBlock) {
