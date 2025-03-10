@@ -4,10 +4,9 @@ import { InventoryDto } from "@/types/dtos/Inventory.dto";
 
 interface InventoryProps {
     inventories: InventoryDto[];
-    view: "list" | "card";
 }
 
-const Inventory: React.FC<InventoryProps> = ({ inventories, view }) => {
+const Inventory: React.FC<InventoryProps> = ({ inventories }) => {
     if (!Array.isArray(inventories)) {
         return <div>No inventories available</div>;
     }
@@ -15,8 +14,9 @@ const Inventory: React.FC<InventoryProps> = ({ inventories, view }) => {
     return (
         <div
             style={{
-                display: "grid",
-                gridTemplateColumns: view === "list" ? "1fr" : "repeat(3, 1fr)",
+                display: "flex",
+                flexDirection: "row",
+                flexWrap: "wrap",
                 gap: "20px",
                 justifyContent: "center"
             }}
