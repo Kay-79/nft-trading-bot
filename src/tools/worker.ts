@@ -16,29 +16,29 @@ import {
 } from "@/constants/constants";
 import { sleep } from "@/utilsV2/common/sleep";
 import { SyncedDto } from "@/types/dtos/Synced.dto";
-import { AnalysisDto } from "@/types/dtos/Analysis.dto";
+// import { AnalysisDto } from "@/types/dtos/Analysis.dto";
 const step = 2000;
 
 const worker = async () => {
     const db = await connectMongo();
     console.log("Worker started");
-    const analysis = await db.collection("analysis").findOne({});
-    if (!analysis) {
-        console.log("No analysis found. Starting from block 0");
-        const newAnalysis: AnalysisDto = {
-            normal: {
-                totalBuy: { amount: 0, value: 0 },
-                totalSell: { amount: 0, value: 0 },
-                totalCancel: { amount: 0, value: 0 }
-            },
-            pro: {
-                totalBuy: { amount: 0, value: 0 },
-                totalSell: { amount: 0, value: 0 },
-                totalCancel: { amount: 0, value: 0 }
-            }
-        };
-        await db.collection("analysis").insertOne(newAnalysis);
-    }
+    // const analysis = await db.collection("analysis").findOne({});
+    // if (!analysis) {
+    //     console.log("No analysis found. Starting from block 0");
+    //     const newAnalysis: AnalysisDto = {
+    //         normal: {
+    //             totalBuy: { amount: 0, value: 0 },
+    //             totalSell: { amount: 0, value: 0 },
+    //             totalCancel: { amount: 0, value: 0 }
+    //         },
+    //         pro: {
+    //             totalBuy: { amount: 0, value: 0 },
+    //             totalSell: { amount: 0, value: 0 },
+    //             totalCancel: { amount: 0, value: 0 }
+    //         }
+    //     };
+    //     await db.collection("analysis").insertOne(newAnalysis);
+    // }
     const synced = await db.collection("synced").findOne({});
     if (!synced) {
         console.log("No synced block found. Starting from block 0");
@@ -50,6 +50,12 @@ const worker = async () => {
     let startBlock = synced ? synced.block : 0;
     while (true) {
         const endBlock = await fullNodeProvider.getBlockNumber();
+        if (startBlock >= endBlock) {
+            const synced = await db.collection("synced").findOne({});
+            if (synced) {
+                startBlock = synced.block + 1;
+            }
+        }
         console.log("Syncing blocks:", startBlock, "to", endBlock);
         for (let currentBlock = startBlock; currentBlock <= endBlock; currentBlock += step) {
             console.log("Processing blocks:", currentBlock, "to", currentBlock + step - 1);
