@@ -1,7 +1,7 @@
 import { Log } from "ethers";
 import { Db } from "mongodb";
 import { byte32ToAddress } from "../common/utils";
-import { contracts } from "@/config/config";
+import { allContracts } from "@/config/config";
 import { ethers } from "hardhat";
 import {
     logBidToId,
@@ -19,7 +19,7 @@ import { ChangeDto } from "@/types/worker/Change.dto";
 export const handleBidEvent = async (db: Db, log: Log) => {
     const buyer = byte32ToAddress(log.topics[2]);
     const seller = byte32ToAddress(log.topics[1]);
-    if (contracts.includes(buyer) || contracts.includes(ethers.getAddress(buyer))) {
+    if (allContracts.includes(buyer) || allContracts.includes(ethers.getAddress(buyer))) {
         const inventories: InventoryDto[] = logBidToInventory(buyer, log.data);
         await databaseService.createOrIncreaseInventories(
             db,
@@ -28,7 +28,7 @@ export const handleBidEvent = async (db: Db, log: Log) => {
             log.transactionHash
         );
     }
-    if (contracts.includes(seller) || contracts.includes(ethers.getAddress(seller))) {
+    if (allContracts.includes(seller) || allContracts.includes(ethers.getAddress(seller))) {
         const id = logBidToId(seller, log.data);
         await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
     }
@@ -36,7 +36,7 @@ export const handleBidEvent = async (db: Db, log: Log) => {
 
 export const handleListingEvent = async (db: Db, log: Log) => {
     const auctor = byte32ToAddress(log.topics[1]);
-    if (contracts.includes(auctor) || contracts.includes(ethers.getAddress(auctor))) {
+    if (allContracts.includes(auctor) || allContracts.includes(ethers.getAddress(auctor))) {
         const listings: AuctionDto[] = logCreateToListing(auctor, log.data);
         await databaseService.createListings(db, listings, log.blockNumber, log.transactionHash);
         await databaseService.deleteOrDecreaseInventories(
@@ -50,19 +50,23 @@ export const handleListingEvent = async (db: Db, log: Log) => {
 
 export const handleChangeEvent = async (db: Db, log: Log) => {
     const auctor = byte32ToAddress(log.topics[1]);
-    const changes: ChangeDto = logChangeToChange(auctor, log.data);
-    await databaseService.updateListing(db, changes, log.blockNumber, log.transactionHash);
+    if (allContracts.includes(auctor) || allContracts.includes(ethers.getAddress(auctor))) {
+        const changes: ChangeDto = logChangeToChange(auctor, log.data);
+        await databaseService.updateListing(db, changes, log.blockNumber, log.transactionHash);
+    }
 };
 
 export const handleCancelEvent = async (db: Db, log: Log) => {
     const auctor = byte32ToAddress(log.topics[1]);
-    const id = logCancelToId(auctor, log.data);
-    await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
-    const inventories: InventoryDto[] = logCancelToInventory(auctor, log.data);
-    await databaseService.createOrIncreaseInventories(
-        db,
-        inventories,
-        log.blockNumber,
-        log.transactionHash
-    );
+    if (allContracts.includes(auctor) || allContracts.includes(ethers.getAddress(auctor))) {
+        const id = logCancelToId(auctor, log.data);
+        await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
+        const inventories: InventoryDto[] = logCancelToInventory(auctor, log.data);
+        await databaseService.createOrIncreaseInventories(
+            db,
+            inventories,
+            log.blockNumber,
+            log.transactionHash
+        );
+    }
 };

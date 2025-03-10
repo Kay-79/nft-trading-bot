@@ -97,7 +97,7 @@ const deleteOrDecreaseInventories = async (
                                     owner: listing.auctor,
                                     type: InventoryType.NORMAL
                                 },
-                                { $inc: { amount: -amounts[i] } }
+                                { $inc: { amount: -Number(amounts[i]) } }
                             );
                             console.log(
                                 `Inventory ${listing.auctor}_${ids[i]}_${listing.tokenId} amount decremented successfully`
@@ -222,7 +222,6 @@ const deleteListing = async (
 export const databaseService = {
     //Sync
     // updateSynced,
-
     //Inventory
     createOrIncreaseInventories,
     deleteOrDecreaseInventories,
