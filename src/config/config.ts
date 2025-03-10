@@ -71,6 +71,12 @@ export const contracts: string[] = [
     "0x1Cf2c4119A6e65C3053be65103b5e276506449eB"
 ];
 
-export const allContracts: string[] = ["0x1Cf2c4119A6e65C3053be65103b5e276506449eB"];
+export const allContracts: string[] = [
+    "0x2D02D9fa00eFE096068c733e925035aBB9661e98",
+    "0x5Af0F366B44161AF0c412adA0c2840CFbd8e6A81",
+    "0x2D34E0171db021b2e0A0ECb4eA298DBE708a6C68",
+    "0xbad9ecD57d69E4b16073936c8453FD4b0F7D31Fd",
+    "0x1Cf2c4119A6e65C3053be65103b5e276506449eB"
+];
 
 export const bidContract = "0x2D34E0171db021b2e0A0ECb4eA298DBE708a6C68";

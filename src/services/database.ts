@@ -2,7 +2,7 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { InventoryDto } from "../types/dtos/Inventory.dto";
 import { Db } from "mongodb";
 import { isNormalAuction, isProAuction } from "@/utilsV2/find/utils";
-import { InventoryType } from "@/enum/enum";
+// import { InventoryType } from "@/enum/enum";
 import { ChangeDto } from "@/types/worker/Change.dto";
 
 const updateSynced = async (
@@ -11,11 +11,9 @@ const updateSynced = async (
     transactionHash: string
 ): Promise<void> => {
     try {
-        console.log("Updating synced block...");
         await db
             .collection("synced")
             .updateOne({}, { $set: { block: blockNumber, tx: transactionHash } }, { upsert: true });
-        console.log(`Synced block updated successfully`);
     } catch (error) {
         throw new Error(`Error updating synced block: ${error}`);
     }
@@ -28,7 +26,6 @@ const createOrIncreaseInventories = async (
     transactionHash: string
 ): Promise<void> => {
     try {
-        console.log("Updating inventories...");
         for (const inventory of inventories) {
             const type = inventory.type;
             const existingInventory = await db.collection("inventories").findOne({
@@ -47,7 +44,7 @@ const createOrIncreaseInventories = async (
                     },
                     { $inc: { amount: inventory.amount } }
                 );
-                console.log(`Inventory ${inventory.id} amount incremented successfully`);
+                console.log(`Inventory amount incremented`);
             } else {
                 await db.collection("inventories").updateOne(
                     {
@@ -59,7 +56,7 @@ const createOrIncreaseInventories = async (
                     { $set: { ...inventory } },
                     { upsert: true }
                 );
-                console.log(`Inventory ${inventory.id} updated successfully`);
+                console.log(`Inventory created`);
             }
         }
         await updateSynced(db, blockNumber, transactionHash);
@@ -75,43 +72,32 @@ const deleteOrDecreaseInventories = async (
     transactionHash: string
 ): Promise<void> => {
     try {
-        console.log("Updating inventories...");
         for (const listing of listings) {
             if (isProAuction(listing)) {
             } else if (isNormalAuction(listing)) {
                 const ids = listing.ids || [];
                 const amounts = listing.amounts || [];
                 for (let i = 0; i < ids.length; i++) {
-                    const inventory = await db.collection("inventories").findOne({
-                        id: `${listing.auctor}_${ids[i]}_${listing.tokenId}`,
-                        prototype: ids[i],
-                        owner: listing.auctor,
-                        type: InventoryType.NORMAL
-                    });
+                    const inventory = (await db.collection("inventories").findOne({
+                        id: `${listing.auctor}_${ids[i]}_${listing.tokenId}`
+                    })) as InventoryDto | null;
                     if (inventory) {
-                        if (inventory.amount > amounts[i]) {
+                        if (
+                            inventory.amount !== undefined &&
+                            inventory.amount > Number(amounts[i])
+                        ) {
                             await db.collection("inventories").updateOne(
                                 {
-                                    id: `${listing.auctor}_${ids[i]}_${listing.tokenId}`,
-                                    prototype: ids[i],
-                                    owner: listing.auctor,
-                                    type: InventoryType.NORMAL
+                                    id: `${listing.auctor}_${ids[i]}_${listing.tokenId}`
                                 },
                                 { $inc: { amount: -Number(amounts[i]) } }
                             );
-                            console.log(
-                                `Inventory ${listing.auctor}_${ids[i]}_${listing.tokenId} amount decremented successfully`
-                            );
+                            console.log(`Inventory amount decremented`);
                         } else {
                             await db.collection("inventories").deleteOne({
-                                id: `${listing.auctor}_${ids[i]}_${listing.tokenId}`,
-                                prototype: ids[i],
-                                owner: listing.auctor,
-                                type: InventoryType.NORMAL
+                                id: `${listing.auctor}_${ids[i]}_${listing.tokenId}`
                             });
-                            console.log(
-                                `Inventory ${listing.auctor}_${ids[i]}_${listing.tokenId} deleted successfully`
-                            );
+                            console.log(`Inventory deleted`);
                         }
                     }
                 }
@@ -130,7 +116,6 @@ const createListings = async (
     transactionHash: string
 ): Promise<void> => {
     try {
-        console.log("Updating listings...");
         for (const listing of listings) {
             const existingListing = await db.collection("listings").findOne({
                 id: listing.id,
@@ -146,7 +131,7 @@ const createListings = async (
                     },
                     { $set: { ...listing } }
                 );
-                console.log(`Listing ${listing.id} updated successfully`);
+                console.log(`Listing updated`);
             } else {
                 await db.collection("listings").updateOne(
                     {
@@ -157,7 +142,7 @@ const createListings = async (
                     { $set: { ...listing } },
                     { upsert: true }
                 );
-                console.log(`Listing ${listing.id} inserted successfully`);
+                console.log(`Listing created`);
             }
         }
         await updateSynced(db, blockNumber, transactionHash);
@@ -173,7 +158,6 @@ const updateListing = async (
     transactionHash: string
 ): Promise<void> => {
     try {
-        console.log("Updating listing...");
         const existingListing = (await db.collection("listings").findOne({
             id: change.id,
             index: change.index
@@ -193,7 +177,7 @@ const updateListing = async (
                     }
                 }
             );
-            console.log(`Listing ${change.id} updated successfully`);
+            console.log(`Listing updated`);
         } else {
             console.log(`Listing ${change.id} not found`);
         }
@@ -210,9 +194,8 @@ const deleteListing = async (
     transactionHash: string
 ): Promise<void> => {
     try {
-        console.log("Deleting listing...");
         await db.collection("listings").deleteOne({ id: id });
-        console.log(`Listing ${id} deleted successfully`);
+        console.log(`Listing deleted`);
         await updateSynced(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error deleting listing: ${error}`);

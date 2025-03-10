@@ -92,7 +92,6 @@ const worker = async () => {
                         break;
                 }
             }
-            console.log("Blocks processed:", currentBlock, "to", currentBlock + step - 1);
             startBlock = logs[logs.length - 1].blockNumber + 1;
         }
         await sleep(30);
