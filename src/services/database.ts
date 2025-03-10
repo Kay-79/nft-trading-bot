@@ -3,8 +3,30 @@ import { InventoryDto } from "../types/dtos/Inventory.dto";
 import { Db } from "mongodb";
 import { isNormalAuction, isProAuction } from "@/utilsV2/find/utils";
 import { InventoryType } from "@/enum/enum";
+import { ChangeDto } from "@/types/worker/Change.dto";
 
-const createOrIncreaseInventories = async (db: Db, inventories: InventoryDto[]): Promise<void> => {
+const updateSynced = async (
+    db: Db,
+    blockNumber: number,
+    transactionHash: string
+): Promise<void> => {
+    try {
+        console.log("Updating synced block...");
+        await db
+            .collection("synced")
+            .updateOne({}, { $set: { block: blockNumber, tx: transactionHash } }, { upsert: true });
+        console.log(`Synced block updated successfully`);
+    } catch (error) {
+        throw new Error(`Error updating synced block: ${error}`);
+    }
+};
+
+const createOrIncreaseInventories = async (
+    db: Db,
+    inventories: InventoryDto[],
+    blockNumber: number,
+    transactionHash: string
+): Promise<void> => {
     try {
         console.log("Updating inventories...");
         for (const inventory of inventories) {
@@ -40,12 +62,18 @@ const createOrIncreaseInventories = async (db: Db, inventories: InventoryDto[]):
                 console.log(`Inventory ${inventory.id} updated successfully`);
             }
         }
+        await updateSynced(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error updating inventories: ${error}`);
     }
 };
 
-const deleteOrDecreaseInventories = async (db: Db, listings: AuctionDto[]): Promise<void> => {
+const deleteOrDecreaseInventories = async (
+    db: Db,
+    listings: AuctionDto[],
+    blockNumber: number,
+    transactionHash: string
+): Promise<void> => {
     try {
         console.log("Updating inventories...");
         for (const listing of listings) {
@@ -89,12 +117,18 @@ const deleteOrDecreaseInventories = async (db: Db, listings: AuctionDto[]): Prom
                 }
             }
         }
+        await updateSynced(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error updating inventories: ${error}`);
     }
 };
 
-const updateListings = async (db: Db, listings: AuctionDto[]): Promise<void> => {
+const createListings = async (
+    db: Db,
+    listings: AuctionDto[],
+    blockNumber: number,
+    transactionHash: string
+): Promise<void> => {
     try {
         console.log("Updating listings...");
         for (const listing of listings) {
@@ -126,26 +160,74 @@ const updateListings = async (db: Db, listings: AuctionDto[]): Promise<void> => 
                 console.log(`Listing ${listing.id} inserted successfully`);
             }
         }
+        await updateSynced(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error updating listings: ${error}`);
     }
 };
 
-const deleteListing = async (db: Db, id: string): Promise<void> => {
+const updateListing = async (
+    db: Db,
+    change: ChangeDto,
+    blockNumber: number,
+    transactionHash: string
+): Promise<void> => {
+    try {
+        console.log("Updating listing...");
+        const existingListing = (await db.collection("listings").findOne({
+            id: change.id,
+            index: change.index
+        })) as AuctionDto | null;
+        if (existingListing) {
+            await db.collection("listings").updateOne(
+                {
+                    id: change.id
+                },
+                {
+                    $set: {
+                        startPrice: change.startPrice,
+                        endPrice: change.endPrice,
+                        nowPrice: change.startPrice,
+                        durationDays: change.durationDays,
+                        uptime: change.newStartTime
+                    }
+                }
+            );
+            console.log(`Listing ${change.id} updated successfully`);
+        } else {
+            console.log(`Listing ${change.id} not found`);
+        }
+        await updateSynced(db, blockNumber, transactionHash);
+    } catch (error) {
+        throw new Error(`Error updating listing: ${error}`);
+    }
+};
+
+const deleteListing = async (
+    db: Db,
+    id: string,
+    blockNumber: number,
+    transactionHash: string
+): Promise<void> => {
     try {
         console.log("Deleting listing...");
         await db.collection("listings").deleteOne({ id: id });
         console.log(`Listing ${id} deleted successfully`);
+        await updateSynced(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error deleting listing: ${error}`);
     }
 };
 
 export const databaseService = {
+    //Sync
+    // updateSynced,
+
     //Inventory
     createOrIncreaseInventories,
     deleteOrDecreaseInventories,
     //Listing
-    updateListings,
+    createListings,
+    updateListing,
     deleteListing
 };
