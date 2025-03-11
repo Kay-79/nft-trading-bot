@@ -15,6 +15,7 @@ import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
 import { stakingUtils } from "@/utilsV2/staking/utils";
 import fs from "fs";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
+import { CachePriceReward } from "@/types/AI/CachePriceReward";
 
 export const getTrainingData = async (): Promise<TrainingData[]> => {
     const trainingData: TrainingData[] = [];
@@ -147,10 +148,11 @@ export const getMboxPriceAndRewardDelay5m = async (): Promise<{
         cache = fs.readFileSync("./src/AI/predict/cache.json", "utf-8");
     } else {
         console.log("Create new cache file");
-        cache = JSON.stringify({ mboxPrice: 0, reward: 0, latestCheck: 0 });
+        const newCache: CachePriceReward = { mboxPrice: 0, reward: 0, timestamp: 0 };
+        cache = JSON.stringify(newCache);
     }
     const cacheJson = JSON.parse(cache);
-    const timestamp = cacheJson.latestCheck;
+    const timestamp = cacheJson.timestamp;
     if (Date.now() / 1000 - timestamp > 5 * 60) {
         const mboxPrice = await getPriceMboxOnChain(-1, CACHE_MBOX_PRICE);
         const reward = await stakingUtils.getRewardPer1000Hashrate(-1, CACHE_REWARD_PER_1000_HASH);
