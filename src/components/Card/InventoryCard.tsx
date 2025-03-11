@@ -57,12 +57,12 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                 {/* Amount */}
                 {item.type === InventoryType.NORMAL ? (
                     <div className="text-center mt-2 flex items-center justify-center">
-                        <FaTimes className="text-lg" />
+                        <FaTimes />
                         <p className="text-lg font-semibold">{item.amount}</p>
                     </div>
                 ) : (
                     <div className="text-center mt-2 flex items-center justify-center">
-                        <FaTimes className="text-lg" />
+                        <FaTimes className="text-sm" />
                         <p className="text-lg font-semibold">1</p>
                     </div>
                 )}

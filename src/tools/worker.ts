@@ -92,7 +92,7 @@ const worker = async () => {
             }
             startBlock = logs[logs.length - 1].blockNumber + 1;
         }
-        await sleep(30);
+        await sleep(300);
     }
 };
 
