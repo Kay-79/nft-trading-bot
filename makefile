@@ -54,11 +54,15 @@ create:
 	npm run create
 #######################################
 ############### AI ####################
-hostDatabase:
-	bun apiData
+hostDb:
+	bun ./src/AI/api/hostDb.ts
 
-getDatabase:
-	bun getData
+getDbBox:
+	bun ./src/AI/data/getDbBox.ts
+	bun clean
+
+getDbBot:
+	bun ./src/AI/data/getDbBot.ts
 	bun clean
 
 modelAI:
