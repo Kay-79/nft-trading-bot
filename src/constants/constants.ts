@@ -198,7 +198,7 @@ export const WAIT_BID_PATH = "./src/data/waitBid.json";
 
 export const IP_MAC = "100.92.200.100";
 
-export const IP_PY_BOX = "100.122.209.23";
+export const IP_PY_BOX = "192.168.1.9";
 
 export const IP_PY_BOT = "192.168.1.11";
 
