@@ -18,7 +18,8 @@ import {
     WAIT_BID_PATH,
     MP_BLOCK_ADDRESS,
     ENV,
-    API_AI_PRICE_PREDICT_FOR_BOT
+    API_AI_PRICE_PREDICT_FOR_BOT,
+    MP_ADDRESS
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { BidType, BlockType, Environment } from "../../enum/enum";
@@ -114,7 +115,7 @@ export const setupBidAuction = ({
             break;
         case BidType.PRO:
             buyer = PRO_BUYER;
-            contractAddress = bidContract;
+            contractAddress = MP_ADDRESS;
             minGasPrice = MIN_GAS_PRICE_PRO;
             maxGasPrice = MIN_GAS_PRICE_PRO;
             uptime = auctions[0]?.uptime ?? 0;
@@ -128,11 +129,11 @@ export const setupBidAuction = ({
             uptime = (auctionGroup?.uptime ?? 0) + 8 * 60;
             id = auctionGroup?.auctor ?? "" + auctionGroup?.orderId ?? "";
             break;
-        case BidType.GEM: //comin soon
+        case BidType.BOX:
             break;
-        case BidType.BOX: //comin soon
+        case BidType.MECBOX:
             break;
-        case BidType.MECBOX: //comin soon
+        case BidType.GEM:
             break;
         default:
             break;
