@@ -127,7 +127,7 @@ export const setupBidAuction = ({
             minGasPrice = MIN_GAS_PRICE_PRO;
             maxGasPrice = MIN_GAS_PRICE_PRO;
             uptime = (auctionGroup?.uptime ?? 0) + 8 * 60;
-            id = auctionGroup?.auctor ?? "" + auctionGroup?.orderId ?? "";
+            id = (auctionGroup?.auctor ?? "") + (auctionGroup?.orderId ?? "");
             break;
         case BidType.BOX:
             break;

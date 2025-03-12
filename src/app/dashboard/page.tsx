@@ -110,6 +110,8 @@ const DashboardPage = () => {
                         comparison = (a.level || 0) - (b.level || 0);
                     } else if (filter.sort === "uptime") {
                         comparison = (a.uptime || 0) - (b.uptime || 0);
+                    } else if (filter.sort === "prototype") {
+                        comparison = (a.prototype || 0) - (b.prototype || 0);
                     }
                     return filter.sortOrder === "asc" ? comparison : -comparison;
                 })
@@ -122,9 +124,19 @@ const DashboardPage = () => {
             )
         );
         setFilteredInventory(
-            inventory.filter(
-                item => item.hashrate !== undefined && item.hashrate >= filter.minHashrate
-            )
+            inventory
+                .filter(item => item.hashrate !== undefined && item.hashrate >= filter.minHashrate)
+                .sort((a, b) => {
+                    let comparison = 0;
+                    if (filter.sort === "hashrate") {
+                        comparison = (a.hashrate || 0) - (b.hashrate || 0);
+                    } else if (filter.sort === "level") {
+                        comparison = (a.level || 0) - (b.level || 0);
+                    } else if (filter.sort === "prototype") {
+                        comparison = (a.prototype || 0) - (b.prototype || 0);
+                    }
+                    return filter.sortOrder === "asc" ? comparison : -comparison;
+                })
         );
     };
 
@@ -231,7 +243,7 @@ const DashboardPage = () => {
                             )}
                             {selectedSection === "inventory" && (
                                 <div>
-                                    <Inventories inventories={filteredInventory} view="list" />
+                                    <Inventories inventories={filteredInventory} />
                                 </div>
                             )}
                             {selectedSection === "markets" && (
