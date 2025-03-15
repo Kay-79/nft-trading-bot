@@ -126,6 +126,7 @@ const DashboardPage = () => {
         setFilteredInventory(
             inventory
                 .filter(item => item.hashrate !== undefined && item.hashrate >= filter.minHashrate)
+                .filter(listing => (listing.prototype || 0).toString().includes(filter.search))
                 .sort((a, b) => {
                     let comparison = 0;
                     if (filter.sort === "hashrate") {

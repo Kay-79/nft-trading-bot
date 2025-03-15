@@ -2,8 +2,10 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { InventoryDto } from "../types/dtos/Inventory.dto";
 import { Db } from "mongodb";
 import { isNormalAuction, isProAuction } from "@/utilsV2/find/utils";
-// import { InventoryType } from "@/enum/enum";
+// import { MomoType } from "@/enum/enum";
 import { ChangeDto } from "@/types/worker/Change.dto";
+import { MomoType } from "@/enum/enum";
+import { AnalysisDto } from "@/types/dtos/Analysis.dto";
 
 const updateSynced = async (
     db: Db,
@@ -28,30 +30,39 @@ const createOrIncreaseInventories = async (
     try {
         for (const inventory of inventories) {
             const type = inventory.type;
-            const existingInventory = await db.collection("inventories").findOne({
-                id: inventory.id,
-                prototype: inventory.prototype,
-                owner: inventory.owner,
-                type
-            });
-            if (existingInventory) {
-                await db.collection("inventories").updateOne(
-                    {
-                        id: inventory.id,
-                        prototype: inventory.prototype,
-                        owner: inventory.owner,
-                        type
-                    },
-                    { $inc: { amount: inventory.amount } }
-                );
-                console.log(`Inventory amount incremented`);
+
+            if (type === MomoType.NORMAL) {
+                const existingInventory = await db.collection("inventories").findOne({
+                    id: inventory.id
+                });
+                if (existingInventory) {
+                    await db.collection("inventories").updateOne(
+                        {
+                            id: inventory.id,
+                            prototype: inventory.prototype,
+                            owner: inventory.owner,
+                            type
+                        },
+                        { $inc: { amount: inventory.amount } }
+                    );
+                    console.log(`Inventory amount incremented`);
+                } else {
+                    await db.collection("inventories").updateOne(
+                        {
+                            id: inventory.id,
+                            prototype: inventory.prototype,
+                            owner: inventory.owner,
+                            type
+                        },
+                        { $set: { ...inventory } },
+                        { upsert: true }
+                    );
+                    console.log(`Inventory created`);
+                }
             } else {
                 await db.collection("inventories").updateOne(
                     {
-                        id: inventory.id,
-                        prototype: inventory.prototype,
-                        owner: inventory.owner,
-                        type
+                        id: inventory.id
                     },
                     { $set: { ...inventory } },
                     { upsert: true }
@@ -202,6 +213,41 @@ const deleteListing = async (
     }
 };
 
+const updateAnalysis = async (db: Db, analysis: AnalysisDto): Promise<void> => {
+    try {
+        const existingAnalysis = (await db.collection("analysis").findOne({
+            id: analysis.id
+        })) as AnalysisDto | null;
+        if (existingAnalysis) {
+            await db.collection("analysis").updateOne(
+                {
+                    id: analysis.id
+                },
+                {
+                    $set: {
+                        totalBid: existingAnalysis.totalBid + analysis.totalBid,
+                        totalSell: existingAnalysis.totalSell + analysis.totalSell,
+                        countBid: existingAnalysis.countBid + analysis.countBid,
+                        countSell: existingAnalysis.countSell + analysis.countSell,
+                        countChange: existingAnalysis.countChange + analysis.countChange,
+                        countCancel: existingAnalysis.countCancel + analysis.countCancel
+                    }
+                }
+            );
+            console.log(`Analysis updated`);
+        } else {
+            await db.collection("analysis").updateOne(
+                {
+                    id: analysis.id
+                },
+                { $set: { ...analysis } },
+                { upsert: true }
+            );
+            console.log(`Analysis created`);
+        }
+    } catch {}
+};
+
 export const databaseService = {
     //Sync
     // updateSynced,
@@ -211,5 +257,7 @@ export const databaseService = {
     //Listing
     createListings,
     updateListing,
-    deleteListing
+    deleteListing,
+    //Analysis
+    updateAnalysis
 };

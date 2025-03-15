@@ -8,7 +8,7 @@ export enum BidType {
     GEM = "GEM" // 🔜
 }
 
-export enum InventoryType {
+export enum MomoType {
     NORMAL = "NORMAL",
     PRO = "PRO"
 }

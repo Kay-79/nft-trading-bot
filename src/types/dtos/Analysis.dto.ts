@@ -1,26 +1,11 @@
-interface TradeTransactionNormal {
-    amountBuy: number;
-    valueBuy: number;
-    amountSell: number;
-    valueSell: number;
-    countChange: number;
-    countCancel: number;
-}
-
-interface TradeTransactionPro {
-    amount: number;
-    value: number;
-}
+import { MomoType } from "@/enum/enum";
 
 export interface AnalysisDto {
-    normal: {
-        totalBuy: TradeTransactionNormal;
-        totalSell: TradeTransactionNormal;
-        totalCancel: TradeTransactionNormal;
-    };
-    pro: {
-        totalBuy: TradeTransactionPro;
-        totalSell: TradeTransactionPro;
-        totalCancel: TradeTransactionPro;
-    };
+    id: MomoType;
+    totalBid: number;
+    totalSell: number;
+    countBid: number;
+    countSell: number;
+    countChange: number;
+    countCancel: number;
 }

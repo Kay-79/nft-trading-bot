@@ -4,7 +4,7 @@ import { FaTimes } from "react-icons/fa";
 import InventoryDetailModal from "@/components/Modal/InventoryDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
-import { InventoryType } from "@/enum/enum";
+import { MomoType } from "@/enum/enum";
 
 interface InventoryCardProps {
     item: InventoryDto;
@@ -55,7 +55,7 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                 </div>
 
                 {/* Amount */}
-                {item.type === InventoryType.NORMAL ? (
+                {item.type === MomoType.NORMAL ? (
                     <div className="text-center mt-2 flex items-center justify-center">
                         <FaTimes />
                         <p className="text-lg font-semibold">{item.amount}</p>
