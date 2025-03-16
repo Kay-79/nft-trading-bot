@@ -9,6 +9,7 @@ import {
 import { fullNodeProvider } from "@/providers/fullNodeProvider";
 import {
     MP_ADDRESS,
+    MP_BLOCK_ADDRESS,
     TOPIC_BID,
     TOPIC_CANCEL,
     TOPIC_CHANGE,
@@ -58,7 +59,7 @@ const worker = async () => {
         for (let currentBlock = startBlock; currentBlock <= endBlock; currentBlock += step) {
             console.log("Processing blocks:", currentBlock, "to", currentBlock + step - 1);
             const filter = {
-                address: [MP_ADDRESS],
+                address: [MP_ADDRESS, MP_BLOCK_ADDRESS],
                 fromBlock: currentBlock,
                 toBlock: currentBlock + step - 1
             };

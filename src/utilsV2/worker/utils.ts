@@ -1,3 +1,4 @@
+import { MP_ADDRESS, MP_BLOCK_ADDRESS } from "@/constants/constants";
 import { MomoType } from "@/enum/enum";
 import { AnalysisDto } from "@/types/dtos/Analysis.dto";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
@@ -17,50 +18,89 @@ export const logBidToId = (auctor: string, data: string): string => {
 
 export const logBidToInventory = (
     owner: string,
-    data: string
-): { inventories: InventoryDto[]; analysis: AnalysisDto } => {
-    const decodeData = abiCoder.decode(
-        ["uint256", "uint256", "uint256", "uint256[]", "uint256[]", "uint256"],
-        data
-    );
-    const tokenId = decodeData[2];
-    const ids = decodeData[3];
-    const amounts = decodeData[4];
+    data: string,
+    address: string
+): { inventories: InventoryDto[]; analysisPro: AnalysisDto; analysisNormal: AnalysisDto } => {
+    let decodeData;
+    let tokenIds: number[] = [];
+    let ids;
+    let amounts;
+    let bidPrice = 0;
+    if (address.toLowerCase() === MP_ADDRESS.toLowerCase()) {
+        decodeData = abiCoder.decode(
+            ["uint256", "uint256", "uint256", "uint256[]", "uint256[]", "uint256"],
+            data
+        );
+        tokenIds = [Number(decodeData[2])];
+        ids = decodeData[3];
+        amounts = decodeData[4];
+        bidPrice = Number(decodeData[0]) / 1e18;
+    }
+    if (address.toLowerCase() === MP_BLOCK_ADDRESS.toLowerCase()) {
+        decodeData = abiCoder.decode(
+            ["uint256", "uint256", "uint256", "uint256", "uint256[]", "uint256[]"],
+            data
+        );
+        tokenIds = decodeData[4];
+        ids = decodeData[5];
+        amounts = ids.map(() => 1);
+        bidPrice = Number(decodeData[3]) / 1e18;
+    }
     const inventories: InventoryDto[] = [];
-    if (Number(tokenId)) {
-        inventories.push({
-            id: `${owner}_99999_${tokenId}`,
-            prototype: 99999,
-            owner,
-            amount: 1,
-            tokenId: Number(tokenId),
-            type: MomoType.PRO,
-            quality: 1,
-            category: 1,
-            level: 1,
-            specialty: 1,
-            hashrate: 1,
-            lvHashrate: 1
-        });
-        const analysis: AnalysisDto = {
+    let analysisPro: AnalysisDto = {
+        id: MomoType.PRO,
+        totalBid: 0,
+        totalSell: 0,
+        countBid: 0,
+        countSold: 0,
+        countChange: 0,
+        countCancel: 0
+    };
+    let analysisNormal: AnalysisDto = {
+        id: MomoType.NORMAL,
+        totalBid: 0,
+        totalSell: 0,
+        countBid: 0,
+        countSold: 0,
+        countChange: 0,
+        countCancel: 0
+    };
+    if (tokenIds.length && Number(tokenIds[0])) {
+        for (let i = 0; i < tokenIds.length; i++) {
+            inventories.push({
+                id: `${owner}_99999_${tokenIds[i]}`,
+                prototype: 99999,
+                owner,
+                amount: 1,
+                tokenId: Number(tokenIds[i]),
+                type: MomoType.PRO,
+                quality: 1,
+                category: 1,
+                level: 1,
+                specialty: 1,
+                hashrate: 1,
+                lvHashrate: 1
+            });
+        }
+        analysisPro = {
             id: MomoType.PRO,
-            totalBid: Number(decodeData[0]) / 1e18,
+            totalBid: bidPrice,
             totalSell: 0,
             countBid: 1,
             countSold: 0,
             countChange: 0,
             countCancel: 0
         };
-        return { inventories, analysis };
-    } else {
+    }
+    if (ids.length) {
         let countBid = 0;
         for (let i = 0; i < ids.length; i++) {
             inventories.push({
-                id: `${owner}_${ids[i]}_${tokenId}`,
+                id: `${owner}_${ids[i]}_${0}`,
                 prototype: Number(ids[i]),
                 owner,
                 amount: Number(amounts[i]),
-                tokenId: Number(tokenId),
+                tokenId: Number(0),
                 type: MomoType.NORMAL,
                 quality: 1,
                 category: 1,
@@ -71,17 +111,21 @@ export const logBidToInventory = (
             });
             countBid += Number(amounts[i]);
         }
-        const analysis: AnalysisDto = {
+        analysisNormal = {
             id: MomoType.NORMAL,
-            totalBid: Number(decodeData[0]) / 1e18,
+            totalBid: address.toLowerCase() === MP_BLOCK_ADDRESS.toLowerCase() ? bidPrice : 0,
             totalSell: 0,
             countBid: countBid,
             countSold: 0,
             countChange: 0,
             countCancel: 0
         };
-        return { inventories, analysis };
     }
+    return {
+        inventories,
+        analysisPro,
+        analysisNormal
+    };
 };
 
 export const logCancelToInventory = (

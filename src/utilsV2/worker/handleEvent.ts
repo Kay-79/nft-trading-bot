@@ -20,10 +20,16 @@ import { AnalysisDto } from "@/types/dtos/Analysis.dto";
 export const handleBidEvent = async (db: Db, log: Log) => {
     const buyer = byte32ToAddress(log.topics[2]);
     const seller = byte32ToAddress(log.topics[1]);
-    const inventories: InventoryDto[] = logBidToInventory(buyer, log.data).inventories;
-    const analysis: AnalysisDto = logBidToInventory(buyer, log.data).analysis;
+    const inventories: InventoryDto[] = logBidToInventory(buyer, log.data, log.address).inventories;
+    const analysisPro: AnalysisDto = logBidToInventory(buyer, log.data, log.address).analysisPro;
+    const analysisNormal: AnalysisDto = logBidToInventory(
+        buyer,
+        log.data,
+        log.address
+    ).analysisNormal;
     if (allContracts.includes(buyer) || allContracts.includes(ethers.getAddress(buyer))) {
-        await databaseService.updateAnalysis(db, analysis);
+        await databaseService.updateAnalysis(db, analysisPro);
+        await databaseService.updateAnalysis(db, analysisNormal);
         await databaseService.createOrIncreaseInventories(
             db,
             inventories,
@@ -32,21 +38,31 @@ export const handleBidEvent = async (db: Db, log: Log) => {
         );
         console.log("################## handleBidEvent");
         console.log(log.transactionHash);
-        console.log(analysis);
+        console.log(analysisPro);
     }
     if (allContracts.includes(seller) || allContracts.includes(ethers.getAddress(seller))) {
         const id = logBidToId(seller, log.data);
         await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
-        if (analysis) {
-            analysis.totalSell = analysis.totalBid;
-            analysis.totalBid = 0;
-            analysis.countSold = analysis.countBid;
-            analysis.countBid = 0;
-            await databaseService.updateAnalysis(db, analysis);
+        if (analysisPro) {
+            analysisPro.totalSell = analysisPro.totalBid;
+            analysisPro.totalBid = 0;
+            analysisPro.countSold = analysisPro.countBid;
+            analysisPro.countBid = 0;
+            await databaseService.updateAnalysis(db, analysisPro);
+            console.log("################## handleBidEvent");
+            console.log(log.transactionHash);
+            console.log(analysisPro);
         }
-        console.log("################## handleBidEvent");
-        console.log(log.transactionHash);
-        console.log(analysis);
+        if (analysisNormal) {
+            analysisNormal.totalSell = analysisNormal.totalBid;
+            analysisNormal.totalBid = 0;
+            analysisNormal.countSold = analysisNormal.countBid;
+            analysisNormal.countBid = 0;
+            await databaseService.updateAnalysis(db, analysisNormal);
+            console.log("################## handleBidEvent");
+            console.log(log.transactionHash);
+            console.log(analysisNormal);
+        }
     }
 };
 
