@@ -30,7 +30,6 @@ const createOrIncreaseInventories = async (
     try {
         for (const inventory of inventories) {
             const type = inventory.type;
-
             if (type === MomoType.NORMAL) {
                 const existingInventory = await db.collection("inventories").findOne({
                     id: inventory.id
@@ -85,6 +84,25 @@ const deleteOrDecreaseInventories = async (
     try {
         for (const listing of listings) {
             if (isProAuction(listing)) {
+                const inventory = (await db.collection("inventories").findOne({
+                    id: `${listing.auctor}_99999_${listing.tokenId}`
+                })) as InventoryDto | null;
+                if (inventory) {
+                    if (inventory.amount !== undefined && inventory.amount > 1) {
+                        await db.collection("inventories").updateOne(
+                            {
+                                id: `${listing.auctor}_99999_${listing.tokenId}`
+                            },
+                            { $inc: { amount: -1 } }
+                        );
+                        console.log(`Inventory amount decremented`);
+                    } else {
+                        await db.collection("inventories").deleteOne({
+                            id: `${listing.auctor}_99999_${listing.tokenId}`
+                        });
+                        console.log(`Inventory deleted`);
+                    }
+                }
             } else if (isNormalAuction(listing)) {
                 const ids = listing.ids || [];
                 const amounts = listing.amounts || [];

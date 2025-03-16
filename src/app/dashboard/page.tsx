@@ -99,7 +99,9 @@ const DashboardPage = () => {
             listings
                 .filter(listing => shortenNumber(listing.nowPrice || 0, 9, 3) >= filter.minPrice)
                 .filter(listing => (listing.hashrate || 0) >= filter.minHashrate)
-                .filter(listing => (listing.prototype || 0).toString().includes(filter.search))
+                .filter(listing =>
+                    (listing.prototype + (listing.auctor ?? "")).toLowerCase().includes((filter.search).toLowerCase())
+                )
                 .sort((a, b) => {
                     let comparison = 0;
                     if (filter.sort === "price") {
@@ -126,7 +128,7 @@ const DashboardPage = () => {
         setFilteredInventory(
             inventory
                 .filter(item => item.hashrate !== undefined && item.hashrate >= filter.minHashrate)
-                .filter(listing => (listing.prototype || 0).toString().includes(filter.search))
+                .filter(i => i.prototype.toString().includes(filter.search))
                 .sort((a, b) => {
                     let comparison = 0;
                     if (filter.sort === "hashrate") {

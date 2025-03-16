@@ -86,7 +86,7 @@ export const logBidToInventory = (
             id: MomoType.PRO,
             totalBid: bidPrice,
             totalSell: 0,
-            countBid: 1,
+            countBid: tokenIds.length,
             countSold: 0,
             countChange: 0,
             countCancel: 0
@@ -113,7 +113,7 @@ export const logBidToInventory = (
         }
         analysisNormal = {
             id: MomoType.NORMAL,
-            totalBid: address.toLowerCase() === MP_BLOCK_ADDRESS.toLowerCase() ? bidPrice : 0,
+            totalBid: address.toLowerCase() === MP_ADDRESS.toLowerCase() ? bidPrice : 0,
             totalSell: 0,
             countBid: countBid,
             countSold: 0,

@@ -43,7 +43,7 @@ export const handleBidEvent = async (db: Db, log: Log) => {
     if (allContracts.includes(seller) || allContracts.includes(ethers.getAddress(seller))) {
         const id = logBidToId(seller, log.data);
         await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
-        if (analysisPro) {
+        if (analysisPro.totalBid) {
             analysisPro.totalSell = analysisPro.totalBid;
             analysisPro.totalBid = 0;
             analysisPro.countSold = analysisPro.countBid;
@@ -53,7 +53,7 @@ export const handleBidEvent = async (db: Db, log: Log) => {
             console.log(log.transactionHash);
             console.log(analysisPro);
         }
-        if (analysisNormal) {
+        if (analysisNormal.totalBid) {
             analysisNormal.totalSell = analysisNormal.totalBid;
             analysisNormal.totalBid = 0;
             analysisNormal.countSold = analysisNormal.countBid;
