@@ -44,10 +44,10 @@ export const logBidToInventory = (
         });
         const analysis: AnalysisDto = {
             id: MomoType.PRO,
-            totalBid: Number(decodeData[0]) / 1e9,
+            totalBid: Number(decodeData[0]) / 1e18,
             totalSell: 0,
             countBid: 1,
-            countSell: 0,
+            countSold: 0,
             countChange: 0,
             countCancel: 0
         };
@@ -72,11 +72,11 @@ export const logBidToInventory = (
             countBid += Number(amounts[i]);
         }
         const analysis: AnalysisDto = {
-            id: MomoType.PRO,
-            totalBid: Number(decodeData[0]) / 1e9,
+            id: MomoType.NORMAL,
+            totalBid: Number(decodeData[0]) / 1e18,
             totalSell: 0,
             countBid: countBid,
-            countSell: 0,
+            countSold: 0,
             countChange: 0,
             countCancel: 0
         };
@@ -116,7 +116,7 @@ export const logCancelToInventory = (
             totalBid: 0,
             totalSell: 0,
             countBid: 0,
-            countSell: 0,
+            countSold: -1,
             countChange: 0,
             countCancel: 1
         };
@@ -143,7 +143,7 @@ export const logCancelToInventory = (
             totalBid: 0,
             totalSell: 0,
             countBid: 0,
-            countSell: 0,
+            countSold: -1,
             countChange: 0,
             countCancel: 1
         };
@@ -177,6 +177,7 @@ export const logCreateToListing = (
     const amounts = decodeData[6];
     const startTime = decodeData[7];
     const listings: AuctionDto[] = [];
+    const prototype = ids.length ? Number(ids[0]) : 99999;
     listings.push({
         id: `bnb_${auctor}_${index}`,
         auctor,
@@ -188,7 +189,7 @@ export const logCreateToListing = (
         amounts: amounts.map(String),
         tokenId: Number(tokenId),
         uptime: Number(startTime),
-        prototype: Number(ids[0]),
+        prototype: prototype,
         hashrate: 1,
         lvHashrate: 1,
         level: 1,
@@ -199,28 +200,28 @@ export const logCreateToListing = (
         deleted: null,
         nowPrice: Number(startPrice)
     });
-    if (!Number(tokenId)) {
+    if (Number(tokenId)) {
         const analysis: AnalysisDto = {
             id: MomoType.PRO,
             totalBid: 0,
             totalSell: 0,
             countBid: 0,
-            countSell: 1,
+            countSold: 1,
             countChange: 0,
             countCancel: 0
         };
         return { auctions: listings, analysis };
     } else {
-        let countSell = 0;
+        let countSold = 0;
         for (let i = 0; i < ids.length; i++) {
-            countSell += Number(amounts[i]);
+            countSold += Number(amounts[i]);
         }
         const analysis: AnalysisDto = {
             id: MomoType.NORMAL,
             totalBid: 0,
             totalSell: 0,
             countBid: 0,
-            countSell: countSell,
+            countSold: countSold,
             countChange: 0,
             countCancel: 0
         };
@@ -250,7 +251,7 @@ export const logChangeToChange = (
         totalBid: 0,
         totalSell: 0,
         countBid: 0,
-        countSell: 0,
+        countSold: 0,
         countChange: 1,
         countCancel: 0
     };

@@ -20,9 +20,9 @@ import { AnalysisDto } from "@/types/dtos/Analysis.dto";
 export const handleBidEvent = async (db: Db, log: Log) => {
     const buyer = byte32ToAddress(log.topics[2]);
     const seller = byte32ToAddress(log.topics[1]);
+    const inventories: InventoryDto[] = logBidToInventory(buyer, log.data).inventories;
+    const analysis: AnalysisDto = logBidToInventory(buyer, log.data).analysis;
     if (allContracts.includes(buyer) || allContracts.includes(ethers.getAddress(buyer))) {
-        const inventories: InventoryDto[] = logBidToInventory(buyer, log.data).inventories;
-        const analysis: AnalysisDto = logBidToInventory(buyer, log.data).analysis;
         await databaseService.updateAnalysis(db, analysis);
         await databaseService.createOrIncreaseInventories(
             db,
@@ -30,18 +30,33 @@ export const handleBidEvent = async (db: Db, log: Log) => {
             log.blockNumber,
             log.transactionHash
         );
+        console.log("################## handleBidEvent");
+        console.log(log.transactionHash);
+        console.log(analysis);
     }
-    const id = logBidToId(seller, log.data);
-    await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
+    if (allContracts.includes(seller) || allContracts.includes(ethers.getAddress(seller))) {
+        const id = logBidToId(seller, log.data);
+        await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
+        if (analysis) {
+            analysis.totalSell = analysis.totalBid;
+            analysis.totalBid = 0;
+            analysis.countSold = analysis.countBid;
+            analysis.countBid = 0;
+            await databaseService.updateAnalysis(db, analysis);
+        }
+        console.log("################## handleBidEvent");
+        console.log(log.transactionHash);
+        console.log(analysis);
+    }
 };
 
 export const handleListingEvent = async (db: Db, log: Log) => {
     const auctor = byte32ToAddress(log.topics[1]);
-    const listings: AuctionDto[] = logCreateToListing(auctor, log.data).auctions;
-    const analysis: AnalysisDto = logCreateToListing(auctor, log.data).analysis;
-    await databaseService.updateAnalysis(db, analysis);
-    await databaseService.createListings(db, listings, log.blockNumber, log.transactionHash);
     if (allContracts.includes(auctor) || allContracts.includes(ethers.getAddress(auctor))) {
+        console.log("################## handleListingEvent");
+        const listings: AuctionDto[] = logCreateToListing(auctor, log.data).auctions;
+        console.log(log.transactionHash);
+        await databaseService.createListings(db, listings, log.blockNumber, log.transactionHash);
         await databaseService.deleteOrDecreaseInventories(
             db,
             listings,
@@ -53,20 +68,28 @@ export const handleListingEvent = async (db: Db, log: Log) => {
 
 export const handleChangeEvent = async (db: Db, log: Log) => {
     const auctor = byte32ToAddress(log.topics[1]);
-    const changes: ChangeDto = logChangeToChange(auctor, log.data).change;
-    const analysis: AnalysisDto = logChangeToChange(auctor, log.data).analysis;
-    await databaseService.updateAnalysis(db, analysis);
-    await databaseService.updateListing(db, changes, log.blockNumber, log.transactionHash);
+    if (allContracts.includes(auctor) || allContracts.includes(ethers.getAddress(auctor))) {
+        console.log("################## handleChangeEvent");
+        const changes: ChangeDto = logChangeToChange(auctor, log.data).change;
+        const analysis: AnalysisDto = logChangeToChange(auctor, log.data).analysis;
+        console.log(log.transactionHash);
+        console.log(analysis);
+        await databaseService.updateAnalysis(db, analysis);
+        await databaseService.updateListing(db, changes, log.blockNumber, log.transactionHash);
+    }
 };
 
 export const handleCancelEvent = async (db: Db, log: Log) => {
     const auctor = byte32ToAddress(log.topics[1]);
-    const id = logCancelToId(auctor, log.data);
-    await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
-    const inventories: InventoryDto[] = logCancelToInventory(auctor, log.data).inventories;
-    const analysis: AnalysisDto = logCancelToInventory(auctor, log.data).analysis;
-    await databaseService.updateAnalysis(db, analysis);
     if (allContracts.includes(auctor) || allContracts.includes(ethers.getAddress(auctor))) {
+        const id = logCancelToId(auctor, log.data);
+        await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
+        const inventories: InventoryDto[] = logCancelToInventory(auctor, log.data).inventories;
+        const analysis: AnalysisDto = logCancelToInventory(auctor, log.data).analysis;
+        console.log("################## handleCancelEvent");
+        console.log(log.transactionHash);
+        console.log(analysis);
+        await databaseService.updateAnalysis(db, analysis);
         await databaseService.createOrIncreaseInventories(
             db,
             inventories,

@@ -5,7 +5,7 @@ export interface AnalysisDto {
     totalBid: number;
     totalSell: number;
     countBid: number;
-    countSell: number;
+    countSold: number;
     countChange: number;
     countCancel: number;
 }

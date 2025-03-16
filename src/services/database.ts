@@ -228,7 +228,7 @@ const updateAnalysis = async (db: Db, analysis: AnalysisDto): Promise<void> => {
                         totalBid: existingAnalysis.totalBid + analysis.totalBid,
                         totalSell: existingAnalysis.totalSell + analysis.totalSell,
                         countBid: existingAnalysis.countBid + analysis.countBid,
-                        countSell: existingAnalysis.countSell + analysis.countSell,
+                        countSold: existingAnalysis.countSold + analysis.countSold,
                         countChange: existingAnalysis.countChange + analysis.countChange,
                         countCancel: existingAnalysis.countCancel + analysis.countCancel
                     }
