@@ -118,7 +118,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             const response = await axios.post("/api/refreshListing", {
                 listing: listingData
             });
-            console.log(response.data.data);
             setListingData(response.data.data);
             toast.success("Listing refreshed successfully!");
         } catch (error) {
