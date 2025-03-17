@@ -15,7 +15,20 @@ export async function POST(request: Request) {
         listing.lvHashrate = Number(momoInfo.lvHashrate);
         const db = await connectMongo();
         const collection = db.collection("listings");
-        await collection.updateOne({ _id: listing._id }, { $set: listing });
+        await collection.updateOne(
+            { id: listing.id },
+            {
+                $set: {
+                    prototype: listing.prototype,
+                    quality: listing.quality,
+                    category: listing.category,
+                    level: listing.level,
+                    specialty: listing.specialty,
+                    hashrate: listing.hashrate,
+                    lvHashrate: listing.lvHashrate
+                }
+            }
+        );
         return NextResponse.json({ message: "Listing updated successfully", data: listing });
     } catch (error) {
         if (error instanceof Error) {
