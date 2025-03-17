@@ -5,6 +5,7 @@ import InventoryDetailModal from "@/components/Modal/InventoryDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { MomoType } from "@/enum/enum";
+import { shortenAddress } from "@/utils/shorten";
 
 interface InventoryCardProps {
     item: InventoryDto;
@@ -52,6 +53,13 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                         width={100}
                         height={100}
                     />
+                </div>
+
+                {/* Owner */}
+                <div className="flex items-center justify-center">
+                    <div className="bg-white text-black px-2 py-1 rounded-full text-xs">
+                        {shortenAddress(item.owner || "")}
+                    </div>
                 </div>
 
                 {/* Amount */}

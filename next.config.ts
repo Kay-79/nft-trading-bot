@@ -37,7 +37,9 @@ const nextConfig: NextConfig = {
         NORMAL_BUYER_MAINNET: process.env.NORMAL_BUYER_MAINNET,
         PRO_BUYER_MAINNET: process.env.PRO_BUYER_MAINNET,
         CHANGER_MAINNET: process.env.CHANGER_MAINNET,
-        MONGO_URI: process.env.MONGO_URI
+        MONGO_URI: process.env.MONGO_URI,
+        MORALIST_RPC_ARCHIVE_NODE: process.env.MORALIST_RPC_ARCHIVE_NODE,
+        
     }
 };
 

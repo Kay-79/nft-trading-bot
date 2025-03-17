@@ -9,7 +9,13 @@ import { getBackgroundColor } from "@/utils/colorUtils";
 import { mpContractService } from "@/services/mpContract";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
-import { RiAiGenerate2, RiCloseLine, RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
+import {
+    RiAiGenerate2,
+    RiCloseLine,
+    RiArrowLeftSLine,
+    RiArrowRightSLine,
+    RiRefreshLine
+} from "react-icons/ri";
 import PrimaryButton from "@/components/Button/PrimaryButton";
 import SecondaryButton from "@/components/Button/SecondaryButton";
 import LoadingButtonIcon from "@/components/Button/LoadingButtonIcon";
@@ -29,8 +35,9 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const { address } = useAccount();
     const [showAdjustInput, setShowAdjustInput] = useState<boolean>(false);
-    const [loadingPredict, setLoadingPredict] = useState<boolean>(false); // Add loading state
-    const [loadingAdjust, setLoadingAdjust] = useState<boolean>(false); // Add loading state for adjust button
+    const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
+    const [loadingAdjust, setLoadingAdjust] = useState<boolean>(false);
+    const [listingData, setListingData] = useState<AuctionDto>(listing);
 
     const resetError = useCallback(() => {
         handleError(null); // Reset error state
@@ -39,7 +46,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const handleAdjustPrice = async () => {
         setLoadingAdjust(true); // Set loading state to true
         try {
-            await mpContractService.changePrice(listing, address, price);
+            await mpContractService.changePrice(listingData, address, price);
             toast.success("Price adjusted successfully!");
         } catch (error) {
             handleError(error as Error);
@@ -70,23 +77,23 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
 
     const handlePredict = useCallback(async () => {
         resetError();
-        setLoadingPredict(true); 
+        setLoadingPredict(true);
         try {
             const response = await axios.post("/api/predictOne", {
-                hashrate: listing.hashrate ?? 0,
-                lvHashrate: listing.lvHashrate ?? 0,
-                prototype: listing.prototype ?? 0,
-                level: listing.level ?? 0
+                hashrate: listingData.hashrate ?? 0,
+                lvHashrate: listingData.lvHashrate ?? 0,
+                prototype: listingData.prototype ?? 0,
+                level: listingData.level ?? 0
             });
             const predicted = response.data.prediction;
             setPredictedPrice(shortenNumber(predicted, 0, 3));
         } catch (error) {
             handleError(error as Error);
-            toast.error("Prediction failed!"); 
+            toast.error("Prediction failed!");
         } finally {
-            setLoadingPredict(false); 
+            setLoadingPredict(false);
         }
-    }, [listing, resetError, handleError]);
+    }, [listingData, resetError, handleError]);
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
@@ -95,29 +102,45 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     };
 
     const handleNextImage = () => {
-        setCurrentImageIndex(prevIndex => (prevIndex + 1) % (listing.ids?.length ?? 1));
+        setCurrentImageIndex(prevIndex => (prevIndex + 1) % (listingData.ids?.length ?? 1));
     };
 
     const handlePrevImage = () => {
         setCurrentImageIndex(
-            prevIndex => (prevIndex - 1 + (listing.ids?.length ?? 1)) % (listing.ids?.length ?? 1)
+            prevIndex =>
+                (prevIndex - 1 + (listingData.ids?.length ?? 1)) % (listingData.ids?.length ?? 1)
         );
     };
 
+    const handleRefresh = async () => {
+        resetError();
+        try {
+            const response = await axios.post("/api/refreshListing", {
+                listing: listingData
+            });
+            console.log(response.data.data);
+            setListingData(response.data.data);
+            toast.success("Listing refreshed successfully!");
+        } catch (error) {
+            handleError(error as Error);
+            toast.error("Failed to refresh listing");
+        }
+    };
+
     const imageSrc =
-        listing.ids && listing.ids.length > 1
-            ? `/images/MOMO/${(listing.ids ?? [])[currentImageIndex]}.png`
-            : `/images/MOMO/${listing.prototype}.png`;
+        listingData.ids && listingData.ids.length > 1
+            ? `/images/MOMO/${(listingData.ids ?? [])[currentImageIndex]}.png`
+            : `/images/MOMO/${listingData.prototype}.png`;
 
     const backgroundColor =
-        listing.ids && listing.ids.length > 1
-            ? getBackgroundColor(Number((listing.ids ?? [])[currentImageIndex]))
-            : getBackgroundColor(listing.prototype || 0);
+        listingData.ids && listingData.ids.length > 1
+            ? getBackgroundColor(Number((listingData.ids ?? [])[currentImageIndex]))
+            : getBackgroundColor(listingData.prototype || 0);
 
     const prototype =
-        listing.ids && listing.ids.length > 1
-            ? (listing.ids ?? [])[currentImageIndex]
-            : listing.prototype || 0;
+        listingData.ids && listingData.ids.length > 1
+            ? (listingData.ids ?? [])[currentImageIndex]
+            : listingData.prototype || 0;
 
     return (
         <div
@@ -178,7 +201,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     >
                         <span className="text-sm flex items-center gap-1">
                             <span className="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs">
-                                Lv. {listing.level}
+                                Lv. {listingData.level}
                             </span>
                         </span>
                         <div className="text-right">
@@ -186,14 +209,16 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                 className="text-lg font-bold"
                                 style={{ color: customDarkTheme.textColor }}
                             >
-                                {listing.lvHashrate}
+                                {listingData.lvHashrate}
                             </p>
                             <p className="text-xs" style={{ color: customDarkTheme.textColor }}>
-                                {(listing.hashrate || 0) > 5 ? `Lv. 1 - ${listing.hashrate}` : ""}
+                                {(listingData.hashrate || 0) > 5
+                                    ? `Lv. 1 - ${listingData.hashrate}`
+                                    : ""}
                             </p>
                         </div>
                     </div>
-                    {listing.ids && listing.ids.length > 1 && (
+                    {listingData.ids && listingData.ids.length > 1 && (
                         <button
                             onClick={handlePrevImage}
                             style={{
@@ -215,7 +240,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                     >
                         <Image src={imageSrc} alt="Avatar" width={100} height={100} priority />
                     </div>
-                    {listing.ids && listing.ids.length > 1 && (
+                    {listingData.ids && listingData.ids.length > 1 && (
                         <button
                             onClick={handleNextImage}
                             style={{
@@ -232,7 +257,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                             <RiArrowRightSLine size={24} />
                         </button>
                     )}
-                    {listing.ids && listing.ids.length > 1 && (
+                    {listingData.ids && listingData.ids.length > 1 && (
                         <p
                             style={{
                                 textAlign: "center",
@@ -240,7 +265,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                 color: customDarkTheme.textColor
                             }}
                         >
-                            Quantity: {listing.amounts?.[currentImageIndex] ?? 1}
+                            Quantity: {listingData.amounts?.[currentImageIndex] ?? 1}
                         </p>
                     )}
                     <p
@@ -253,22 +278,32 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         className="text-center text-lg font-semibold"
                         style={{ color: customDarkTheme.textColor }}
                     >
-                        {shortenAddress(listing.auctor || "")}
+                        {shortenAddress(listingData.auctor || "")}
                     </p>
                     <div className="flex justify-between items-center mt-4">
                         <span className="text-green-400 font-bold text-lg">
-                            {shortenNumber(listing.nowPrice || 0, 9, 3)} USDT
+                            {shortenNumber(listingData.nowPrice || 0, 9, 3)} USDT
                         </span>
-                        {(listing.tokenId ?? 0) > 0 &&
-                            (predictedPrice !== null ? (
-                                <span className="text-blue-400 font-bold text-lg">
-                                    {predictedPrice} USDT
-                                </span>
-                            ) : (
-                                <LoadingButtonIcon onClick={handlePredict} loading={loadingPredict}>
-                                    <RiAiGenerate2 size={24} />
+                        <div className="flex">
+                            {listingData.prototype === 99999 && (
+                                <LoadingButtonIcon onClick={handleRefresh} loading={false}>
+                                    <RiRefreshLine size={24} />
                                 </LoadingButtonIcon>
-                            ))}
+                            )}
+                            {(listingData.tokenId ?? 0) > 0 &&
+                                (predictedPrice !== null ? (
+                                    <span className="text-blue-400 font-bold text-lg">
+                                        {predictedPrice} USDT
+                                    </span>
+                                ) : (
+                                    <LoadingButtonIcon
+                                        onClick={handlePredict}
+                                        loading={loadingPredict}
+                                    >
+                                        <RiAiGenerate2 size={24} />
+                                    </LoadingButtonIcon>
+                                ))}
+                        </div>
                     </div>
                 </div>
                 {showAdjustInput && (
