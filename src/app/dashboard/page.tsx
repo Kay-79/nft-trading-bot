@@ -25,7 +25,7 @@ const DashboardPage = () => {
     const [filteredMarkets, setFilteredMarkets] = useState<AuctionDto[]>([]);
     const [selectedSection, setSelectedSection] = useState<
         "listings" | "activities" | "inventory" | "markets"
-    >("inventory");
+    >("listings");
     const [loading, setLoading] = useState<boolean>(false);
     const { theme } = useTheme();
     const [showScrollTop, setShowScrollTop] = useState<boolean>(false); // Added state for scroll top button

@@ -93,6 +93,7 @@ const worker = async () => {
             }
             startBlock = logs[logs.length - 1].blockNumber + 1;
         }
+        console.log("Waiting for new blocks, sleeping for 300 seconds");
         await sleep(300);
     }
 };
