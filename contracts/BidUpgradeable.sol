@@ -5,6 +5,7 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 
 contract BidUpgradeable is OwnableUpgradeable {
     address public addressMP = 0xcB0CffC2B12739D4BE791b8aF7fbf49bc1d6a8c2;
+    address public addressMPBlock = 0x1d4D9706B057a945FCE86EE53B8894BD17FFa0dE;
     address public addressMomo = 0x3bD6a582698ECCf6822dB08141818A1a8512c68D;
     address public changer = 0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000;
     address public proBidder = 0x0E9BC747335a4b01A6194A6c1bB1De54a0a5355c;
@@ -40,6 +41,10 @@ contract BidUpgradeable is OwnableUpgradeable {
         addressMP = address(newMP_);
     }
 
+    function setMPBlock(address newMPBlock_) public onlyOwner {
+        addressMPBlock = address(newMPBlock_);
+    }
+
     function withdraw(address payable destAddr) public onlyOwner {
         uint256 balance = address(this).balance;
         destAddr.transfer(balance);
@@ -71,6 +76,29 @@ contract BidUpgradeable is OwnableUpgradeable {
         uint256 price_
     ) external payable onlyBidder {
         (bool success, bytes memory returnData) = addressMP.call{
+            gas: gasleft(),
+            value: msg.value
+        }(
+            abi.encodeWithSignature(
+                "bid(address,uint256,uint256,uint256)",
+                auctor_,
+                index_,
+                startTime_,
+                price_
+            )
+        );
+        if (!success) {
+            revert(string(returnData));
+        }
+    }
+
+    function bidBlock(
+        address auctor_,
+        uint256 index_,
+        uint256 startTime_,
+        uint256 price_
+    ) external payable onlyBidder {
+        (bool success, bytes memory returnData) = addressMPBlock.call{
             gas: gasleft(),
             value: msg.value
         }(
