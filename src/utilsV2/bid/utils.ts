@@ -139,7 +139,7 @@ export const getTxData = (bidAuction: BidAuction): string => {
                     true
                 ]);
         case BidType.GROUP:
-            return bidProvider.interface.encodeFunctionData(FunctionFragment.BID, [
+            return bidProvider.interface.encodeFunctionData(FunctionFragment.BID_BLOCK, [
                 bidAuction.auctionGroup?.auctor,
                 bidAuction.auctionGroup?.index,
                 bidAuction.auctionGroup?.orderId,

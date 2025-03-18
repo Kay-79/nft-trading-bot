@@ -47,6 +47,7 @@ export enum ModeBotStatus {
 
 export enum FunctionFragment {
     BID = "bid(address,uint256,uint256,uint256)",
+    BID_BLOCK = "bidBlock(address,uint256,uint256,uint256)",
     BID_BATCH = "bid(address[],uint256[],uint256[],uint256[],bool)",
     CHANGE_PRICE = "changePrice(uint256,uint256,uint256,uint256)"
 }

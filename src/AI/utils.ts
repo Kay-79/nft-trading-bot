@@ -106,11 +106,11 @@ export const predictModel = async (inputOne: number[], predictMode: string) => {
         };
         if (dataset.bidder) {
             checkTrader(dataset.bidder, proBidders, "Bidder (Pro):");
-            checkTrader(dataset.bidder, newbieBidders, "Bidder (newbie):");
+            checkTrader(dataset.bidder, newbieBidders, "Bidder (Newbie):");
         }
         if (dataset.auctor) {
             checkTrader(dataset.auctor, proBidders, "Auctor (Pro):");
-            checkTrader(dataset.auctor, newbieBidders, "Auctor (newbie):");
+            checkTrader(dataset.auctor, newbieBidders, "Auctor (Newbie):");
         }
         for (const input of dataset.inputs ?? []) {
             input.push(...inputOne.slice(-3));
