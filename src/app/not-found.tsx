@@ -17,10 +17,7 @@ export default function NotFound() {
             <p className="mb-8" style={{ color: theme.textColor }}>
                 Oops! The page you are looking for could not be found.
             </p>
-            <Link
-                href="/"
-                className="px-6 py-3 rounded-md"
-            >
+            <Link href="/" className="px-6 py-3 rounded-md">
                 Return Home
             </Link>
         </div>

@@ -100,7 +100,9 @@ const DashboardPage = () => {
                 .filter(listing => shortenNumber(listing.nowPrice || 0, 9, 3) >= filter.minPrice)
                 .filter(listing => (listing.hashrate || 0) >= filter.minHashrate)
                 .filter(listing =>
-                    (listing.prototype + (listing.auctor ?? "")).toLowerCase().includes((filter.search).toLowerCase())
+                    (listing.prototype + (listing.auctor ?? ""))
+                        .toLowerCase()
+                        .includes(filter.search.toLowerCase())
                 )
                 .sort((a, b) => {
                     let comparison = 0;

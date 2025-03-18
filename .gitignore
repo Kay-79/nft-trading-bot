@@ -19,6 +19,7 @@ src/AI/model/*.pkl
 src/airdrop/*.json
 src/AI/predict/cache.json
 public/images/MOMO
+/venv
 
 # Hardhat files
 /cache
