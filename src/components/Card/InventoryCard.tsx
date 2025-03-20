@@ -15,7 +15,7 @@ interface InventoryCardProps {
 
 const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const dispatch = useDispatch(); // Initialize dispatch
+    const dispatch = useDispatch();
     const backgroundColor = getBackgroundColor(item.prototype || 0);
 
     const bulkItems = useSelector(

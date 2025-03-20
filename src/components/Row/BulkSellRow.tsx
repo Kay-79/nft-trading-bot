@@ -2,12 +2,19 @@ import React, { useState } from "react";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import Image from "next/image";
 import { useTheme } from "@/config/theme";
+import { FaTrash } from "react-icons/fa"; // Import FaTrash
+import { removeItemFromBulk } from "@/store/actions/storageBulk";
+import { useDispatch } from "react-redux";
 
 interface BulkSellRowProps {
     bulkSellItem: InventoryDto;
 }
 
 const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
+    const dispatch = useDispatch();
+    const handleRemoveFromStorage = () => {
+        dispatch(removeItemFromBulk(bulkSellItem));
+    };
     const [amount, setAmount] = useState(0);
     const [price, setPrice] = useState(0);
     const { theme } = useTheme();
@@ -69,24 +76,11 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                         color: theme.textColor
                     }}
                 />
-
-                {/* <button
-                    onClick={() => {
-                        // Sell the item
-                    }}
-                    style={{
-                        flex: 1,
-                        padding: "10px 20px",
-                        backgroundColor: theme.buttonBackgroundColor,
-                        color: theme.buttonTextColor,
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        textAlign: "center"
-                    }}
-                >
-                    Sell
-                </button> */}
+                <FaTrash
+                    className="text-red-500 cursor-pointer"
+                    onClick={handleRemoveFromStorage}
+                    style={{ fontSize: "30px" }} 
+                />
             </div>
         </div>
     );
