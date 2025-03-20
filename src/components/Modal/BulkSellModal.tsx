@@ -3,6 +3,7 @@ import { useTheme } from "@/config/theme";
 import { RiCloseLine } from "react-icons/ri";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { useSelector } from "react-redux";
+import BulkSellRow from "../Row/BulkSellRow";
 
 interface BulkSellModalProps {
     onClose: () => void;
@@ -19,6 +20,10 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
         if (e.target === e.currentTarget) {
             onClose();
         }
+    };
+
+    const handleBulkSell = () => {
+        // Implement bulk sell logic here
     };
 
     return (
@@ -64,17 +69,32 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
                     <RiCloseLine />
                 </button>
                 <h1 style={{ textAlign: "center" }}>Bulk Sell</h1>
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
                     {items.map((item, index) => (
                         <div
                             key={index}
                             style={{ display: "flex", justifyContent: "space-between" }}
                         >
-                            <p>{item.prototype}</p>
-                            <p>{item.amount}</p>
+                            <BulkSellRow bulkSellItem={item} />
                         </div>
                     ))}
                 </div>
+                <button
+                    onClick={handleBulkSell}
+                    style={{
+                        marginTop: "20px",
+                        width: "100%",
+                        padding: "10px 20px",
+                        backgroundColor: theme.buttonBackgroundColor,
+                        color: theme.buttonTextColor,
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                        textAlign: "center"
+                    }}
+                >
+                    Bulk Sell
+                </button>
             </div>
         </div>
     );

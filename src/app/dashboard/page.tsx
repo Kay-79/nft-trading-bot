@@ -11,7 +11,8 @@ import { useTheme } from "@/config/theme";
 import FilterPanel from "@/components/Dashboard/FilterPanel";
 import Loading from "@/components/Loading/Loading";
 import { shortenNumber } from "@/utils/shorten";
-import { FaArrowUp, FaShoppingCart } from "react-icons/fa"; // Import icons
+import { FaArrowUp } from "react-icons/fa";
+import { MdSell } from "react-icons/md";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import BulkSellModal from "@/components/Modal/BulkSellModal";
 
@@ -243,7 +244,7 @@ const DashboardPage = () => {
                     </label>
                     {selectedSection === "inventory" ? (
                         <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-                            <FaShoppingCart
+                            <MdSell
                                 style={{ cursor: "pointer" }}
                                 onClick={() => setIsBulkSellModalOpen(true)}
                             />

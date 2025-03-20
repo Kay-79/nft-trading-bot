@@ -81,8 +81,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
                             setMinHashrate(Number(value));
                         }
                     }}
-                    onWheel={e => e.currentTarget.blur()} // Disable scroll wheel input change
-                    placeholder="0" // Add placeholder
+                    placeholder="0"
                     style={{
                         width: "100%",
                         padding: "10px",
