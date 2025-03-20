@@ -10,7 +10,7 @@ interface LoadingButtonProps {
     style?: React.CSSProperties;
 }
 
-const LoadingButton: React.FC<LoadingButtonProps> = ({
+const PrimaryLoadingButton: React.FC<LoadingButtonProps> = ({
     onClick,
     loading,
     children,
@@ -60,4 +60,4 @@ const LoadingButton: React.FC<LoadingButtonProps> = ({
     );
 };
 
-export default LoadingButton;
+export default PrimaryLoadingButton;

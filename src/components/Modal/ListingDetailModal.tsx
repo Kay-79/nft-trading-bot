@@ -17,10 +17,10 @@ import {
     RiRefreshLine
 } from "react-icons/ri";
 import PrimaryButton from "@/components/Button/PrimaryButton";
-import SecondaryButton from "@/components/Button/SecondaryButton";
-import LoadingButtonIcon from "@/components/Button/LoadingButtonIcon";
-import LoadingButton from "@/components/Button/LoadingButton";
+import PrimaryLoadingIcon from "@/components/Button/PrimaryLoadingIcon";
 import { toast } from "react-toastify";
+import PrimaryLoadingButton from "../Button/PrimaryLoadingButton";
+import SecondaryLoadingButton from "../Button/SecondaryLoadingButton";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -37,6 +37,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [showAdjustInput, setShowAdjustInput] = useState<boolean>(false);
     const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
     const [loadingAdjust, setLoadingAdjust] = useState<boolean>(false);
+    const [loadingCancel, setLoadingCancel] = useState<boolean>(false);
     const [listingData, setListingData] = useState<AuctionDto>(listing);
 
     const resetError = useCallback(() => {
@@ -44,11 +45,11 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     }, [handleError]);
 
     const handleAdjustPrice = async () => {
-        setLoadingAdjust(true); // Set loading state to true
+        setLoadingAdjust(true);
         try {
             await mpContractService.changePrice(listingData, address, price);
             toast.success("Price adjusted successfully!");
-        } catch (error) {
+        } catch {
             handleError(error as Error);
             toast.error("Failed to adjust price");
             setLoadingAdjust(false);
@@ -66,13 +67,17 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         }
     };
 
-    const handleDelist = () => {
-        resetError();
+    const handleDelist = async () => {
+        setLoadingCancel(true);
         try {
-            throw new Error("An example error");
-        } catch (err) {
-            handleError(err as Error);
+            await mpContractService.cancelAuction(listingData, address);
+            toast.success("Price cancel successfully!");
+        } catch {
+            toast.error("Failed to cancel listing");
+            setLoadingCancel(false);
         }
+        setLoadingCancel(false);
+        onClose();
     };
 
     const handlePredict = useCallback(async () => {
@@ -285,9 +290,9 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         </span>
                         <div className="flex">
                             {listingData.prototype === 99999 && (
-                                <LoadingButtonIcon onClick={handleRefresh} loading={false}>
+                                <PrimaryLoadingIcon onClick={handleRefresh} loading={false}>
                                     <RiRefreshLine size={24} />
-                                </LoadingButtonIcon>
+                                </PrimaryLoadingIcon>
                             )}
                             {(listingData.tokenId ?? 0) > 0 &&
                                 (predictedPrice !== null ? (
@@ -295,12 +300,12 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                         {predictedPrice} USDT
                                     </span>
                                 ) : (
-                                    <LoadingButtonIcon
+                                    <PrimaryLoadingIcon
                                         onClick={handlePredict}
                                         loading={loadingPredict}
                                     >
                                         <RiAiGenerate2 size={24} />
-                                    </LoadingButtonIcon>
+                                    </PrimaryLoadingIcon>
                                 ))}
                         </div>
                     </div>
@@ -340,21 +345,25 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         <>
                             {showAdjustInput ? (
                                 <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-                                    <LoadingButton
+                                    <PrimaryLoadingButton
                                         onClick={handleAdjustClick}
                                         loading={loadingAdjust}
                                     >
                                         Confirm
-                                    </LoadingButton>
+                                    </PrimaryLoadingButton>
                                 </div>
                             ) : (
                                 <>
                                     <PrimaryButton onClick={handleAdjustClick} style={{ flex: 1 }}>
                                         Adjust
                                     </PrimaryButton>
-                                    <SecondaryButton onClick={handleDelist} style={{ flex: 1 }}>
+                                    <SecondaryLoadingButton
+                                        onClick={handleDelist}
+                                        loading={loadingCancel}
+                                        style={{ flex: 1 }}
+                                    >
                                         Delist
-                                    </SecondaryButton>
+                                    </SecondaryLoadingButton>
                                 </>
                             )}
                         </>

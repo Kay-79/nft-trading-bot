@@ -4,7 +4,7 @@ import { wagmiConfig } from "@/app/wagmi";
 import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { ethers } from "ethers";
-import { MP_ADDRESS } from "@/constants/constants";
+import { CHANGER, MP_ADDRESS, PRO_BUYER } from "@/constants/constants";
 
 const transfer = async (from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
@@ -43,18 +43,35 @@ const changePrice = async (
         throw new Error("Please connect your wallet first!");
     }
     if (from?.toLocaleLowerCase() !== (listing.auctor || "").toLocaleLowerCase()) {
-        throw new Error("You are not the owner of the listing!");
+        throw new Error("You are not the owner or changer of the listing!");
     }
     const price = ethers.parseUnits(newPrice.toString(), 18);
+    const to = listing.auctor?.toLocaleLowerCase() === PRO_BUYER ? MP_ADDRESS : listing.auctor;
     return await writeContract(wagmiConfig, {
         abi: abiMp,
-        address: MP_ADDRESS as `0x${string}`,
+        address: to as `0x${string}`,
         functionName: "changePrice",
         args: [listing.index, price, price, 2]
     });
 };
 
+const cancelAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) => {
+    if (!wagmiConfig) {
+        throw new Error("Please connect your wallet first!");
+    }
+    if (from?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()) {
+        throw new Error("You are not the changer of the listing! ");
+    }
+    return await writeContract(wagmiConfig, {
+        abi: abiMp,
+        address: listing.auctor as `0x${string}`,
+        functionName: "cancelAuction",
+        args: [listing.index]
+    });
+};
+
 export const mpContractService = {
     transfer,
-    changePrice
+    changePrice,
+    cancelAuction
 };

@@ -2,7 +2,7 @@ import { customDarkTheme } from "@/config/theme";
 import React from "react";
 import { RiLoader4Line } from "react-icons/ri";
 
-interface LoadingButtonIconProps {
+interface PrimaryLoadingButtonIconProps {
     onClick: () => void;
     loading: boolean;
     children: React.ReactNode;
@@ -10,7 +10,7 @@ interface LoadingButtonIconProps {
     style?: React.CSSProperties;
 }
 
-const LoadingButtonIcon: React.FC<LoadingButtonIconProps> = ({
+const PrimaryLoadingIcon: React.FC<PrimaryLoadingButtonIconProps> = ({
     onClick,
     loading,
     children,
@@ -54,4 +54,4 @@ const LoadingButtonIcon: React.FC<LoadingButtonIconProps> = ({
     );
 };
 
-export default LoadingButtonIcon;
+export default PrimaryLoadingIcon;
