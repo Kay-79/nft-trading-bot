@@ -68,8 +68,8 @@ export interface ThemeContextProps {
 }
 
 export const ThemeContext = createContext<ThemeContextProps>({
-    theme: customLightTheme, // Default theme
-    setTheme: () => {} // Dummy function
+    theme: customLightTheme,
+    setTheme: () => {}
 });
 
 export const useTheme = (): ThemeContextProps => useContext(ThemeContext);

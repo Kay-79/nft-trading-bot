@@ -4,8 +4,10 @@ import React, { useState, useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
 import { RainbowKitProvider, darkTheme, lightTheme, Theme } from "@rainbow-me/rainbowkit";
+import { Provider as ReduxProvider } from "react-redux";
 import { wagmiConfig } from "./wagmi";
 import { ThemeContext, customDarkTheme, customLightTheme, ThemeConfig } from "@/config/theme";
+import store from "@/store"; // Import the Redux store
 
 const queryClient = new QueryClient();
 
@@ -30,13 +32,17 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return (
         <ThemeContext.Provider value={{ theme, setTheme }}>
             <QueryClientProvider client={queryClient}>
-                {wagmiConfig ? (
-                    <WagmiProvider config={wagmiConfig}>
+                <ReduxProvider store={store}>
+                    {wagmiConfig ? (
+                        <WagmiProvider config={wagmiConfig}>
+                            <RainbowKitProvider theme={rainbowKitTheme}>
+                                {children}
+                            </RainbowKitProvider>
+                        </WagmiProvider>
+                    ) : (
                         <RainbowKitProvider theme={rainbowKitTheme}>{children}</RainbowKitProvider>
-                    </WagmiProvider>
-                ) : (
-                    <RainbowKitProvider theme={rainbowKitTheme}>{children}</RainbowKitProvider>
-                )}
+                    )}
+                </ReduxProvider>
             </QueryClientProvider>
         </ThemeContext.Provider>
     );

@@ -40,14 +40,14 @@ const worker = async () => {
     //     };
     //     await db.collection("analysis").insertOne(newAnalysis);
     // }
-    const synced = await db.collection("synced").findOne({});
-    if (!synced) {
-        console.log("No synced block found. Starting from block 0");
-        const newSynced: SyncedDto = { block: 0, tx: "" };
-        await db.collection("synced").insertOne(newSynced);
-    }
-    let startBlock = synced ? synced.block + 1 : 0;
     while (true) {
+        const synced = await db.collection("synced").findOne({});
+        if (!synced) {
+            console.log("No synced block found. Starting from block 0");
+            const newSynced: SyncedDto = { block: 0, tx: "" };
+            await db.collection("synced").insertOne(newSynced);
+        }
+        let startBlock = synced ? synced.block + 1 : 0;
         const endBlock = await fullNodeProvider.getBlockNumber();
         if (startBlock >= endBlock) {
             const synced = await db.collection("synced").findOne({});

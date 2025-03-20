@@ -103,3 +103,10 @@ export enum MintMomoSelector {
 export enum Momo1155Selector {
     TEST = "0x0e89341c"
 }
+
+export enum BulkAction {
+    ADD = "ADD",
+    REMOVE = "REMOVE",
+    UPDATE = "UPDATE",
+    CLEAR = "CLEAR"
+}

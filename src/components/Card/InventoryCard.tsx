@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Image from "next/image";
-import { FaTimes } from "react-icons/fa";
+import { FaTimes, FaPlusCircle, FaMinusCircle } from "react-icons/fa"; // Import FaMinusCircle
+import { useDispatch, useSelector } from "react-redux";
 import InventoryDetailModal from "@/components/Modal/InventoryDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { MomoType } from "@/enum/enum";
 import { shortenAddress } from "@/utils/shorten";
+import { addItemToBulk, removeItemFromBulk } from "@/store/actions/storageBulk"; // Import the actions
 
 interface InventoryCardProps {
     item: InventoryDto;
@@ -13,7 +15,11 @@ interface InventoryCardProps {
 
 const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const dispatch = useDispatch(); // Initialize dispatch
     const backgroundColor = getBackgroundColor(item.prototype || 0);
+
+    const bulkItems = useSelector((state: { bulkStorage: { items: InventoryDto[] } }) => state.bulkStorage.items); // Access bulk storage items
+    const isInBulk = bulkItems.some((bulkItem: InventoryDto) => bulkItem.id === item.id); // Check if item is in bulk
 
     const handleClick = () => {
         setIsModalOpen(true);
@@ -21,6 +27,14 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+    };
+
+    const handleAddToStorage = () => {
+        dispatch(addItemToBulk(item));
+    };
+
+    const handleRemoveFromStorage = () => {
+        dispatch(removeItemFromBulk(item));
     };
 
     return (
@@ -74,6 +88,27 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                         <p className="text-lg font-semibold">1</p>
                     </div>
                 )}
+
+                {/* Add to Storage Icon */}
+                <div className="absolute bottom-4 right-4">
+                    {isInBulk ? (
+                        <FaMinusCircle
+                            className="text-white cursor-pointer"
+                            onClick={e => {
+                                e.stopPropagation(); // Prevent triggering the card click
+                                handleRemoveFromStorage();
+                            }}
+                        />
+                    ) : (
+                        <FaPlusCircle
+                            className="text-white cursor-pointer"
+                            onClick={e => {
+                                e.stopPropagation(); // Prevent triggering the card click
+                                handleAddToStorage();
+                            }}
+                        />
+                    )}
+                </div>
             </div>
             {isModalOpen && <InventoryDetailModal item={item} onClose={handleCloseModal} />}
         </>

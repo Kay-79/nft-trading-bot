@@ -19,7 +19,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventories }) => {
     return (
         <div>
             <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                <p style={{ margin: 0 }}>Total Inventories: {totalInventories}</p>
+                <p style={{ margin: 0 }}>Total Momos: {totalInventories}</p>
             </div>
             <div
                 style={{
