@@ -18,7 +18,7 @@ import {
     WAIT_BID_PATH,
     // MP_BLOCK_ADDRESS,
     ENV,
-    API_AI_PRICE_PREDICT_FOR_BOT
+    API_AI_PRICE_PREDICT
     // MP_ADDRESS
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
@@ -211,7 +211,7 @@ export const getPriceFromAI = async (
         rewardPer1000Hash
     ];
     try {
-        const response = await axios.post(API_AI_PRICE_PREDICT_FOR_BOT, {
+        const response = await axios.post(API_AI_PRICE_PREDICT, {
             input: input
         });
         // console.log(input);
@@ -245,7 +245,7 @@ export const getPriceBlockFromAI = async (
     let totalPredict = 0;
     try {
         for (const input of inputs) {
-            const response = await axios.post(API_AI_PRICE_PREDICT_FOR_BOT, {
+            const response = await axios.post(API_AI_PRICE_PREDICT, {
                 input: input
             });
             // console.log(input);

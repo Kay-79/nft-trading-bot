@@ -57,6 +57,10 @@ create:
 hostDb:
 	bun ./src/AI/api/hostDb.ts
 
+getDbMac:
+	bun ./src/AI/data/getDbMac.ts
+	bun clean
+
 getDbBox:
 	bun ./src/AI/data/getDbBox.ts
 	bun clean

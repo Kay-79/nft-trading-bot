@@ -196,19 +196,15 @@ export const IS_FRONT_RUNNING = false;
 
 export const WAIT_BID_PATH = "./src/data/waitBid.json";
 
+export const IP_WIN = "172.16.1.91";
+
 export const IP_MAC = "100.92.200.100";
 
 export const IP_PY_BOX = "192.168.1.9";
 
 export const IP_PY_BOT = "192.168.1.11";
 
-export const IP_AI_PREDICT = "localhost";
-
-export const IP_BOT = "192.168.1.11";
-
 export const PORT_HOST_DATASET = 3004;
-
-export const API_AI_PRICE_PREDICT_FOR_BOT = `http://${IP_AI_PREDICT}:5000/predict`;
 
 export const API_AI_PRICE_PREDICT = "http://localhost:5000/predict";
 
