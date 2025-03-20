@@ -188,7 +188,7 @@ export const TIME_ENABLE_BID_AUCTION = 120; //2mins
 
 export const TIME_ENABLE_BID_AUCTION_GROUP = 600; //10mins
 
-export const TIME_DISABLE_BID = 60; //1min
+export const TIME_DISABLE_BID = 3600; //1hour
 
 export const TIME_DELAY_NOTICE_STATUS_BOT = 4; //4hours
 
