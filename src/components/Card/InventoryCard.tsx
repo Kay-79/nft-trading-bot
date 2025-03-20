@@ -7,7 +7,7 @@ import { getBackgroundColor } from "@/utils/colorUtils";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { MomoType } from "@/enum/enum";
 import { shortenAddress } from "@/utils/shorten";
-import { addItemToBulk, removeItemFromBulk } from "@/store/actions/storageBulk"; // Import the actions
+import { addItemToBulk, removeItemFromBulk } from "@/store/actions/storageBulk";
 
 interface InventoryCardProps {
     item: InventoryDto;
@@ -18,8 +18,13 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
     const dispatch = useDispatch(); // Initialize dispatch
     const backgroundColor = getBackgroundColor(item.prototype || 0);
 
-    const bulkItems = useSelector((state: { bulkStorage: { items: InventoryDto[] } }) => state.bulkStorage.items); // Access bulk storage items
-    const isInBulk = bulkItems.some((bulkItem: InventoryDto) => bulkItem.id === item.id); // Check if item is in bulk
+    const bulkItems = useSelector(
+        (state: { bulkStorage: { items: InventoryDto[] } }) => state.bulkStorage.items
+    );
+    const isInBulk = bulkItems.some((bulkItem: InventoryDto) => bulkItem.id === item.id);
+    const canAddToBulk =
+        bulkItems.length < 6 &&
+        bulkItems.every((bulkItem: InventoryDto) => bulkItem.owner === item.owner);
 
     const handleClick = () => {
         setIsModalOpen(true);
@@ -95,16 +100,18 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                         <FaMinusCircle
                             className="text-white cursor-pointer"
                             onClick={e => {
-                                e.stopPropagation(); // Prevent triggering the card click
+                                e.stopPropagation();
                                 handleRemoveFromStorage();
                             }}
                         />
                     ) : (
                         <FaPlusCircle
-                            className="text-white cursor-pointer"
+                            className={`text-white cursor-pointer ${
+                                !canAddToBulk && "opacity-50 cursor-not-allowed"
+                            }`}
                             onClick={e => {
-                                e.stopPropagation(); // Prevent triggering the card click
-                                handleAddToStorage();
+                                e.stopPropagation();
+                                if (canAddToBulk) handleAddToStorage();
                             }}
                         />
                     )}

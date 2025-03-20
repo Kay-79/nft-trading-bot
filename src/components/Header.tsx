@@ -10,26 +10,24 @@ import { ConnectWallet } from "./ConnectWallet";
  * @returns {JSX.Element}
  */
 const Header = () => {
-    // Access the current theme
     const { theme } = useTheme();
 
     return (
-        // Navigation bar with dynamic background and text color based on the theme
         <nav
             style={{
                 backgroundColor: theme.headerBackgroundColor,
                 color: theme.headerTextColor,
                 padding: "10px 20px",
-                margin: "0px 0", // Add margin to the navigation bar
+                margin: "0px 0",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
                 position: "fixed",
                 width: "100%",
                 top: 0,
-                boxSizing: "border-box", // Ensure padding is included in the element's total width and height
-                flexWrap: "wrap", // Allow wrapping for smaller screens
-                zIndex: 1000 // Ensure the header stays above other elements
+                boxSizing: "border-box",
+                flexWrap: "wrap",
+                zIndex: 1000
             }}
         >
             {/* Logo and title */}

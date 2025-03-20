@@ -1,15 +1,18 @@
 import React from "react";
 import { useTheme } from "@/config/theme";
-import Image from "next/image";
 import { RiCloseLine } from "react-icons/ri";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
+import { useSelector } from "react-redux";
 
-interface InventoryDetailModalProps {
-    item: InventoryDto;
+interface BulkSellModalProps {
     onClose: () => void;
 }
 
-const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClose }) => {
+const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
+    const items: InventoryDto[] = useSelector(
+        (state: { bulkStorage: { items: InventoryDto[] } }) => state.bulkStorage.items
+    );
+
     const { theme } = useTheme();
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -58,40 +61,23 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                         color: theme.textColor
                     }}
                 >
-                    <RiCloseLine size={24} /> {/* Use the close icon */}
+                    <RiCloseLine />
                 </button>
-                <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Inventory Details</h2>
-                <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                    <Image
-                        src={`/images/MOMO/${item.prototype}.png`}
-                        alt="Avatar"
-                        width={100}
-                        height={100}
-                    />
+                <h1 style={{ textAlign: "center" }}>Bulk Sell</h1>
+                <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    {items.map((item, index) => (
+                        <div
+                            key={index}
+                            style={{ display: "flex", justifyContent: "space-between" }}
+                        >
+                            <p>{item.prototype}</p>
+                            <p>{item.amount}</p>
+                        </div>
+                    ))}
                 </div>
-                <p>Level: {item.level}</p>
-                <p>Hashrate: {item.hashrate}</p>
-                <p>Prototype: {item.prototype}</p>
-                <p>Quality: {item.quality}</p>
-                <p>Specialty: {item.specialty}</p>
-                <button
-                    onClick={onClose}
-                    style={{
-                        padding: "10px 20px",
-                        backgroundColor: theme.buttonBackgroundColor,
-                        color: theme.buttonTextColor,
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        display: "block",
-                        margin: "20px auto 0"
-                    }}
-                >
-                    Close
-                </button>
             </div>
         </div>
     );
 };
 
-export default InventoryDetailModal;
+export default BulkSellModal;

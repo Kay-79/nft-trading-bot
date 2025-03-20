@@ -15,7 +15,6 @@ const Inventory: React.FC<InventoryProps> = ({ inventories }) => {
         (sum, inventory) => sum + (inventory.amount || 0),
         0
     );
-
     return (
         <div>
             <div style={{ textAlign: "right", marginBottom: "20px" }}>
