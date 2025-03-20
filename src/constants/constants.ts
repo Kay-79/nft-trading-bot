@@ -200,9 +200,9 @@ export const IP_WIN = "172.16.1.91";
 
 export const IP_MAC = "100.92.200.100";
 
-export const IP_PY_BOX = "192.168.1.9";
+export const IP_PI_BOX = "192.168.1.9";
 
-export const IP_PY_BOT = "192.168.1.11";
+export const IP_PI_BOT = "192.168.1.11";
 
 export const PORT_HOST_DATASET = 3004;
 

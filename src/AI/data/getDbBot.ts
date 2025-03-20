@@ -1,9 +1,9 @@
 import axios from "axios";
-import { PORT_HOST_DATASET, IP_PY_BOX } from "@/constants/constants";
+import { PORT_HOST_DATASET, IP_PI_BOX } from "@/constants/constants";
 import fs from "fs";
 import path from "path";
 
-const API_URL = `http://${IP_PY_BOX}:${PORT_HOST_DATASET}/dataset`;
+const API_URL = `http://${IP_PI_BOX}:${PORT_HOST_DATASET}/dataset`;
 const OUTPUT_FILE = "./src/AI/data/datasets.json";
 
 const fetchAndSaveDataset = async () => {
