@@ -9,6 +9,7 @@ import { clearBulk } from "@/store/actions/storageBulk";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
 import PrimaryLoadingButton from "@/components/Button/PrimaryLoadingButton";
+import { mpContractService } from "@/services/mpContract";
 
 interface BulkSellModalProps {
     onClose: () => void;
@@ -20,7 +21,6 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
             state.bulkStorage.bulkSellItems
     );
     const dispatch = useDispatch();
-
     const { theme } = useTheme();
     const { address } = useAccount();
     const [loadingBulkSell, setLoadingBulkSell] = useState<boolean>(false);
@@ -35,7 +35,7 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
         setLoadingBulkSell(true);
         try {
             // similate bulk sell
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await mpContractService.createAuctionBatch(bulkSellItems, address);
             dispatch(clearBulk());
             onClose();
         } catch {
