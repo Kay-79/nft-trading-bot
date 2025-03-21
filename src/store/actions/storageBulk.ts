@@ -10,3 +10,7 @@ export const removeItemFromBulk = (item: InventoryDto) => ({
     type: BulkAction.REMOVE,
     payload: item
 });
+
+export const clearBulk = () => ({
+    type: BulkAction.CLEAR
+});

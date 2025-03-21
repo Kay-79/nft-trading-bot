@@ -5,6 +5,9 @@ import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { ethers } from "ethers";
 import { CHANGER, MP_ADDRESS, PRO_BUYER } from "@/constants/constants";
+import { InventoryDto } from "@/types/dtos/Inventory.dto";
+import { mpUtils } from "@/utilsV2/mp/utils";
+import { MomoType } from "@/enum/enum";
 
 const transfer = async (from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
@@ -70,8 +73,46 @@ const cancelAuction = async (listing: AuctionDto, from: `0x${string}` | undefine
     });
 };
 
+const createAuctionBatch = async (
+    bulkSellItems: InventoryDto[],
+    from: `0x${string}` | undefined
+) => {
+    if (!wagmiConfig) {
+        throw new Error("Please connect your wallet first!");
+    }
+    if (from?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()) {
+        throw new Error("You are not the changer of the listing! ");
+    }
+    const owner = bulkSellItems[0].owner;
+    const allSameOwner = bulkSellItems.every(item => item.owner === owner);
+    if (!allSameOwner) {
+        throw new Error("All items must have the same owner");
+    }
+    const suggestIndex = await mpUtils.getNewIndex(owner || "");
+    const tokenIds: number[] = [];
+    const prices721: number[] = [];
+    const ids: number[] = [];
+    const prices1155: number[] = [];
+    for (const item of bulkSellItems) {
+        if (item.type === MomoType.PRO) {
+            tokenIds.push(item.tokenId || 0);
+            prices721.push(item.price);
+        } else if (item.type === MomoType.NORMAL) {
+            ids.push(item.prototype || 0);
+            prices1155.push(item.price);
+        }
+    }
+    return await writeContract(wagmiConfig, {
+        abi: abiMp,
+        address: owner as `0x${string}`,
+        functionName: "createAuctionBatch",
+        args: [suggestIndex, tokenIds, prices721, ids, prices1155]
+    });
+};
+
 export const mpContractService = {
     transfer,
     changePrice,
-    cancelAuction
+    cancelAuction,
+    createAuctionBatch
 };

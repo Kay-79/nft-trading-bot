@@ -72,7 +72,7 @@ export enum StakingSelector {
 }
 
 export enum MpSelector {
-    UNKNOWN_1 = "0xd28cc5f0", //get number of user
+    GET_SUGGEST_INDEX = "0xd28cc5f0",
     GET_LISTED_MOMOS = "0xcbbac767",
     GET_ORDER = "0xedb25841"
 }

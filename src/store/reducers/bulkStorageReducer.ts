@@ -2,11 +2,11 @@ import { BulkAction } from "@/enum/enum";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 
 interface BulkStorageState {
-    items: InventoryDto[];
+    bulkSellItems: InventoryDto[];
 }
 
 const initialState: BulkStorageState = {
-    items: []
+    bulkSellItems: []
 };
 
 const bulkStorageReducer = (
@@ -17,24 +17,24 @@ const bulkStorageReducer = (
         case BulkAction.ADD:
             return {
                 ...state,
-                items: [...state.items, action.payload]
+                bulkSellItems: [...state.bulkSellItems, action.payload]
             };
         case BulkAction.REMOVE:
             return {
                 ...state,
-                items: state.items.filter(item => item.id !== action.payload.id)
+                bulkSellItems: state.bulkSellItems.filter(item => item.id !== action.payload.id)
             };
         case BulkAction.UPDATE:
             return {
                 ...state,
-                items: state.items.map(item =>
+                bulkSellItems: state.bulkSellItems.map(item =>
                     item.id === action.payload.id ? action.payload : item
                 )
             };
         case BulkAction.CLEAR:
             return {
                 ...state,
-                items: []
+                bulkSellItems: []
             };
         default:
             return state;

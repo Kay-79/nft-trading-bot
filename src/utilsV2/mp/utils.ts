@@ -86,8 +86,21 @@ const getOrderHistory = async (user: string, index: string, block: number): Prom
     return orderInforesult;
 };
 
+const getNewIndex = async (user: string): Promise<number> => {
+    const abiCoder = new AbiCoder();
+    const encodedAddress = abiCoder.encode(["address"], [user]);
+    const data = MpSelector.GET_SUGGEST_INDEX + encodedAddress.slice(2);
+    const result = await ethersProvider.call({
+        to: MP_ADDRESS,
+        data: data
+    });
+    const decodeData = abiCoder.decode(["uint256"], result);
+    return Number(decodeData[0]);
+};
+
 export const mpUtils = {
     getListedProMomos,
     getOrder,
-    getOrderHistory
+    getOrderHistory,
+    getNewIndex
 };

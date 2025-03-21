@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import Image from "next/image";
 import { useTheme } from "@/config/theme";
-import { FaTrash } from "react-icons/fa"; // Import FaTrash
+import { FaTrash } from "react-icons/fa";
 import { removeItemFromBulk } from "@/store/actions/storageBulk";
 import { useDispatch } from "react-redux";
 
@@ -79,7 +79,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                 <FaTrash
                     className="text-red-500 cursor-pointer"
                     onClick={handleRemoveFromStorage}
-                    style={{ fontSize: "30px" }} 
+                    style={{ fontSize: "30px" }}
                 />
             </div>
         </div>

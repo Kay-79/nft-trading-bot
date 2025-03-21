@@ -19,7 +19,8 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
     const backgroundColor = getBackgroundColor(item.prototype || 0);
 
     const bulkItems = useSelector(
-        (state: { bulkStorage: { items: InventoryDto[] } }) => state.bulkStorage.items
+        (state: { bulkStorage: { bulkSellItems: InventoryDto[] } }) =>
+            state.bulkStorage.bulkSellItems
     );
     const isInBulk = bulkItems.some((bulkItem: InventoryDto) => bulkItem.id === item.id);
     const canAddToBulk =
