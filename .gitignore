@@ -20,6 +20,7 @@ src/airdrop/*.json
 src/AI/predict/cache.json
 public/images/MOMO
 /venv
+src/utilsV2/find/*.json
 
 # Hardhat files
 /cache

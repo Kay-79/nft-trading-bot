@@ -2,6 +2,7 @@ import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierPrice } from "../../types/common/TierPrice";
 import { bidContract, profitBlock, profitPerTier, profitProAI } from "../../config/config";
 import fs from "fs";
+import path from "path";
 import {
     API_BNB_PRICE_COIGEKO,
     API_BNB_PRICE_MOBOX,
@@ -499,6 +500,22 @@ export const getBnbPrice = async (cacheBnbPrice: number): Promise<number> => {
 
 export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice> => {
     const floorPrices = cacheTierPrice;
+    const filePath = path.join(__dirname, "tierPrices.json");
+    const fileExists = fs.existsSync(filePath);
+    if (fileExists) {
+        const fileStats = fs.statSync(filePath);
+        const fileAge = Date.now() - fileStats.mtimeMs;
+        if (fileAge < 5 * 60 * 1000) {
+            try {
+                const data = JSON.parse(fs.readFileSync(filePath, "utf8"));
+                console.log("Tier prices loaded from JSON file");
+                return data;
+            } catch (error) {
+                console.log("Error reading tier prices from JSON file:", error);
+            }
+        }
+    }
+
     const getPrice = async (
         prototype: number,
         amountCheck: number,
@@ -561,6 +578,13 @@ export const getTierPrice = async (cacheTierPrice: TierPrice): Promise<TierPrice
     if ((floorPrices[6] ?? 0) > 1000) {
         floorPrices[6] = 900;
     }
+
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(floorPrices));
+    } catch (error) {
+        console.log("Error writing tier prices to JSON file:", error);
+    }
+
     return floorPrices;
 };
 

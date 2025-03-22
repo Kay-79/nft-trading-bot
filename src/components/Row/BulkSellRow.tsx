@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import Image from "next/image";
 import { useTheme } from "@/config/theme";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaDollarSign } from "react-icons/fa"; // Import FaDollarSign
 import { removeItemFromBulk, updateItemInBulk } from "@/store/actions/storageBulk";
 import { useDispatch } from "react-redux";
 
@@ -21,6 +21,18 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
 
     const handleUpdate = (newAmount: number, newPrice: number) => {
         dispatch(updateItemInBulk({ ...bulkSellItem, quantity: newAmount, price: newPrice }));
+    };
+
+    const fetchMarketPrice = async () => {
+        const marketPrice = await getMarketPrice(bulkSellItem.inventory.prototype);
+        setPrice(marketPrice);
+        handleUpdate(amount, marketPrice);
+    };
+
+    const getMarketPrice = async (prototype: number) => {
+        // Replace with actual API call to fetch market price
+        console.log(`Fetching market price for ${prototype}`);
+        return 100;
     };
 
     return (
@@ -85,6 +97,11 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                         backgroundColor: theme.backgroundColor,
                         color: theme.textColor
                     }}
+                />
+                <FaDollarSign
+                    className="text-green-500 cursor-pointer"
+                    onClick={fetchMarketPrice}
+                    style={{ fontSize: "20px" }}
                 />
                 <FaTrash
                     className="text-red-500 cursor-pointer"
