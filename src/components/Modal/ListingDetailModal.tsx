@@ -84,7 +84,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         resetError();
         setLoadingPredict(true);
         try {
-            const response = await axios.post("/api/predictOne", {
+            const response = await axios.post("/api/predict721", {
                 hashrate: listingData.hashrate ?? 0,
                 lvHashrate: listingData.lvHashrate ?? 0,
                 prototype: listingData.prototype ?? 0,

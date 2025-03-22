@@ -5,6 +5,9 @@ import { useTheme } from "@/config/theme";
 import { FaTrash, FaDollarSign } from "react-icons/fa"; // Import FaDollarSign
 import { removeItemFromBulk, updateItemInBulk } from "@/store/actions/storageBulk";
 import { useDispatch } from "react-redux";
+import PrimaryLoadingIcon from "@/components/Button/PrimaryLoadingIcon"; // Import PrimaryLoadingIcon
+import axios from "axios";
+import { toast } from "react-toastify";
 
 interface BulkSellRowProps {
     bulkSellItem: BulkItemListStorage;
@@ -18,21 +21,28 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
     const [amount, setAmount] = useState(bulkSellItem.quantity);
     const [price, setPrice] = useState(bulkSellItem.price);
     const { theme } = useTheme();
+    const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
 
     const handleUpdate = (newAmount: number, newPrice: number) => {
         dispatch(updateItemInBulk({ ...bulkSellItem, quantity: newAmount, price: newPrice }));
     };
 
     const fetchMarketPrice = async () => {
-        const marketPrice = await getMarketPrice(bulkSellItem.inventory.prototype);
-        setPrice(marketPrice);
-        handleUpdate(amount, marketPrice);
-    };
-
-    const getMarketPrice = async (prototype: number) => {
-        // Replace with actual API call to fetch market price
-        console.log(`Fetching market price for ${prototype}`);
-        return 100;
+        setLoadingPredict(true);
+        try {
+            const response = await axios.post("/api/predict1155", {
+                hashrate: bulkSellItem.inventory.hashrate ?? 0,
+                lvHashrate: bulkSellItem.inventory.lvHashrate ?? 0,
+                prototype: bulkSellItem.inventory.prototype ?? 0,
+                level: bulkSellItem.inventory.level ?? 0
+            });
+            setPrice(response.data.prediction);
+        } catch (error) {
+            console.error(error);
+            toast.error("Prediction failed!");
+        } finally {
+            setLoadingPredict(false);
+        }
     };
 
     return (
@@ -98,15 +108,16 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                         color: theme.textColor
                     }}
                 />
-                <FaDollarSign
-                    className="text-green-500 cursor-pointer"
-                    onClick={fetchMarketPrice}
-                    style={{ fontSize: "20px" }}
-                />
+                <PrimaryLoadingIcon onClick={fetchMarketPrice} loading={loadingPredict}>
+                    <FaDollarSign
+                        className="text-green-500 cursor-pointer"
+                        style={{ fontSize: "15px" }}
+                    />
+                </PrimaryLoadingIcon>
                 <FaTrash
                     className="text-red-500 cursor-pointer"
                     onClick={handleRemoveFromStorage}
-                    style={{ fontSize: "30px" }}
+                    style={{ fontSize: "50px" }}
                 />
             </div>
         </div>
