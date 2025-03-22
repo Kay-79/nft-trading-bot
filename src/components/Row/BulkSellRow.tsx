@@ -37,6 +37,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                 level: bulkSellItem.inventory.level ?? 0
             });
             setPrice(response.data.prediction);
+            handleUpdate(amount, response.data.prediction);
         } catch (error) {
             console.error(error);
             toast.error("Prediction failed!");
@@ -108,12 +109,14 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                         color: theme.textColor
                     }}
                 />
-                <PrimaryLoadingIcon onClick={fetchMarketPrice} loading={loadingPredict}>
-                    <FaDollarSign
-                        className="text-green-500 cursor-pointer"
-                        style={{ fontSize: "15px" }}
-                    />
-                </PrimaryLoadingIcon>
+                {!price && (
+                    <PrimaryLoadingIcon onClick={fetchMarketPrice} loading={loadingPredict}>
+                        <FaDollarSign
+                            className="text-green-500 cursor-pointer"
+                            style={{ fontSize: "15px" }}
+                        />
+                    </PrimaryLoadingIcon>
+                )}
                 <FaTrash
                     className="text-red-500 cursor-pointer"
                     onClick={handleRemoveFromStorage}

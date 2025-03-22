@@ -90,18 +90,21 @@ const createAuctionBatch = async (
     }
     const suggestIndex = await mpUtils.getNewIndex(owner || "");
     const tokenIds: number[] = [];
-    const prices721: number[] = [];
+    const prices721: bigint[] = [];
     const ids: number[] = [];
-    const prices1155: number[] = [];
+    const prices1155: bigint[] = [];
     for (const item of bulkSellItems) {
         if (item.inventory.type === MomoType.PRO) {
             tokenIds.push(item.inventory.tokenId || 0);
-            prices721.push(item.price);
+            const price = ethers.parseUnits(item.price.toString(), 18);
+            prices721.push(price);
         } else if (item.inventory.type === MomoType.NORMAL) {
             ids.push(item.inventory.prototype || 0);
-            prices1155.push(item.price);
+            const price = ethers.parseUnits(item.price.toString(), 18);
+            prices1155.push(price);
         }
     }
+    console.log(suggestIndex, tokenIds, prices721, ids, prices1155);
     return await writeContract(wagmiConfig, {
         abi: abiMp,
         address: owner as `0x${string}`,

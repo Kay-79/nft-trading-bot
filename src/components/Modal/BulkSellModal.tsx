@@ -10,6 +10,7 @@ import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
 import PrimaryLoadingButton from "@/components/Button/PrimaryLoadingButton";
 import { mpContractService } from "@/services/mpContract";
+import { toast } from "react-toastify";
 
 interface BulkSellModalProps {
     onClose: () => void;
@@ -21,7 +22,6 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
             state.bulkStorage.bulkSellItems
     );
 
-    console.log(bulkSellItems);
     const dispatch = useDispatch();
     const { theme } = useTheme();
     const { address } = useAccount();
@@ -36,12 +36,12 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
     const handleBulkSell = async () => {
         setLoadingBulkSell(true);
         try {
-            console.log(bulkSellItems);
             await mpContractService.createAuctionBatch(bulkSellItems, address);
             dispatch(clearBulk());
+            toast.success("Bulk sell successfully!");
             onClose();
         } catch {
-            // Handle error
+            toast.error("Bulk sell failed!");
         } finally {
             setLoadingBulkSell(false);
         }
