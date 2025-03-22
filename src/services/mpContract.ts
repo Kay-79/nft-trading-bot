@@ -5,9 +5,9 @@ import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { ethers } from "ethers";
 import { CHANGER, MP_ADDRESS, PRO_BUYER } from "@/constants/constants";
-import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { mpUtils } from "@/utilsV2/mp/utils";
 import { MomoType } from "@/enum/enum";
+import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 
 const transfer = async (from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
@@ -45,8 +45,8 @@ const changePrice = async (
     if (!wagmiConfig) {
         throw new Error("Please connect your wallet first!");
     }
-    if (from?.toLocaleLowerCase() !== (listing.auctor || "").toLocaleLowerCase()) {
-        throw new Error("You are not the owner or changer of the listing!");
+    if (from?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()) {
+        throw new Error("You are not the changer of the listing! ");
     }
     const price = ethers.parseUnits(newPrice.toString(), 18);
     const to = listing.auctor?.toLocaleLowerCase() === PRO_BUYER ? MP_ADDRESS : listing.auctor;
@@ -74,7 +74,7 @@ const cancelAuction = async (listing: AuctionDto, from: `0x${string}` | undefine
 };
 
 const createAuctionBatch = async (
-    bulkSellItems: InventoryDto[],
+    bulkSellItems: BulkItemListStorage[],
     from: `0x${string}` | undefined
 ) => {
     if (!wagmiConfig) {
@@ -83,8 +83,8 @@ const createAuctionBatch = async (
     if (from?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()) {
         throw new Error("You are not the changer of the listing! ");
     }
-    const owner = bulkSellItems[0].owner;
-    const allSameOwner = bulkSellItems.every(item => item.owner === owner);
+    const owner = bulkSellItems[0].inventory.owner;
+    const allSameOwner = bulkSellItems.every(item => item.inventory.owner === owner);
     if (!allSameOwner) {
         throw new Error("All items must have the same owner");
     }
@@ -94,11 +94,11 @@ const createAuctionBatch = async (
     const ids: number[] = [];
     const prices1155: number[] = [];
     for (const item of bulkSellItems) {
-        if (item.type === MomoType.PRO) {
-            tokenIds.push(item.tokenId || 0);
+        if (item.inventory.type === MomoType.PRO) {
+            tokenIds.push(item.inventory.tokenId || 0);
             prices721.push(item.price);
-        } else if (item.type === MomoType.NORMAL) {
-            ids.push(item.prototype || 0);
+        } else if (item.inventory.type === MomoType.NORMAL) {
+            ids.push(item.inventory.prototype || 0);
             prices1155.push(item.price);
         }
     }

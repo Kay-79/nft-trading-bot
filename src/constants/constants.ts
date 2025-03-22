@@ -68,7 +68,7 @@ export const RATE_FEE_MARKET = 0.05;
 
 export const RPC_URL =
     ENV === Environment.MAINNET
-        ? "https://bsc-dataseed.binance.org/"
+        ? "https://bsc-dataseed1.binance.org/"
         : "https://data-seed-prebsc-1-s1.binance.org:8545/";
 
 export const RPC_URL_ARCHIVE = process.env.MORALIST_RPC_ARCHIVE_NODE || "default_rpc_archive";
@@ -79,7 +79,7 @@ export const MIN_GAS_PRICE_NORMAL = ENV === Environment.MAINNET ? 1.0001 : 10;
 
 export const MIN_GAS_PRICE_PRO = ENV === Environment.MAINNET ? 3.002 : 10;
 
-export const MIN_GAS_PRICE_CHANGE = ENV === Environment.MAINNET ? 0 : 10;
+export const MIN_GAS_PRICE_CHANGE = ENV === Environment.MAINNET ? 1.000001 : 10;
 
 export const MP_ADDRESS =
     ENV === Environment.MAINNET

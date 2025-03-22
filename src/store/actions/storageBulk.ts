@@ -1,13 +1,18 @@
 import { BulkAction } from "@/enum/enum";
-import { InventoryDto } from "@/types/dtos/Inventory.dto";
+import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 
-export const addItemToBulk = (item: InventoryDto) => ({
+export const addItemToBulk = (item: BulkItemListStorage) => ({
     type: BulkAction.ADD,
     payload: item
 });
 
-export const removeItemFromBulk = (item: InventoryDto) => ({
+export const removeItemFromBulk = (item: BulkItemListStorage) => ({
     type: BulkAction.REMOVE,
+    payload: item
+});
+
+export const updateItemInBulk = (item: BulkItemListStorage) => ({
+    type: BulkAction.UPDATE,
     payload: item
 });
 

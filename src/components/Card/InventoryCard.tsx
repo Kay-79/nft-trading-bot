@@ -8,6 +8,7 @@ import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { MomoType } from "@/enum/enum";
 import { shortenAddress } from "@/utils/shorten";
 import { addItemToBulk, removeItemFromBulk } from "@/store/actions/storageBulk";
+import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 
 interface InventoryCardProps {
     item: InventoryDto;
@@ -18,14 +19,18 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
     const dispatch = useDispatch();
     const backgroundColor = getBackgroundColor(item.prototype || 0);
 
-    const bulkItems = useSelector(
-        (state: { bulkStorage: { bulkSellItems: InventoryDto[] } }) =>
+    const bulkSellItems: BulkItemListStorage[] = useSelector(
+        (state: { bulkStorage: { bulkSellItems: BulkItemListStorage[] } }) =>
             state.bulkStorage.bulkSellItems
     );
-    const isInBulk = bulkItems.some((bulkItem: InventoryDto) => bulkItem.id === item.id);
+    const isInBulk = bulkSellItems.some(
+        (bulkItem: BulkItemListStorage) => bulkItem.inventory?.id === item?.id
+    );
     const canAddToBulk =
-        bulkItems.length < 6 &&
-        bulkItems.every((bulkItem: InventoryDto) => bulkItem.owner === item.owner);
+        bulkSellItems.length < 6 &&
+        bulkSellItems.every(
+            (bulkItem: BulkItemListStorage) => bulkItem.inventory?.owner === item?.owner
+        );
 
     const handleClick = () => {
         setIsModalOpen(true);
@@ -36,11 +41,23 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
     };
 
     const handleAddToStorage = () => {
-        dispatch(addItemToBulk(item));
+        const bulkItem: BulkItemListStorage = {
+            id: item.id,
+            inventory: item,
+            quantity: 1,
+            price: 0
+        };
+        dispatch(addItemToBulk(bulkItem));
     };
 
     const handleRemoveFromStorage = () => {
-        dispatch(removeItemFromBulk(item));
+        const bulkItem: BulkItemListStorage = {
+            id: item.id,
+            inventory: item,
+            quantity: 1,
+            price: 0
+        };
+        dispatch(removeItemFromBulk(bulkItem));
     };
 
     return (
@@ -78,7 +95,7 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                 {/* Owner */}
                 <div className="flex items-center justify-center">
                     <div className="bg-white text-black px-2 py-1 rounded-full text-xs">
-                        {shortenAddress(item.owner || "")}
+                        {shortenAddress(item?.owner || "")}
                     </div>
                 </div>
 

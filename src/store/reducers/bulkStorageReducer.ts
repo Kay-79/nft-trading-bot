@@ -1,8 +1,15 @@
 import { BulkAction } from "@/enum/enum";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 
+export interface BulkItemListStorage {
+    id: string;
+    inventory: InventoryDto;
+    quantity: number;
+    price: number;
+}
+
 interface BulkStorageState {
-    bulkSellItems: InventoryDto[];
+    bulkSellItems: BulkItemListStorage[];
 }
 
 const initialState: BulkStorageState = {
@@ -11,7 +18,7 @@ const initialState: BulkStorageState = {
 
 const bulkStorageReducer = (
     state = initialState,
-    action: { type: BulkAction; payload: InventoryDto }
+    action: { type: BulkAction; payload: BulkItemListStorage }
 ): BulkStorageState => {
     switch (action.type) {
         case BulkAction.ADD:

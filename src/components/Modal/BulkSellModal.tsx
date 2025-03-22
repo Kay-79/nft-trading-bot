@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useTheme } from "@/config/theme";
 import { RiCloseLine } from "react-icons/ri";
-import { InventoryDto } from "@/types/dtos/Inventory.dto";
+import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import { useSelector } from "react-redux";
 import BulkSellRow from "../Row/BulkSellRow";
 import { useDispatch } from "react-redux";
@@ -16,10 +16,12 @@ interface BulkSellModalProps {
 }
 
 const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
-    const bulkSellItems: InventoryDto[] = useSelector(
-        (state: { bulkStorage: { bulkSellItems: InventoryDto[] } }) =>
+    const bulkSellItems: BulkItemListStorage[] = useSelector(
+        (state: { bulkStorage: { bulkSellItems: BulkItemListStorage[] } }) =>
             state.bulkStorage.bulkSellItems
     );
+
+    console.log(bulkSellItems);
     const dispatch = useDispatch();
     const { theme } = useTheme();
     const { address } = useAccount();
@@ -34,7 +36,7 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
     const handleBulkSell = async () => {
         setLoadingBulkSell(true);
         try {
-            // similate bulk sell
+            console.log(bulkSellItems);
             await mpContractService.createAuctionBatch(bulkSellItems, address);
             dispatch(clearBulk());
             onClose();

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import { InventoryDto } from "@/types/dtos/Inventory.dto";
+import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import Image from "next/image";
 import { useTheme } from "@/config/theme";
 import { FaTrash } from "react-icons/fa";
-import { removeItemFromBulk } from "@/store/actions/storageBulk";
+import { removeItemFromBulk, updateItemInBulk } from "@/store/actions/storageBulk";
 import { useDispatch } from "react-redux";
 
 interface BulkSellRowProps {
-    bulkSellItem: InventoryDto;
+    bulkSellItem: BulkItemListStorage;
 }
 
 const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
@@ -15,24 +15,30 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
     const handleRemoveFromStorage = () => {
         dispatch(removeItemFromBulk(bulkSellItem));
     };
-    const [amount, setAmount] = useState(0);
-    const [price, setPrice] = useState(0);
+    const [amount, setAmount] = useState(bulkSellItem.quantity);
+    const [price, setPrice] = useState(bulkSellItem.price);
     const { theme } = useTheme();
+
+    const handleUpdate = (newAmount: number, newPrice: number) => {
+        dispatch(updateItemInBulk({ ...bulkSellItem, quantity: newAmount, price: newPrice }));
+    };
 
     return (
         <div className="flex items-center justify-between border-b border-gray-200">
             <div className="flex items-center gap-4">
                 <div className="flex justify-center my-4 mr-2">
-                    <Image
-                        src={`/images/MOMO/${bulkSellItem.prototype}.png`}
-                        alt="Avatar"
-                        width={100}
-                        height={100}
-                    />
+                    {bulkSellItem.inventory && (
+                        <Image
+                            src={`/images/MOMO/${bulkSellItem.inventory.prototype}.png`}
+                            alt="Avatar"
+                            width={100}
+                            height={100}
+                        />
+                    )}
                 </div>
                 <div className="ml-4">
-                    <p className="font-semibold">{bulkSellItem.prototype}</p>
-                    <p className="text-sm text-gray-500">Lv. {bulkSellItem.level}</p>
+                    <p className="font-semibold">{bulkSellItem.inventory?.prototype}</p>
+                    <p className="text-sm text-gray-500">Lv. {bulkSellItem.inventory?.level}</p>
                 </div>
             </div>
             <div className="flex items-center gap-4">
@@ -42,7 +48,9 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                     onChange={e => {
                         const value = e.target.value;
                         if (!isNaN(Number(value)) || value === "") {
-                            setAmount(Number(value));
+                            const newAmount = Number(value);
+                            setAmount(newAmount);
+                            handleUpdate(newAmount, price);
                         }
                     }}
                     onWheel={e => e.currentTarget.blur()} // Disable scroll wheel input change
@@ -62,7 +70,9 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                     onChange={e => {
                         const value = e.target.value;
                         if (!isNaN(Number(value)) || value === "" || /^\d*\.?\d*$/.test(value)) {
-                            setPrice(Number(value));
+                            const newPrice = Number(value);
+                            setPrice(newPrice);
+                            handleUpdate(amount, newPrice);
                         }
                     }}
                     onWheel={e => e.currentTarget.blur()}
