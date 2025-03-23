@@ -39,7 +39,7 @@ const transfer = async (from: string, to: string, amount: number) => {
 
 const changePrice = async (
     listing: AuctionDto,
-    from: `0x${string}` | undefined, // useAccount()
+    from: `0x${string}` | undefined,
     newPrice: number
 ) => {
     if (!wagmiConfig) {
@@ -94,17 +94,29 @@ const createAuctionBatch = async (
     const ids: number[] = [];
     const prices1155: bigint[] = [];
     for (const item of bulkSellItems) {
-        if (item.inventory.type === MomoType.PRO) {
-            tokenIds.push(item.inventory.tokenId || 0);
-            const price = ethers.parseUnits(item.price.toString(), 18);
-            prices721.push(price);
-        } else if (item.inventory.type === MomoType.NORMAL) {
-            ids.push(item.inventory.prototype || 0);
-            const price = ethers.parseUnits(item.price.toString(), 18);
-            prices1155.push(price);
+        for (let i = 0; i < item.quantity; i++) {
+            if (item.inventory.type === MomoType.PRO) {
+                tokenIds.push(item.inventory.tokenId || 0);
+                const price = ethers.parseUnits(item.price.toString(), 18);
+                prices721.push(price);
+            } else if (item.inventory.type === MomoType.NORMAL) {
+                ids.push(item.inventory.prototype || 0);
+                const price = ethers.parseUnits(item.price.toString(), 18);
+                prices1155.push(price);
+            }
         }
     }
-    console.log(suggestIndex, tokenIds, prices721, ids, prices1155);
+    if (
+        tokenIds.length === 0 &&
+        ids.length === 0 &&
+        prices1155.length === 0 &&
+        prices721.length === 0
+    ) {
+        throw new Error("No items to sell");
+    }
+    if (tokenIds.length > 6 && ids.length > 6 && prices1155.length > 6 && prices721.length > 6) {
+        throw new Error("You can't sell more than 5 items at once");
+    }
     return await writeContract(wagmiConfig, {
         abi: abiMp,
         address: owner as `0x${string}`,
