@@ -41,7 +41,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [listingData, setListingData] = useState<AuctionDto>(listing);
 
     const resetError = useCallback(() => {
-        handleError(null); // Reset error state
+        handleError(null);
     }, [handleError]);
 
     const handleAdjustPrice = async () => {
@@ -84,7 +84,8 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         resetError();
         setLoadingPredict(true);
         try {
-            const response = await axios.post("/api/predict721", {
+            const url = (listingData?.tokenId ?? 0) > 0 ? "/api/predict721" : "/api/predict1155";
+            const response = await axios.post(url, {
                 hashrate: listingData.hashrate ?? 0,
                 lvHashrate: listingData.lvHashrate ?? 0,
                 prototype: listingData.prototype ?? 0,
@@ -294,19 +295,18 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                     <RiRefreshLine size={24} />
                                 </PrimaryLoadingIcon>
                             )}
-                            {(listingData.tokenId ?? 0) > 0 &&
-                                (predictedPrice !== null ? (
-                                    <span className="text-blue-400 font-bold text-lg">
-                                        {predictedPrice} USDT
-                                    </span>
-                                ) : (
-                                    <PrimaryLoadingIcon
-                                        onClick={handlePredict}
-                                        loading={loadingPredict}
-                                    >
-                                        <RiAiGenerate2 size={24} />
-                                    </PrimaryLoadingIcon>
-                                ))}
+                            {predictedPrice !== null ? (
+                                <span className="text-blue-400 font-bold text-lg">
+                                    {predictedPrice} USDT
+                                </span>
+                            ) : (
+                                <PrimaryLoadingIcon
+                                    onClick={handlePredict}
+                                    loading={loadingPredict}
+                                >
+                                    <RiAiGenerate2 size={24} />
+                                </PrimaryLoadingIcon>
+                            )}
                         </div>
                     </div>
                 </div>
