@@ -16,7 +16,10 @@ export const getPriceSuggestNormal = async (prototype: number): Promise<number> 
         (allContracts.includes(auctor) || allContracts.includes(ethers.getAddress(auctor)))
     ) {
         for (let i = 0; i < auctionSorted.length; i++) {
-            if (auctor !== auctionSorted[i].auctor) {
+            if (
+                !allContracts.includes(auctionSorted[i].auctor || "") &&
+                !allContracts.includes(ethers.getAddress(auctionSorted[i].auctor || ""))
+            ) {
                 return shortenNumber(
                     (auctionSorted[i].nowPrice || 999 * 10 ** 9) - 0.001 * 10 ** 9,
                     9,

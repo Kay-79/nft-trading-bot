@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import PrimaryLoadingIcon from "@/components/Button/PrimaryLoadingIcon"; // Import PrimaryLoadingIcon
 import axios from "axios";
 import { toast } from "react-toastify";
+import { shortenNumber } from "@/utils/shorten";
 
 interface BulkSellRowProps {
     bulkSellItem: BulkItemListStorage;
@@ -30,13 +31,15 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
     const fetchMarketPrice = async () => {
         setLoadingPredict(true);
         try {
-            const response = await axios.post("/api/predict1155", {
+            const apiEndpoint =
+                bulkSellItem.inventory.tokenId || 0 > 0 ? "/api/predict721" : "/api/predict1155";
+            const response = await axios.post(apiEndpoint, {
                 hashrate: bulkSellItem.inventory.hashrate ?? 0,
                 lvHashrate: bulkSellItem.inventory.lvHashrate ?? 0,
                 prototype: bulkSellItem.inventory.prototype ?? 0,
                 level: bulkSellItem.inventory.level ?? 0
             });
-            setPrice(response.data.prediction);
+            setPrice(shortenNumber(response.data.prediction, 0, 3));
             handleUpdate(amount, response.data.prediction);
         } catch (error) {
             console.error(error);
