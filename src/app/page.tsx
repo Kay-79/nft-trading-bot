@@ -17,7 +17,7 @@ const LandingPage = () => {
             }}
         >
             <header style={{ marginBottom: "40px", textAlign: "center" }}>
-                <h1 style={{ color: theme.primaryColor, fontSize: "3rem" }}>Mobox Profit Bot</h1>
+                <h1 style={{ color: theme.primaryColor, fontSize: "3rem" }}>NFT Trading</h1>
                 <p style={{ fontSize: "1.2rem" }}>
                     A sophisticated bot designed to front-run transactions on the Binance Smart
                     Chain (BSC) and profit from arbitrage opportunities in the Mobox ecosystem.

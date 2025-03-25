@@ -16,7 +16,7 @@ const Footer = () => {
                 zIndex: 1000
             }}
         >
-            <p style={{ margin: 0 }}>&copy; 2024 Mobox Profit Bot. All rights reserved.</p>
+            <p style={{ margin: 0 }}>&copy; 2024 NFT Trading. All rights reserved.</p>
         </footer>
     );
 };

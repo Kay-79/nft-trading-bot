@@ -21,7 +21,6 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
         (state: { bulkStorage: { bulkSellItems: BulkItemListStorage[] } }) =>
             state.bulkStorage.bulkSellItems
     );
-
     const dispatch = useDispatch();
     const { theme } = useTheme();
     const { address } = useAccount();
@@ -35,6 +34,28 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
 
     const handleBulkSell = async () => {
         setLoadingBulkSell(true);
+        let totalBulkSellItems = 0;
+        for (let i = 0; i < bulkSellItems.length; i++) {
+            totalBulkSellItems += bulkSellItems[i].quantity;
+            if (bulkSellItems[i].price === 0) {
+                toast.error("Please set price for all items!");
+                setLoadingBulkSell(false);
+                return;
+            }
+            if (
+                bulkSellItems[i].quantity === 0 ||
+                bulkSellItems[i].quantity > (bulkSellItems[i].inventory?.amount ?? 0)
+            ) {
+                toast.error("Invalid quantity!");
+                setLoadingBulkSell(false);
+                return false;
+            }
+        }
+        if (totalBulkSellItems > 6) {
+            toast.error("Maximum 6 items for bulk sell!");
+            setLoadingBulkSell(false);
+            return false;
+        }
         try {
             await mpContractService.createAuctionBatch(bulkSellItems, address);
             dispatch(clearBulk());

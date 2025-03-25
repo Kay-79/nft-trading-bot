@@ -146,6 +146,8 @@ const DashboardPage = () => {
                         comparison = (a.level || 0) - (b.level || 0);
                     } else if (filter.sort === "prototype") {
                         comparison = (a.prototype || 0) - (b.prototype || 0);
+                    } else if (filter.sort === "amount") {
+                        comparison = (a.amount || 0) - (b.amount || 0);
                     }
                     return filter.sortOrder === "asc" ? comparison : -comparison;
                 })

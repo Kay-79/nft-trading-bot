@@ -417,7 +417,7 @@ export const getPayableBidAuctions = async (bidAuctions: BidAuction[]): Promise<
                 case BidType.BOX:
                 case BidType.MECBOX:
                 case BidType.GEM:
-                    return PRO_BUYER;
+                    return bidContract;
                 case BidType.NORMAL:
                 case BidType.BUNDLE:
                     return bidContract;

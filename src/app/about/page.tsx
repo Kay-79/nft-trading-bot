@@ -25,12 +25,10 @@ const AboutPage = () => {
             {/* Header section */}
             <header style={{ marginBottom: "40px", textAlign: "center" }}>
                 {/* Main title with dynamic color */}
-                <h1 style={{ color: theme.primaryColor, fontSize: "3rem" }}>
-                    About Mobox Profit Bot
-                </h1>
+                <h1 style={{ color: theme.primaryColor, fontSize: "3rem" }}>About NFT Trading</h1>
                 {/* Subtitle */}
                 <p style={{ fontSize: "1.2rem" }}>
-                    Learn more about the Mobox Profit Bot and its features.
+                    Learn more about the NFT Trading and its features.
                 </p>
             </header>
 

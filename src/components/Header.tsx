@@ -40,7 +40,7 @@ const Header = () => {
                         height={40}
                         style={{ marginRight: "10px" }}
                     />
-                    <div style={{ fontSize: "2rem", fontWeight: "bolder" }}>Mobox Profit Bot</div>
+                    <div style={{ fontSize: "2rem", fontWeight: "bolder" }}>NFT Trading</div>
                 </div>
             </Link>
             {/* Navigation links */}

@@ -63,7 +63,9 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
     return (
         <>
             <div
-                className={`text-white p-4 rounded-2xl w-72 shadow-lg relative cursor-pointer`}
+                className={`text-white p-4 rounded-2xl w-72 shadow-lg relative cursor-pointer ${
+                    isInBulk ? "font-bold border-4 border-yellow-500" : ""
+                }`}
                 style={{ backgroundColor: backgroundColor }}
                 onClick={handleClick}
             >
