@@ -79,7 +79,7 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                     <div className="text-right">
                         <p className="text-lg font-bold">{item.lvHashrate}</p>
                         <p className="text-xs text-gray-300">
-                            {(item.hashrate || 0) > 5 ? `Lv. 1 - ${item.hashrate}` : ""}
+                            {(item.hashrate || 0) > 5 ? `Lv. 1 - ${item.hashrate}` : <br />}
                         </p>
                     </div>
                 </div>

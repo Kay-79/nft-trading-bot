@@ -243,9 +243,11 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                 {listingData.lvHashrate}
                             </p>
                             <p className="text-xs" style={{ color: customDarkTheme.textColor }}>
-                                {(listingData.hashrate || 0) > 5
-                                    ? `Lv. 1 - ${listingData.hashrate}`
-                                    : ""}
+                                {(listingData.hashrate || 0) > 5 ? (
+                                    `Lv. 1 - ${listingData.hashrate}`
+                                ) : (
+                                    <br />
+                                )}
                             </p>
                         </div>
                     </div>

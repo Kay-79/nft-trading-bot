@@ -38,7 +38,7 @@ const HoverOnShowActivitiesDetail: React.FC<HoverOnShowActivitiesDetailProps> = 
                     <div className="text-right" style={{ fontSize: "10px" }}>
                         <p className="font-bold">{item.lvHashrate}</p>
                         <p className="text-gray-300">
-                            {(item.hashrate || 0) > 5 ? `Lv. 1 - ${item.hashrate}` : ""}
+                            {(item.hashrate || 0) > 5 ? `Lv. 1 - ${item.hashrate}` : <br />}
                         </p>
                     </div>
                 )}

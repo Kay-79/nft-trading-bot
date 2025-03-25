@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         listing.hashrate = Number(momoInfo.hashrate);
         listing.lvHashrate = Number(momoInfo.lvHashrate);
         const db = await connectMongo();
-        const collection = db.collection("listings");
+        const collection = db.collection("inventory");
         await collection.updateOne(
             { id: listing.id },
             {

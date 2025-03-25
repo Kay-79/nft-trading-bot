@@ -1,8 +1,13 @@
-import React from "react";
-import { useTheme } from "@/config/theme";
+import React, { useState } from "react";
 import Image from "next/image";
-import { RiCloseLine } from "react-icons/ri";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
+import { getBackgroundColor } from "@/utils/colorUtils";
+import { shortenAddress } from "@/utils/shorten";
+import PrimaryLoadingButton from "../Button/PrimaryLoadingButton";
+import { toast } from "react-toastify";
+import axios from "axios";
+import PrimaryLoadingIcon from "../Button/PrimaryLoadingIcon";
+import { RiRefreshLine } from "react-icons/ri";
 
 interface InventoryDetailModalProps {
     item: InventoryDto;
@@ -10,13 +15,41 @@ interface InventoryDetailModalProps {
 }
 
 const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClose }) => {
-    const { theme } = useTheme();
+    console.log("item", item);
+    const [loadingList, setLoadingList] = useState(false);
+    const [itemData, setItemData] = useState<InventoryDto>(item);
+
+    const handleList = async () => {
+        setLoadingList(true);
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            console.log("Listing item:", itemData);
+        } catch (error) {
+            console.error("Failed to list item:", error);
+        } finally {
+            setLoadingList(false);
+        }
+    };
+
+    const handleRefresh = async () => {
+        try {
+            const response = await axios.post("/api/refreshInventory", {
+                inventory: itemData
+            });
+            setItemData(response.data.data);
+            toast.success("Listing refreshed successfully!");
+        } catch {
+            toast.error("Failed to refresh invnetory!");
+        }
+    };
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
             onClose();
         }
     };
+
+    const backgroundColor = getBackgroundColor(itemData.prototype || 0);
 
     return (
         <div
@@ -30,19 +63,19 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
-                zIndex: 1000 // Ensure the modal stays above other elements
+                zIndex: 1000
             }}
             onClick={handleOutsideClick}
         >
             <div
                 style={{
-                    backgroundColor: theme.backgroundColor,
-                    color: theme.textColor,
+                    backgroundColor: "#1a1a1a",
+                    color: "#fff",
                     padding: "20px",
                     borderRadius: "10px",
                     width: "80%",
-                    maxWidth: "500px",
-                    position: "relative" // Add relative positioning for the close button
+                    maxWidth: "400px",
+                    position: "relative"
                 }}
             >
                 <button
@@ -55,40 +88,64 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                         border: "none",
                         fontSize: "20px",
                         cursor: "pointer",
-                        color: theme.textColor
+                        color: "#fff"
                     }}
                 >
-                    <RiCloseLine size={24} /> {/* Use the close icon */}
+                    ✕
                 </button>
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>Inventory Details</h2>
-                <div style={{ textAlign: "center", marginBottom: "20px" }}>
-                    <Image
-                        src={`/images/MOMO/${item.prototype}.png`}
-                        alt="Avatar"
-                        width={100}
-                        height={100}
-                    />
-                </div>
-                <p>Level: {item.level}</p>
-                <p>Hashrate: {item.hashrate}</p>
-                <p>Prototype: {item.prototype}</p>
-                <p>Quality: {item.quality}</p>
-                <p>Specialty: {item.specialty}</p>
-                <button
-                    onClick={onClose}
+                <div
                     style={{
-                        padding: "10px 20px",
-                        backgroundColor: theme.buttonBackgroundColor,
-                        color: theme.buttonTextColor,
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        display: "block",
-                        margin: "20px auto 0"
+                        textAlign: "center",
+                        marginBottom: "20px",
+                        backgroundColor: backgroundColor,
+                        padding: "10px",
+                        borderRadius: "10px"
                     }}
                 >
-                    Close
-                </button>
+                    <div
+                        className="flex justify-between items-center"
+                        style={{ marginBottom: "20px" }}
+                    >
+                        <span className="text-sm flex items-center gap-1">
+                            <span className="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs">
+                                Lv. {itemData.level}
+                            </span>
+                        </span>
+                        <div className="text-right">
+                            <p className="text-lg font-bold">{itemData.lvHashrate}</p>
+                            <p className="text-xs text-gray-300">
+                                {(itemData.hashrate || 0) > 5 ? `Lv. 1 - ${itemData.hashrate}` : <br />}
+                            </p>
+                        </div>
+                    </div>
+                    <div
+                        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                    >
+                        <Image
+                            src={`/images/MOMO/${itemData.prototype}.png`}
+                            alt="Avatar"
+                            width={100}
+                            height={100}
+                            priority
+                        />
+                    </div>
+                    <p className="text-center text-lg font-semibold" style={{ marginTop: "10px" }}>
+                        {shortenAddress(itemData.owner || "")}
+                    </p>
+                    {itemData.prototype === 99999 && (
+                        <div style={{ position: "absolute", bottom: "20px", right: "15px" }}>
+                            <PrimaryLoadingIcon onClick={handleRefresh} loading={false}>
+                                <RiRefreshLine size={24} />
+                            </PrimaryLoadingIcon>
+                        </div>
+                    )}
+                </div>
+                <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                    <PrimaryLoadingButton onClick={handleList} loading={loadingList}>
+                        List
+                    </PrimaryLoadingButton>
+                </div>
             </div>
         </div>
     );
