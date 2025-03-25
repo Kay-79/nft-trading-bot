@@ -8,12 +8,13 @@ interface ListingsProps {
 }
 
 const Listings: React.FC<ListingsProps> = ({ listings }) => {
+    const validListings = Array.isArray(listings) ? listings : [];
     const totalPrice = shortenNumber(
-        listings.reduce((sum, listing) => sum + (listing.nowPrice || 0), 0),
+        validListings.reduce((sum, listing) => sum + (listing.nowPrice || 0), 0),
         9,
         3
     );
-    const totalListings = listings.length;
+    const totalListings = validListings.length;
 
     return (
         <div>
@@ -30,7 +31,7 @@ const Listings: React.FC<ListingsProps> = ({ listings }) => {
                     justifyContent: "center"
                 }}
             >
-                {listings.map(listing => (
+                {validListings.map(listing => (
                     <ListingCard key={listing.id} listing={listing} />
                 ))}
                 <style jsx>{`

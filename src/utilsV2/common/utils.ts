@@ -72,3 +72,9 @@ export const getDataStorageHistory = async (address: string, slot: string, block
 export const hexToString = (hex: string): string => {
     return Buffer.from(hex.slice(2), "hex").toString();
 };
+
+export const checkMyIp = async () => {
+    const res = await fetch("https://api.ipify.org?format=json");
+    const data = await res.json();
+    return data.ip;
+};
