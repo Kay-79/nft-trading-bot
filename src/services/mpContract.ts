@@ -8,6 +8,7 @@ import { CHANGER, MP_ADDRESS, PRO_BUYER } from "@/constants/constants";
 import { mpUtils } from "@/utilsV2/mp/utils";
 import { MomoType } from "@/enum/enum";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
+import { bidContract } from "@/config/config";
 
 const transfer = async (from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
@@ -125,9 +126,30 @@ const createAuctionBatch = async (
     });
 };
 
+const bidAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) => {
+    if (!wagmiConfig) {
+        throw new Error("Please connect your wallet first!");
+    }
+    if (from?.toLocaleLowerCase() !== PRO_BUYER.toLocaleLowerCase()) {
+        throw new Error("Failed to bid the auction");
+    }
+    return await writeContract(wagmiConfig, {
+        abi: abiMp,
+        address: bidContract as `0x${string}`,
+        functionName: "bid",
+        args: [
+            listing.auctor,
+            listing.index,
+            listing.uptime,
+            ((listing?.nowPrice ?? 0) + 10 ** 5).toString() + "000000000"
+        ]
+    });
+};
+
 export const mpContractService = {
     transfer,
     changePrice,
     cancelAuction,
-    createAuctionBatch
+    createAuctionBatch,
+    bidAuction
 };

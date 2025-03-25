@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { customDarkTheme, useTheme } from "@/config/theme";
 import Image from "next/image";
@@ -21,6 +21,8 @@ import PrimaryLoadingIcon from "@/components/Button/PrimaryLoadingIcon";
 import { toast } from "react-toastify";
 import PrimaryLoadingButton from "../Button/PrimaryLoadingButton";
 import SecondaryLoadingButton from "../Button/SecondaryLoadingButton";
+import { allContracts } from "@/config/config";
+import { ethers } from "ethers";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -35,10 +37,20 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
     const { address } = useAccount();
     const [showAdjustInput, setShowAdjustInput] = useState<boolean>(false);
-    const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
-    const [loadingAdjust, setLoadingAdjust] = useState<boolean>(false);
-    const [loadingCancel, setLoadingCancel] = useState<boolean>(false);
     const [listingData, setListingData] = useState<AuctionDto>(listing);
+    const [loadingAdjust, setLoadingAdjust] = useState<boolean>(false);
+    const [loadingDelist, setLoadingDelist] = useState<boolean>(false);
+    const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
+    const [loadingPurchase, setLoadingPurchase] = useState<boolean>(false);
+    const isMyListing = useMemo(() => {
+        if (
+            allContracts.includes(listingData.auctor || "") ||
+            allContracts.includes(ethers.getAddress(listingData.auctor || ""))
+        ) {
+            return true;
+        }
+        return false;
+    }, [listingData]);
 
     const resetError = useCallback(() => {
         handleError(null);
@@ -49,13 +61,13 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         try {
             await mpContractService.changePrice(listingData, address, price);
             toast.success("Price adjusted successfully!");
+            onClose();
         } catch {
             handleError(error as Error);
             toast.error("Failed to adjust price");
+        } finally {
             setLoadingAdjust(false);
         }
-        setLoadingAdjust(false);
-        onClose();
     };
 
     const handleAdjustClick = () => {
@@ -68,16 +80,16 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     };
 
     const handleDelist = async () => {
-        setLoadingCancel(true);
+        setLoadingDelist(true);
         try {
             await mpContractService.cancelAuction(listingData, address);
             toast.success("Price cancel successfully!");
+            onClose();
         } catch {
             toast.error("Failed to cancel listing");
-            setLoadingCancel(false);
+        } finally {
+            setLoadingDelist(false);
         }
-        setLoadingCancel(false);
-        onClose();
     };
 
     const handlePredict = useCallback(async () => {
@@ -129,6 +141,20 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
         } catch (error) {
             handleError(error as Error);
             toast.error("Failed to refresh listing");
+        }
+    };
+
+    const handlePurchase = async () => {
+        setLoadingPurchase(true);
+        try {
+            await mpContractService.bidAuction(listingData, address);
+            toast.success("Purchase successful!");
+            onClose();
+        } catch (error) {
+            handleError(error as Error);
+            toast.error("Failed to purchase");
+        } finally {
+            setLoadingPurchase(false);
         }
     };
 
@@ -342,31 +368,52 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                 )}
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
                     {address ? (
-                        <>
-                            {showAdjustInput ? (
-                                <div style={{ flex: 1, display: "flex", justifyContent: "center" }}>
-                                    <PrimaryLoadingButton
-                                        onClick={handleAdjustClick}
-                                        loading={loadingAdjust}
+                        isMyListing ? (
+                            <>
+                                {showAdjustInput ? (
+                                    <div
+                                        style={{
+                                            flex: 1,
+                                            display: "flex",
+                                            justifyContent: "center"
+                                        }}
                                     >
-                                        Confirm
-                                    </PrimaryLoadingButton>
-                                </div>
-                            ) : (
-                                <>
-                                    <PrimaryButton onClick={handleAdjustClick} style={{ flex: 1 }}>
-                                        Adjust
-                                    </PrimaryButton>
-                                    <SecondaryLoadingButton
-                                        onClick={handleDelist}
-                                        loading={loadingCancel}
-                                        style={{ flex: 1 }}
-                                    >
-                                        Delist
-                                    </SecondaryLoadingButton>
-                                </>
-                            )}
-                        </>
+                                        <PrimaryLoadingButton
+                                            onClick={handleAdjustClick}
+                                            loading={loadingAdjust}
+                                        >
+                                            Confirm
+                                        </PrimaryLoadingButton>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <PrimaryButton
+                                            onClick={handleAdjustClick}
+                                            style={{ flex: 1 }}
+                                        >
+                                            Adjust
+                                        </PrimaryButton>
+                                        <SecondaryLoadingButton
+                                            onClick={handleDelist}
+                                            loading={loadingDelist}
+                                            style={{ flex: 1 }}
+                                            disabled={loadingPredict}
+                                        >
+                                            Delist
+                                        </SecondaryLoadingButton>
+                                    </>
+                                )}
+                            </>
+                        ) : (
+                            <PrimaryLoadingButton
+                                onClick={handlePurchase}
+                                loading={loadingPurchase}
+                                style={{ flex: 1 }}
+                                disabled={loadingPurchase}
+                            >
+                                Purchase
+                            </PrimaryLoadingButton>
+                        )
                     ) : (
                         <div style={{ display: "flex", justifyContent: "center", width: "100%" }}>
                             <ConnectWallet />
