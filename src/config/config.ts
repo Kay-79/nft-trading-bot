@@ -59,11 +59,15 @@ export const proBidders: string[] = [
     "0x4114463f52401b22c8127bc76bc7ec129928ca97"
 ];
 
-export const newbieBidders: string[] = ["0xF91116A59E7a004030fDB42070e3E8A97912591a"];
+export const newbieBidders: string[] = [
+    "0xF91116A59E7a004030fDB42070e3E8A97912591a",
+    "0x8B5DA11bD2955569a6408050246f14b5340f61c8"
+];
 
 export const newbieAuctors: string[] = [
     "0x3cf0689468a046c3f353F41a71bBeF2c5F486980",
-    "0xd3ff2923508ef254f12eb6316481b72b0052506e"
+    "0xd3ff2923508ef254f12eb6316481b72b0052506e",
+    "0x72264a0Dd6794094992fD7A221F894118A113875"
 ];
 
 export const contracts: string[] = [

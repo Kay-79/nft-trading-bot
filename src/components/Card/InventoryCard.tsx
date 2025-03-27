@@ -9,6 +9,7 @@ import { MomoType } from "@/enum/enum";
 import { shortenAddress } from "@/utils/shorten";
 import { addItemToBulk, removeItemFromBulk } from "@/store/actions/storageBulk";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
+import { Tooltip } from "react-tooltip"; // Update import to use Tooltip
 
 interface InventoryCardProps {
     item: InventoryDto;
@@ -117,23 +118,35 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                 {/* Add to Storage Icon */}
                 <div className="absolute bottom-4 right-4">
                     {isInBulk ? (
-                        <FaMinusCircle
-                            className="text-white cursor-pointer"
-                            onClick={e => {
-                                e.stopPropagation();
-                                handleRemoveFromStorage();
-                            }}
-                        />
+                        <>
+                            <FaMinusCircle
+                                className="text-white cursor-pointer"
+                                data-tooltip-id="tooltip"
+                                data-tooltip-content="Remove from Bulk Sell"
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    handleRemoveFromStorage();
+                                }}
+                            />
+                            <Tooltip id="tooltip" place="top" />
+                        </>
                     ) : (
-                        <FaPlusCircle
-                            className={`text-white cursor-pointer ${
-                                !canAddToBulk && "opacity-50 cursor-not-allowed"
-                            }`}
-                            onClick={e => {
-                                e.stopPropagation();
-                                if (canAddToBulk) handleAddToStorage();
-                            }}
-                        />
+                        <>
+                            <FaPlusCircle
+                                className={`text-white cursor-pointer ${
+                                    !canAddToBulk && "opacity-50 cursor-not-allowed"
+                                }`}
+                                data-tooltip-id="tooltip"
+                                data-tooltip-content={
+                                    canAddToBulk ? "Add to Bulk Sell" : "Cannot add to Bulk Sell"
+                                }
+                                onClick={e => {
+                                    e.stopPropagation();
+                                    if (canAddToBulk) handleAddToStorage();
+                                }}
+                            />
+                            <Tooltip id="tooltip" place="top" />
+                        </>
                     )}
                 </div>
             </div>
