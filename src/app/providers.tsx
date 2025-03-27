@@ -34,7 +34,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             <QueryClientProvider client={queryClient}>
                 <ReduxProvider store={store}>
                     {wagmiConfig ? (
-                        <WagmiProvider config={wagmiConfig}>
+                        <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
                             <RainbowKitProvider theme={rainbowKitTheme}>
                                 {children}
                             </RainbowKitProvider>

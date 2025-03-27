@@ -63,8 +63,8 @@ export const getChangeDecisionNormal = async (
     const auctionLowestPrice = auctionsSamePrototype
         .filter(a => a.nowPrice)
         .sort((a, b) => (a.nowPrice ?? 0) - (b.nowPrice ?? 0))[0];
-    if (!(await isExistAuction(auctionLowestPrice))) {
-        console.log("No lowest price");
+    if (!(await isExistAuction(auctionLowestPrice)) || !(await isExistAuction(auction))) {
+        console.log("Not exist, maybe changed or bought");
         return changeDecision;
     }
     if (!auctionLowestPrice?.auctor || !auctionLowestPrice.nowPrice || !auctionLowestPrice.uptime) {
