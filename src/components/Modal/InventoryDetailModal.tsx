@@ -1,13 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Image from "next/image";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { getBackgroundColor } from "@/utils/colorUtils";
-import { shortenAddress } from "@/utils/shorten";
+import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import PrimaryLoadingButton from "../Button/PrimaryLoadingButton";
 import { toast } from "react-toastify";
 import axios from "axios";
 import PrimaryLoadingIcon from "../Button/PrimaryLoadingIcon";
 import { RiRefreshLine } from "react-icons/ri";
+import { RiAiGenerate2 } from "react-icons/ri";
 
 interface InventoryDetailModalProps {
     item: InventoryDto;
@@ -15,9 +16,10 @@ interface InventoryDetailModalProps {
 }
 
 const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClose }) => {
-    console.log("item", item);
     const [loadingList, setLoadingList] = useState(false);
     const [itemData, setItemData] = useState<InventoryDto>(item);
+    const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
+    const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
 
     const handleList = async () => {
         setLoadingList(true);
@@ -42,6 +44,26 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
             toast.error("Failed to refresh invnetory!");
         }
     };
+
+    const handlePredict = useCallback(async () => {
+        setLoadingPredict(true);
+        try {
+            const url = itemData.tokenId || 0 > 0 ? "/api/predict721" : "/api/predict1155";
+            const response = await axios.post(url, {
+                hashrate: itemData.hashrate ?? 0,
+                lvHashrate: itemData.lvHashrate ?? 0,
+                prototype: itemData.prototype ?? 0,
+                level: itemData.level ?? 0
+            });
+            console.log("Prediction response:", response.data);
+            const predicted = response.data.prediction;
+            setPredictedPrice(shortenNumber(predicted, 0, 3));
+        } catch {
+            toast.error("Prediction failed!");
+        } finally {
+            setLoadingPredict(false);
+        }
+    }, [itemData]);
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
@@ -100,7 +122,8 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                         marginBottom: "20px",
                         backgroundColor: backgroundColor,
                         padding: "10px",
-                        borderRadius: "10px"
+                        borderRadius: "10px",
+                        position: "relative" // Added for icon positioning
                     }}
                 >
                     <div
@@ -115,7 +138,11 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                         <div className="text-right">
                             <p className="text-lg font-bold">{itemData.lvHashrate}</p>
                             <p className="text-xs text-gray-300">
-                                {(itemData.hashrate || 0) > 5 ? `Lv. 1 - ${itemData.hashrate}` : <br />}
+                                {(itemData.hashrate || 0) > 5 ? (
+                                    `Lv. 1 - ${itemData.hashrate}`
+                                ) : (
+                                    <br />
+                                )}
                             </p>
                         </div>
                     </div>
@@ -133,13 +160,34 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                     <p className="text-center text-lg font-semibold" style={{ marginTop: "10px" }}>
                         {shortenAddress(itemData.owner || "")}
                     </p>
-                    {itemData.prototype === 99999 && (
-                        <div style={{ position: "absolute", bottom: "20px", right: "15px" }}>
+                    <div
+                        style={{
+                            position: "absolute",
+                            bottom: "10px",
+                            right: "10px",
+                            display: "flex",
+                            gap: "10px"
+                        }}
+                    >
+                        {itemData.prototype === 99999 && (
                             <PrimaryLoadingIcon onClick={handleRefresh} loading={false}>
                                 <RiRefreshLine size={24} />
                             </PrimaryLoadingIcon>
-                        </div>
-                    )}
+                        )}
+                        {predictedPrice === null ? (
+                            <PrimaryLoadingIcon onClick={handlePredict} loading={loadingPredict}>
+                                <RiAiGenerate2 size={24} />
+                            </PrimaryLoadingIcon>
+                        ) : (
+                            <div>
+                                {predictedPrice !== null && (
+                                    <span className="text-blue-400 font-bold text-lg">
+                                        {predictedPrice} USDT
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                     <PrimaryLoadingButton onClick={handleList} loading={loadingList}>
