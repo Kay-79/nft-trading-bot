@@ -76,7 +76,8 @@ export const contracts: string[] = [
     "0x2D34E0171db021b2e0A0ECb4eA298DBE708a6C68",
     "0xbad9ecD57d69E4b16073936c8453FD4b0F7D31Fd",
     "0x1Cf2c4119A6e65C3053be65103b5e276506449eB",
-    "0x4cAefa2AB16075B3527fE3757BC7987845796d5E" // version 6.1.8
+    "0x4cAefa2AB16075B3527fE3757BC7987845796d5E", // version 6.1.8
+    "0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F"
 ];
 
 export const allContracts: string[] = [
@@ -86,7 +87,8 @@ export const allContracts: string[] = [
     "0xbad9ecD57d69E4b16073936c8453FD4b0F7D31Fd",
     "0x1Cf2c4119A6e65C3053be65103b5e276506449eB",
     "0x4cAefa2AB16075B3527fE3757BC7987845796d5E",
-    "0x0e9bc747335a4b01a6194a6c1bb1de54a0a5355c"
+    "0x0e9bc747335a4b01a6194a6c1bb1de54a0a5355c",
+    "0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F"
 ];
 
-export const bidContract = "0x4cAefa2AB16075B3527fE3757BC7987845796d5E";
+export const bidContract = "0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F";
