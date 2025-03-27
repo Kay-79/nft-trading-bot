@@ -55,6 +55,7 @@
         "crawl": "bun ./src/AI/crawlingDatasetsRpc.ts",
         "clean": "bun ./src/AI/cleanDatasets.ts",
         "check": "node ./src/tools/check",
+        "backup": "bun ./src/tools/backup.ts",
         "find": "bun ./src/tools/find.ts",
         "bid": "bun ./src/tools/bid.ts",
         "create": "node ./src/tools/create",
