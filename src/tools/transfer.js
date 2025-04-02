@@ -60,7 +60,7 @@ async function transfer(address_) {
                     .encodeABI();
                 let tx = {
                     gas: 100000,
-                    gasPrice: Number((1.0001 * 10 ** 9).toFixed(0)),
+                    gasPrice: Number((0 * 10 ** 9).toFixed(0)),
                     to: myAcc[index][0],
                     value: 0,
                     data: encoded
@@ -87,7 +87,7 @@ async function transfer(address_) {
     }
 }
 
-const minTransfer = 50;
+const minTransfer = 10;
 const maxTransfer = 999;
 
-transfer("0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F");
+transfer("0xE4534fA363016b1BD1E95C20144361cFB7c2d3aC");
