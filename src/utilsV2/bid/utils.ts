@@ -25,6 +25,7 @@ import { AuctionGroupDto } from "@/types/dtos/AuctionGroup.dto";
 import { mpBlockUtils } from "../mpBlock/utils";
 import { bidContract } from "@/config/config";
 import { erc20Provider } from "@/providers/erc20Provider";
+import { shortenNumber } from "@/utils/shorten";
 
 export const getBidAuctions = async (): Promise<BidAuction[]> => {
     try {
@@ -360,20 +361,33 @@ export const getSerializedTxs = async (bidAuctions: BidAuction[]): Promise<Buffe
 
 export const isExistAuction = async (auction: AuctionDto): Promise<boolean> => {
     try {
-        if (!auction.auctor || !auction.uptime) {
+        if (
+            !auction.auctor ||
+            !auction.uptime ||
+            auction.index === undefined ||
+            auction.tokenId === undefined ||
+            !auction.durationDays ||
+            !auction.startPrice ||
+            !auction.endPrice
+        ) {
             throw new Error("Auction auctor is undefined");
         }
         const order = await mpUtils.getOrder(auction.auctor, (auction.index ?? 0).toString());
         return (
             (order.status === BigInt(AuctionStatus.ACTIVE) &&
                 BigInt(auction.uptime) === order.uptime &&
-                order.tokenId === BigInt(auction.tokenId ?? 0) &&
+                order.tokenId === BigInt(auction.tokenId) &&
                 (auction.ids?.length ?? 0) === (order.ids?.length ?? 0) &&
                 (auction.amounts?.length ?? 0) === (order.amounts?.length ?? 0) &&
                 auction.ids?.every((id, index) => order.ids && BigInt(id) === order.ids[index]) &&
                 auction.amounts?.every(
                     (amount, index) => order.amounts && BigInt(amount) === order.amounts[index]
-                )) ??
+                ) &&
+                BigInt(auction.durationDays) === order.durationDays &&
+                shortenNumber(auction.startPrice, 9, 3) ===
+                    shortenNumber(Number(order.startPrice), 18, 3) &&
+                shortenNumber(auction.endPrice, 9, 3) ===
+                    shortenNumber(Number(order.endPrice), 18, 3)) ??
             false
         );
     } catch (error) {
