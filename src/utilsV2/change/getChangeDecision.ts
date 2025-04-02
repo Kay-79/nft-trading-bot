@@ -33,13 +33,19 @@ export const getChangeDecisionPro = async (
         return { shouldChange: false, newPrice: 0 };
     }
     const floorPrice = floorPrices[Math.floor(auction.prototype / 10 ** 4)];
-    const prediction = shortenNumber(await predictAuctionPro(auction), 0, 3);
-    if (shortenNumber(auction.nowPrice, 9, 3) > prediction) {
-        return {
-            shouldChange: true,
-            newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
-        };
+    try {
+        const prediction = shortenNumber(await predictAuctionPro(auction), 0, 3);
+        if (shortenNumber(auction.nowPrice, 9, 3) > prediction) {
+            return {
+                shouldChange: true,
+                newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
+            };
+        }
+    } catch (error) {
+        console.log("Error when predict auction pro", error);
+        return { shouldChange: false, newPrice: 0 };
     }
+
     return { shouldChange: false, newPrice: 0 };
 };
 
