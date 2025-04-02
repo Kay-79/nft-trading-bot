@@ -1,6 +1,6 @@
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
-import { ENV, MIN_GAS_PRICE_CHANGE, RPC_URL } from "./src/constants/constants";
+import { ENV, RPC_URL } from "./src/constants/constants";
 import { Environment } from "./src/enum/enum";
 import dotenv from "dotenv";
 dotenv.config();
@@ -15,6 +15,7 @@ if (!PRIVATE_KEY) {
 }
 
 const chainId = ENV === Environment.MAINNET ? 56 : 97;
+const gasPrice = ENV === Environment.MAINNET ? 1 : 10;
 
 const config: HardhatUserConfig = {
     solidity: "0.8.28",
@@ -27,7 +28,7 @@ const config: HardhatUserConfig = {
             url: RPC_URL ? RPC_URL : "",
             chainId: chainId,
             accounts: PRIVATE_KEY ? [PRIVATE_KEY] : [],
-            gasPrice: MIN_GAS_PRICE_CHANGE * 10 ** 9
+            gasPrice: gasPrice * 10 ** 9
         }
     }
 };
