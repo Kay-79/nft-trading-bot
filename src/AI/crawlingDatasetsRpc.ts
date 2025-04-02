@@ -9,12 +9,15 @@ import { fullNodeProvider } from "@/providers/fullNodeProvider";
 import { byte32ToAddress, shortenNumber } from "@/utilsV2/common/utils";
 import { AbiCoder } from "ethers";
 import { momo721 } from "@/utilsV2/momo721/utils";
-import fs from "fs";
 import { Environment } from "@/enum/enum";
 import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
 import { stakingUtils } from "@/utilsV2/staking/utils";
 import { sleep } from "@/utilsV2/common/sleep";
 import { ethersProvider } from "@/providers/ethersProvider";
+import { closeMongoConnection, connectMongo } from "@/utils/connectMongo";
+import { exit } from "process";
+import { databaseService } from "@/services/database";
+import { cleanDatasets } from "./utils";
 
 const abiCoder = new AbiCoder();
 
@@ -25,16 +28,18 @@ export const crawlingDatasetsRpc = async () => {
     }
     const endBlock = await fullNodeProvider.getBlockNumber();
     await sleep(1.5);
-    const lastBlock = JSON.parse(fs.readFileSync("./src/AI/data/lastBlock.json", "utf-8"));
-    let startBlock = lastBlock.lastBlock;
+    const db = await connectMongo();
+    const synced = await db.collection("synced").findOne({});
+    if (!synced || !synced.blockAI) {
+        console.log("No synced blockBot found. Starting from blockBot 0");
+        exit(1);
+    }
+    let startBlock = synced.blockAI + 1;
+    console.log(`Start from block ${startBlock} to block ${endBlock}`);
     const step = 1000;
     let cacheMboxPrice = CACHE_MBOX_PRICE;
     let cacheRewardPer1000Hash = CACHE_REWARD_PER_1000_HASH;
     while (startBlock < endBlock) {
-        fs.writeFileSync(
-            "./src/AI/data/lastBlock.json",
-            JSON.stringify({ lastBlock: startBlock }, null, 2)
-        );
         let datasets = "";
         const toBlock = startBlock + step;
         const filter = {
@@ -110,20 +115,21 @@ export const crawlingDatasetsRpc = async () => {
             datasets += JSON.stringify(dataset) + ",";
         }
         if (datasets.length > 0) {
-            let existingData = [];
-            const filePath = "./src/AI/data/datasets.json";
-            if (fs.existsSync(filePath)) {
-                const fileContent = fs.readFileSync(filePath, "utf-8");
-                existingData = fileContent.trim() ? JSON.parse(fileContent) : [];
+            const newDatasets = cleanDatasets(JSON.parse(`[${datasets.slice(0, -1)}]`));
+            for (let i = 0; i < newDatasets.length; i++) {
+                const data = newDatasets[i];
+                console.log("Inserting", data);
+                await db.collection("datasets").insertOne(data);
             }
-            const newData = JSON.parse(`[${datasets.slice(0, -1)}]`);
-            const updatedData = existingData.concat(newData);
-            fs.writeFileSync(filePath, JSON.stringify(updatedData, null, 2));
+            await databaseService.updateSyncedAI(db, logs[logs.length - 1].blockNumber);
         }
         if (logs.length === 0) startBlock = toBlock + 1;
         else startBlock = logs[logs.length - 1].blockNumber + 1;
         console.log("Querying from block", startBlock, "to block", toBlock + step);
     }
+    await databaseService.updateSyncedAI(db, endBlock);
+    await sleep(1.5);
+    await closeMongoConnection();
     console.log("Done");
 };
 

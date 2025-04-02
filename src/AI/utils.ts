@@ -6,7 +6,7 @@ import {
     PRO_BUYER
 } from "../constants/constants";
 import axios from "axios";
-import { newbieBidders, proBidders } from "@/config/config";
+import { newbieAuctors, newbieBidders, proBidders } from "@/config/config";
 import { PredictMode } from "@/enum/enum";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
@@ -261,4 +261,34 @@ export const predictAuctionPro = async (auction: AuctionDto): Promise<number> =>
         reward
     ];
     return predictModelOne(input);
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const cleanDatasets = (datasets: any[]) => {
+    const proTradersNormalized = new Set(proBidders.map(addr => ethers.getAddress(addr)));
+    const newbieTradersNormalized = new Set(newbieBidders.map(addr => ethers.getAddress(addr)));
+    const newbieAuctorsNormalized = new Set(newbieAuctors.map(addr => ethers.getAddress(addr)));
+    const newData = datasets.filter(
+        (dataset: {
+            bidder: string;
+            auctor: string;
+            output: number[];
+            bidTime: number;
+            listTime: number;
+        }) => {
+            const bidderAddress = ethers.getAddress(dataset.bidder.trim());
+            const auctorAddress = ethers.getAddress(dataset.auctor.trim());
+            const isNotnewbieAuctor = !newbieAuctorsNormalized.has(auctorAddress);
+            const isNotProTrader = !proTradersNormalized.has(bidderAddress);
+            const isNotnewbieTrader = !newbieTradersNormalized.has(bidderAddress);
+            return (
+                dataset.output.length === 1 &&
+                isNotProTrader &&
+                isNotnewbieTrader &&
+                isNotnewbieAuctor &&
+                dataset.bidTime - dataset.listTime > 5 * 60
+            );
+        }
+    );
+    return newData;
 };

@@ -2,7 +2,7 @@ import fs from "fs";
 import { newbieBidders, proBidders, newbieAuctors } from "@/config/config";
 import { ethers } from "ethers";
 
-export const cleanDatasets = async () => {
+const cleanDatasets = async () => {
     const filePath = "./src/AI/data/datasets.json";
     let existingData = [];
     if (fs.existsSync(filePath)) {

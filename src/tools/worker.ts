@@ -17,42 +17,24 @@ import {
 } from "@/constants/constants";
 import { sleep } from "@/utilsV2/common/sleep";
 import { SyncedDto } from "@/types/dtos/Synced.dto";
-// import { AnalysisDto } from "@/types/dtos/Analysis.dto";
 const step = 2000;
 
 const worker = async () => {
     const db = await connectMongo();
     console.log("Worker started");
-    // const analysis = await db.collection("analysis").findOne({});
-    // if (!analysis) {
-    //     console.log("No analysis found. Starting from block 0");
-    //     const newAnalysis: AnalysisDto = {
-    //         normal: {
-    //             totalBuy: { amount: 0, value: 0 },
-    //             totalSell: { amount: 0, value: 0 },
-    //             totalCancel: { amount: 0, value: 0 }
-    //         },
-    //         pro: {
-    //             totalBuy: { amount: 0, value: 0 },
-    //             totalSell: { amount: 0, value: 0 },
-    //             totalCancel: { amount: 0, value: 0 }
-    //         }
-    //     };
-    //     await db.collection("analysis").insertOne(newAnalysis);
-    // }
     while (true) {
         const synced = await db.collection("synced").findOne({});
         if (!synced) {
-            console.log("No synced block found. Starting from block 0");
-            const newSynced: SyncedDto = { block: 0, tx: "" };
+            console.log("No synced blockBot found. Starting from blockBot 0");
+            const newSynced: SyncedDto = { blockBot: 0, blockAI: 0, tx: "" };
             await db.collection("synced").insertOne(newSynced);
         }
-        let startBlock = synced ? synced.block + 1 : 0;
+        let startBlock = synced ? synced.blockBot + 1 : 0;
         const endBlock = await fullNodeProvider.getBlockNumber();
         if (startBlock >= endBlock) {
             const synced = await db.collection("synced").findOne({});
             if (synced) {
-                startBlock = synced.block + 1;
+                startBlock = synced.blockBot + 1;
             }
         }
         console.log("Syncing blocks:", startBlock, "to", endBlock);

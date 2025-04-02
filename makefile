@@ -54,21 +54,6 @@ create:
 	npm run create
 #######################################
 ############### AI ####################
-hostDb:
-	bun ./src/AI/api/hostDb.ts
-
-getDbMac:
-	bun ./src/AI/data/getDbMac.ts
-	bun clean
-
-getDbBox:
-	bun ./src/AI/data/getDbBox.ts
-	bun clean
-
-getDbBot:
-	bun ./src/AI/data/getDbBot.ts
-	bun clean
-
 modelAI:
 	python ./src/AI/model/model.py
 

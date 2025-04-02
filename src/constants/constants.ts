@@ -71,9 +71,9 @@ export const RPC_URL =
         ? "https://bsc-dataseed1.binance.org/"
         : "https://data-seed-prebsc-1-s1.binance.org:8545/";
 
-export const RPC_URL_ARCHIVE = process.env.MORALIST_RPC_ARCHIVE_NODE || "default_rpc_archive";
+export const RPC_URL_ARCHIVE = process.env.MORALIST_RPC_ARCHIVE_NODE || RPC_URL;
 
-export const RPC_URL_FULL_NODE = process.env.GET_BLOCK_RPC_FULL_NODE || "default_rpc_full_node";
+export const RPC_URL_FULL_NODE = process.env.GET_BLOCK_RPC_FULL_NODE || RPC_URL;
 
 export const MIN_GAS_PRICE_NORMAL = ENV === Environment.MAINNET ? 1.0001 : 10;
 
@@ -195,16 +195,6 @@ export const TIME_DELAY_NOTICE_STATUS_BOT = 4; //4hours
 export const IS_FRONT_RUNNING = false;
 
 export const WAIT_BID_PATH = "./src/data/waitBid.json";
-
-export const IP_WIN = "172.16.1.91";
-
-export const IP_MAC = "100.92.200.100";
-
-export const IP_PI_BOX = "192.168.1.9";
-
-export const IP_PI_BOT = "192.168.1.11";
-
-export const PORT_HOST_DATASET = 3004;
 
 export const API_AI_PRICE_PREDICT = "http://localhost:5000/predict";
 

@@ -7,7 +7,7 @@ import { ChangeDto } from "@/types/worker/Change.dto";
 import { MomoType } from "@/enum/enum";
 import { AnalysisDto } from "@/types/dtos/Analysis.dto";
 
-const updateSynced = async (
+const updateSyncedMp = async (
     db: Db,
     blockNumber: number,
     transactionHash: string
@@ -15,7 +15,20 @@ const updateSynced = async (
     try {
         await db
             .collection("synced")
-            .updateOne({}, { $set: { block: blockNumber, tx: transactionHash } }, { upsert: true });
+            .updateOne(
+                {},
+                { $set: { blockBot: blockNumber, tx: transactionHash } },
+                { upsert: true }
+            );
+    } catch (error) {
+        throw new Error(`Error updating synced block: ${error}`);
+    }
+};
+const updateSyncedAI = async (db: Db, blockNumber: number): Promise<void> => {
+    try {
+        await db
+            .collection("synced")
+            .updateOne({}, { $set: { blockAI: blockNumber } }, { upsert: true });
     } catch (error) {
         throw new Error(`Error updating synced block: ${error}`);
     }
@@ -69,7 +82,7 @@ const createOrIncreaseInventories = async (
                 console.log(`Inventory created`);
             }
         }
-        await updateSynced(db, blockNumber, transactionHash);
+        await updateSyncedMp(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error updating inventories: ${error}`);
     }
@@ -132,7 +145,7 @@ const deleteOrDecreaseInventories = async (
                 }
             }
         }
-        await updateSynced(db, blockNumber, transactionHash);
+        await updateSyncedMp(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error updating inventories: ${error}`);
     }
@@ -174,7 +187,7 @@ const createListings = async (
                 console.log(`Listing created`);
             }
         }
-        await updateSynced(db, blockNumber, transactionHash);
+        await updateSyncedMp(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error updating listings: ${error}`);
     }
@@ -210,7 +223,7 @@ const updateListing = async (
         } else {
             console.log(`Listing ${change.id} not found`);
         }
-        await updateSynced(db, blockNumber, transactionHash);
+        await updateSyncedMp(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error updating listing: ${error}`);
     }
@@ -225,7 +238,7 @@ const deleteListing = async (
     try {
         await db.collection("listings").deleteOne({ id: id });
         console.log(`Listing deleted`);
-        await updateSynced(db, blockNumber, transactionHash);
+        await updateSyncedMp(db, blockNumber, transactionHash);
     } catch (error) {
         throw new Error(`Error deleting listing: ${error}`);
     }
@@ -268,7 +281,8 @@ const updateAnalysis = async (db: Db, analysis: AnalysisDto): Promise<void> => {
 
 export const databaseService = {
     //Sync
-    // updateSynced,
+    // updateSyncedMp,
+    updateSyncedAI,
     //Inventory
     createOrIncreaseInventories,
     deleteOrDecreaseInventories,

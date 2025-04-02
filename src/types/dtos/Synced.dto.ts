@@ -1,4 +1,5 @@
 export interface SyncedDto {
-    block: number;
+    blockBot: number;
+    blockAI: number;
     tx: string;
 }
