@@ -19,22 +19,22 @@ export const modeBot: ModeBot = {
 };
 
 export const profitPerTier: TierPrice = {
-    1: 0.05,
-    2: 0.05,
-    3: 0.05,
-    4: 2,
+    1: 0.15,
+    2: 0.1,
+    3: 0.1,
+    4: 3,
     5: 5,
     6: 500
 };
 
 export const profitBlock: ProfitConfig = {
-    min: 5,
-    percent: 0.7
+    min: 10,
+    percent: 0.6
 };
 
 export const profitProAI: ProfitConfig = {
-    min: 5,
-    percent: 0.7
+    min: 10,
+    percent: 0.6
 };
 
 export const delayTimeGet: LatestGet = {

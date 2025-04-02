@@ -75,16 +75,11 @@ export const preprocessRawData = (rawDatasets: RecentSoldDto[]): TrainingData[] 
 };
 
 export const predictModel = async (inputOne: number[], predictMode: string) => {
-    console.log("Predicting model...", API_AI_PRICE_PREDICT);
     if (predictMode === PredictMode.ONE) {
         try {
             const response = await axios.post(API_AI_PRICE_PREDICT, {
                 input: inputOne
             });
-            console.log("===================================================================");
-            console.log("Input:\t\t\t", inputOne);
-            console.log("Prediction:\t\t", response.data.prediction[0]);
-            console.log("===================================================================");
             return response.data.prediction[0];
         } catch (error) {
             console.error("Error predicting model:", error);
@@ -139,7 +134,7 @@ export const predictModelOne = async (inputOne: number[]) => {
     return predictModel(inputOne, PredictMode.ONE);
 };
 
-export const getMboxPriceAndRewardDelay5m = async (): Promise<{
+export const getMboxPriceAndRewardDelay1Hour = async (): Promise<{
     mboxPrice: number;
     reward: number;
 }> => {
@@ -153,7 +148,7 @@ export const getMboxPriceAndRewardDelay5m = async (): Promise<{
     }
     const cacheJson = JSON.parse(cache);
     const timestamp = cacheJson.timestamp;
-    if (Date.now() / 1000 - timestamp > 5 * 60) {
+    if (Date.now() / 1000 - timestamp > 60 * 60) {
         const mboxPrice = await getPriceMboxOnChain(-1, CACHE_MBOX_PRICE);
         const reward = await stakingUtils.getRewardPer1000Hashrate(-1, CACHE_REWARD_PER_1000_HASH);
         fs.writeFileSync(
@@ -250,4 +245,20 @@ export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrat
     }
     console.log("Total price all:\t", totalPriceAll);
     console.log("Total predicted all:\t", totalPredictedAll);
+};
+
+export const predictAuctionPro = async (auction: AuctionDto): Promise<number> => {
+    const data = await getMboxPriceAndRewardDelay1Hour();
+    const mboxPrice = data.mboxPrice;
+    const reward = data.reward;
+    const input = [
+        auction.hashrate ?? 0,
+        auction.lvHashrate ?? 0,
+        Math.floor((auction.prototype ?? 0) / 10 ** 4),
+        auction.level ?? 0,
+        Math.floor(Date.now() / 1000),
+        mboxPrice,
+        reward
+    ];
+    return predictModelOne(input);
 };

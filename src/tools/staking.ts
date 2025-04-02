@@ -1,10 +1,10 @@
-import { getMboxPriceAndRewardDelay5m } from "@/AI/utils";
+import { getMboxPriceAndRewardDelay1Hour } from "@/AI/utils";
 import { PRO_BUYER } from "@/constants/constants";
 import { shortenNumber } from "@/utilsV2/common/utils";
 import { stakingUtils } from "@/utilsV2/staking/utils";
 
 const staking = async (address: string) => {
-    const data = await getMboxPriceAndRewardDelay5m();
+    const data = await getMboxPriceAndRewardDelay1Hour();
     const mboxPrice = data.mboxPrice;
     const rewardPer1000Hash = data.reward;
     const earned = await stakingUtils.earned(address);

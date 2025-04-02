@@ -15,28 +15,32 @@ import {
     priceThreshold
 } from "@/config/changeConfig";
 import { isExistAuction } from "../bid/utils";
+import { predictAuctionPro } from "@/AI/utils";
 
 export const getChangeDecisionPro = async (
     auction: AuctionDto,
     floorPrices: TierPrice
 ): Promise<ChangeDecision> => {
+    if (!auction.prototype || !auction.nowPrice || !auction.uptime || !modeChange.pro) {
+        return { shouldChange: false, newPrice: 0 };
+    }
+    if (auction.uptime - Date.now() / 1000 < minTimeListedMyAuctionToChange.pro) {
+        console.log("Require minTimeListedMyAuctionToChange");
+        return { shouldChange: false, newPrice: 0 };
+    }
     if (!(await isExistAuction(auction))) {
         console.log("Not exist, maybe changed or bought");
         return { shouldChange: false, newPrice: 0 };
     }
-    const changeDecision: ChangeDecision = {
-        shouldChange: false,
-        newPrice: 0
-    };
-    if (!modeChange.pro) {
-        console.log("Pro mode is disabled");
-        return changeDecision;
+    const floorPrice = floorPrices[Math.floor(auction.prototype / 10 ** 4)];
+    const prediction = shortenNumber(await predictAuctionPro(auction), 0, 3);
+    if (shortenNumber(auction.nowPrice, 9, 3) > prediction) {
+        return {
+            shouldChange: true,
+            newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
+        };
     }
-    if (!auction.uptime && floorPrices) {
-        console.log("No uptime, maybe changed or bought");
-    }
-    await sleep(1);
-    return changeDecision;
+    return { shouldChange: false, newPrice: 0 };
 };
 
 export const getChangeDecisionNormal = async (
@@ -61,7 +65,7 @@ export const getChangeDecisionNormal = async (
     }
 
     if (
-        Date.now() / 1000 - auction.uptime < minTimeListedMyAuctionToChange ||
+        Date.now() / 1000 - auction.uptime < minTimeListedMyAuctionToChange.normal ||
         Date.now() / 1000 - auctionLowestPrice.uptime < minTimeListedOtherAuctionToChange ||
         contracts.includes(auctionLowestPrice.auctor.toLowerCase()) ||
         contracts.includes(ethers.getAddress(auctionLowestPrice.auctor))

@@ -1,8 +1,8 @@
-import { getMboxPriceAndRewardDelay5m, predictModel } from "@/AI/utils";
+import { getMboxPriceAndRewardDelay1Hour, predictModel } from "@/AI/utils";
 import { PredictMode } from "@/enum/enum";
 
 const predictOne = async () => {
-    const data = await getMboxPriceAndRewardDelay5m();
+    const data = await getMboxPriceAndRewardDelay1Hour();
     const mboxPrice = data.mboxPrice;
     const reward = data.reward;
     const momoInfo = [480, 13677, 5, 40];

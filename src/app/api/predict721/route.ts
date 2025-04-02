@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
-import { getMboxPriceAndRewardDelay5m, predictModel } from "@/AI/utils";
+import { getMboxPriceAndRewardDelay1Hour, predictModel } from "@/AI/utils";
 import { PredictMode } from "@/enum/enum";
 
 export async function POST(request: Request) {
     try {
         const { hashrate, lvHashrate, prototype, level } = await request.json();
-        const data = await getMboxPriceAndRewardDelay5m();
+        const data = await getMboxPriceAndRewardDelay1Hour();
         const mboxPrice = data.mboxPrice;
         const reward = data.reward;
         const input = [
