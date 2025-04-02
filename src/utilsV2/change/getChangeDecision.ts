@@ -21,11 +21,26 @@ export const getChangeDecisionPro = async (
     auction: AuctionDto,
     floorPrices: TierPrice
 ): Promise<ChangeDecision> => {
-    if (!auction.prototype || !auction.nowPrice || !auction.uptime || !modeChange.pro) {
+    if (
+        !auction.prototype ||
+        !auction.nowPrice ||
+        !auction.uptime ||
+        !auction.auctor ||
+        !modeChange.pro
+    ) {
         return { shouldChange: false, newPrice: 0 };
     }
-    if (auction.uptime - Date.now() / 1000 < minTimeListedMyAuctionToChange.pro) {
-        console.log("Require minTimeListedMyAuctionToChange");
+    if (Date.now() / 1000 - auction.uptime < minTimeListedMyAuctionToChange.pro) {
+        console.log("Require minTimeListedMyAuctionToChange.pro");
+        return { shouldChange: false, newPrice: 0 };
+    }
+    if (
+        !(
+            contracts.includes(auction.auctor.toLowerCase()) ||
+            contracts.includes(ethers.getAddress(auction.auctor))
+        )
+    ) {
+        console.log("Not my auction");
         return { shouldChange: false, newPrice: 0 };
     }
     if (!(await isExistAuction(auction))) {
@@ -40,12 +55,18 @@ export const getChangeDecisionPro = async (
                 shouldChange: true,
                 newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
             };
+        } else {
+            if (Date.now() / 1000 - auction.uptime > 2 * minTimeListedMyAuctionToChange.pro) {
+                return {
+                    shouldChange: true,
+                    newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
+                };
+            }
         }
     } catch (error) {
         console.log("Error when predict auction pro", error);
         return { shouldChange: false, newPrice: 0 };
     }
-
     return { shouldChange: false, newPrice: 0 };
 };
 
@@ -53,7 +74,22 @@ export const getChangeDecisionNormal = async (
     auction: AuctionDto,
     floorPrices: TierPrice
 ): Promise<ChangeDecision> => {
-    if (!auction.prototype || !auction.nowPrice || !auction.uptime || !modeChange.normal) {
+    if (
+        !auction.prototype ||
+        !auction.nowPrice ||
+        !auction.uptime ||
+        !auction.auctor ||
+        !modeChange.normal
+    ) {
+        return { shouldChange: false, newPrice: 0 };
+    }
+    if (
+        !(
+            contracts.includes(auction.auctor.toLowerCase()) ||
+            contracts.includes(ethers.getAddress(auction.auctor))
+        )
+    ) {
+        console.log("Not my auction");
         return { shouldChange: false, newPrice: 0 };
     }
     const auctionsSamePrototype = await getAuctionsByPrototype(auction.prototype);
