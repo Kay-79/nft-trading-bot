@@ -39,6 +39,9 @@ const nextConfig: NextConfig = {
         CHANGER_MAINNET: process.env.CHANGER_MAINNET,
         MONGO_URI: process.env.MONGO_URI,
         MORALIST_RPC_ARCHIVE_NODE: process.env.MORALIST_RPC_ARCHIVE_NODE
+    },
+    images: {
+        domains: ["www.mobox.io"]
     }
 };
 
