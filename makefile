@@ -69,8 +69,5 @@ apiMomoWin:
 	python ./src/AI/api/app.py
 #######################################
 ############### PLA-PLA ###############
-moveSsh:
-	scp /Users/legend_k/Downloads/datasets.json kaybot@172.16.1.111:/home/kaybot/Desktop/be-mobox-front-run/src/AI/data
-
 temp:
 	cat /sys/class/thermal/thermal_zone0/temp
