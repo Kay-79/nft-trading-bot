@@ -7,6 +7,7 @@ import { EXPLORER_URL } from "@/constants/constants";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import HoverOnShowActivitiesDetail from "@/components/Hover/HoverOnShowActivitiesDetail";
 import { formatDistanceToNow } from "date-fns";
+import { getImgUrl } from "@/utils/image/getImgUrl";
 
 interface ActivityRowProps {
     activity: RecentSoldDto;
@@ -94,7 +95,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                             {activity.amounts?.[index] ?? 0}
                         </span>
                         <Image
-                            src={`/images/MOMO/${id}.png`}
+                            src={getImgUrl(Number(id))}
                             alt={`MOMO ${id}`}
                             width={40}
                             height={40}
@@ -139,7 +140,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                     >
                         {renderIcon()}
                         <Image
-                            src={`/images/MOMO/${token.prototype}.png`}
+                            src={getImgUrl(token.prototype || 0)}
                             alt={`MOMO ${token.prototype}`}
                             width={40}
                             height={40}

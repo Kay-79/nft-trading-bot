@@ -9,6 +9,7 @@ import PrimaryLoadingIcon from "@/components/Button/PrimaryLoadingIcon"; // Impo
 import axios from "axios";
 import { toast } from "react-toastify";
 import { shortenNumber } from "@/utils/shorten";
+import { getImgUrl } from "@/utils/image/getImgUrl";
 
 interface BulkSellRowProps {
     bulkSellItem: BulkItemListStorage;
@@ -55,7 +56,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                 <div className="flex justify-center my-4 mr-2">
                     {bulkSellItem.inventory && (
                         <Image
-                            src={`/images/MOMO/${bulkSellItem.inventory.prototype}.png`}
+                            src={getImgUrl(bulkSellItem.inventory.prototype || 0)}
                             alt="Avatar"
                             width={100}
                             height={100}

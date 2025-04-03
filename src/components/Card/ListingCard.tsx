@@ -4,6 +4,7 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import ListingDetailModal from "@/components/Modal/ListingDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
+import { getImgUrl } from "@/utils/image/getImgUrl";
 
 interface ListingCardProps {
     listing: AuctionDto;
@@ -46,7 +47,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
                 {/* Avatar */}
                 <div className="flex justify-center my-4">
                     <Image
-                        src={`/images/MOMO/${listing.prototype}.png`}
+                        src={getImgUrl(listing.prototype || 0)}
                         alt="Avatar"
                         width={100}
                         height={100}

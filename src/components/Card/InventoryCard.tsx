@@ -10,6 +10,7 @@ import { shortenAddress } from "@/utils/shorten";
 import { addItemToBulk, removeItemFromBulk } from "@/store/actions/storageBulk";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import { Tooltip } from "react-tooltip"; // Update import to use Tooltip
+import { getImgUrl } from "@/utils/image/getImgUrl";
 
 interface InventoryCardProps {
     item: InventoryDto;
@@ -88,7 +89,7 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                 {/* Avatar */}
                 <div className="flex justify-center my-4">
                     <Image
-                        src={`/images/MOMO/${item.prototype}.png`}
+                        src={getImgUrl(item.prototype || 0)}
                         alt="Avatar"
                         width={100}
                         height={100}

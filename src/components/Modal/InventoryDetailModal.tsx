@@ -9,6 +9,7 @@ import axios from "axios";
 import PrimaryLoadingIcon from "../Button/PrimaryLoadingIcon";
 import { RiRefreshLine } from "react-icons/ri";
 import { RiAiGenerate2 } from "react-icons/ri";
+import { getImgUrl } from "@/utils/image/getImgUrl";
 
 interface InventoryDetailModalProps {
     item: InventoryDto;
@@ -150,7 +151,7 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                         style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
                     >
                         <Image
-                            src={`/images/MOMO/${itemData.prototype}.png`}
+                            src={getImgUrl(itemData.prototype || 0)}
                             alt="Avatar"
                             width={100}
                             height={100}
