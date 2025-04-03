@@ -79,6 +79,8 @@ export const MIN_GAS_PRICE_NORMAL = ENV === Environment.MAINNET ? 1.0001 : 10;
 
 export const MIN_GAS_PRICE_PRO = ENV === Environment.MAINNET ? 3.002 : 10;
 
+export const MIN_GAS_PRICE_BLOCK = ENV === Environment.MAINNET ? 1.1 : 10;
+
 export const MIN_GAS_PRICE_CHANGE = ENV === Environment.MAINNET ? 1.000001 : 10;
 
 export const MP_ADDRESS =
