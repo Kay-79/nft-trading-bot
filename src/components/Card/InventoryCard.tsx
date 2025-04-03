@@ -14,9 +14,11 @@ import { getImgUrl } from "@/utils/image/getImgUrl";
 
 interface InventoryCardProps {
     item: InventoryDto;
+    isListing: boolean;
+    amountListing: number;
 }
 
-const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
+const InventoryCard: React.FC<InventoryCardProps> = ({ item, isListing, amountListing }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const dispatch = useDispatch();
     const backgroundColor = getBackgroundColor(item.prototype || 0);
@@ -68,9 +70,33 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item }) => {
                 className={`text-white p-4 rounded-2xl w-72 shadow-lg relative cursor-pointer ${
                     isInBulk ? "font-bold border-4 border-yellow-500" : ""
                 }`}
-                style={{ backgroundColor: backgroundColor }}
+                style={{
+                    backgroundColor: backgroundColor,
+                    opacity: isListing ? 0.6 : 1, // Dim the card if it's already listed
+                    position: "relative"
+                }}
                 onClick={handleClick}
             >
+                {/* Highlight for listed items */}
+                {isListing && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: "10px",
+                            right: "10px",
+                            backgroundColor: "yellow",
+                            color: "black",
+                            padding: "5px 10px",
+                            borderRadius: "5px",
+                            fontSize: "12px",
+                            fontWeight: "bold",
+                            zIndex: 1
+                        }}
+                    >
+                        {amountListing} Listed
+                    </div>
+                )}
+
                 {/* Level and Stats */}
                 <div className="flex justify-between items-center">
                     <span className="text-sm flex items-center gap-1">

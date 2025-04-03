@@ -270,7 +270,10 @@ const DashboardPage = () => {
                             )}
                             {selectedSection === "inventory" && (
                                 <div>
-                                    <Inventories inventories={filteredInventory} />
+                                    <Inventories
+                                        inventories={filteredInventory}
+                                        listings={listings}
+                                    />
                                 </div>
                             )}
                             {selectedSection === "markets" && (

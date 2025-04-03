@@ -1,12 +1,14 @@
 import React from "react";
 import InventoryCard from "@/components/Card/InventoryCard";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
+import { AuctionDto } from "@/types/dtos/Auction.dto";
 
 interface InventoryProps {
     inventories: InventoryDto[];
+    listings: AuctionDto[];
 }
 
-const Inventory: React.FC<InventoryProps> = ({ inventories }) => {
+const Inventory: React.FC<InventoryProps> = ({ inventories, listings }) => {
     if (!Array.isArray(inventories)) {
         return <div>No inventories available</div>;
     }
@@ -15,6 +17,21 @@ const Inventory: React.FC<InventoryProps> = ({ inventories }) => {
         (sum, inventory) => sum + (inventory.amount || 0),
         0
     );
+
+    const isListingOfItem = (item: InventoryDto): boolean => {
+        return listings.some(listing => listing.prototype === item.prototype);
+    };
+
+    const amountListingOfItem = (item: InventoryDto): number => {
+        let amount = 0;
+        listings.forEach(listing => {
+            if (listing.prototype === item.prototype) {
+                amount += 1;
+            }
+        });
+        return amount;
+    };
+
     return (
         <div>
             <div style={{ textAlign: "right", marginBottom: "20px" }}>
@@ -30,7 +47,12 @@ const Inventory: React.FC<InventoryProps> = ({ inventories }) => {
                 }}
             >
                 {inventories.map(item => (
-                    <InventoryCard key={item.id + (item.tokenId?.toString() ?? "")} item={item} />
+                    <InventoryCard
+                        key={item.id + (item.tokenId?.toString() ?? "")}
+                        item={item}
+                        isListing={isListingOfItem(item)}
+                        amountListing={amountListingOfItem(item)}
+                    />
                 ))}
                 <style jsx>{`
                     @media (max-width: 768px) {
