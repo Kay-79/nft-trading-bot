@@ -23,6 +23,7 @@ import PrimaryLoadingButton from "../Button/PrimaryLoadingButton";
 import SecondaryLoadingButton from "../Button/SecondaryLoadingButton";
 import { allContracts } from "@/config/config";
 import { ethers } from "ethers";
+import { getImgUrl } from "@/utils/image/getImgUrl";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -160,8 +161,8 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
 
     const imageSrc =
         listingData.ids && listingData.ids.length > 1
-            ? `/images/MOMO/${(listingData.ids ?? [])[currentImageIndex]}.png`
-            : `/images/MOMO/${listingData.prototype}.png`;
+            ? getImgUrl(Number((listingData.ids ?? [])[currentImageIndex]))
+            : getImgUrl(listingData.prototype || 0);
 
     const backgroundColor =
         listingData.ids && listingData.ids.length > 1
@@ -243,9 +244,11 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                                 {listingData.lvHashrate}
                             </p>
                             <p className="text-xs" style={{ color: customDarkTheme.textColor }}>
-                                {(listingData.hashrate || 0) > 5
-                                    ? `Lv. 1 - ${listingData.hashrate}`
-                                    : <br />}
+                                {(listingData.hashrate || 0) > 5 ? (
+                                    `Lv. 1 - ${listingData.hashrate}`
+                                ) : (
+                                    <br />
+                                )}
                             </p>
                         </div>
                     </div>
