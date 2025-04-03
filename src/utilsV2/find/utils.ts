@@ -1,6 +1,12 @@
 import { AuctionDto } from "../../types/dtos/Auction.dto";
 import { TierPrice } from "../../types/common/TierPrice";
-import { bidContract, profitBlock, profitPerTier, profitProAI } from "../../config/config";
+import {
+    bidContract,
+    bidContractPro,
+    profitBlock,
+    profitPerTier,
+    profitProAI
+} from "../../config/config";
 import fs from "fs";
 import path from "path";
 import {
@@ -116,7 +122,7 @@ export const setupBidAuction = ({
             break;
         case BidType.PRO:
             buyer = PRO_BUYER;
-            contractAddress = bidContract;
+            contractAddress = bidContractPro;
             minGasPrice = MIN_GAS_PRICE_PRO;
             maxGasPrice = MIN_GAS_PRICE_PRO;
             uptime = auctions[0]?.uptime ?? 0;
@@ -124,7 +130,7 @@ export const setupBidAuction = ({
             break;
         case BidType.GROUP:
             buyer = PRO_BUYER;
-            contractAddress = bidContract;
+            contractAddress = bidContractPro;
             minGasPrice = MIN_GAS_PRICE_PRO;
             maxGasPrice = MIN_GAS_PRICE_PRO;
             uptime = (auctionGroup?.uptime ?? 0) + 8 * 60;

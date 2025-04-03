@@ -109,7 +109,6 @@ export const noticeBotFind = async (
         return latestNotice;
     }
     const budgetNormal = (await erc20Provider.balanceOf(bidContract)) ?? 0;
-    const budgetPro = (await erc20Provider.balanceOf(PRO_BUYER)) ?? 0;
     const feeBidder = (await ethersProvider.getBalance(NORMAL_BUYER ?? "")) ?? 0;
     const feePro = (await ethersProvider.getBalance(PRO_BUYER ?? "")) ?? 0;
     const feeChange = (await ethersProvider.getBalance(CHANGER ?? "")) ?? 0;
@@ -121,12 +120,11 @@ export const noticeBotFind = async (
               .join(", $")}`
         : "";
     const bnbNow = `\nBNB: $${shortenNumber(bnbPrice, 0, 2)}`;
-    const budgetNormalMess = `\nBudget normal: 💵${shortenNumber(Number(budgetNormal), 18, 2)}`;
-    const budgetProMess = `\nBudget pro: 💵${shortenNumber(Number(budgetPro), 18, 2)}`;
+    const budgetNormalMess = `\nBudget: 💵${shortenNumber(Number(budgetNormal), 18, 2)}`;
     const feeBidderMess = `\nFee bidder: ${shortenNumber(Number(feeBidder), 18, 4)} BNB`;
     const feeProMess = `\nFee pro: ${shortenNumber(Number(feePro), 18, 4)} BNB`;
     const feeChangeMess = `\nFee change: ${shortenNumber(Number(feeChange), 18, 4)} BNB`;
-    const message = `${status}${floorPrices}${bnbNow}${budgetNormalMess}${budgetProMess}${feeBidderMess}${feeProMess}${feeChangeMess}`;
+    const message = `${status}${floorPrices}${bnbNow}${budgetNormalMess}${feeBidderMess}${feeProMess}${feeChangeMess}`;
     try {
         await noticeBot(message);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -144,15 +142,6 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
     const profits = `\nMin profit: 💵${bidAuctions
         .map(bidAuction => shortenNumber(bidAuction.profit ?? 0, 0, 2))
         .join(", 💵")}`;
-    // const types = `\nType: ${bidAuctions
-    //     .map(bidAuction =>
-    //         bidAuction.type === BidType.BUNDLE
-    //             ? BidType.BUNDLE
-    //             : bidAuction.amount === 1
-    //             ? bidAuction.type
-    //             : `BATCH ${bidAuction.type}`
-    //     )
-    //     .join(", ")}`;
     const types = `\nType: ${bidAuctions
         .map(bidAuction => {
             switch (bidAuction.type) {
