@@ -13,13 +13,19 @@ const updateSyncedMp = async (
     transactionHash: string
 ): Promise<void> => {
     try {
-        await db
-            .collection("synced")
-            .updateOne(
-                {},
-                { $set: { blockBot: blockNumber, tx: transactionHash } },
-                { upsert: true }
-            );
+        if (transactionHash) {
+            await db
+                .collection("synced")
+                .updateOne(
+                    {},
+                    { $set: { blockBot: blockNumber, tx: transactionHash } },
+                    { upsert: true }
+                );
+        } else {
+            await db
+                .collection("synced")
+                .updateOne({}, { $set: { blockBot: blockNumber } }, { upsert: true });
+        }
     } catch (error) {
         throw new Error(`Error updating synced block: ${error}`);
     }
@@ -281,7 +287,7 @@ const updateAnalysis = async (db: Db, analysis: AnalysisDto): Promise<void> => {
 
 export const databaseService = {
     //Sync
-    // updateSyncedMp,
+    updateSyncedMp,
     updateSyncedAI,
     //Inventory
     createOrIncreaseInventories,

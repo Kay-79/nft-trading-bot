@@ -1,5 +1,4 @@
 import { connectMongo } from "@/utils/connectMongo";
-// import { sleep } from "@/utilsV2/common/sleep";
 import {
     handleBidEvent,
     handleCancelEvent,
@@ -17,6 +16,7 @@ import {
 } from "@/constants/constants";
 import { sleep } from "@/utilsV2/common/sleep";
 import { SyncedDto } from "@/types/dtos/Synced.dto";
+import { databaseService } from "@/services/database";
 const step = 2000;
 
 const worker = async () => {
@@ -37,7 +37,8 @@ const worker = async () => {
                 startBlock = synced.blockBot + 1;
             }
         }
-        console.log("Syncing blocks:", startBlock, "to", endBlock);
+        console.log(`Last synced blockBot: ${startBlock}`);
+        console.log(`Now Block: ${endBlock}`);
         for (let currentBlock = startBlock; currentBlock <= endBlock; currentBlock += step) {
             console.log("Processing blocks:", currentBlock, "to", currentBlock + step - 1);
             const filter = {
@@ -75,6 +76,7 @@ const worker = async () => {
             }
             startBlock = logs[logs.length - 1].blockNumber + 1;
         }
+        await databaseService.updateSyncedMp(db, endBlock, "");
         const delay = 60;
         console.log(`Waiting for new blocks, sleeping for ${delay} seconds`);
         await sleep(delay);

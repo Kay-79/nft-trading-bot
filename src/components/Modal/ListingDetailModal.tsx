@@ -102,7 +102,9 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                 hashrate: listingData.hashrate ?? 0,
                 lvHashrate: listingData.lvHashrate ?? 0,
                 prototype: listingData.prototype ?? 0,
-                level: listingData.level ?? 0
+                level: listingData.level ?? 0,
+                ids: listingData.ids ?? [],
+                amounts: listingData.amounts ?? []
             });
             const predicted = response.data.prediction;
             setPredictedPrice(shortenNumber(predicted, 0, 3));
