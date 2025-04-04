@@ -29,12 +29,12 @@ export const profitPerTier: TierPrice = {
 
 export const profitBlock: ProfitConfig = {
     min: 10,
-    percent: 0.6
+    percent: 0.55
 };
 
 export const profitProAI: ProfitConfig = {
     min: 10,
-    percent: 0.6
+    percent: 0.55
 };
 
 export const delayTimeGet: LatestGet = {
@@ -53,7 +53,8 @@ export const newbieBidders: string[] = [
 export const newbieAuctors: string[] = [
     "0x3cf0689468a046c3f353F41a71bBeF2c5F486980",
     "0xd3ff2923508ef254f12eb6316481b72b0052506e",
-    "0x72264a0Dd6794094992fD7A221F894118A113875"
+    "0x72264a0Dd6794094992fD7A221F894118A113875",
+    "0x4cb440a92e8ac308d44c0c9799342dbce1dc1d13"
 ];
 
 export const contracts: string[] = [
