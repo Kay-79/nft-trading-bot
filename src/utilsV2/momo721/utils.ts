@@ -191,6 +191,19 @@ const ownerOf = async (id: string) => {
     return byte32ToAddress(result);
 };
 
+const getEquipmentMomo = async (tokenId: string) => {
+    const abiCoder = new AbiCoder();
+    const encodedData = abiCoder.encode(["uint256"], [tokenId]);
+    const data = Momo721Selector.GET_EQUIPMENT_MOMO + encodedData.slice(2);
+    const result = await ethersProvider.call({
+        to: "0x5Fb3035d07E5d0E1D8Efbc5aE5b7546C15173035",
+        data: data
+    });
+    console.log("getEquipmentMomo", result);
+    const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
+    console.log("decodedResult", decodedResult);
+};
+
 export const momo721 = {
     getMomoInfo,
     getMomoInfoHistory,
@@ -201,5 +214,6 @@ export const momo721 = {
     balanceOf,
     tokenOfOwnerByIndex,
     tokenByIndex,
-    ownerOf
+    ownerOf,
+    getEquipmentMomo
 };

@@ -88,6 +88,11 @@ export const MP_ADDRESS =
         ? "0xcb0cffc2b12739d4be791b8af7fbf49bc1d6a8c2"
         : "0xCCCC9D44B0A3e6d01eE204849d195f2422dcD437";
 
+export const MP_GEM_ADDRESS =
+    ENV === Environment.MAINNET
+        ? "0x819e97c7da2c784403b790121304db9e6a038de9"
+        : "0x0000000000000000000000000000000000000000";
+
 export const MP_BLOCK_ADDRESS =
     ENV === Environment.MAINNET
         ? "0x1d4d9706b057a945fce86ee53b8894bd17ffa0de"
