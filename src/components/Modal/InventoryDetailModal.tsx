@@ -21,16 +21,26 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
     const [itemData, setItemData] = useState<InventoryDto>(item);
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
+    const [isListing, setIsListing] = useState(false); // State to toggle input and confirm button
+    const [listPrice, setListPrice] = useState<number | null>(null); // State for input value
 
-    const handleList = async () => {
+    const handleList = () => {
+        setIsListing(true); // Show input and confirm button
+    };
+
+    const handleConfirm = async () => {
         setLoadingList(true);
         try {
+            console.log("Confirming listing with price:", listPrice);
+            // Add your API call or logic here
             await new Promise(resolve => setTimeout(resolve, 1000));
-            console.log("Listing item:", itemData);
+            toast.success("Item listed successfully!");
         } catch (error) {
             console.error("Failed to list item:", error);
+            toast.error("Failed to list item!");
         } finally {
             setLoadingList(false);
+            setIsListing(false); // Reset to initial state
         }
     };
 
@@ -191,9 +201,33 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                     </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                    <PrimaryLoadingButton onClick={handleList} loading={loadingList}>
-                        List
-                    </PrimaryLoadingButton>
+                    {isListing ? (
+                        <>
+                            <input
+                                type="number"
+                                placeholder="Enter price"
+                                value={listPrice || ""}
+                                onChange={e => setListPrice(Number(e.target.value))}
+                                onWheel={e => e.currentTarget.blur()}
+                                style={{
+                                    padding: "10px",
+                                    borderRadius: "5px",
+                                    border: "1px solid #ccc",
+                                    marginRight: "10px",
+                                    width: "60%",
+                                    backgroundColor: "#fff",
+                                    color: "#000"
+                                }}
+                            />
+                            <PrimaryLoadingButton onClick={handleConfirm} loading={loadingList}>
+                                Confirm
+                            </PrimaryLoadingButton>
+                        </>
+                    ) : (
+                        <PrimaryLoadingButton onClick={handleList} loading={loadingList}>
+                            List
+                        </PrimaryLoadingButton>
+                    )}
                 </div>
             </div>
         </div>

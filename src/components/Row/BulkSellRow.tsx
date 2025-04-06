@@ -32,13 +32,16 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
     const fetchMarketPrice = async () => {
         setLoadingPredict(true);
         try {
-            const apiEndpoint =
-                bulkSellItem.inventory.tokenId || 0 > 0 ? "/api/predict721" : "/api/predict1155";
+            const apiEndpoint = bulkSellItem.inventory.tokenId
+                ? "/api/predict721"
+                : "/api/predict1155";
             const response = await axios.post(apiEndpoint, {
                 hashrate: bulkSellItem.inventory.hashrate ?? 0,
                 lvHashrate: bulkSellItem.inventory.lvHashrate ?? 0,
                 prototype: bulkSellItem.inventory.prototype ?? 0,
-                level: bulkSellItem.inventory.level ?? 0
+                level: bulkSellItem.inventory.level ?? 0,
+                ids: [],
+                amounts: []
             });
             setPrice(shortenNumber(response.data.prediction, 0, 3));
             handleUpdate(amount, response.data.prediction);

@@ -341,74 +341,56 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         </div>
                     </div>
                 </div>
-                {showAdjustInput && (
-                    <div style={{ marginBottom: "20px" }}>
-                        <label style={{ display: "block", marginBottom: "10px" }}>
-                            Price (USDT)
-                        </label>
-                        <input
-                            type="text"
-                            value={price || ""}
-                            placeholder="0"
-                            onChange={e => {
-                                const value = e.target.value;
-                                if (!isNaN(Number(value)) || value === "") {
-                                    setPrice(Number(value));
-                                }
-                            }}
-                            onWheel={e => e.currentTarget.blur()}
-                            style={{
-                                width: "100%",
-                                padding: "10px",
-                                borderRadius: "5px",
-                                border: `1px solid ${theme.textColor}`,
-                                backgroundColor: theme.backgroundColor,
-                                color: theme.textColor
-                            }}
-                        />
-                    </div>
-                )}
                 {error && (
                     <div style={{ color: "red", marginBottom: "20px" }}>Error: {error.message}</div>
+                )}
+                {showAdjustInput && (
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            marginTop: "20px",
+                            gap: "10px"
+                        }}
+                    >
+                        <input
+                            type="number"
+                            placeholder="Enter price"
+                            value={price || ""}
+                            onChange={e => setPrice(Number(e.target.value))}
+                            onWheel={e => e.currentTarget.blur()} // Disable scroll wheel input change
+                            style={{
+                                padding: "10px",
+                                borderRadius: "5px",
+                                border: "1px solid #ccc",
+                                width: "60%",
+                                backgroundColor: "#fff", // Màu nền trắng
+                                color: "#000" // Màu chữ đen
+                            }}
+                        />
+                        <PrimaryLoadingButton onClick={handleAdjustPrice} loading={loadingAdjust}>
+                            Confirm
+                        </PrimaryLoadingButton>
+                    </div>
                 )}
                 <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
                     {address ? (
                         isMyListing ? (
-                            <>
-                                {showAdjustInput ? (
-                                    <div
-                                        style={{
-                                            flex: 1,
-                                            display: "flex",
-                                            justifyContent: "center"
-                                        }}
+                            !showAdjustInput && (
+                                <>
+                                    <PrimaryButton onClick={handleAdjustClick} style={{ flex: 1 }}>
+                                        Adjust
+                                    </PrimaryButton>
+                                    <SecondaryLoadingButton
+                                        onClick={handleDelist}
+                                        loading={loadingDelist}
+                                        style={{ flex: 1 }}
+                                        disabled={loadingPredict}
                                     >
-                                        <PrimaryLoadingButton
-                                            onClick={handleAdjustClick}
-                                            loading={loadingAdjust}
-                                        >
-                                            Confirm
-                                        </PrimaryLoadingButton>
-                                    </div>
-                                ) : (
-                                    <>
-                                        <PrimaryButton
-                                            onClick={handleAdjustClick}
-                                            style={{ flex: 1 }}
-                                        >
-                                            Adjust
-                                        </PrimaryButton>
-                                        <SecondaryLoadingButton
-                                            onClick={handleDelist}
-                                            loading={loadingDelist}
-                                            style={{ flex: 1 }}
-                                            disabled={loadingPredict}
-                                        >
-                                            Delist
-                                        </SecondaryLoadingButton>
-                                    </>
-                                )}
-                            </>
+                                        Delist
+                                    </SecondaryLoadingButton>
+                                </>
+                            )
                         ) : (
                             <PrimaryLoadingButton
                                 onClick={handlePurchase}

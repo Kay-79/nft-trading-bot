@@ -3,16 +3,22 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
     try {
-        const { ids, amounts } = await request.json();
-        // const prediction = await getPriceSuggestNormal(prototype);
-        let totalPredict = 0;
-        for (let i = 0; i < ids.length; i++) {
-            const prototype = ids[i];
-            const prediction = await getPriceSuggestNormal(prototype);
-            totalPredict += prediction * amounts[i];
+        const { ids, amounts, prototype } = await request.json();
+        if (ids && ids.length > 0) {
+            let totalPredict = 0;
+            for (let i = 0; i < ids.length; i++) {
+                const prototype = ids[i];
+                const prediction = await getPriceSuggestNormal(prototype);
+                totalPredict += prediction * amounts[i];
+            }
+            return NextResponse.json({ prediction: totalPredict });
         }
-        return NextResponse.json({ prediction: totalPredict });
-    } catch {
+        if (prototype) {
+            const prediction = await getPriceSuggestNormal(prototype);
+            return NextResponse.json({ prediction: prediction });
+        }
+    } catch (error) {
+        console.error("Error in predict1155 route:", error);
         return NextResponse.json(
             { error: "An error occurred while processing your request." },
             { status: 500 }
