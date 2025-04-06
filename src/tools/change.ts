@@ -121,7 +121,6 @@ const change = async () => {
             }
             await ranSleep(15, 30);
         }
-        await ranSleep(60 * 60, 120 * 60);
     }
 };
 

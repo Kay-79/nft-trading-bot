@@ -21,7 +21,7 @@ export const getAllMyAuctions = async (): Promise<AuctionDto[]> => {
     let allAuctions: AuctionDto[] = [];
     for (const contract of contracts) {
         console.log(`Getting auctions from ${shortenAddress(contract)}`);
-        await ranSleep(5, 15);
+        await ranSleep(45, 60);
         const listAuctions = await getListAutions(contract);
         allAuctions = allAuctions.concat(listAuctions);
     }

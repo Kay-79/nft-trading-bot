@@ -29,7 +29,6 @@ const nextConfig: NextConfig = {
     },
     env: {
         ENV: process.env.ENV,
-        MP_ADDRESS: process.env.MP_ADDRESS,
         NEXT_PUBLIC_ENABLE_TESTNETS: process.env.NEXT_PUBLIC_ENABLE_TESTNETS,
         NORMAL_BUYER_TESTNET: process.env.NORMAL_BUYER_TESTNET,
         PRO_BUYER_TESTNET: process.env.PRO_BUYER_TESTNET,
