@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import Image from "next/image";
 import { useTheme } from "@/config/theme";
-import { FaTrash, FaDollarSign } from "react-icons/fa"; // Import FaDollarSign
+import { FaTrash, FaDollarSign } from "react-icons/fa"; 
 import { removeItemFromBulk, updateItemInBulk } from "@/store/actions/storageBulk";
 import { useDispatch } from "react-redux";
-import PrimaryLoadingIcon from "@/components/Button/PrimaryLoadingIcon"; // Import PrimaryLoadingIcon
+import PrimaryLoadingIcon from "@/components/Button/PrimaryLoadingIcon";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { shortenNumber } from "@/utils/shorten";
@@ -25,7 +25,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
     const { theme } = useTheme();
     const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
 
-    const handleUpdate = (newAmount: number, newPrice: number) => {
+    const handleUpdateBulkItem = (newAmount: number, newPrice: number) => {
         dispatch(updateItemInBulk({ ...bulkSellItem, quantity: newAmount, price: newPrice }));
     };
 
@@ -44,7 +44,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                 amounts: []
             });
             setPrice(shortenNumber(response.data.prediction, 0, 3));
-            handleUpdate(amount, response.data.prediction);
+            handleUpdateBulkItem(amount, response.data.prediction);
         } catch (error) {
             console.error(error);
             toast.error("Prediction failed!");
@@ -80,7 +80,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                         if (!isNaN(Number(value)) || value === "") {
                             const newAmount = Number(value);
                             setAmount(newAmount);
-                            handleUpdate(newAmount, price);
+                            handleUpdateBulkItem(newAmount, price);
                         }
                     }}
                     onWheel={e => e.currentTarget.blur()} // Disable scroll wheel input change
@@ -102,7 +102,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                         if (!isNaN(Number(value)) || value === "" || /^\d*\.?\d*$/.test(value)) {
                             const newPrice = Number(value);
                             setPrice(newPrice);
-                            handleUpdate(amount, newPrice);
+                            handleUpdateBulkItem(amount, newPrice);
                         }
                     }}
                     onWheel={e => e.currentTarget.blur()}

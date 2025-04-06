@@ -9,6 +9,7 @@ import { mpUtils } from "@/utilsV2/mp/utils";
 import { MomoType } from "@/enum/enum";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import { bidContract } from "@/config/config";
+import { InventoryDto } from "@/types/dtos/Inventory.dto";
 
 const transfer = async (from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
@@ -71,6 +72,42 @@ const cancelAuction = async (listing: AuctionDto, from: `0x${string}` | undefine
         address: listing.auctor as `0x${string}`,
         functionName: "cancelAuction",
         args: [listing.index]
+    });
+};
+
+const createAuction = async (
+    inventoryItem: InventoryDto,
+    from: `0x${string}` | undefined,
+    listPrice: number
+) => {
+    if (!wagmiConfig) {
+        throw new Error("Please connect your wallet first!");
+    }
+    if (from?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()) {
+        throw new Error("You are not the changer of the listing! ");
+    }
+    const suggestIndex = await mpUtils.getNewIndex(inventoryItem.owner || "");
+    const tokenIds: number[] = [];
+    const prices721: bigint[] = [];
+    const ids: number[] = [];
+    const prices1155: bigint[] = [];
+    if (inventoryItem.type === MomoType.PRO) {
+        tokenIds.push(inventoryItem.tokenId || 0);
+        const price = ethers.parseUnits(listPrice.toString(), 18);
+        prices721.push(price);
+    } else if (inventoryItem.type === MomoType.NORMAL) {
+        ids.push(inventoryItem.prototype || 0);
+        const price = ethers.parseUnits(listPrice.toString(), 18);
+        prices1155.push(price);
+    }
+    if (tokenIds.length === 0 && ids.length === 0) {
+        throw new Error("No items to sell");
+    }
+    return await writeContract(wagmiConfig, {
+        abi: abiMp,
+        address: inventoryItem.owner as `0x${string}`,
+        functionName: "createAuctionBatch",
+        args: [suggestIndex, tokenIds, prices721, ids, prices1155]
     });
 };
 
@@ -150,6 +187,7 @@ export const mpContractService = {
     transfer,
     changePrice,
     cancelAuction,
+    createAuction,
     createAuctionBatch,
     bidAuction
 };

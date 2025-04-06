@@ -10,6 +10,9 @@ import PrimaryLoadingIcon from "../Button/PrimaryLoadingIcon";
 import { RiRefreshLine } from "react-icons/ri";
 import { RiAiGenerate2 } from "react-icons/ri";
 import { getImgUrl } from "@/utils/image/getImgUrl";
+import { mpContractService } from "@/services/mpContract";
+import { useAccount } from "wagmi";
+import { ConnectWallet } from "@/components/ConnectWallet";
 
 interface InventoryDetailModalProps {
     item: InventoryDto;
@@ -21,26 +24,39 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
     const [itemData, setItemData] = useState<InventoryDto>(item);
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
-    const [isListing, setIsListing] = useState(false); // State to toggle input and confirm button
-    const [listPrice, setListPrice] = useState<number | null>(null); // State for input value
+    const [isListing, setIsListing] = useState(false);
+    const [listPrice, setListPrice] = useState<number | null>(null);
+    const { address } = useAccount();
 
     const handleList = () => {
-        setIsListing(true); // Show input and confirm button
+        setIsListing(true);
     };
 
     const handleConfirm = async () => {
         setLoadingList(true);
         try {
-            console.log("Confirming listing with price:", listPrice);
-            // Add your API call or logic here
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            if (!listPrice) {
+                toast.error("Please enter a valid price!");
+                return;
+            }
+            if (listPrice <= 0) {
+                toast.error("Price must be greater than 0!");
+                return;
+            }
+            if (itemData.prototype === 99999) {
+                toast.error("Plese sync the item first!");
+                setLoadingList(false);
+                return;
+            }
+            await mpContractService.createAuction(item, address, listPrice);
             toast.success("Item listed successfully!");
         } catch (error) {
             console.error("Failed to list item:", error);
             toast.error("Failed to list item!");
         } finally {
             setLoadingList(false);
-            setIsListing(false); // Reset to initial state
+            setIsListing(false);
+            onClose();
         }
     };
 
@@ -59,12 +75,14 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
     const handlePredict = useCallback(async () => {
         setLoadingPredict(true);
         try {
-            const url = itemData.tokenId || 0 > 0 ? "/api/predict721" : "/api/predict1155";
+            const url = (itemData?.tokenId ?? 0) > 0 ? "/api/predict721" : "/api/predict1155";
             const response = await axios.post(url, {
                 hashrate: itemData.hashrate ?? 0,
                 lvHashrate: itemData.lvHashrate ?? 0,
                 prototype: itemData.prototype ?? 0,
-                level: itemData.level ?? 0
+                level: itemData.level ?? 0,
+                ids: [],
+                amounts: []
             });
             console.log("Prediction response:", response.data);
             const predicted = response.data.prediction;
@@ -201,12 +219,14 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                     </div>
                 </div>
                 <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                    {isListing ? (
+                    {!address ? (
+                        <ConnectWallet />
+                    ) : isListing ? (
                         <>
                             <input
                                 type="number"
                                 placeholder="Enter price"
-                                value={listPrice || ""}
+                                value={listPrice || predictedPrice || ""}
                                 onChange={e => setListPrice(Number(e.target.value))}
                                 onWheel={e => e.currentTarget.blur()}
                                 style={{
