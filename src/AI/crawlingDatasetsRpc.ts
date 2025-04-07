@@ -36,7 +36,7 @@ export const crawlingDatasetsRpc = async () => {
     }
     let startBlock = synced.blockAI + 1;
     console.log(`Start from block ${startBlock} to block ${endBlock}`);
-    const step = 1000;
+    const step = 2000;
     let cacheMboxPrice = CACHE_MBOX_PRICE;
     let cacheRewardPer1000Hash = CACHE_REWARD_PER_1000_HASH;
     while (startBlock < endBlock) {
@@ -95,17 +95,20 @@ export const crawlingDatasetsRpc = async () => {
                 console.log("Legendary prototype is not allowed");
                 continue;
             }
+            const momoEquipmentHistory = await momo721.getEquipmentMomoHistory(
+                Number(decodedResult[2]).toString(),
+                log.blockNumber
+            );
             const bidPrice = +(decodedResult[0].toString().slice(0, -9) / 1e9).toFixed(2);
             const dataset = {
-                input: [
+                momoInfo: [
                     Number(momo721InforHistory.hashrate ?? 0),
                     Number(momo721InforHistory.lvHashrate ?? 0),
                     Math.floor(Number(momo721InforHistory.prototype ?? 0) / 1e4),
-                    Number(momo721InforHistory.level ?? 0),
-                    timestamp,
-                    Number(mboxPriceHistory),
-                    Number(rewardPer1000Hashrate)
+                    Number(momo721InforHistory.level ?? 0)
                 ],
+                momoEquipment: momoEquipmentHistory,
+                priceVsReward: [Number(mboxPriceHistory), Number(rewardPer1000Hashrate)],
                 output: [bidPrice],
                 bidTime: timestamp,
                 listTime: Number(decodedResult[5]),

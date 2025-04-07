@@ -191,7 +191,7 @@ const ownerOf = async (id: string) => {
     return byte32ToAddress(result);
 };
 
-const getEquipmentMomo = async (tokenId: string) => {
+const getEquipmentMomo = async (tokenId: string): Promise<number[]> => {
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["uint256"], [tokenId]);
     const data = Momo721Selector.GET_EQUIPMENT_MOMO + encodedData.slice(2);
@@ -199,9 +199,31 @@ const getEquipmentMomo = async (tokenId: string) => {
         to: "0x5Fb3035d07E5d0E1D8Efbc5aE5b7546C15173035",
         data: data
     });
-    console.log("getEquipmentMomo", result);
     const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
-    console.log("decodedResult", decodedResult);
+    return [
+        Number(decodedResult[0]),
+        Number(decodedResult[1]),
+        Number(decodedResult[2]),
+        Number(decodedResult[3])
+    ];
+};
+
+const getEquipmentMomoHistory = async (tokenId: string, block: number): Promise<number[]> => {
+    const abiCoder = new AbiCoder();
+    const encodedData = abiCoder.encode(["uint256"], [tokenId]);
+    const data = Momo721Selector.GET_EQUIPMENT_MOMO + encodedData.slice(2);
+    const result = await archiveProvider.call({
+        to: "0x5Fb3035d07E5d0E1D8Efbc5aE5b7546C15173035",
+        data: data,
+        blockTag: block
+    });
+    const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
+    return [
+        Number(decodedResult[0]),
+        Number(decodedResult[1]),
+        Number(decodedResult[2]),
+        Number(decodedResult[3])
+    ];
 };
 
 export const momo721 = {
@@ -215,5 +237,6 @@ export const momo721 = {
     tokenOfOwnerByIndex,
     tokenByIndex,
     ownerOf,
-    getEquipmentMomo
+    getEquipmentMomo,
+    getEquipmentMomoHistory
 };
