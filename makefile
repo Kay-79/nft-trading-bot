@@ -59,6 +59,7 @@ modelAI:
 	python ./src/AI/model/model.py
 
 modelAIPi:
+	bun backup 
 	bash -c "source venv/bin/activate && python ./src/AI/model/model.py"
 #######################################
 ############### API ###################
