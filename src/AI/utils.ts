@@ -7,7 +7,6 @@ import {
 } from "../constants/constants";
 import axios from "axios";
 import { newbieAuctors, newbieBidders, proBidders } from "@/config/config";
-import { PredictMode } from "@/enum/enum";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
 import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
@@ -75,64 +74,16 @@ export const preprocessRawData = (rawDatasets: RecentSoldDto[]): TrainingData[] 
     }, []);
 };
 
-export const predictModel = async (inputOne: number[], predictMode: string) => {
-    if (predictMode === PredictMode.ONE) {
-        try {
-            const response = await axios.post(API_AI_PRICE_PREDICT, {
-                input: inputOne
-            });
-            return response.data.prediction[0];
-        } catch (error) {
-            console.error("Error predicting model:", error);
-            throw error;
-        }
-    }
-    const datasetsTest = await getTrainingData();
-    for (let i = 0; i < datasetsTest.length; i++) {
-        const dataset = datasetsTest[i];
-        let totalPredicted = 0;
-        console.log("===================================================================");
-        const checkTrader = (address: string, traders: string[], type: string) => {
-            if (
-                traders.includes(ethers.getAddress(address)) ||
-                traders.includes(address.toLowerCase())
-            ) {
-                console.log(`${type}\t\t`, address);
-            }
-        };
-        if (dataset.bidder) {
-            checkTrader(dataset.bidder, proBidders, "Bidder (Pro):");
-            checkTrader(dataset.bidder, newbieBidders, "Bidder (New):");
-        }
-        if (dataset.auctor) {
-            checkTrader(dataset.auctor, proBidders, "Auctor (Pro):");
-            checkTrader(dataset.auctor, newbieBidders, "Auctor (New):");
-        }
-        for (const input of dataset.inputs ?? []) {
-            input.push(...inputOne.slice(-3));
-            try {
-                const response = await axios.post(API_AI_PRICE_PREDICT, {
-                    input: input
-                });
-                console.log("Input:\t\t\t", input);
-                console.log("Prediction:\t\t", response.data.prediction[0]);
-                totalPredicted += Number(response.data.prediction[0]);
-            } catch (error) {
-                console.error("Error predicting model:", error);
-                throw error;
-            }
-        }
-        if (dataset.output) {
-            console.log("Total price:\t\t", dataset.output[0]);
-        }
-        console.log("Total predicted:\t", totalPredicted);
-        console.log("===================================================================");
-    }
-    return 0;
-};
-
 export const predictModelOne = async (inputOne: number[]) => {
-    return predictModel(inputOne, PredictMode.ONE);
+    try {
+        const response = await axios.post(API_AI_PRICE_PREDICT, {
+            input: inputOne
+        });
+        return response.data.prediction[0];
+    } catch (error) {
+        console.error("Error predicting model:", error);
+        throw error;
+    }
 };
 
 export const getMboxPriceAndRewardDelay1Hour = async (): Promise<{
@@ -250,28 +201,14 @@ export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrat
 
 export const predictAuctionPro = async (auction: AuctionDto): Promise<number> => {
     try {
-        if (
-            !auction.tokenId ||
-            !auction.nowPrice ||
-            !auction.hashrate ||
-            !auction.lvHashrate ||
-            !auction.prototype ||
-            !auction.level
-        )
-            return 0;
-        const cache = await getMboxPriceAndRewardDelay1Hour();
-        const momoInfo = [
-            auction.hashrate,
-            auction.lvHashrate,
-            Math.floor(auction.prototype / 10 ** 4),
-            auction.level
-        ];
-        const momoEquipment = await momo721.getEquipmentMomo(auction.tokenId.toFixed(0));
-        const mboxPrice = cache.mboxPrice;
-        const reward = cache.reward;
-        const timestamp = Math.floor(Date.now() / 1000);
-        const input = [...momoInfo, ...momoEquipment, mboxPrice, reward, timestamp];
-        const prediction = await predictModel(input, PredictMode.ONE);
+        const input = await buildInputVector({
+            hashrate: auction.hashrate || 0,
+            lvHashrate: auction.lvHashrate || 0,
+            prototype: auction.prototype || 0,
+            level: auction.level || 0,
+            tokenId: auction.tokenId || 0
+        });
+        const prediction = await predictModelOne(input);
         return prediction[0];
     } catch {
         return 0;
@@ -307,3 +244,25 @@ export const cleanDatasets = (datasets: any[]) => {
     );
     return newData;
 };
+
+export async function buildInputVector({
+    hashrate,
+    lvHashrate,
+    prototype,
+    level,
+    tokenId
+}: {
+    hashrate: number;
+    lvHashrate: number;
+    prototype: number;
+    level: number;
+    tokenId: string | number;
+}): Promise<number[]> {
+    const cache = await getMboxPriceAndRewardDelay1Hour();
+    const momoInfo = [hashrate, lvHashrate, Math.floor(prototype / 10 ** 4), level];
+    const momoEquipment = await momo721.getEquipmentMomo(tokenId.toString());
+    const mboxPrice = cache.mboxPrice;
+    const reward = cache.reward;
+    const timestamp = Math.floor(Date.now() / 1000);
+    return [...momoInfo, ...momoEquipment, mboxPrice, reward, timestamp];
+}

@@ -1,19 +1,17 @@
 import { NextResponse } from "next/server";
-import { getMboxPriceAndRewardDelay1Hour, predictModel } from "@/AI/utils";
-import { PredictMode } from "@/enum/enum";
-import { momo721 } from "@/utilsV2/momo721/utils";
+import { buildInputVector, predictModelOne } from "@/AI/utils";
 
 export async function POST(request: Request) {
     try {
         const { hashrate, lvHashrate, prototype, level, tokenId } = await request.json();
-        const cache = await getMboxPriceAndRewardDelay1Hour();
-        const momoInfo = [hashrate, lvHashrate, Math.floor(prototype / 10 ** 4), level];
-        const momoEquipment = await momo721.getEquipmentMomo(tokenId);
-        const mboxPrice = cache.mboxPrice;
-        const reward = cache.reward;
-        const timestamp = Math.floor(Date.now() / 1000);
-        const input = [...momoInfo, ...momoEquipment, mboxPrice, reward, timestamp];
-        const prediction = await predictModel(input, PredictMode.ONE);
+        const input = await buildInputVector({
+            hashrate: hashrate || 0,
+            lvHashrate: lvHashrate || 0,
+            prototype: prototype || 0,
+            level: level || 0,
+            tokenId: tokenId || 0
+        });
+        const prediction = await predictModelOne(input);
         return NextResponse.json({ prediction: prediction[0] });
     } catch {
         return NextResponse.json(

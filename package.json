@@ -50,9 +50,6 @@
     },
     "scripts": {
         "debug": "bun ./src/debugs/test.ts",
-        "predictOne": "bun ./src/AI/predict/predictOne.ts",
-        "predictAll": "bun ./src/AI/predict/predictAll.ts",
-        "predictPro": "bun ./src/AI/predict/predictPro.ts",
         "crawl": "bun ./src/AI/crawlingDatasetsRpc.ts",
         "clean": "bun ./src/AI/cleanDatasets.ts",
         "check": "node ./src/tools/check",
