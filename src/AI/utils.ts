@@ -16,6 +16,7 @@ import { stakingUtils } from "@/utilsV2/staking/utils";
 import fs from "fs";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { CachePriceReward } from "@/types/AI/CachePriceReward";
+import { momo721 } from "@/utilsV2/momo721/utils";
 
 export const getTrainingData = async (): Promise<TrainingData[]> => {
     const trainingData: TrainingData[] = [];
@@ -248,19 +249,33 @@ export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrat
 };
 
 export const predictAuctionPro = async (auction: AuctionDto): Promise<number> => {
-    const data = await getMboxPriceAndRewardDelay1Hour();
-    const mboxPrice = data.mboxPrice;
-    const reward = data.reward;
-    const input = [
-        auction.hashrate ?? 0,
-        auction.lvHashrate ?? 0,
-        Math.floor((auction.prototype ?? 0) / 10 ** 4),
-        auction.level ?? 0,
-        Math.floor(Date.now() / 1000),
-        mboxPrice,
-        reward
-    ];
-    return predictModelOne(input);
+    try {
+        if (
+            !auction.tokenId ||
+            !auction.nowPrice ||
+            !auction.hashrate ||
+            !auction.lvHashrate ||
+            !auction.prototype ||
+            !auction.level
+        )
+            return 0;
+        const cache = await getMboxPriceAndRewardDelay1Hour();
+        const momoInfo = [
+            auction.hashrate,
+            auction.lvHashrate,
+            Math.floor(auction.prototype / 10 ** 4),
+            auction.level
+        ];
+        const momoEquipment = await momo721.getEquipmentMomo(auction.tokenId.toFixed(0));
+        const mboxPrice = cache.mboxPrice;
+        const reward = cache.reward;
+        const timestamp = Math.floor(Date.now() / 1000);
+        const input = [...momoInfo, ...momoEquipment, mboxPrice, reward, timestamp];
+        const prediction = await predictModel(input, PredictMode.ONE);
+        return prediction[0];
+    } catch {
+        return 0;
+    }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

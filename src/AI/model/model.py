@@ -24,8 +24,31 @@ def load_data(file_path):
 file_path = "./backupData/datasets.json"
 data = load_data(file_path)
 
-X = np.array([d["input"] for d in data])
-y = np.array([d["output"] for d in data])
+X = []
+y = []
+
+for d in data:
+    try:
+        momo_info = d.get("momoInfo", [])
+        momo_equipment = d.get("momoEquipment", [])
+        price_vs_reward = d.get("priceVsReward", [])
+        bid_time = d.get("bidTime", 0)
+
+        features = momo_info + momo_equipment + price_vs_reward + [bid_time]
+        features = [float(f) for f in features]
+
+        X.append(features)
+        y.append([float(d["output"][0])])
+    except (ValueError, KeyError, TypeError):
+        print(f"Skipping invalid data entry: {d}")
+
+X = np.array(X)
+y = np.array(y)
+print("X shape: ", X.shape)
+print("y shape: ", y.shape)
+
+if X.size == 0 or y.size == 0:
+    raise ValueError("No valid data available for training.")
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.001, random_state=42)

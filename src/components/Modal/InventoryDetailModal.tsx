@@ -82,7 +82,8 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                 prototype: itemData.prototype ?? 0,
                 level: itemData.level ?? 0,
                 ids: [],
-                amounts: []
+                amounts: [],
+                tokenId: itemData.tokenId ?? 99999
             });
             console.log("Prediction response:", response.data);
             const predicted = response.data.prediction;

@@ -55,6 +55,7 @@ create:
 #######################################
 ############### AI ####################
 modelAI:
+	bun backup 
 	python ./src/AI/model/model.py
 
 modelAIPi:
