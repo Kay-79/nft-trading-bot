@@ -51,7 +51,7 @@ if X.size == 0 or y.size == 0:
     raise ValueError("No valid data available for training.")
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.001, random_state=42)
+    X, y, test_size=0.0001, random_state=42)
 
 scaler = RobustScaler()
 X_train = scaler.fit_transform(X_train)
@@ -68,7 +68,7 @@ model.compile(optimizer='adam', loss='mse', metrics=['mae'])
 
 sample_weights = np.linspace(0.01, 1.0, num=len(y_train))
 early_stopping = EarlyStopping(
-    monitor='val_loss', patience=300, restore_best_weights=True)
+    monitor='val_loss', patience=1000, restore_best_weights=True)
 reduce_lr = ReduceLROnPlateau(
     monitor='val_loss', factor=0.5, patience=30, min_lr=1e-6)
 

@@ -201,10 +201,10 @@ const getEquipmentMomo = async (tokenId: string): Promise<number[]> => {
     });
     const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
     return [
-        Number(decodedResult[0]),
-        Number(decodedResult[1]),
-        Number(decodedResult[2]),
-        Number(decodedResult[3])
+        Number(decodedResult[0]) > 0 ? Number(decodedResult[0]) - 100 : 0,
+        Number(decodedResult[1]) > 0 ? Number(decodedResult[1]) - 200 : 0,
+        Number(decodedResult[2]) > 0 ? Number(decodedResult[2]) - 300 : 0,
+        Number(decodedResult[3]) > 0 ? Number(decodedResult[3]) - 400 : 0
     ];
 };
 
@@ -219,10 +219,10 @@ const getEquipmentMomoHistory = async (tokenId: string, block: number): Promise<
     });
     const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
     return [
-        Number(decodedResult[0]),
-        Number(decodedResult[1]),
-        Number(decodedResult[2]),
-        Number(decodedResult[3])
+        Number(decodedResult[0]) > 0 ? Number(decodedResult[0]) - 100 : 0,
+        Number(decodedResult[1]) > 0 ? Number(decodedResult[1]) - 200 : 0,
+        Number(decodedResult[2]) > 0 ? Number(decodedResult[2]) - 300 : 0,
+        Number(decodedResult[3]) > 0 ? Number(decodedResult[3]) - 400 : 0
     ];
 };
 
