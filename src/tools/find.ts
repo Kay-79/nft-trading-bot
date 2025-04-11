@@ -97,9 +97,7 @@ const find = async () => {
                 const profitAuctions = await checkProfitAuctions(
                     newAuctions,
                     floorPrices,
-                    bnbPrice,
-                    mboxPrice,
-                    rewardPer1000Hash
+                    bnbPrice
                 );
                 if (profitAuctions.length > 0) {
                     await updateWaitBid(profitAuctions);

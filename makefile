@@ -20,16 +20,18 @@ killChange:
 killApiMomo:
 	kill -9 $(shell ps aux | grep app.py | grep -v grep | awk '{print $$2}')
 
-all:
+bot:
 	make bid
 	make find
 	make change
 	make apiMomo
 
-allWin:
-	npm run bid
-	npm run find
-	npm run change
+all:
+	make modelAIPi
+	make bid
+	make find
+	make change
+	make apiMomo
 
 killAll:
 	kill -9 $(shell ps aux | grep bun | grep -v grep | awk '{print $$2}')

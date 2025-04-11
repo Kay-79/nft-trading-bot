@@ -35,6 +35,7 @@ import axios from "axios";
 import { noticeBotDetectProfit } from "../bid/handleNoticeBot";
 import { AuctionGroupDto } from "@/types/dtos/AuctionGroup.dto";
 import { sleep } from "../common/sleep";
+import { buildInputVector, predictModelOne } from "@/AI/utils";
 
 export const isProAuction = (auction: AuctionDto): boolean => {
     return auction.amounts?.length === 0;
@@ -202,31 +203,18 @@ export const isProfitable = (profit: number, minProfit: number): boolean => {
     return profit >= minProfit;
 };
 
-export const getPriceFromAI = async (
-    auction: AuctionDto,
-    mboxPrice: number,
-    rewardPer1000Hash: number
-): Promise<number> => {
-    if (!auction.tokenId || !auction.prototype) return 0;
-    if (auction.prototype >= 6 * 10 ** 4) return 0;
-    const input = [
-        auction.hashrate,
-        auction.lvHashrate,
-        Math.floor(auction.prototype / 10 ** 4),
-        auction.level,
-        Date.now() / 1000,
-        mboxPrice,
-        rewardPer1000Hash
-    ];
+export const getPriceFromAI = async (auction: AuctionDto): Promise<number> => {
     try {
-        const response = await axios.post(API_AI_PRICE_PREDICT, {
-            input: input
+        const input = await buildInputVector({
+            hashrate: auction.hashrate || 0,
+            lvHashrate: auction.lvHashrate || 0,
+            prototype: auction.prototype || 0,
+            level: auction.level || 0,
+            tokenId: auction.tokenId || 0
         });
-        // console.log(input);
-        // console.log(`Price prediction ONE: ${response.data.prediction[0][0]}`);
-        return response.data.prediction[0][0];
+        const prediction = await predictModelOne(input);
+        return prediction[0];
     } catch {
-        console.log("Error get price from AI");
         return 0;
     }
 };
@@ -271,9 +259,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
     auctions: AuctionDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
-    type: BidType,
-    mboxPrice: number,
-    rewardPer1000Hash: number
+    type: BidType
 ): Promise<BidAuction[]> => {
     auctions.sort((a, b) => (a.uptime ?? 0) - (b.uptime ?? 0));
     let profitableAuctions: AuctionDto[] = [];
@@ -324,7 +310,7 @@ export const getProfitableBidAuctionsNormalVsPro = async (
                 (fee + auction?.nowPrice * 10 ** -9 + GAS_LIMIT_LIST * bnbPrice * 10 ** -9)
             );
         };
-        const minValue = await getPriceFromAI(auction, mboxPrice, rewardPer1000Hash);
+        const minValue = await getPriceFromAI(auction);
         const minProfit = profitProAI.min;
         const profit = calculateProfitPro(minValue, fee, auction, bnbPrice);
         return { profit, minProfit, pricePrediction: minValue };

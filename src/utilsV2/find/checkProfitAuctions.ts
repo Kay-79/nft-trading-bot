@@ -13,9 +13,7 @@ import { BidType } from "@/enum/enum";
 export const checkProfitAuctions = async (
     auctions: AuctionDto[],
     floorPrices: TierPrice,
-    bnbPrice: number,
-    mboxPrice: number,
-    rewardPer1000Hash: number
+    bnbPrice: number
 ): Promise<BidAuction[]> => {
     if (!auctions || auctions.length === 0) {
         return [];
@@ -39,9 +37,7 @@ export const checkProfitAuctions = async (
             normalAuctions,
             floorPrices,
             bnbPrice,
-            BidType.NORMAL,
-            NaN,
-            NaN
+            BidType.NORMAL
         ))
     );
     profitableBidAuctions.push(
@@ -49,9 +45,7 @@ export const checkProfitAuctions = async (
             proAuctions,
             floorPrices,
             bnbPrice,
-            BidType.PRO,
-            mboxPrice,
-            rewardPer1000Hash
+            BidType.PRO
         ))
     );
     profitableBidAuctions.push(
