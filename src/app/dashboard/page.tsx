@@ -95,9 +95,21 @@ const DashboardPage = () => {
         search: string;
         sort: string;
         sortOrder: string;
+        rarity: string; // Added rarity filter
     }
 
     const applyFilter = (filter: Filter) => {
+        const mapRarity = (rarityValue: number | undefined): string => {
+            if (rarityValue === undefined) return "";
+            if (rarityValue >= 10000 && rarityValue < 20000) return "common";
+            if (rarityValue >= 20000 && rarityValue < 30000) return "uncommon";
+            if (rarityValue >= 30000 && rarityValue < 40000) return "unique";
+            if (rarityValue >= 40000 && rarityValue < 50000) return "rare";
+            if (rarityValue >= 50000 && rarityValue < 60000) return "epic";
+            if (rarityValue >= 60000 && rarityValue < 70000) return "legendary";
+            return "";
+        };
+
         setFilteredListings(
             listings
                 .filter(listing => shortenNumber(listing.nowPrice || 0, 9, 3) >= filter.minPrice)
@@ -107,6 +119,7 @@ const DashboardPage = () => {
                         .toLowerCase()
                         .includes(filter.search.toLowerCase())
                 )
+                .filter(listing => !filter.rarity || mapRarity(listing.prototype) === filter.rarity)
                 .sort((a, b) => {
                     let comparison = 0;
                     if (filter.sort === "price") {
@@ -138,6 +151,7 @@ const DashboardPage = () => {
                         .toLowerCase()
                         .includes(filter.search.toLowerCase())
                 )
+                .filter(item => !filter.rarity || mapRarity(item.prototype) === filter.rarity)
                 .sort((a, b) => {
                     let comparison = 0;
                     if (filter.sort === "hashrate") {
@@ -148,6 +162,32 @@ const DashboardPage = () => {
                         comparison = (a.prototype || 0) - (b.prototype || 0);
                     } else if (filter.sort === "amount") {
                         comparison = (a.amount || 0) - (b.amount || 0);
+                    }
+                    return filter.sortOrder === "asc" ? comparison : -comparison;
+                })
+        );
+        setFilteredMarkets(
+            markets
+                .filter(market => shortenNumber(market.nowPrice || 0, 9, 3) >= filter.minPrice)
+                .filter(market => (market.hashrate || 0) >= filter.minHashrate)
+                .filter(market =>
+                    (market.prototype + (market.auctor ?? ""))
+                        .toLowerCase()
+                        .includes(filter.search.toLowerCase())
+                )
+                .filter(market => !filter.rarity || mapRarity(market.prototype) === filter.rarity) // Filter by rarity
+                .sort((a, b) => {
+                    let comparison = 0;
+                    if (filter.sort === "price") {
+                        comparison = (a.nowPrice || 0) - (b.nowPrice || 0);
+                    } else if (filter.sort === "hashrate") {
+                        comparison = (a.hashrate || 0) - (b.hashrate || 0);
+                    } else if (filter.sort === "level") {
+                        comparison = (a.level || 0) - (b.level || 0);
+                    } else if (filter.sort === "uptime") {
+                        comparison = (a.uptime || 0) - (b.uptime || 0);
+                    } else if (filter.sort === "prototype") {
+                        comparison = (a.prototype || 0) - (b.prototype || 0);
                     }
                     return filter.sortOrder === "asc" ? comparison : -comparison;
                 })

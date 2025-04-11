@@ -8,6 +8,7 @@ interface FilterPanelProps {
         search: string;
         sort: string;
         sortOrder: string;
+        rarity: string;
     }) => void;
 }
 
@@ -18,9 +19,10 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
     const [search, setSearch] = useState<string>("");
     const [sort, setSort] = useState<string>("");
     const [sortOrder, setSortOrder] = useState<string>("asc");
+    const [rarity, setRarity] = useState<string>(""); // Added state for rarity
 
     const handleApplyFilter = () => {
-        applyFilter({ minPrice, minHashrate, search, sort, sortOrder });
+        applyFilter({ minPrice, minHashrate, search, sort, sortOrder, rarity }); // Pass rarity
     };
 
     const handleResetAll = () => {
@@ -29,7 +31,15 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
         setSearch("");
         setSort("");
         setSortOrder("asc");
-        applyFilter({ minPrice: 0, minHashrate: 0, search: "", sort: "", sortOrder: "asc" });
+        setRarity(""); // Reset rarity
+        applyFilter({
+            minPrice: 0,
+            minHashrate: 0,
+            search: "",
+            sort: "",
+            sortOrder: "asc",
+            rarity: ""
+        });
     };
 
     return (
@@ -107,6 +117,29 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
                         color: theme.textColor
                     }}
                 />
+            </div>
+            <div style={{ marginBottom: "20px" }}>
+                <label style={{ display: "block", marginBottom: "10px" }}>Rarity</label>
+                <select
+                    value={rarity}
+                    onChange={e => setRarity(e.target.value)}
+                    style={{
+                        width: "100%",
+                        padding: "10px",
+                        borderRadius: "5px",
+                        border: `1px solid ${theme.textColor}`,
+                        backgroundColor: theme.backgroundColor,
+                        color: theme.textColor
+                    }}
+                >
+                    <option value="">All</option>
+                    <option value="common">Common</option>
+                    <option value="uncommon">Uncommon</option>
+                    <option value="unique">Unique</option>
+                    <option value="rare">Rare</option>
+                    <option value="epic">Epic</option>
+                    <option value="legendary">Legendary</option>
+                </select>
             </div>
             <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
                 <div style={{ flex: 1 }}>
