@@ -89,18 +89,30 @@ const find = async () => {
             Date.now() / 1000 - (latestGetData.auction ?? 0) > (delayTimeGet.auction ?? 0)
         ) {
             latestGetData.auction = Date.now() / 1000;
-            await getNewAutions(cacheIds.auction || []).then(async ([auctions, auctionIds]) => {
-                newAuctions = auctions;
-                cacheIds.auction = auctionIds;
-            });
+            try {
+                await getNewAutions(cacheIds.auction || []).then(async ([auctions, auctionIds]) => {
+                    newAuctions = auctions;
+                    cacheIds.auction = auctionIds;
+                });
+            } catch (error) {
+                console.error("Error fetching new auctions:", error);
+            }
             if (newAuctions.length !== 0) {
-                const profitAuctions = await checkProfitAuctions(
-                    newAuctions,
-                    floorPrices,
-                    bnbPrice
-                );
-                if (profitAuctions.length > 0) {
-                    await updateWaitBid(profitAuctions);
+                try {
+                    const profitAuctions = await checkProfitAuctions(
+                        newAuctions,
+                        floorPrices,
+                        bnbPrice
+                    );
+                    if (profitAuctions.length > 0) {
+                        try {
+                            await updateWaitBid(profitAuctions);
+                        } catch (error) {
+                            console.error("Error updating wait bid for profit auctions:", error);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error processing profit auctions:", error);
                 }
             }
         }
@@ -125,7 +137,11 @@ const find = async () => {
                     rewardPer1000Hash
                 );
                 if (profitAuctionsBlock.length > 0) {
-                    await updateWaitBid(profitAuctionsBlock);
+                    try {
+                        await updateWaitBid(profitAuctionsBlock);
+                    } catch (error) {
+                        console.error("Error updating wait bid for profit auction groups:", error);
+                    }
                 }
             }
         }

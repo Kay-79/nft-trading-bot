@@ -20,6 +20,19 @@ export const setup = async (
         cacheRewardPer1000Hash
     );
     const floorPrices = await getTierPrice(cacheTierPrice);
+    if (!bnbPrice || !floorPrices || !mboxPrice || !rewardPer1000Hash) {
+        console.log("Error: Failed to fetch prices");
+        return {
+            bnbPrice: cacheBnbPrice,
+            isFrontRunNormal: true,
+            isFrontRunPro: true,
+            isFrontRunProHash: true,
+            floorPrices: cacheTierPrice,
+            timeLastSetup: Date.now() / 1000,
+            mboxPrice: cacheMboxPrice,
+            rewardPer1000Hash: cacheRewardPer1000Hash
+        };
+    }
     return {
         bnbPrice: bnbPrice,
         isFrontRunNormal: true,
