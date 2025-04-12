@@ -23,7 +23,6 @@ const abiCoder = new AbiCoder();
 
 export const crawlingDatasetsRpc = async () => {
     if (ENV !== Environment.MAINNET) {
-        console.log("Testnet not supported");
         return;
     }
     const endBlock = await fullNodeProvider.getBlockNumber();
@@ -31,7 +30,6 @@ export const crawlingDatasetsRpc = async () => {
     const db = await connectMongo();
     const synced = await db.collection("synced").findOne({});
     if (!synced || !synced.blockAI) {
-        console.log("No synced blockBot found. Starting from blockBot 0");
         exit(1);
     }
     let startBlock = synced.blockAI + 1;

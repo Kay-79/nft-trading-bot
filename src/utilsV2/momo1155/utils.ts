@@ -11,10 +11,8 @@ const test = async (id: string) => {
         to: MOMO1155_ADDRESS,
         data: data
     });
-    console.log(result);
     const decodeData = abiCoder.decode(["string"], result);
     return decodeData;
-    return result;
 };
 
 export const momo1155 = {

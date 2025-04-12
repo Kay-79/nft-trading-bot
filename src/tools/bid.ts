@@ -17,7 +17,6 @@ const bid = async () => {
         const now = new Date();
         const currentHour = now.getHours();
         if (Math.abs(currentHour - latestNotice) >= TIME_DELAY_NOTICE_STATUS_BOT) {
-            console.log("Notice bot bid");
             latestNotice = await noticeBotBid(latestNotice);
         }
         let bidAuctions: BidAuction[] = [];
@@ -59,7 +58,6 @@ const bid = async () => {
         } else {
             try {
                 await normalBidAuction(sameUpTimeAuctions);
-                console.log("Normal bid auction");
             } catch (error) {
                 console.error("Error normal bid auction:", error);
             }

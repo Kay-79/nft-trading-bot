@@ -17,6 +17,7 @@ import { TierPrice } from "../../types/common/TierPrice";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { erc20Provider } from "../../providers/erc20Provider";
 import packageJson from "../../../package.json";
+import { exit } from "process";
 
 const noticeBot = async (message: string) => {
     try {
@@ -30,7 +31,8 @@ const noticeBot = async (message: string) => {
     } catch (error) {
         console.error("Error noticeBot", error);
         if (!API_TELEGRAM || !CHATID_MOBOX) {
-            console.log("Please set API_TELEGRAM and CHATID_MOBOX in .env");
+            console.error("API_TELEGRAM or CHATID_MOBOX is not defined");
+            exit(1);
         }
     }
 };

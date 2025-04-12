@@ -64,7 +64,6 @@
         "withdraw": "node ./src/tools/withdraw",
         "changeset": "changeset",
         "version": "changeset version",
-        "staking": "bun ./src/tools/staking.ts",
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",

@@ -85,7 +85,6 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                 amounts: [],
                 tokenId: itemData.tokenId ?? 99999
             });
-            console.log("Prediction response:", response.data);
             const predicted = response.data.prediction;
             setPredictedPrice(shortenNumber(predicted, 0, 3));
         } catch {

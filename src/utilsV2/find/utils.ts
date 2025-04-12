@@ -244,8 +244,6 @@ export const getPriceBlockFromAI = async (
             const response = await axios.post(API_AI_PRICE_PREDICT, {
                 input: input
             });
-            // console.log(input);
-            // console.log(`Price prediction ALL: ${response.data.prediction[0][0]}`);
             totalPredict += response.data.prediction[0][0];
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars

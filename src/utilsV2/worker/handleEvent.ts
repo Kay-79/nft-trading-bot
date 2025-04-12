@@ -36,9 +36,6 @@ export const handleBidEvent = async (db: Db, log: Log) => {
             log.blockNumber,
             log.transactionHash
         );
-        // console.log("################## handleBidEvent");
-        // console.log(log.transactionHash);
-        // console.log(analysisPro);
     }
     if (allContracts.includes(seller) || allContracts.includes(ethers.getAddress(seller))) {
         const id = logBidToId(seller, log.data);
@@ -49,9 +46,6 @@ export const handleBidEvent = async (db: Db, log: Log) => {
             analysisPro.countSold = analysisPro.countBid;
             analysisPro.countBid = 0;
             await databaseService.updateAnalysis(db, analysisPro);
-            // console.log("################## handleSoldEvent");
-            // console.log(log.transactionHash);
-            // console.log(analysisPro);
         }
         if (analysisNormal.totalBid) {
             analysisNormal.totalSell = analysisNormal.totalBid;
@@ -59,9 +53,6 @@ export const handleBidEvent = async (db: Db, log: Log) => {
             analysisNormal.countSold = analysisNormal.countBid;
             analysisNormal.countBid = 0;
             await databaseService.updateAnalysis(db, analysisNormal);
-            // console.log("################## handleBidEvent");
-            // console.log(log.transactionHash);
-            // console.log(analysisNormal);
         }
     }
 };
@@ -69,9 +60,7 @@ export const handleBidEvent = async (db: Db, log: Log) => {
 export const handleListingEvent = async (db: Db, log: Log) => {
     const auctor = byte32ToAddress(log.topics[1]);
     if (allContracts.includes(auctor) || allContracts.includes(ethers.getAddress(auctor))) {
-        // console.log("################## handleListingEvent");
         const listings: AuctionDto[] = logCreateToListing(auctor, log.data).auctions;
-        // console.log(log.transactionHash);
         await databaseService.createListings(db, listings, log.blockNumber, log.transactionHash);
         await databaseService.deleteOrDecreaseInventories(
             db,
@@ -85,11 +74,8 @@ export const handleListingEvent = async (db: Db, log: Log) => {
 export const handleChangeEvent = async (db: Db, log: Log) => {
     const auctor = byte32ToAddress(log.topics[1]);
     if (allContracts.includes(auctor) || allContracts.includes(ethers.getAddress(auctor))) {
-        // console.log("################## handleChangeEvent");
         const changes: ChangeDto = logChangeToChange(auctor, log.data).change;
         const analysis: AnalysisDto = logChangeToChange(auctor, log.data).analysis;
-        // console.log(log.transactionHash);
-        // console.log(analysis);
         await databaseService.updateAnalysis(db, analysis);
         await databaseService.updateListing(db, changes, log.blockNumber, log.transactionHash);
     }
@@ -102,9 +88,6 @@ export const handleCancelEvent = async (db: Db, log: Log) => {
         await databaseService.deleteListing(db, id, log.blockNumber, log.transactionHash);
         const inventories: InventoryDto[] = logCancelToInventory(auctor, log.data).inventories;
         const analysis: AnalysisDto = logCancelToInventory(auctor, log.data).analysis;
-        // console.log("################## handleCancelEvent");
-        // console.log(log.transactionHash);
-        // console.log(analysis);
         await databaseService.updateAnalysis(db, analysis);
         await databaseService.createOrIncreaseInventories(
             db,

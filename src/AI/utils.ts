@@ -2,8 +2,7 @@ import {
     API_AI_PRICE_PREDICT,
     API_MOBOX,
     CACHE_MBOX_PRICE,
-    CACHE_REWARD_PER_1000_HASH,
-    PRO_BUYER
+    CACHE_REWARD_PER_1000_HASH
 } from "../constants/constants";
 import axios from "axios";
 import { newbieAuctors, newbieBidders, proBidders } from "@/config/config";
@@ -94,7 +93,6 @@ export const getMboxPriceAndRewardDelay1Hour = async (): Promise<{
     if (fs.existsSync("./src/AI/predict/cache.json")) {
         cache = fs.readFileSync("./src/AI/predict/cache.json", "utf-8");
     } else {
-        console.log("Create new cache file");
         const newCache: CachePriceReward = { mboxPrice: 0, reward: 0, timestamp: 0 };
         cache = JSON.stringify(newCache);
     }
@@ -140,63 +138,6 @@ export const preprocessListingsData = (listingsPro: AuctionDto[]): TrainingData[
         acc.push({ input, inputs, bidTime, listTime, bidder, auctor, price });
         return acc;
     }, []);
-};
-
-export const predictListingsPro = async (mboxPrice: number, rewardPer1000Hashrate: number) => {
-    let totalPriceAll = 0;
-    let totalPredictedAll = 0;
-    const data = await axios.get(
-        `${API_MOBOX}/auction/list/BNB/${PRO_BUYER}?sort=-time&page=1&limit=128`
-    );
-    const listingsPro = data?.data?.list || [];
-    const trainingData = preprocessListingsData(listingsPro);
-    for (const data of trainingData) {
-        let totalPredicted = 0;
-        console.log("===================================================================");
-        console.log(`PRO AUCTOR:\t\t ${data.auctor}`);
-        if (data.inputs && data.inputs.length > 0) {
-            for (const input of data.inputs ?? []) {
-                console.log("Input:\t\t\t", input);
-                input.push(Math.floor(Date.now() / 1000), mboxPrice, rewardPer1000Hashrate);
-                try {
-                    const response = await axios.post(API_AI_PRICE_PREDICT, {
-                        input: input
-                    });
-                    console.log("Prediction:\t\t", response.data.prediction[0]);
-                    totalPredicted += Number(response.data.prediction[0]);
-                    totalPredictedAll += Number(response.data.prediction[0]);
-                } catch (error) {
-                    console.error("Error predicting model:", error);
-                    throw error;
-                }
-            }
-        } else {
-            const input = data.input;
-            console.log("Input:\t\t\t", input);
-            if (input) {
-                input.push(Math.floor(Date.now() / 1000), mboxPrice, rewardPer1000Hashrate);
-                try {
-                    const response = await axios.post(API_AI_PRICE_PREDICT, {
-                        input: input
-                    });
-                    console.log("Prediction:\t\t", response.data.prediction[0]);
-                    totalPredicted += Number(response.data.prediction[0]);
-                    totalPredictedAll += Number(response.data.prediction[0]);
-                } catch (error) {
-                    console.error("Error predicting model:", error);
-                    throw error;
-                }
-            }
-        }
-        if (data.price) {
-            totalPriceAll += data.price;
-            console.log("Price listing:\t\t", data.price);
-        }
-        console.log("Total predicted:\t", totalPredicted);
-        console.log("===================================================================");
-    }
-    console.log("Total price all:\t", totalPriceAll);
-    console.log("Total predicted all:\t", totalPredictedAll);
 };
 
 export const predictAuctionPro = async (auction: AuctionDto): Promise<number> => {
