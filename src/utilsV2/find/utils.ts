@@ -219,25 +219,21 @@ export const getPriceFromAI = async (auction: AuctionDto): Promise<number> => {
     }
 };
 
-export const getPriceBlockFromAI = async (
-    auctionGroup: AuctionGroupDto,
-    mboxPrice: number,
-    rewardPer1000Hash: number
-): Promise<number> => {
+export const getPriceBlockFromAI = async (auctionGroup: AuctionGroupDto): Promise<number> => {
     if (!auctionGroup.tokens) return 0;
     const inputs: number[][] = [];
-    auctionGroup.tokens.forEach(token => {
-        const input = [
-            token.hashrate,
-            token.lvHashrate,
-            token.prototype !== undefined ? Math.floor(token.prototype / 10 ** 4) : undefined,
-            token.level,
-            Date.now() / 1000,
-            mboxPrice,
-            rewardPer1000Hash
-        ].filter(value => value !== undefined) as number[];
-        inputs.push(input);
-    });
+    for (let i = 0; i < auctionGroup.tokens.length; i++) {
+        const token = auctionGroup.tokens[i];
+        if (!token) continue;
+        const inputVector = await buildInputVector({
+            hashrate: token.hashrate || 0,
+            lvHashrate: token.lvHashrate || 0,
+            prototype: token.prototype || 0,
+            level: token.level || 0,
+            tokenId: token.tokenId || 0
+        });
+        inputs.push(inputVector);
+    }
     let totalPredict = 0;
     try {
         for (const input of inputs) {
@@ -246,8 +242,8 @@ export const getPriceBlockFromAI = async (
             });
             totalPredict += response.data.prediction[0][0];
         }
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
+        console.error("Error predicting model:", error);
         return 0;
     }
     return totalPredict;
@@ -583,9 +579,7 @@ export const getProfitableBidAuctionsBlock = async (
     auctionGroups: AuctionGroupDto[],
     floorPrices: TierPrice,
     bnbPrice: number,
-    type: BidType,
-    mboxPrice: number,
-    rewardPer1000Hash: number
+    type: BidType
 ): Promise<BidAuction[]> => {
     if (type !== BidType.GROUP) {
         console.log("Type is not group");
@@ -618,7 +612,7 @@ export const getProfitableBidAuctionsBlock = async (
                         auctionGroup.tokens?.length * GAS_LIMIT_LIST * bnbPrice * 10 ** -9)
                 );
             };
-            const minValue = await getPriceBlockFromAI(auctionGroup, mboxPrice, rewardPer1000Hash);
+            const minValue = await getPriceBlockFromAI(auctionGroup);
             let crewPrice = 0;
             if (auctionGroup.type === BlockType.CREW) {
                 crewPrice += floorPrices[1] ?? 0;
@@ -645,7 +639,6 @@ export const getProfitableBidAuctionsBlock = async (
         const totalMinProfit = minProfit;
         const totalPricePrediction = pricePrediction;
         const totalPrice = auctionGroup.price;
-        // console.log(profit, minProfit, pricePrediction);
         // Block method
         if (isProfitable(totalProfit, totalMinProfit)) {
             profitableBidAuctions.push(

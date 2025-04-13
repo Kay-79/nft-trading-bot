@@ -132,9 +132,7 @@ const find = async () => {
                 const profitAuctionsBlock = await checkProfitAuctionGroups(
                     newAuctionsBlock,
                     floorPrices,
-                    bnbPrice,
-                    mboxPrice,
-                    rewardPer1000Hash
+                    bnbPrice
                 );
                 if (profitAuctionsBlock.length > 0) {
                     try {
