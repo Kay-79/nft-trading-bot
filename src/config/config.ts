@@ -27,6 +27,15 @@ export const profitPerTier: TierPrice = {
     6: 500
 };
 
+export const minPriceAIChange: TierPrice = {
+    1: NaN,
+    2: NaN,
+    3: NaN,
+    4: 10,
+    5: 90,
+    6: 500
+};
+
 export const profitBlock: ProfitConfig = {
     min: 10,
     percent: 0.55

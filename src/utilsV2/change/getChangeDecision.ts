@@ -2,7 +2,7 @@ import { ChangeDecision } from "@/types/change/ChangeDecision";
 import { TierPrice } from "@/types/common/TierPrice";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { sleep } from "../common/sleep";
-import { contracts } from "@/config/config";
+import { contracts, minPriceAIChange } from "@/config/config";
 import { getAuctionsByPrototype } from "./utils";
 import { ethers } from "ethers";
 import { shortenNumber } from "@/utils/shorten";
@@ -51,6 +51,11 @@ export const getChangeDecisionPro = async (
     try {
         const prediction = shortenNumber(await predictAuctionPro(auction), 0, 3);
         if (shortenNumber(auction.nowPrice, 9, 3) > prediction) {
+            const minPriceRequire = minPriceAIChange[auction.prototype / 10 ** 4];
+            if (minPriceRequire && prediction < minPriceRequire) {
+                console.log("Prediction is too low, not changing");
+                return { shouldChange: false, newPrice: 0 };
+            }
             return {
                 shouldChange: true,
                 newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
