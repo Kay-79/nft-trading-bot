@@ -50,8 +50,8 @@ const change = async () => {
     let hasNotified = false;
     while (true) {
         const myAuctions = sortVsFilterAuctions(await getAllMyAuctions());
-        for (const auction of myAuctions) {
-            console.log(`### Auction ${auction.prototype} ###`);
+        for (const myAuction of myAuctions) {
+            console.log(`### Auction ${myAuction.prototype} ###`);
             const now = new Date();
             const currentHour = now.getHours();
             if (currentHour === 17 && !hasNotified) {
@@ -89,31 +89,31 @@ const change = async () => {
                 console.log("Setup failed, waiting for next loop...");
                 continue;
             }
-            if (!auction.nowPrice) {
+            if (!myAuction.nowPrice) {
                 console.log("No now price, maybe changed or bought");
                 continue;
             }
-            if (!(await isExistAuction(auction))) {
+            if (!(await isExistAuction(myAuction))) {
                 console.log("Not exist, maybe changed or bought");
                 await ranSleep(5, 10);
                 continue;
             }
             const changeDecision: ChangeDecision =
-                isProAuction(auction) && modeChange.pro
-                    ? await getChangeDecisionPro(auction, floorPrices)
-                    : isBundleAuction(auction) && modeChange.bundle
-                    ? await getChangeDecisionBundle(auction, floorPrices)
-                    : isNormalAuction(auction) && modeChange.normal
-                    ? await getChangeDecisionNormal(auction, floorPrices)
+                isProAuction(myAuction) && modeChange.pro
+                    ? await getChangeDecisionPro(myAuction, floorPrices)
+                    : isBundleAuction(myAuction) && modeChange.bundle
+                    ? await getChangeDecisionBundle(myAuction, floorPrices)
+                    : isNormalAuction(myAuction) && modeChange.normal
+                    ? await getChangeDecisionNormal(myAuction, floorPrices)
                     : { shouldChange: false, newPrice: 0 };
 
             if (changeDecision.shouldChange && changeDecision.newPrice) {
-                await changeAuction(auction, changeDecision.newPrice);
+                await changeAuction(myAuction, changeDecision.newPrice);
                 await ranSleep(5 * 60, 10 * 60);
             } else {
                 console.log(
-                    `No need to change auction ${auction.prototype}, price: ${shortenNumber(
-                        auction.nowPrice,
+                    `No need to change myAuction ${myAuction.prototype}, price: ${shortenNumber(
+                        myAuction.nowPrice,
                         9,
                         3
                     )}`

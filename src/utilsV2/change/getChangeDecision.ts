@@ -18,40 +18,36 @@ import { isExistAuction } from "../bid/utils";
 import { predictAuctionPro } from "@/AI/utils";
 
 export const getChangeDecisionPro = async (
-    auction: AuctionDto,
+    myAuction: AuctionDto,
     floorPrices: TierPrice
 ): Promise<ChangeDecision> => {
     if (
-        !auction.prototype ||
-        !auction.nowPrice ||
-        !auction.uptime ||
-        !auction.auctor ||
+        !myAuction.prototype ||
+        !myAuction.nowPrice ||
+        !myAuction.uptime ||
+        !myAuction.auctor ||
         !modeChange.pro
     ) {
         return { shouldChange: false, newPrice: 0 };
     }
-    if (Date.now() / 1000 - auction.uptime < minTimeListedMyAuctionToChange.pro) {
+    if (Date.now() / 1000 - myAuction.uptime < minTimeListedMyAuctionToChange.pro) {
         console.log("Require minTimeListedMyAuctionToChange.pro");
         return { shouldChange: false, newPrice: 0 };
     }
     if (
         !(
-            contracts.includes(auction.auctor.toLowerCase()) ||
-            contracts.includes(ethers.getAddress(auction.auctor))
+            contracts.includes(myAuction.auctor.toLowerCase()) ||
+            contracts.includes(ethers.getAddress(myAuction.auctor))
         )
     ) {
-        console.log("Not my auction");
+        console.log("Not my myAuction");
         return { shouldChange: false, newPrice: 0 };
     }
-    if (!(await isExistAuction(auction))) {
-        console.log("Not exist, maybe changed or bought");
-        return { shouldChange: false, newPrice: 0 };
-    }
-    const floorPrice = floorPrices[Math.floor(auction.prototype / 10 ** 4)];
+    const floorPrice = floorPrices[Math.floor(myAuction.prototype / 10 ** 4)];
     try {
-        const prediction = shortenNumber(await predictAuctionPro(auction), 0, 3);
-        if (shortenNumber(auction.nowPrice, 9, 3) > prediction) {
-            const minPriceRequire = minPriceAIChange[auction.prototype / 10 ** 4];
+        const prediction = shortenNumber(await predictAuctionPro(myAuction), 0, 3);
+        if (shortenNumber(myAuction.nowPrice, 9, 3) > prediction) {
+            const minPriceRequire = minPriceAIChange[myAuction.prototype / 10 ** 4];
             if (minPriceRequire && prediction < minPriceRequire) {
                 console.log("Prediction is too low, not changing");
                 return { shouldChange: false, newPrice: 0 };
@@ -61,7 +57,7 @@ export const getChangeDecisionPro = async (
                 newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
             };
         } else {
-            if (Date.now() / 1000 - auction.uptime > 2 * minTimeListedMyAuctionToChange.pro) {
+            if (Date.now() / 1000 - myAuction.uptime > 2 * minTimeListedMyAuctionToChange.pro) {
                 return {
                     shouldChange: true,
                     newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
@@ -69,35 +65,35 @@ export const getChangeDecisionPro = async (
             }
         }
     } catch (error) {
-        console.log("Error when predict auction pro", error);
+        console.log("Error when predict myAuction pro", error);
         return { shouldChange: false, newPrice: 0 };
     }
     return { shouldChange: false, newPrice: 0 };
 };
 
 export const getChangeDecisionNormal = async (
-    auction: AuctionDto,
+    myAuction: AuctionDto,
     floorPrices: TierPrice
 ): Promise<ChangeDecision> => {
     if (
-        !auction.prototype ||
-        !auction.nowPrice ||
-        !auction.uptime ||
-        !auction.auctor ||
+        !myAuction.prototype ||
+        !myAuction.nowPrice ||
+        !myAuction.uptime ||
+        !myAuction.auctor ||
         !modeChange.normal
     ) {
         return { shouldChange: false, newPrice: 0 };
     }
     if (
         !(
-            contracts.includes(auction.auctor.toLowerCase()) ||
-            contracts.includes(ethers.getAddress(auction.auctor))
+            contracts.includes(myAuction.auctor.toLowerCase()) ||
+            contracts.includes(ethers.getAddress(myAuction.auctor))
         )
     ) {
-        console.log("Not my auction");
+        console.log("Not my myAuction");
         return { shouldChange: false, newPrice: 0 };
     }
-    const auctionsSamePrototype = await getAuctionsByPrototype(auction.prototype);
+    const auctionsSamePrototype = await getAuctionsByPrototype(myAuction.prototype);
     const auctionLowestPrice = auctionsSamePrototype
         .filter(a => a.nowPrice)
         .sort((a, b) => (a.nowPrice ?? 0) - (b.nowPrice ?? 0))[0];
@@ -106,13 +102,13 @@ export const getChangeDecisionNormal = async (
         return { shouldChange: false, newPrice: 0 };
     }
 
-    if (!(await isExistAuction(auctionLowestPrice)) || !(await isExistAuction(auction))) {
+    if (!(await isExistAuction(auctionLowestPrice))) {
         console.log("Not exist, maybe changed or bought");
         return { shouldChange: false, newPrice: 0 };
     }
 
     if (
-        Date.now() / 1000 - auction.uptime < minTimeListedMyAuctionToChange.normal ||
+        Date.now() / 1000 - myAuction.uptime < minTimeListedMyAuctionToChange.normal ||
         Date.now() / 1000 - auctionLowestPrice.uptime < minTimeListedOtherAuctionToChange ||
         contracts.includes(auctionLowestPrice.auctor.toLowerCase()) ||
         contracts.includes(ethers.getAddress(auctionLowestPrice.auctor))
@@ -122,7 +118,7 @@ export const getChangeDecisionNormal = async (
     }
 
     let newPrice = shortenNumber(auctionLowestPrice.nowPrice - priceDelta * 10 ** 9, 9, 3);
-    const floorPrice = floorPrices[Math.floor(auction.prototype / 10 ** 4)];
+    const floorPrice = floorPrices[Math.floor(myAuction.prototype / 10 ** 4)];
     if (newPrice < floorPrice || Math.abs(newPrice - floorPrice) < priceThreshold) {
         newPrice = Math.min(
             floorPrice - priceDeltaMin,
@@ -133,7 +129,7 @@ export const getChangeDecisionNormal = async (
         }
     }
 
-    if (newPrice >= shortenNumber(auction.nowPrice, 9, 3)) {
+    if (newPrice >= shortenNumber(myAuction.nowPrice, 9, 3)) {
         return { shouldChange: false, newPrice: 0 };
     }
 
@@ -141,7 +137,7 @@ export const getChangeDecisionNormal = async (
 };
 
 export const getChangeDecisionBundle = async (
-    auction: AuctionDto,
+    myAuction: AuctionDto,
     floorPrices: TierPrice
 ): Promise<ChangeDecision> => {
     const changeDecision: ChangeDecision = {
@@ -152,7 +148,7 @@ export const getChangeDecisionBundle = async (
         console.log("Bundle mode is disabled");
         return changeDecision;
     }
-    if (!auction.uptime && floorPrices) {
+    if (!myAuction.uptime && floorPrices) {
         console.log("No uptime, maybe changed or bought");
     }
     await sleep(1);
