@@ -14,7 +14,7 @@ export interface ThemeConfig {
     secondaryButtonBackgroundColor: string; // New property for secondary button background color
     secondaryButtonTextColor: string; // New property for secondary button text color
     headerBackgroundColor?: string;
-    headerTextColor?: string;
+    headerTextColor?: string; // Text color for table headers
     footerBackgroundColor?: string;
     footerTextColor?: string;
 }

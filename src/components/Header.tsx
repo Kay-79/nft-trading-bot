@@ -11,6 +11,13 @@ import { ConnectWallet } from "./ConnectWallet";
  */
 const Header = () => {
     const { theme } = useTheme();
+    const NAVS = [
+        { href: "/dashboard", label: "Dashboard" },
+        { href: "#contact", label: "Contact" },
+        { href: "/plans", label: "Pricing" },
+        { href: "/about", label: "About" },
+        { href: "/console", label: "Console" }
+    ];
 
     return (
         <nav
@@ -54,18 +61,11 @@ const Header = () => {
                     flexWrap: "wrap" // Allow wrapping for smaller screens
                 }}
             >
-                <Link href="/dashboard" passHref style={{ margin: "0 10px" }}>
-                    Dashboard
-                </Link>
-                <Link href="#contact" passHref style={{ margin: "0 10px" }}>
-                    Contact
-                </Link>
-                <Link href="/plans" passHref style={{ margin: "0 10px" }}>
-                    Pricing
-                </Link>
-                <Link href="/about" passHref style={{ margin: "0 10px" }}>
-                    About
-                </Link>
+                {NAVS.map((link, index) => (
+                    <Link key={index} href={link.href} passHref style={{ margin: "0 10px" }}>
+                        {link.label}
+                    </Link>
+                ))}
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
                 <ConnectWallet />
