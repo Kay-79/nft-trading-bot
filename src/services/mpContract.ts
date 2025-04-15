@@ -2,15 +2,16 @@ import { readContract, writeContract } from "@wagmi/core";
 import { wagmiConfig } from "@/app/wagmi";
 import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
-import { ethers } from "ethers";
-import { CHANGER, MP_ADDRESS, NORMAL_BUYER, PRO_BUYER, USDT_ADDRESS } from "@/constants/constants";
+import { AbiCoder, ethers } from "ethers";
+import { CHANGER, MP_ADDRESS, NORMAL_BUYER, PRO_BUYER, STAKING_ADDRESS, USDT_ADDRESS } from "@/constants/constants";
 import { mpUtils } from "@/utilsV2/mp/utils";
-import { MomoType } from "@/enum/enum";
+import { MomoType, StakingSelector } from "@/enum/enum";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import { allContracts, bidContract } from "@/config/config";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { abiBid } from "@/abi/abiBid";
 import { abiERC20 } from "@/abi/abiERC20";
+import { ethersProvider } from "@/providers/ethersProvider";
 
 const transferERC20 = async (userAddress: string, from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
@@ -48,16 +49,26 @@ const transferERC20 = async (userAddress: string, from: string, to: string, amou
         functionName: "decimals"
     })) as number;
     const amountInWei = ethers.parseUnits(amount.toFixed(3), decimals);
-    // console.log('all params', {
-    //     to,
-    //     amountInWei
-    // })
     return await writeContract(wagmiConfig, {
         abi: abiBid,
         address: from as `0x${string}`,
         functionName: "transferERC20",
         args: [USDT_ADDRESS, to, amountInWei]
     });
+};
+
+const getUserHash = async (address: string) => {
+    if (!wagmiConfig) {
+        throw new Error("wagmiConfig is null");
+    }
+    const abiCoder = new AbiCoder();
+        const encodedData = abiCoder.encode(["address"], [address]);
+        const data = StakingSelector.USER_HASH_RATE + encodedData.slice(2);
+        const result = await ethersProvider.call({
+            to: STAKING_ADDRESS,
+            data: data
+        });
+        return Number(result);
 };
 
 const changePrice = async (
@@ -206,6 +217,7 @@ const bidAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) 
 
 export const mpContractService = {
     transferERC20,
+    getUserHash,
     changePrice,
     cancelAuction,
     createAuction,

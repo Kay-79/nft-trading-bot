@@ -29,14 +29,8 @@ const worker = async () => {
             const newSynced: SyncedDto = { blockBot: 0, blockAI: 0, tx: "" };
             await db.collection("synced").insertOne(newSynced);
         }
-        let startBlock = synced ? synced.blockBot + 1 : 0;
+        const startBlock = synced ? synced.blockBot + 1 : 0;
         const endBlock = await fullNodeProvider.getBlockNumber();
-        if (startBlock >= endBlock) {
-            const synced = await db.collection("synced").findOne({});
-            if (synced) {
-                startBlock = synced.blockBot + 1;
-            }
-        }
         console.log(`Last synced blockBot: ${startBlock}`);
         console.log(`Now Block: ${endBlock}`);
         for (let currentBlock = startBlock; currentBlock <= endBlock; currentBlock += step) {
@@ -74,7 +68,11 @@ const worker = async () => {
                         break;
                 }
             }
-            startBlock = logs[logs.length - 1].blockNumber + 1;
+            await databaseService.updateSyncedMp(
+                db,
+                logs[logs.length - 1].blockNumber,
+                logs[logs.length - 1].transactionHash
+            );
         }
         await databaseService.updateSyncedMp(db, endBlock, "");
         const delay = 60;

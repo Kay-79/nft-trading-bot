@@ -6,6 +6,7 @@ import { contracts } from "@/config/config";
 import { erc20Contract } from "@/services/erc20Contract";
 import { shortenAddress } from "@/utils/shorten";
 import Link from "next/link";
+import { mpContractService } from "@/services/mpContract";
 
 /**
  * @description
@@ -13,25 +14,27 @@ import Link from "next/link";
  */
 const Console = () => {
     const { theme } = useTheme();
-    const [balances, setBalances] = useState<{ address: string; balance: number }[]>([]);
-    const totalBalance = balances.reduce((acc, { balance }) => acc + balance, 0);
+    const [contractsData, setContracts] = useState<
+        { address: string; balance: number; hash: number }[]
+    >([]);
+    const totalBalance = contractsData.reduce((acc, { balance }) => acc + balance, 0);
 
     useEffect(() => {
-        const fetchBalances = async () => {
+        const fetchContracts = async () => {
             try {
                 const results = await Promise.all(
                     contracts.map(async address => {
                         const balance = await erc20Contract.getBalance(address);
-                        return { address, balance };
+                        const hash = await mpContractService.getUserHash(address);
+                        return { address, balance, hash };
                     })
                 );
-                setBalances(results);
+                setContracts(results);
             } catch (error) {
                 console.error("Error fetching balances:", error);
             }
         };
-
-        fetchBalances();
+        fetchContracts();
     }, []);
 
     return (
@@ -83,12 +86,22 @@ const Console = () => {
                                 textAlign: "left"
                             }}
                         >
+                            Hash
+                        </th>
+                        <th
+                            style={{
+                                backgroundColor: theme.primaryColor,
+                                color: theme.headerTextColor,
+                                padding: "8px",
+                                textAlign: "left"
+                            }}
+                        >
                             Actions
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {balances.map(({ address, balance }) => (
+                    {contractsData.map(({ address, balance, hash }) => (
                         <tr key={address}>
                             <td
                                 style={{
@@ -105,6 +118,14 @@ const Console = () => {
                                 }}
                             >
                                 $ {balance}
+                            </td>
+                            <td
+                                style={{
+                                    border: `1px solid ${theme.primaryColor}`,
+                                    padding: "8px"
+                                }}
+                            >
+                                {hash}
                             </td>
                             <td
                                 style={{
