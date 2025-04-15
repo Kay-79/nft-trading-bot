@@ -8,6 +8,7 @@ import { mpContractService } from "@/services/mpContract";
 import { toast } from "react-toastify";
 import { allContracts } from "@/config/config";
 import { useAccount } from "wagmi";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 /**
  * @description Detail page for a specific address
@@ -52,13 +53,7 @@ const AddressDetail: React.FC = () => {
                 toast.error("Please fill in all fields correctly!");
             }
         } catch (error) {
-            const errorMessage =
-                error instanceof Error
-                    ? error.message.length > 100
-                        ? "Transfer failed!"
-                        : error.message
-                    : "An unknown error occurred.";
-            toast.error(errorMessage);
+            toast.error(getErrorMessage(error));
         }
     };
 

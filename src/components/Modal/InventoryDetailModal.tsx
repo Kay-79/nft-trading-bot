@@ -13,6 +13,7 @@ import { getImgUrl } from "@/utils/image/getImgUrl";
 import { mpContractService } from "@/services/mpContract";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 interface InventoryDetailModalProps {
     item: InventoryDto;
@@ -51,8 +52,7 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
             await mpContractService.createAuction(item, address, listPrice);
             toast.success("Item listed successfully!");
         } catch (error) {
-            console.error("Failed to list item:", error);
-            toast.error("Failed to list item!");
+            toast.error(getErrorMessage(error));
         } finally {
             setLoadingList(false);
             setIsListing(false);
@@ -67,8 +67,8 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
             });
             setItemData(response.data.data);
             toast.success("Listing refreshed successfully!");
-        } catch {
-            toast.error("Failed to refresh invnetory!");
+        } catch (error) {
+            toast.error(getErrorMessage(error));
         }
     };
 

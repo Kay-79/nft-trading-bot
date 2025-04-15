@@ -3,7 +3,14 @@ import { wagmiConfig } from "@/app/wagmi";
 import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { AbiCoder, ethers } from "ethers";
-import { CHANGER, MP_ADDRESS, NORMAL_BUYER, PRO_BUYER, STAKING_ADDRESS, USDT_ADDRESS } from "@/constants/constants";
+import {
+    CHANGER,
+    MP_ADDRESS,
+    NORMAL_BUYER,
+    PRO_BUYER,
+    STAKING_ADDRESS,
+    USDT_ADDRESS
+} from "@/constants/constants";
 import { mpUtils } from "@/utilsV2/mp/utils";
 import { MomoType, StakingSelector } from "@/enum/enum";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
@@ -62,13 +69,13 @@ const getUserHash = async (address: string) => {
         throw new Error("wagmiConfig is null");
     }
     const abiCoder = new AbiCoder();
-        const encodedData = abiCoder.encode(["address"], [address]);
-        const data = StakingSelector.USER_HASH_RATE + encodedData.slice(2);
-        const result = await ethersProvider.call({
-            to: STAKING_ADDRESS,
-            data: data
-        });
-        return Number(result);
+    const encodedData = abiCoder.encode(["address"], [address]);
+    const data = StakingSelector.USER_HASH_RATE + encodedData.slice(2);
+    const result = await ethersProvider.call({
+        to: STAKING_ADDRESS,
+        data: data
+    });
+    return Number(result);
 };
 
 const changePrice = async (
@@ -154,7 +161,9 @@ const createAuctionBatch = async (
         throw new Error("You are not the changer of the listing! ");
     }
     const owner = bulkSellItems[0].inventory.owner;
-    const allSameOwner = bulkSellItems.every(item => item.inventory.owner === owner);
+    const allSameOwner = bulkSellItems.every(
+        item => item.inventory.owner?.toLocaleLowerCase() === owner?.toLocaleLowerCase()
+    );
     if (!allSameOwner) {
         throw new Error("All items must have the same owner");
     }

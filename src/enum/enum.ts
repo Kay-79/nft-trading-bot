@@ -74,7 +74,8 @@ export enum StakingSelector {
 export enum MpSelector {
     GET_SUGGEST_INDEX = "0xd28cc5f0",
     GET_LISTED_MOMOS = "0xcbbac767",
-    GET_ORDER = "0xedb25841"
+    GET_ORDER = "0xedb25841",
+    CREATE_AUCTION_BATCH = "0x4213cec7"
 }
 
 export enum MpBlockSelector {
@@ -94,7 +95,7 @@ export enum Momo721Selector {
     TOKENS_OF_OWNER_BY_INDEX = "0x2f745c59",
     TOKEN_BY_INDEX = "0x4f6ccce7",
     OWNER_OF = "0x6352211e",
-    GET_EQUIPMENT_MOMO = "0x205ead31",
+    GET_EQUIPMENT_MOMO = "0x205ead31"
 }
 
 export enum MintMomoSelector {

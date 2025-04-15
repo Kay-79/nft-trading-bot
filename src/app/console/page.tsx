@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useTheme } from "@/config/theme";
 import { contracts } from "@/config/config";
 import { erc20Contract } from "@/services/erc20Contract";
-import { shortenAddress } from "@/utils/shorten";
+import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import Link from "next/link";
 import { mpContractService } from "@/services/mpContract";
 
@@ -76,7 +76,7 @@ const Console = () => {
                                 textAlign: "left"
                             }}
                         >
-                            USDT Balance (${totalBalance})
+                            USDT Balance (${shortenNumber(totalBalance, 0, 2)})
                         </th>
                         <th
                             style={{

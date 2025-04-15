@@ -24,6 +24,7 @@ import SecondaryLoadingButton from "../Button/SecondaryLoadingButton";
 import { allContracts } from "@/config/config";
 import { ethers } from "ethers";
 import { getImgUrl } from "@/utils/image/getImgUrl";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -44,9 +45,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
     const [loadingPurchase, setLoadingPurchase] = useState<boolean>(false);
     const isMyListing = useMemo(() => {
-        if (
-            allContracts.includes(ethers.getAddress(listingData.auctor || ""))
-        ) {
+        if (allContracts.includes(ethers.getAddress(listingData.auctor || ""))) {
             return true;
         }
         return false;
@@ -63,8 +62,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             toast.success("Price adjusted successfully!");
             onClose();
         } catch {
-            handleError(error as Error);
-            toast.error("Failed to adjust price");
+            toast.error(getErrorMessage(error));
         } finally {
             setLoadingAdjust(false);
         }
@@ -85,8 +83,8 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             await mpContractService.cancelAuction(listingData, address);
             toast.success("Price cancel successfully!");
             onClose();
-        } catch {
-            toast.error("Failed to cancel listing");
+        } catch (error) {
+            toast.error(getErrorMessage(error));
         } finally {
             setLoadingDelist(false);
         }
@@ -109,12 +107,11 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             const predicted = response.data.prediction;
             setPredictedPrice(shortenNumber(predicted, 0, 3));
         } catch (error) {
-            handleError(error as Error);
-            toast.error("Prediction failed!");
+            toast.error(getErrorMessage(error));
         } finally {
             setLoadingPredict(false);
         }
-    }, [listingData, resetError, handleError]);
+    }, [listingData, resetError]);
 
     const handleOutsideClick = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.target === e.currentTarget) {
@@ -154,8 +151,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
             toast.success("Purchase successful!");
             onClose();
         } catch (error) {
-            handleError(error as Error);
-            toast.error("Failed to purchase");
+            toast.error(getErrorMessage(error));
         } finally {
             setLoadingPurchase(false);
         }

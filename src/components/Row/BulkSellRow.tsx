@@ -10,6 +10,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { shortenNumber } from "@/utils/shorten";
 import { getImgUrl } from "@/utils/image/getImgUrl";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 interface BulkSellRowProps {
     bulkSellItem: BulkItemListStorage;
@@ -46,8 +47,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
             setPrice(shortenNumber(response.data.prediction, 0, 3));
             handleUpdateBulkItem(amount, response.data.prediction);
         } catch (error) {
-            console.error(error);
-            toast.error("Prediction failed!");
+            toast.error(getErrorMessage(error));
         } finally {
             setLoadingPredict(false);
         }
