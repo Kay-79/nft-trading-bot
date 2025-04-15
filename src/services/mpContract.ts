@@ -3,7 +3,7 @@ import { wagmiConfig } from "@/app/wagmi";
 import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { ethers } from "ethers";
-import { CHANGER, MP_ADDRESS, PRO_BUYER, USDT_ADDRESS } from "@/constants/constants";
+import { CHANGER, MP_ADDRESS, NORMAL_BUYER, PRO_BUYER, USDT_ADDRESS } from "@/constants/constants";
 import { mpUtils } from "@/utilsV2/mp/utils";
 import { MomoType } from "@/enum/enum";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
@@ -12,9 +12,12 @@ import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { abiBid } from "@/abi/abiBid";
 import { abiERC20 } from "@/abi/abiERC20";
 
-const transferERC20 = async (from: string, to: string, amount: number) => {
+const transferERC20 = async (userAddress: string, from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
         throw new Error("wagmiConfig is null");
+    }
+    if (userAddress?.toLocaleLowerCase() !== NORMAL_BUYER.toLocaleLowerCase()) {
+        throw new Error("You are not the owner of this contract!");
     }
     if (!from || !to) {
         throw new Error("Invalid address");
@@ -34,15 +37,21 @@ const transferERC20 = async (from: string, to: string, amount: number) => {
         functionName: "balanceOf",
         args: [from]
     });
+    const balanceInEther = ethers.formatUnits(balance as bigint, 18);
+    const balanceAsNumber = parseFloat(balanceInEther);
+    if (balanceAsNumber < amount) {
+        throw new Error("Insufficient balance");
+    }
     const decimals = (await readContract(wagmiConfig, {
         abi: abiERC20,
         address: USDT_ADDRESS,
         functionName: "decimals"
     })) as number;
-    const amountInWei = ethers.parseUnits(amount.toString(), decimals.toString());
-    if (balance ?? 0 < amountInWei) {
-        throw new Error("Insufficient balance");
-    }
+    const amountInWei = ethers.parseUnits(amount.toFixed(3), decimals);
+    // console.log('all params', {
+    //     to,
+    //     amountInWei
+    // })
     return await writeContract(wagmiConfig, {
         abi: abiBid,
         address: from as `0x${string}`,

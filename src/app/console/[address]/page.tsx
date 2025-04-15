@@ -6,37 +6,29 @@ import { erc20Contract } from "@/services/erc20Contract";
 import { useParams } from "next/navigation";
 import { mpContractService } from "@/services/mpContract";
 import { toast } from "react-toastify";
-// import { mpContractService } from "@/services/mpContract";
+import { allContracts } from "@/config/config";
+import { useAccount } from "wagmi";
 
 /**
  * @description Detail page for a specific address
  * @returns {JSX.Element}
  */
-const AddressDetail = () => {
+const AddressDetail: React.FC = () => {
     const { theme } = useTheme();
     const params = useParams();
-    const address = params?.address; // Extract the address from the URL
+    const address = params?.address as string; // Explicitly cast to string
     const [balance, setBalance] = useState<number | null>(null);
-    // const [nftsOnSale, setNftsOnSale] = useState<number>(0);
-    // const [nftsOwned, setNftsOwned] = useState<number>(0);
     const [transferAmount, setTransferAmount] = useState<number>(0);
     const [transferTo, setTransferTo] = useState<string>("");
+    const { address: userAddress } = useAccount();
 
     useEffect(() => {
         const fetchDetails = async () => {
             if (address) {
                 try {
                     // Fetch USDT balance
-                    const fetchedBalance = await erc20Contract.getBalance(address as string);
+                    const fetchedBalance = await erc20Contract.getBalance(address);
                     setBalance(fetchedBalance);
-
-                    // // Fetch NFTs on sale (mocked for now)
-                    // const onSale = await mpContractService.getNftsOnSale(address as string);
-                    // setNftsOnSale(onSale);
-
-                    // // Fetch NFTs owned (mocked for now)
-                    // const owned = await mpContractService.getNftsOwned(address as string);
-                    // setNftsOwned(owned);
                 } catch (error) {
                     console.error("Error fetching details:", error);
                 }
@@ -50,17 +42,22 @@ const AddressDetail = () => {
         try {
             if (address && transferTo && transferAmount > 0) {
                 await mpContractService.transferERC20(
-                    address as string,
+                    userAddress as `0x${string}`,
+                    address,
                     transferTo,
                     transferAmount
                 );
                 toast.success("Transfer successful!");
-            }
-            else {
+            } else {
                 toast.error("Please fill in all fields correctly!");
             }
         } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : "Transfer failed!";
+            const errorMessage =
+                error instanceof Error
+                    ? error.message.length > 100
+                        ? "Transfer failed!"
+                        : error.message
+                    : "An unknown error occurred.";
             toast.error(errorMessage);
         }
     };
@@ -87,51 +84,69 @@ const AddressDetail = () => {
             <p>
                 <strong>USDT Balance:</strong> {balance !== null ? `$ ${balance}` : "Loading..."}
             </p>
-            {/* <p>
-                <strong>NFTs on Sale:</strong> {nftsOnSale}
-            </p>
-            <p>
-                <strong>NFTs Owned:</strong> {nftsOwned}
-            </p> */}
             <div style={{ marginTop: "20px" }}>
                 <h3>Transfer USDT</h3>
-                <input
-                    type="text"
-                    placeholder="Recipient Address"
+                <select
                     value={transferTo}
                     onChange={e => setTransferTo(e.target.value)}
                     style={{
                         padding: "10px",
                         marginRight: "10px",
                         border: `1px solid ${theme.primaryColor}`,
-                        borderRadius: "4px"
+                        borderRadius: "4px",
+                        color: "#000"
+                    }}
+                >
+                    <option value="" disabled>
+                        Select Recipient Address
+                    </option>
+                    {allContracts.map(contract => (
+                        <option key={contract} value={contract}>
+                            {contract}
+                        </option>
+                    ))}
+                </select>
+                <input
+                    type="text"
+                    placeholder="Or Enter Recipient Address"
+                    value={transferTo}
+                    onChange={e => setTransferTo(e.target.value)}
+                    style={{
+                        padding: "10px",
+                        marginRight: "10px",
+                        border: `1px solid ${theme.primaryColor}`,
+                        borderRadius: "4px",
+                        color: "#000"
                     }}
                 />
                 <input
                     type="number"
                     placeholder="Amount"
-                    value={transferAmount}
+                    value={transferAmount || (balance ?? 0) - 0.1}
                     onChange={e => setTransferAmount(Number(e.target.value))}
                     style={{
                         padding: "10px",
                         marginRight: "10px",
                         border: `1px solid ${theme.primaryColor}`,
-                        borderRadius: "4px"
+                        borderRadius: "4px",
+                        color: "#000"
                     }}
                 />
-                <button
-                    onClick={handleTransfer}
-                    style={{
-                        padding: "10px 20px",
-                        backgroundColor: theme.primaryButtonBackgroundColor,
-                        color: theme.primaryButtonTextColor,
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer"
-                    }}
-                >
-                    Transfer
-                </button>
+                {userAddress && (
+                    <button
+                        onClick={handleTransfer}
+                        style={{
+                            padding: "10px 20px",
+                            backgroundColor: theme.primaryButtonBackgroundColor,
+                            color: theme.primaryButtonTextColor,
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer"
+                        }}
+                    >
+                        Transfer
+                    </button>
+                )}
             </div>
             <button
                 onClick={() => window.history.back()}
