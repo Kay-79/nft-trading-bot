@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import Image from "next/image";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { getBackgroundColor } from "@/utils/colorUtils";
-import { shortenAddress, shortenNumber } from "@/utils/shorten";
+import { shortenNumber } from "@/utils/shorten";
 import PrimaryLoadingButton from "../Button/PrimaryLoadingButton";
 import { toast } from "react-toastify";
 import axios from "axios";
@@ -176,7 +176,12 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                         </div>
                     </div>
                     <div
-                        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                        style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            marginBottom: "50px"
+                        }}
                     >
                         <Image
                             src={getImgUrl(itemData.prototype || 0)}
@@ -186,9 +191,6 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                             priority
                         />
                     </div>
-                    <p className="text-center text-lg font-semibold" style={{ marginTop: "10px" }}>
-                        {shortenAddress(itemData.owner || "")}
-                    </p>
                     <div
                         style={{
                             position: "absolute",

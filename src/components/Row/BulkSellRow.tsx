@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import Image from "next/image";
 import { useTheme } from "@/config/theme";
-import { FaTrash, FaDollarSign } from "react-icons/fa"; 
+import { FaTrash, FaDollarSign } from "react-icons/fa";
 import { removeItemFromBulk, updateItemInBulk } from "@/store/actions/storageBulk";
 import { useDispatch } from "react-redux";
 import PrimaryLoadingIcon from "@/components/Button/PrimaryLoadingIcon";
@@ -83,7 +83,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                             handleUpdateBulkItem(newAmount, price);
                         }
                     }}
-                    onWheel={e => e.currentTarget.blur()} // Disable scroll wheel input change
+                    onWheel={e => e.currentTarget.blur()}
                     placeholder="Amount"
                     style={{
                         width: "100%",
@@ -91,8 +91,10 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                         borderRadius: "5px",
                         border: `1px solid ${theme.textColor}`,
                         backgroundColor: theme.backgroundColor,
-                        color: theme.textColor
+                        color: theme.textColor,
+                        cursor: (bulkSellItem.inventory.tokenId || 0) > 0 ? "not-allowed" : "text"
                     }}
+                    disabled={(bulkSellItem.inventory.tokenId || 0) > 0}
                 />
                 <input
                     type="text"

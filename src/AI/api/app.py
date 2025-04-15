@@ -10,7 +10,7 @@ model = joblib.load(model_path)
 scaler = joblib.load(scaler_path)
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS
+CORS(app)
 
 
 @app.route('/predict', methods=['POST'])
@@ -22,8 +22,7 @@ def predict():
         if len(input_data) != 11:
             return jsonify({"error": "Invalid input length"}), 400
         if input_data[2] not in [4, 5, 6]:
-            return jsonify({"error": "Invalid input value"}), 400
-        print(input_data)
+            return jsonify({"error": "Invalid tier"}), 400
         input_data = np.array(input_data).reshape(1, -1)
         input_data = scaler.transform(input_data)
         prediction = model.predict(input_data)
