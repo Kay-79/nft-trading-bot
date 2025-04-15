@@ -2,7 +2,6 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { InventoryDto } from "../types/dtos/Inventory.dto";
 import { Db } from "mongodb";
 import { isNormalAuction, isProAuction } from "@/utilsV2/find/utils";
-// import { MomoType } from "@/enum/enum";
 import { ChangeDto } from "@/types/worker/Change.dto";
 import { MomoType } from "@/enum/enum";
 import { AnalysisDto } from "@/types/dtos/Analysis.dto";

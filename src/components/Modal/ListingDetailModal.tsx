@@ -45,7 +45,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [loadingPurchase, setLoadingPurchase] = useState<boolean>(false);
     const isMyListing = useMemo(() => {
         if (
-            allContracts.includes(listingData.auctor || "") ||
             allContracts.includes(ethers.getAddress(listingData.auctor || ""))
         ) {
             return true;

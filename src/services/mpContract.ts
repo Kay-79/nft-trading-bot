@@ -1,30 +1,42 @@
 import { readContract, writeContract } from "@wagmi/core";
-import { abiERC20 } from "@/abi/abiERC20";
 import { wagmiConfig } from "@/app/wagmi";
 import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { ethers } from "ethers";
-import { CHANGER, MP_ADDRESS, PRO_BUYER } from "@/constants/constants";
+import { CHANGER, MP_ADDRESS, PRO_BUYER, USDT_ADDRESS } from "@/constants/constants";
 import { mpUtils } from "@/utilsV2/mp/utils";
 import { MomoType } from "@/enum/enum";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
-import { bidContract } from "@/config/config";
+import { allContracts, bidContract } from "@/config/config";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
+import { abiBid } from "@/abi/abiBid";
+import { abiERC20 } from "@/abi/abiERC20";
 
-const transfer = async (from: string, to: string, amount: number) => {
+const transferERC20 = async (from: string, to: string, amount: number) => {
     if (!wagmiConfig) {
         throw new Error("wagmiConfig is null");
     }
-    // check if the user has enough balance
+    if (!from || !to) {
+        throw new Error("Invalid address");
+    }
+    if (from.toLocaleLowerCase() === to.toLocaleLowerCase()) {
+        throw new Error("You can't transfer to yourself");
+    }
+    if (amount <= 0) {
+        throw new Error("Invalid amount");
+    }
+    if (!allContracts.includes(ethers.getAddress(to))) {
+        throw new Error("Invalid contract address");
+    }
     const balance = await readContract(wagmiConfig, {
         abi: abiERC20,
-        address: "0x190B955CE93deDACA9E3Dcc06BF19BF025B194C6",
+        address: USDT_ADDRESS,
         functionName: "balanceOf",
         args: [from]
     });
     const decimals = (await readContract(wagmiConfig, {
         abi: abiERC20,
-        address: "0x190B955CE93deDACA9E3Dcc06BF19BF025B194C6",
+        address: USDT_ADDRESS,
         functionName: "decimals"
     })) as number;
     const amountInWei = ethers.parseUnits(amount.toString(), decimals.toString());
@@ -32,10 +44,10 @@ const transfer = async (from: string, to: string, amount: number) => {
         throw new Error("Insufficient balance");
     }
     return await writeContract(wagmiConfig, {
-        abi: abiERC20,
-        address: "0x190B955CE93deDACA9E3Dcc06BF19BF025B194C6",
-        functionName: "transfer",
-        args: [to, amountInWei]
+        abi: abiBid,
+        address: from as `0x${string}`,
+        functionName: "transferERC20",
+        args: [USDT_ADDRESS, to, amountInWei]
     });
 };
 
@@ -184,7 +196,7 @@ const bidAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) 
 };
 
 export const mpContractService = {
-    transfer,
+    transferERC20,
     changePrice,
     cancelAuction,
     createAuction,

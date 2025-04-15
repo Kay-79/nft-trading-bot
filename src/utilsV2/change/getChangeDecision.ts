@@ -34,12 +34,7 @@ export const getChangeDecisionPro = async (
         console.log("Require minTimeListedMyAuctionToChange.pro");
         return { shouldChange: false, newPrice: 0 };
     }
-    if (
-        !(
-            contracts.includes(myAuction.auctor.toLowerCase()) ||
-            contracts.includes(ethers.getAddress(myAuction.auctor))
-        )
-    ) {
+    if (!contracts.includes(ethers.getAddress(myAuction.auctor))) {
         console.log("Not my myAuction");
         return { shouldChange: false, newPrice: 0 };
     }
@@ -84,12 +79,7 @@ export const getChangeDecisionNormal = async (
     ) {
         return { shouldChange: false, newPrice: 0 };
     }
-    if (
-        !(
-            contracts.includes(myAuction.auctor.toLowerCase()) ||
-            contracts.includes(ethers.getAddress(myAuction.auctor))
-        )
-    ) {
+    if (!contracts.includes(ethers.getAddress(myAuction.auctor))) {
         console.log("Not my myAuction");
         return { shouldChange: false, newPrice: 0 };
     }
@@ -110,7 +100,6 @@ export const getChangeDecisionNormal = async (
     if (
         Date.now() / 1000 - myAuction.uptime < minTimeListedMyAuctionToChange.normal ||
         Date.now() / 1000 - auctionLowestPrice.uptime < minTimeListedOtherAuctionToChange ||
-        contracts.includes(auctionLowestPrice.auctor.toLowerCase()) ||
         contracts.includes(ethers.getAddress(auctionLowestPrice.auctor))
     ) {
         console.log("Require minTimeListedMyAuctionToChange, Lowest price is from your contract");

@@ -5,10 +5,6 @@ import { USDT_ADDRESS } from "@/constants/constants";
 import { ethers } from "ethers";
 import { shortenNumber } from "@/utils/shorten";
 
-const transfer = async (from: string, to: string, amount: number) => {
-    console.log("Transfer function called with:", from, to, amount);
-};
-
 const getBalance = async (address: string): Promise<number> => {
     if (!wagmiConfig) {
         throw new Error("wagmiConfig is null");
@@ -20,10 +16,9 @@ const getBalance = async (address: string): Promise<number> => {
         functionName: "balanceOf",
         args: [address]
     });
-    return shortenNumber(Number(ethers.formatUnits(balance as ethers.BigNumberish, 18)), 0, 3);
+    return shortenNumber(Number(ethers.formatUnits(balance as ethers.BigNumberish, 18)), 0, 2);
 };
 
 export const erc20Contract = {
-    transfer,
     getBalance
 };

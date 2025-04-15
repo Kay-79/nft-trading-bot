@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import { useTheme } from "@/config/theme";
 import { contracts } from "@/config/config";
 import { erc20Contract } from "@/services/erc20Contract";
+import { shortenAddress } from "@/utils/shorten";
+import Link from "next/link";
 
 /**
  * @description
@@ -38,8 +40,8 @@ const Console = () => {
                 backgroundColor: theme.backgroundColor,
                 color: theme.textColor,
                 padding: "20px",
-                borderRadius: "8px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                minHeight: "100vh"
             }}
         >
             <h1 style={{ color: theme.primaryColor }}>USDT Balance Tracker</h1>
@@ -73,6 +75,16 @@ const Console = () => {
                         >
                             USDT Balance (${totalBalance})
                         </th>
+                        <th
+                            style={{
+                                backgroundColor: theme.primaryColor,
+                                color: theme.headerTextColor,
+                                padding: "8px",
+                                textAlign: "left"
+                            }}
+                        >
+                            Actions
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,7 +96,7 @@ const Console = () => {
                                     padding: "8px"
                                 }}
                             >
-                                {address}
+                                {shortenAddress(address)}
                             </td>
                             <td
                                 style={{
@@ -92,7 +104,24 @@ const Console = () => {
                                     padding: "8px"
                                 }}
                             >
-                                ${balance}
+                                $ {balance}
+                            </td>
+                            <td
+                                style={{
+                                    border: `1px solid ${theme.primaryColor}`,
+                                    padding: "8px"
+                                }}
+                            >
+                                <Link
+                                    href={`/console/${address}`}
+                                    style={{
+                                        color: theme.primaryColor,
+                                        textDecoration: "none",
+                                        fontWeight: "bold"
+                                    }}
+                                >
+                                    View Detail
+                                </Link>
                             </td>
                         </tr>
                     ))}
