@@ -4,7 +4,7 @@ import { ethersProvider } from "@/providers/ethersProvider";
 import { mpUtils } from "@/utilsV2/mp/utils";
 import { AbiCoder } from "ethers";
 
-const checkHideMomo = async () => {
+const checkHideMomo = async (addressCheck: string) => {
     const idsAll: number[] = [];
     for (let i = 1; i <= 3; i++) {
         for (let j = 1; j <= 4; j++) {
@@ -13,41 +13,34 @@ const checkHideMomo = async () => {
             }
         }
     }
-    const suggestIndex = await mpUtils.getNewIndex("0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F");
+    const suggestIndex = await mpUtils.getNewIndex(addressCheck);
     if (suggestIndex === 128) {
         console.log("Error: suggestIndex is null");
         return;
     }
+    console.log("suggestIndex: ", suggestIndex);
     for (let o = 0; o < idsAll.length; o++) {
-        const tokenId: number[] = [];
-        const ids = [idsAll[o]];
-        const prices721: number[] = ids.map(() => 0); // Ensure prices721 matches the length of ids
-        const prices1155 = ids.map(() => "1000000000000000000"); // Ensure prices1155 matches the length of ids
+        const tokenIds: number[] = [];
+        const ids = [idsAll[o].toString()];
+        const prices721s: number[] = [];
+        const prices1155s = [1000000000000000000n];
         const abiCoder = new AbiCoder();
         const encodedData = abiCoder.encode(
             ["uint256", "uint256[]", "uint256[]", "uint256[]", "uint256[]"],
-            [suggestIndex, tokenId, prices721, ids, prices1155]
+            [suggestIndex, tokenIds, prices721s, ids, prices1155s]
         );
         const data = MpSelector.CREATE_AUCTION_BATCH + encodedData.slice(2);
-        console.log(data);
-        const decodedResult = abiCoder.decode(
-            ["uint256", "uint256[]", "uint256[]", "uint256[]", "uint256[]"],
-            encodedData
-        );
-        console.log(decodedResult);
         try {
             const estimatedGas = await ethersProvider.estimateGas({
-                to: "0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F",
+                to: addressCheck,
                 from: CHANGER,
-                data: data,
-                gasLimit: (await ethersProvider.getBlock("latest"))?.gasLimit ?? "0"
+                data: data
             });
-            console.log(estimatedGas.toString());
-        } catch (error) {
-            console.log("Error: ", error);
-            console.log("Error: ", idsAll[o]);
+            console.log("ID:", idsAll[o], "estimatedGas:", estimatedGas.toString());
+        } catch {
+            console.error("EstimateGas failed for ID:", idsAll[o]);
         }
     }
 };
 
-checkHideMomo();
+checkHideMomo("0xE4534fA363016b1BD1E95C20144361cFB7c2d3aC");
