@@ -1,6 +1,7 @@
 import { CHANGER } from "@/constants/constants";
 import { MpSelector } from "@/enum/enum";
 import { ethersProvider } from "@/providers/ethersProvider";
+import { mpUtils } from "@/utilsV2/mp/utils";
 import { AbiCoder } from "ethers";
 
 const checkHideMomo = async () => {
@@ -12,8 +13,12 @@ const checkHideMomo = async () => {
             }
         }
     }
+    const suggestIndex = await mpUtils.getNewIndex("0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F");
+    if (suggestIndex === 128) {
+        console.log("Error: suggestIndex is null");
+        return;
+    }
     for (let o = 0; o < idsAll.length; o++) {
-        const suggestIndex = 127;
         const tokenId: number[] = [];
         const ids = [idsAll[o]];
         const prices721: number[] = ids.map(() => 0); // Ensure prices721 matches the length of ids
