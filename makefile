@@ -24,14 +24,11 @@ bot:
 	make bid
 	make find
 	make change
-	make apiMomo
 
 all:
-	make modelAIPi
 	make bid
 	make find
 	make change
-	make apiMomo
 
 killAll:
 	kill -9 $(shell ps aux | grep bun | grep -v grep | awk '{print $$2}')

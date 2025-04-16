@@ -9,6 +9,7 @@ import {
     isNormalAuction
 } from "./utils";
 import { BidType } from "@/enum/enum";
+import { modeBot } from "@/config/config";
 
 export const checkProfitAuctions = async (
     auctions: AuctionDto[],
@@ -40,14 +41,18 @@ export const checkProfitAuctions = async (
             BidType.NORMAL
         ))
     );
-    profitableBidAuctions.push(
-        ...(await getProfitableBidAuctionsNormalVsPro(
-            proAuctions,
-            floorPrices,
-            bnbPrice,
-            BidType.PRO
-        ))
-    );
+
+    if (modeBot.auction?.pro) {
+        profitableBidAuctions.push(
+            ...(await getProfitableBidAuctionsNormalVsPro(
+                proAuctions,
+                floorPrices,
+                bnbPrice,
+                BidType.PRO
+            ))
+        );
+    }
+
     profitableBidAuctions.push(
         ...getProfitableBidAuctionsBundle(bundleAuctions, floorPrices, bnbPrice)
     );

@@ -24,6 +24,7 @@ def predict():
         if input_data[2] not in [4, 5, 6]:
             return jsonify({"error": "Invalid tier"}), 400
         input_data = np.array(input_data).reshape(1, -1)
+        print(input_data)
         input_data = scaler.transform(input_data)
         prediction = model.predict(input_data)
         return jsonify({"prediction": prediction.tolist()})

@@ -7,12 +7,12 @@ import { ethers } from "ethers";
 export const modeBot: ModeBot = {
     auction: {
         normal: true,
-        pro: true,
+        pro: false,
         bundle: true
     },
     auctionGroup: {
-        bep721: true,
-        crew: true
+        bep721: false,
+        crew: false
     },
     box: false,
     mecBox: false,
