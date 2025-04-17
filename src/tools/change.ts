@@ -38,9 +38,7 @@ const change = async () => {
         isFrontRunPro,
         isFrontRunProHash,
         floorPrices,
-        timeLastSetup,
-        mboxPrice,
-        rewardPer1000Hash
+        timeLastSetup
     } = initSetup;
     let hasNotified = false;
     while (true) {
@@ -75,7 +73,7 @@ const change = async () => {
                 !isFrontRunPro ||
                 !isFrontRunProHash ||
                 !floorPrices ||
-                !timeLastSetup 
+                !timeLastSetup
             ) {
                 console.log("Setup failed, waiting for next loop...");
                 continue;
