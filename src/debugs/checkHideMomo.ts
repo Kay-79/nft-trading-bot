@@ -18,7 +18,6 @@ const checkHideMomo = async (addressCheck: string) => {
         console.log("Error: suggestIndex is null");
         return;
     }
-    console.log("suggestIndex: ", suggestIndex);
     for (let o = 0; o < idsAll.length; o++) {
         const tokenIds: number[] = [];
         const ids = [idsAll[o].toString()];
@@ -43,4 +42,4 @@ const checkHideMomo = async (addressCheck: string) => {
     }
 };
 
-checkHideMomo("0xE4534fA363016b1BD1E95C20144361cFB7c2d3aC");
+checkHideMomo("0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F");

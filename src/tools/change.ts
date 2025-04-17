@@ -5,8 +5,8 @@ import { noticeBotChange } from "@/utilsV2/bid/handleNoticeBot";
 import {
     CACHE_BNB_PRICE,
     CACHE_TIER_PRICE,
-    CACHE_MBOX_PRICE,
-    CACHE_REWARD_PER_1000_HASH,
+    // CACHE_MBOX_PRICE,
+    // CACHE_REWARD_PER_1000_HASH,
     ENV,
     TIME_DELAY_NOTICE_STATUS_BOT,
     TIME_DELAY_SETUP_CHANGE
@@ -31,12 +31,7 @@ import { modeChange } from "@/config/changeConfig";
 const change = async () => {
     console.log("Starting change...", ENV);
     let latestNotice = new Date().getHours() - TIME_DELAY_NOTICE_STATUS_BOT;
-    let initSetup: SetupBot = await setup(
-        CACHE_BNB_PRICE,
-        CACHE_TIER_PRICE,
-        CACHE_MBOX_PRICE,
-        CACHE_REWARD_PER_1000_HASH
-    );
+    let initSetup: SetupBot = await setup(CACHE_BNB_PRICE, CACHE_TIER_PRICE);
     let {
         bnbPrice,
         isFrontRunNormal,
@@ -62,8 +57,8 @@ const change = async () => {
                 hasNotified = false;
             }
             if (timeLastSetup && Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_CHANGE) {
-                if (bnbPrice && floorPrices && mboxPrice && rewardPer1000Hash) {
-                    initSetup = await setup(bnbPrice, floorPrices, mboxPrice, rewardPer1000Hash);
+                if (bnbPrice && floorPrices) {
+                    initSetup = await setup(bnbPrice, floorPrices);
                 }
                 ({
                     bnbPrice,

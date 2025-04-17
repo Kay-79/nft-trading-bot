@@ -8,8 +8,8 @@ import { updateWaitBid } from "../utilsV2/find/utils";
 import {
     CACHE_BNB_PRICE,
     CACHE_TIER_PRICE,
-    CACHE_MBOX_PRICE,
-    CACHE_REWARD_PER_1000_HASH,
+    // CACHE_MBOX_PRICE,
+    // CACHE_REWARD_PER_1000_HASH,
     ENV,
     TIME_DELAY_NOTICE_STATUS_BOT,
     TIME_DELAY_SETUP_FIND
@@ -42,21 +42,14 @@ const find = async () => {
         mecBox: [],
         gem: []
     };
-    let initSetup: SetupBot = await setup(
-        CACHE_BNB_PRICE,
-        CACHE_TIER_PRICE,
-        CACHE_MBOX_PRICE,
-        CACHE_REWARD_PER_1000_HASH
-    );
+    let initSetup: SetupBot = await setup(CACHE_BNB_PRICE, CACHE_TIER_PRICE);
     let {
         bnbPrice,
         isFrontRunNormal,
         isFrontRunPro,
         isFrontRunProHash,
         floorPrices,
-        timeLastSetup,
-        mboxPrice,
-        rewardPer1000Hash
+        timeLastSetup
     } = initSetup;
     console.log(`ModeBot: ${JSON.stringify(modeBot)}`);
     while (true) {
@@ -67,9 +60,7 @@ const find = async () => {
             !isFrontRunPro ||
             !isFrontRunProHash ||
             !floorPrices ||
-            !timeLastSetup ||
-            !mboxPrice ||
-            !rewardPer1000Hash
+            !timeLastSetup
         )
             continue;
         const now = new Date();
@@ -145,16 +136,14 @@ const find = async () => {
         }
         //===========================SETUP===========================
         if (Date.now() / 1000 - timeLastSetup > TIME_DELAY_SETUP_FIND) {
-            initSetup = await setup(bnbPrice, floorPrices, mboxPrice, rewardPer1000Hash);
+            initSetup = await setup(bnbPrice, floorPrices);
             ({
                 bnbPrice,
                 isFrontRunNormal,
                 isFrontRunPro,
                 isFrontRunProHash,
                 floorPrices,
-                timeLastSetup,
-                mboxPrice,
-                rewardPer1000Hash
+                timeLastSetup
             } = initSetup);
         }
         await ranSleep(15, 30);

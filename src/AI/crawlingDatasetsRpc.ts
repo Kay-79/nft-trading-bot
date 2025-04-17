@@ -1,17 +1,17 @@
 import {
-    CACHE_MBOX_PRICE,
-    CACHE_REWARD_PER_1000_HASH,
+    // CACHE_MBOX_PRICE,
+    // CACHE_REWARD_PER_1000_HASH,
     ENV,
     MP_ADDRESS,
     TOPIC_BID
 } from "@/constants/constants";
 import { fullNodeProvider } from "@/providers/fullNodeProvider";
-import { byte32ToAddress, shortenNumber } from "@/utilsV2/common/utils";
+import { byte32ToAddress /* shortenNumber */ } from "@/utilsV2/common/utils";
 import { AbiCoder } from "ethers";
 import { momo721 } from "@/utilsV2/momo721/utils";
 import { Environment } from "@/enum/enum";
-import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
-import { stakingUtils } from "@/utilsV2/staking/utils";
+// import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
+// import { stakingUtils } from "@/utilsV2/staking/utils";
 import { sleep } from "@/utilsV2/common/sleep";
 import { ethersProvider } from "@/providers/ethersProvider";
 import { closeMongoConnection, connectMongo } from "@/utils/connectMongo";
@@ -35,8 +35,8 @@ export const crawlingDatasetsRpc = async () => {
     let startBlock = synced.blockAI + 1;
     console.log(`Start from block ${startBlock} to block ${endBlock}`);
     const step = 2000;
-    let cacheMboxPrice = CACHE_MBOX_PRICE;
-    let cacheRewardPer1000Hash = CACHE_REWARD_PER_1000_HASH;
+    // let cacheMboxPrice = CACHE_MBOX_PRICE;
+    // let cacheRewardPer1000Hash = CACHE_REWARD_PER_1000_HASH;
     while (startBlock < endBlock) {
         let datasets = "";
         const toBlock = startBlock + step;
@@ -47,8 +47,8 @@ export const crawlingDatasetsRpc = async () => {
         };
         const logs = await fullNodeProvider.getLogs(filter);
         await sleep(1.5);
-        let rewardPer1000Hashrate = "";
-        let mboxPriceHistory = "";
+        // let rewardPer1000Hashrate = "";
+        // let mboxPriceHistory = "";
         for (const log of logs) {
             if (log.topics[0] !== TOPIC_BID) continue;
             const decodedResult = abiCoder.decode(
@@ -65,27 +65,27 @@ export const crawlingDatasetsRpc = async () => {
                 Number(decodedResult[2]).toString(),
                 log.blockNumber
             );
-            if (mboxPriceHistory === "") {
-                mboxPriceHistory = shortenNumber(
-                    await getPriceMboxOnChain(log.blockNumber, cacheMboxPrice),
-                    0,
-                    4
-                );
-                cacheMboxPrice = Number(mboxPriceHistory);
-            }
-            await sleep(1.5);
-            if (rewardPer1000Hashrate === "") {
-                await sleep(1.5);
-                rewardPer1000Hashrate = shortenNumber(
-                    await stakingUtils.getRewardPer1000Hashrate(
-                        log.blockNumber,
-                        cacheRewardPer1000Hash
-                    ),
-                    0,
-                    4
-                );
-                cacheRewardPer1000Hash = Number(rewardPer1000Hashrate);
-            }
+            // if (mboxPriceHistory === "") {
+            //     mboxPriceHistory = shortenNumber(
+            //         await getPriceMboxOnChain(log.blockNumber, cacheMboxPrice),
+            //         0,
+            //         4
+            //     );
+            //     cacheMboxPrice = Number(mboxPriceHistory);
+            // }
+            // await sleep(1.5);
+            // if (rewardPer1000Hashrate === "") {
+            //     await sleep(1.5);
+            //     rewardPer1000Hashrate = shortenNumber(
+            //         await stakingUtils.getRewardPer1000Hashrate(
+            //             log.blockNumber,
+            //             cacheRewardPer1000Hash
+            //         ),
+            //         0,
+            //         4
+            //     );
+            //     cacheRewardPer1000Hash = Number(rewardPer1000Hashrate);
+            // }
             await sleep(1.5);
             if (momo721InforHistory.hashrate === 0n || momo721InforHistory.prototype === 6n)
                 continue;
@@ -106,7 +106,7 @@ export const crawlingDatasetsRpc = async () => {
                     Number(momo721InforHistory.level ?? 0)
                 ],
                 momoEquipment: momoEquipmentHistory,
-                priceVsReward: [Number(mboxPriceHistory), Number(rewardPer1000Hashrate)],
+                // priceVsReward: [Number(mboxPriceHistory), Number(rewardPer1000Hashrate)],
                 output: [bidPrice],
                 bidTime: timestamp,
                 listTime: Number(decodedResult[5]),

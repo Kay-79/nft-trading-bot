@@ -89,6 +89,7 @@ export const getMboxPriceAndRewardDelay1Hour = async (): Promise<{
     mboxPrice: number;
     reward: number;
 }> => {
+    console.log("getMboxPriceAndRewardDelay1Hour");
     let cache;
     if (fs.existsSync("./src/AI/predict/cache.json")) {
         cache = fs.readFileSync("./src/AI/predict/cache.json", "utf-8");
@@ -199,11 +200,11 @@ export async function buildInputVector({
     level: number;
     tokenId: string | number;
 }): Promise<number[]> {
-    const cache = await getMboxPriceAndRewardDelay1Hour();
+    // const cache = await getMboxPriceAndRewardDelay1Hour();
     const momoInfo = [hashrate, lvHashrate, Math.floor(prototype / 10 ** 4), level];
     const momoEquipment = await momo721.getEquipmentMomo(tokenId.toString());
-    const mboxPrice = cache.mboxPrice;
-    const reward = cache.reward;
+    // const mboxPrice = cache.mboxPrice;
+    // const reward = cache.reward;
     const timestamp = Math.floor(Date.now() / 1000);
-    return [...momoInfo, ...momoEquipment, mboxPrice, reward, timestamp];
+    return [...momoInfo, ...momoEquipment, timestamp];
 }

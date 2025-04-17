@@ -31,10 +31,9 @@ for d in data:
     try:
         momo_info = d.get("momoInfo", [])
         momo_equipment = d.get("momoEquipment", [])
-        price_vs_reward = d.get("priceVsReward", [])
         bid_time = d.get("bidTime", 0)
 
-        features = momo_info + momo_equipment + price_vs_reward + [bid_time]
+        features = momo_info + momo_equipment + [bid_time]
         features = [float(f) for f in features]
 
         X.append(features)

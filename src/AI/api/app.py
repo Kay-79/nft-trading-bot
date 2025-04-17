@@ -19,7 +19,7 @@ def predict():
         input_data = request.json.get('input')
         if not input_data:
             return jsonify({"error": "Invalid input"}), 400
-        if len(input_data) != 11:
+        if len(input_data) != 9:
             return jsonify({"error": "Invalid input length"}), 400
         if input_data[2] not in [4, 5, 6]:
             return jsonify({"error": "Invalid tier"}), 400
