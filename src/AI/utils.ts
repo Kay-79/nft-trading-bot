@@ -1,19 +1,19 @@
 import {
     API_AI_PRICE_PREDICT,
-    API_MOBOX,
-    CACHE_MBOX_PRICE,
-    CACHE_REWARD_PER_1000_HASH
+    API_MOBOX
+    // CACHE_MBOX_PRICE,
+    // CACHE_REWARD_PER_1000_HASH
 } from "../constants/constants";
 import axios from "axios";
 import { newbieAuctors, newbieBidders, proBidders } from "@/config/config";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
 import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
-import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
-import { stakingUtils } from "@/utilsV2/staking/utils";
-import fs from "fs";
+// import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
+// import { stakingUtils } from "@/utilsV2/staking/utils";
+// import fs from "fs";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
-import { CachePriceReward } from "@/types/AI/CachePriceReward";
+// import { CachePriceReward } from "@/types/AI/CachePriceReward";
 import { momo721 } from "@/utilsV2/momo721/utils";
 
 export const getTrainingData = async (): Promise<TrainingData[]> => {
@@ -85,31 +85,30 @@ export const predictModelOne = async (inputOne: number[]) => {
     }
 };
 
-export const getMboxPriceAndRewardDelay1Hour = async (): Promise<{
-    mboxPrice: number;
-    reward: number;
-}> => {
-    console.log("getMboxPriceAndRewardDelay1Hour");
-    let cache;
-    if (fs.existsSync("./src/AI/predict/cache.json")) {
-        cache = fs.readFileSync("./src/AI/predict/cache.json", "utf-8");
-    } else {
-        const newCache: CachePriceReward = { mboxPrice: 0, reward: 0, timestamp: 0 };
-        cache = JSON.stringify(newCache);
-    }
-    const cacheJson = JSON.parse(cache);
-    const timestamp = cacheJson.timestamp;
-    if (Date.now() / 1000 - timestamp > 60 * 60) {
-        const mboxPrice = await getPriceMboxOnChain(-1, CACHE_MBOX_PRICE);
-        const reward = await stakingUtils.getRewardPer1000Hashrate(-1, CACHE_REWARD_PER_1000_HASH);
-        fs.writeFileSync(
-            "./src/AI/predict/cache.json",
-            JSON.stringify({ mboxPrice, reward, timestamp: Date.now() / 1000 })
-        );
-        return { mboxPrice, reward };
-    }
-    return { mboxPrice: cacheJson.mboxPrice, reward: cacheJson.reward };
-};
+// export const getMboxPriceAndRewardDelay1Hour = async (): Promise<{
+//     mboxPrice: number;
+//     reward: number;
+// }> => {
+//     let cache;
+//     if (fs.existsSync("./src/AI/predict/cache.json")) {
+//         cache = fs.readFileSync("./src/AI/predict/cache.json", "utf-8");
+//     } else {
+//         const newCache: CachePriceReward = { mboxPrice: 0, reward: 0, timestamp: 0 };
+//         cache = JSON.stringify(newCache);
+//     }
+//     const cacheJson = JSON.parse(cache);
+//     const timestamp = cacheJson.timestamp;
+//     if (Date.now() / 1000 - timestamp > 60 * 60) {
+//         const mboxPrice = await getPriceMboxOnChain(-1, CACHE_MBOX_PRICE);
+//         const reward = await stakingUtils.getRewardPer1000Hashrate(-1, CACHE_REWARD_PER_1000_HASH);
+//         fs.writeFileSync(
+//             "./src/AI/predict/cache.json",
+//             JSON.stringify({ mboxPrice, reward, timestamp: Date.now() / 1000 })
+//         );
+//         return { mboxPrice, reward };
+//     }
+//     return { mboxPrice: cacheJson.mboxPrice, reward: cacheJson.reward };
+// };
 
 export const preprocessListingsData = (listingsPro: AuctionDto[]): TrainingData[] => {
     if (!listingsPro || listingsPro.length === 0) return [];
@@ -200,7 +199,6 @@ export async function buildInputVector({
     level: number;
     tokenId: string | number;
 }): Promise<number[]> {
-    // const cache = await getMboxPriceAndRewardDelay1Hour();
     const momoInfo = [hashrate, lvHashrate, Math.floor(prototype / 10 ** 4), level];
     const momoEquipment = await momo721.getEquipmentMomo(tokenId.toString());
     // const mboxPrice = cache.mboxPrice;
