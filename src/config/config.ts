@@ -80,7 +80,8 @@ export const contracts: string[] = [
 
 export const allContracts: string[] = [
     ...contracts,
-    ethers.getAddress("0x0e9bc747335a4b01a6194a6c1bb1de54a0a5355c")
+    ethers.getAddress("0x0e9bc747335a4b01a6194a6c1bb1de54a0a5355c"),
+    ethers.getAddress("0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000")
 ];
 
 export const proBidders: string[] = [

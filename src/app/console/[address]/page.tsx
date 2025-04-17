@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { allContracts } from "@/config/config";
 import { useAccount } from "wagmi";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import PrimaryLoadingButton from "@/components/Button/PrimaryLoadingButton";
 
 /**
  * @description Detail page for a specific address
@@ -22,6 +23,7 @@ const AddressDetail: React.FC = () => {
     const [transferAmount, setTransferAmount] = useState<number>(0);
     const [transferTo, setTransferTo] = useState<string>("");
     const { address: userAddress } = useAccount();
+    const [loadingTransfer, setLoadingTransfer] = useState(false);
 
     useEffect(() => {
         const fetchDetails = async () => {
@@ -40,6 +42,7 @@ const AddressDetail: React.FC = () => {
     }, [address]);
 
     const handleTransfer = async () => {
+        setLoadingTransfer(true);
         try {
             if (address && transferTo && transferAmount > 0) {
                 await mpContractService.transferERC20(
@@ -55,6 +58,7 @@ const AddressDetail: React.FC = () => {
         } catch (error) {
             toast.error(getErrorMessage(error));
         }
+        setLoadingTransfer(false);
     };
 
     if (!address) {
@@ -128,19 +132,9 @@ const AddressDetail: React.FC = () => {
                     }}
                 />
                 {userAddress && (
-                    <button
-                        onClick={handleTransfer}
-                        style={{
-                            padding: "10px 20px",
-                            backgroundColor: theme.primaryButtonBackgroundColor,
-                            color: theme.primaryButtonTextColor,
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer"
-                        }}
-                    >
+                    <PrimaryLoadingButton onClick={handleTransfer} loading={loadingTransfer}>
                         Transfer
-                    </button>
+                    </PrimaryLoadingButton>
                 )}
             </div>
             <button

@@ -18,6 +18,11 @@ const Inventory: React.FC<InventoryProps> = ({ inventories, listings }) => {
         0
     );
 
+    const totalHashes = inventories.reduce(
+        (sum, inventory) => sum + Math.floor(inventory.prototype / 10000) * (inventory.amount || 0),
+        0
+    );
+
     const isListingOfItem = (item: InventoryDto): boolean => {
         return listings.some(listing => listing.prototype === item.prototype);
     };
@@ -36,6 +41,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventories, listings }) => {
         <div>
             <div style={{ textAlign: "right", marginBottom: "20px" }}>
                 <p style={{ margin: 0 }}>Total Momos: {totalInventories}</p>
+                <p style={{ margin: 0 }}>Total hashes: {totalHashes}</p>
             </div>
             <div
                 style={{

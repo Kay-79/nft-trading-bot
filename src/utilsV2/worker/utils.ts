@@ -78,8 +78,8 @@ export const logBidToInventory = (
                 category: 1,
                 level: 1,
                 specialty: 1,
-                hashrate: 1,
-                lvHashrate: 1
+                hashrate: 999,
+                lvHashrate: 9999
             });
         }
         analysisPro = {
@@ -106,8 +106,8 @@ export const logBidToInventory = (
                 category: 1,
                 level: 1,
                 specialty: 1,
-                hashrate: 1,
-                lvHashrate: 1
+                hashrate: Math.floor(ids[i] / 10000),
+                lvHashrate: Math.floor(ids[i] / 10000)
             });
             countBid += Number(amounts[i]);
         }
