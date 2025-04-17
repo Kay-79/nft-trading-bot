@@ -1,18 +1,26 @@
 import { NextResponse } from "next/server";
-import { AuctionDto } from "@/types/dtos/Auction.dto";
+import axios from "axios";
+import { API_MOBOX } from "@/constants/constants";
 
-export async function GET() {
-    const markets: AuctionDto[] = [];
-    const fetchPromises = [0].map(() =>
-        fetch(
-            `https://nftapi.mobox.io/auction/search_v2/BNB?page=1&limit=30&category=&vType=&sort=-time&pType=`
-        )
-            .then(response => response.json())
-            .then(data => {
-                markets.push(...data.list);
-            })
-    );
-
-    await Promise.all(fetchPromises);
-    return NextResponse.json(markets);
+export async function GET(request: Request) {
+    try {
+        const { searchParams } = new URL(request.url);
+        const page = searchParams.get("page") || "1";
+        const limit = searchParams.get("limit") || "6";
+        const category = searchParams.get("category") || "";
+        const vType = searchParams.get("vType") || "";
+        const sort = searchParams.get("sort") || "-time";
+        const pType = searchParams.get("pType") || "";
+        const params = { page, limit, category, vType, sort, pType };
+        console.log("params", params);
+        const markets = await axios.get(`${API_MOBOX}/auction/search_v2/BNB`, { params });
+        const data = markets.data.list;
+        return NextResponse.json(data);
+    } catch (error) {
+        console.error("Error fetching markets:", error);
+        return NextResponse.json(
+            { error: "An error occurred while processing your request." },
+            { status: 500 }
+        );
+    }
 }

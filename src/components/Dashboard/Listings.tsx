@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import ListingCard from "@/components/Card/ListingCard";
 import { shortenNumber } from "@/utils/shorten";
+import Pagination from "../Pagination/Pagination";
 
 interface ListingsProps {
     listings: AuctionDto[];
@@ -15,6 +16,13 @@ const Listings: React.FC<ListingsProps> = ({ listings }) => {
         3
     );
     const totalListings = validListings.length;
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 12;
+    const totalPages = Math.ceil(validListings.length / itemsPerPage);
+    const paginatedListings = validListings.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     return (
         <div>
@@ -31,7 +39,7 @@ const Listings: React.FC<ListingsProps> = ({ listings }) => {
                     justifyContent: "center"
                 }}
             >
-                {validListings.map(listing => (
+                {paginatedListings.map(listing => (
                     <ListingCard key={listing.id} listing={listing} />
                 ))}
                 <style jsx>{`
@@ -43,6 +51,11 @@ const Listings: React.FC<ListingsProps> = ({ listings }) => {
                     }
                 `}</style>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
         </div>
     );
 };

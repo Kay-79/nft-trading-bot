@@ -1,26 +1,41 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import ListingCard from "@/components/Card/ListingCard";
-import { shortenNumber } from "@/utils/shorten";
+import Pagination from "@/components/Pagination/Pagination";
+import axios from "axios";
 
 interface ListingsProps {
     markets: AuctionDto[];
 }
 
 const Markets: React.FC<ListingsProps> = ({ markets }) => {
-    const totalPrice = shortenNumber(
-        markets.reduce((sum, listing) => sum + (listing.nowPrice || 0), 0),
-        9,
-        3
-    );
-    const totalListings = markets.length;
+    const [currentPage, setCurrentPage] = useState(1);
+    const totalPages = Math.ceil(markets.length / 6) + 10;
+    const [paginatedMarkets, setPaginatedMarkets] = useState<AuctionDto[]>([]);
 
+    useEffect(() => {
+        const fetchMarkets = async () => {
+            try {
+                const response = await axios.get(`/api/markets`, {
+                    params: {
+                        page: currentPage,
+                        limit: 12,
+                        category: "",
+                        vType: "",
+                        sort: "",
+                        pType: ""
+                    }
+                });
+                setPaginatedMarkets(response.data);
+            } catch (error) {
+                console.error("Error fetching markets:", error);
+            }
+        };
+
+        fetchMarkets();
+    }, [currentPage]);
     return (
         <div>
-            <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                <p style={{ margin: 0 }}>Total Price: {totalPrice.toFixed(2)} USDT</p>
-                <p style={{ margin: 0 }}>Total Markets: {totalListings}</p>
-            </div>
             <div
                 style={{
                     display: "flex",
@@ -30,7 +45,7 @@ const Markets: React.FC<ListingsProps> = ({ markets }) => {
                     justifyContent: "center"
                 }}
             >
-                {markets.map(listing => (
+                {paginatedMarkets.map(listing => (
                     <ListingCard key={listing.id} listing={listing} />
                 ))}
                 <style jsx>{`
@@ -42,6 +57,11 @@ const Markets: React.FC<ListingsProps> = ({ markets }) => {
                     }
                 `}</style>
             </div>
+            <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={setCurrentPage}
+            />
         </div>
     );
 };

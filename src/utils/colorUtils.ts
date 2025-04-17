@@ -12,8 +12,8 @@ export const getBackgroundColor = (prototype: number): string => {
         case "5":
             return "#5F4E12";
         case "6":
-            return "bg-pink-500";
+            return "#661919";
         default:
-            return "bg-gray-500";
+            return "black";
     }
 };
