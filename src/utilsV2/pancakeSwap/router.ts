@@ -1,44 +1,49 @@
-import { MBOX_ADDRESS, USDT_ADDRESS } from "@/constants/constants";
-import { archiveProvider } from "@/providers/archiveProvider";
+import { USDT_ADDRESS, WBNB_ADDRESS } from "@/constants/constants";
 import { ethersProvider } from "@/providers/ethersProvider";
 import { AbiCoder, ethers } from "ethers";
 
 const abiCoder = new AbiCoder();
+
 /**
- * Get price of MBOX in USDT on chain
- * @param block
- * if block > 0, get price at block
- * if block <= 0, get price at latest block
- * @returns price of MBOX in USDT
+ * @description Get the price of token on-chain using the PancakeSwap router
+ * @param tokenAddress The address of the token to get the price for
+ * @param routerAddress The address of the PancakeSwap router
+ * @returns The price of the token in USDT
+ * @throws {Error} If the token address is invalid or if the call fails
  */
-export const getPriceMboxOnChain = async (
-    block: number,
-    cacheMboxPrice: number
+export const getPriceOnChain = async (
+    tokenAddress: string,
+    routerAddress: string
 ): Promise<number> => {
-    const amountIn = ethers.parseUnits("1", 18);
-    const encodedData = abiCoder.encode(
-        ["uint256", "address[]"],
-        [amountIn, [MBOX_ADDRESS, USDT_ADDRESS]]
-    );
-    const data = "0xd06ca61f" + encodedData.slice(2);
-    let result = "";
-    if (block > 0) {
-        result = await archiveProvider.call({
-            to: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
-            data: data,
-            blockTag: block
-        });
-    } else {
+    const decimalsToken = 18;
+    const amountIn = ethers.parseUnits("1", decimalsToken);
+
+    const fetchPrice = async (path: string[]): Promise<number> => {
+        const encodedData = abiCoder.encode(["uint256", "address[]"], [amountIn, path]);
+        const data = "0xd06ca61f" + encodedData.slice(2); // 0xd06ca61f is the function selector for getAmountsOut
         try {
-            result = await ethersProvider.call({
-                to: "0x10ed43c718714eb63d5aa57b78b54704e256024e",
+            const result = await ethersProvider.call({
+                to: routerAddress,
                 data: data
             });
-        } catch (error) {
-            console.log("error getPriceMboxOnChain", error);
-            return cacheMboxPrice;
+            const decodedResult = abiCoder.decode(["uint256[]"], result);
+            const price = Number(decodedResult[0][path.length - 1]) / 10 ** 18; // 18 decimals for USDT
+            if (price > 0) {
+                return price;
+            } else {
+                throw new Error("Price is zero or negative");
+            }
+        } catch {
+            return NaN;
         }
+    };
+
+    for (const path of [
+        [tokenAddress, USDT_ADDRESS],
+        [tokenAddress, WBNB_ADDRESS, USDT_ADDRESS]
+    ]) {
+        const price = await fetchPrice(path);
+        if (!isNaN(price)) return price;
     }
-    const decodedResult = abiCoder.decode(["uint256[]"], result);
-    return Number(decodedResult[0][1]) / 10 ** 18;
+    return NaN;
 };
