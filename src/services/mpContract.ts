@@ -140,7 +140,7 @@ const createAuction = async (
         prices1155.push(price);
     }
     if (tokenIds.length === 0 && ids.length === 0) {
-        throw new Error("No items to sell");
+        throw new Error(`No items to create auction`);
     }
     return await writeContract(wagmiConfig, {
         abi: abiMp,
@@ -191,7 +191,11 @@ const createAuctionBatch = async (
         prices1155.length === 0 &&
         prices721.length === 0
     ) {
-        throw new Error("No items to sell");
+        console.log(`tokenIds`, tokenIds);
+        console.log(`ids`, ids);
+        console.log(`prices1155`, prices1155);
+        console.log(`prices721`, prices721);
+        throw new Error(`No items to sell`);
     }
     if (tokenIds.length > 6 && ids.length > 6 && prices1155.length > 6 && prices721.length > 6) {
         throw new Error("You can't sell more than 5 items at once");

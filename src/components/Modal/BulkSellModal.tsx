@@ -82,7 +82,13 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
             tokenId: 0,
             amount: 1,
             owner: "0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F",
-            prototype: 13019
+            prototype: 13019,
+            quality: 0,
+            category: 0,
+            level: 0,
+            specialty: 0,
+            hashrate: 0,
+            lvHashrate: 0
         };
         const bulkItem: BulkItemListStorage = {
             id: item.id,

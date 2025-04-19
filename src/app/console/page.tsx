@@ -2,11 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@/config/theme";
-import { contracts } from "@/config/config";
-import { erc20Contract } from "@/services/erc20Contract";
-import { shortenAddress, shortenNumber } from "@/utils/shorten";
+import { shortenAddress } from "@/utils/shorten";
 import Link from "next/link";
-import { mpContractService } from "@/services/mpContract";
+import axios from "axios";
+import { AccountConsoleDto } from "@/types/dtos/AccountConsole.dto";
 
 /**
  * @description
@@ -14,28 +13,65 @@ import { mpContractService } from "@/services/mpContract";
  */
 const Console = () => {
     const { theme } = useTheme();
-    const [contractsData, setContracts] = useState<
-        { address: string; balance: number; hash: number }[]
-    >([]);
-    const totalBalance = contractsData.reduce((acc, { balance }) => acc + balance, 0);
+    const [contractsData, setContracts] = useState<AccountConsoleDto[]>([]);
+    const [totals, setTotals] = useState({
+        listingsCount: 0,
+        balance: 0,
+        hash: 0,
+        totalPriceSell: 0
+    });
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchContracts = async () => {
             try {
-                const results = await Promise.all(
-                    contracts.map(async address => {
-                        const balance = await erc20Contract.getBalance(address);
-                        const hash = await mpContractService.getUserHash(address);
-                        return { address, balance, hash };
-                    })
+                setLoading(true); // Set loading to true before fetching
+                const accounts = await axios
+                    .get("/api/accounts")
+                    .then(response => (Array.isArray(response.data) ? response.data : []));
+                setContracts(accounts);
+
+                // Calculate totals
+                const totalListingsCount = accounts.reduce(
+                    (sum, acc) => sum + acc.listingsCount,
+                    0
                 );
-                setContracts(results);
+                const totalBalance = accounts.reduce((sum, acc) => sum + acc.balance, 0);
+                const totalHash = accounts.reduce((sum, acc) => sum + acc.hash, 0);
+                const totalPriceSell = accounts.reduce((sum, acc) => sum + acc.totalPriceSell, 0);
+
+                setTotals({
+                    listingsCount: totalListingsCount,
+                    balance: totalBalance,
+                    hash: totalHash,
+                    totalPriceSell: totalPriceSell
+                });
             } catch (error) {
                 console.error("Error fetching balances:", error);
+            } finally {
+                setLoading(false); // Set loading to false after fetching
             }
         };
         fetchContracts();
     }, []);
+
+    if (loading) {
+        return (
+            <div
+                style={{
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
+                    padding: "20px",
+                    minHeight: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}
+            >
+                <h2>Loading...</h2>
+            </div>
+        );
+    }
 
     return (
         <div
@@ -76,7 +112,7 @@ const Console = () => {
                                 textAlign: "left"
                             }}
                         >
-                            USDT Balance (${shortenNumber(totalBalance, 0, 2)})
+                            Listings Count ({totals.listingsCount})
                         </th>
                         <th
                             style={{
@@ -86,7 +122,27 @@ const Console = () => {
                                 textAlign: "left"
                             }}
                         >
-                            Hash
+                            USDT Balance (${totals.balance.toFixed(2)})
+                        </th>
+                        <th
+                            style={{
+                                backgroundColor: theme.primaryColor,
+                                color: theme.headerTextColor,
+                                padding: "8px",
+                                textAlign: "left"
+                            }}
+                        >
+                            Hashrate ({totals.hash})
+                        </th>
+                        <th
+                            style={{
+                                backgroundColor: theme.primaryColor,
+                                color: theme.headerTextColor,
+                                padding: "8px",
+                                textAlign: "left"
+                            }}
+                        >
+                            Total Price Sell (${totals.totalPriceSell.toFixed(2)})
                         </th>
                         <th
                             style={{
@@ -101,51 +157,69 @@ const Console = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {contractsData.map(({ address, balance, hash }) => (
-                        <tr key={address}>
-                            <td
-                                style={{
-                                    border: `1px solid ${theme.primaryColor}`,
-                                    padding: "8px"
-                                }}
-                            >
-                                {shortenAddress(address)}
-                            </td>
-                            <td
-                                style={{
-                                    border: `1px solid ${theme.primaryColor}`,
-                                    padding: "8px"
-                                }}
-                            >
-                                $ {balance}
-                            </td>
-                            <td
-                                style={{
-                                    border: `1px solid ${theme.primaryColor}`,
-                                    padding: "8px"
-                                }}
-                            >
-                                {hash}
-                            </td>
-                            <td
-                                style={{
-                                    border: `1px solid ${theme.primaryColor}`,
-                                    padding: "8px"
-                                }}
-                            >
-                                <Link
-                                    href={`/console/${address}`}
+                    {contractsData.map(
+                        ({ address, listingsCount, balance, hash, totalPriceSell }) => (
+                            <tr key={address}>
+                                <td
                                     style={{
-                                        color: theme.primaryColor,
-                                        textDecoration: "none",
-                                        fontWeight: "bold"
+                                        border: `1px solid ${theme.primaryColor}`,
+                                        padding: "8px"
                                     }}
                                 >
-                                    View Detail
-                                </Link>
-                            </td>
-                        </tr>
-                    ))}
+                                    {shortenAddress(address)}
+                                </td>
+                                <td
+                                    style={{
+                                        border: `1px solid ${theme.primaryColor}`,
+                                        padding: "8px"
+                                    }}
+                                >
+                                    {listingsCount}
+                                </td>
+                                <td
+                                    style={{
+                                        border: `1px solid ${theme.primaryColor}`,
+                                        padding: "8px"
+                                    }}
+                                >
+                                    $ {balance}
+                                </td>
+                                <td
+                                    style={{
+                                        border: `1px solid ${theme.primaryColor}`,
+                                        padding: "8px"
+                                    }}
+                                >
+                                    {hash}
+                                </td>
+                                <td
+                                    style={{
+                                        border: `1px solid ${theme.primaryColor}`,
+                                        padding: "8px"
+                                    }}
+                                >
+                                    $ {totalPriceSell}
+                                </td>
+                                <td
+                                    style={{
+                                        border: `1px solid ${theme.primaryColor}`,
+                                        padding: "8px"
+                                    }}
+                                >
+                                    <Link
+                                        href={`/console/${address}`}
+                                        style={{
+                                            color: theme.primaryColor,
+                                            textDecoration: "none",
+                                            fontWeight: "bold"
+                                        }}
+                                    >
+                                        View Detail
+                                    </Link>
+                                </td>
+                            </tr>
+                        )
+                    )}
                 </tbody>
             </table>
         </div>

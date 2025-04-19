@@ -3,7 +3,7 @@ import bulkStorageReducer from "./bulkStorageReducer";
 
 const rootReducer = combineReducers({
     bulkStorage: bulkStorageReducer,
-    cartStorage: bulkStorageReducer,
+    cartStorage: []
 });
 
 export default rootReducer;

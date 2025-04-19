@@ -14,7 +14,7 @@ const initialState: CartStorageState = {
     cartItems: []
 };
 
-const bulkStorageReducer = (
+const cartStorageReducer = (
     state = initialState,
     action: { type: CartAction; payload: CartItemListStorage }
 ): CartStorageState => {
@@ -46,4 +46,4 @@ const bulkStorageReducer = (
     }
 };
 
-export default bulkStorageReducer;
+export default cartStorageReducer;

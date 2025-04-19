@@ -1,5 +1,5 @@
 import { MP_ADDRESS, NORMAL_BUYER } from "@/constants/constants";
-import { MpSelector } from "@/enum/enum";
+import { MomoType, MpSelector } from "@/enum/enum";
 import { ethersProvider } from "@/providers/ethersProvider";
 import { databaseService } from "@/services/database";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
@@ -78,6 +78,7 @@ const syncInventoryNormal = async (
                         id: `${addressCheck}_${idsAll[o]}_0`,
                         prototype: idsAll[o],
                         owner: addressCheck,
+                        type: MomoType.NORMAL,
                         amount: amountMomoInInventory,
                         tokenId: 0,
                         quality: 1,
@@ -124,4 +125,4 @@ const syncInventory = async (addressCheck: string) => {
     // await syncInventoryPro(addressCheck);
 };
 
-syncInventory("0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F");
+syncInventory("0xE4534fA363016b1BD1E95C20144361cFB7c2d3aC");
