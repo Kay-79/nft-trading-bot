@@ -2,8 +2,10 @@ import { MP_ADDRESS, NORMAL_BUYER } from "@/constants/constants";
 import { MpSelector } from "@/enum/enum";
 import { ethersProvider } from "@/providers/ethersProvider";
 import { databaseService } from "@/services/database";
+import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { closeMongoConnection, connectMongo } from "@/utils/connectMongo";
 import { mpUtils } from "@/utilsV2/mp/utils";
+import { stakingUtils } from "@/utilsV2/staking/utils";
 import { AbiCoder } from "ethers";
 const db = await connectMongo();
 
@@ -18,7 +20,11 @@ const deleteInventory = async (addressCheck: string) => {
  * * @throws {Error} - Throws an error if the address is invalid or if the sync fails.
  */
 // sync momo pro via momo721 utils (comming soon)
-const syncInventoryNormal = async (addressCheck: string) => {
+const syncInventoryNormal = async (
+    addressCheck: string,
+    totalHash: number,
+    suggestIndex: number
+): Promise<void> => {
     const amountKind = 60;
     const idsAll: number[] = [];
     for (let i = 1; i <= 3; i++) {
@@ -28,14 +34,8 @@ const syncInventoryNormal = async (addressCheck: string) => {
             }
         }
     }
-    const suggestIndex = await mpUtils.getNewIndex(addressCheck);
-    if (suggestIndex >= 128) {
-        console.log("Required index < 128, please check your address:", addressCheck);
-        return;
-    } else {
-        await deleteInventory(addressCheck);
-    }
     let totalMomoInInventory = 0;
+    let countHashrate = 0;
     for (let o = 0; o < idsAll.length; o++) {
         const ids = [idsAll[o].toString()];
         let amountMomoInInventory = 0;
@@ -72,12 +72,28 @@ const syncInventoryNormal = async (addressCheck: string) => {
                 console.error("EstimateGas failed for ID:", idsAll[o]);
                 if (amountMomoInInventory > 0) {
                     totalMomoInInventory += amountMomoInInventory;
+                    countHashrate += Math.floor(idsAll[o] / 10000) * amountMomoInInventory;
                     console.log("ID:", idsAll[o], "amountMomoInInventory:", amountMomoInInventory);
-                    // const
-                    // await databaseService.createInventoryUser(db, addressCheck, idsAll[o], amountMomoInInventory);
+                    const newInventory: InventoryDto = {
+                        id: `${addressCheck}_${idsAll[o]}_0`,
+                        prototype: idsAll[o],
+                        owner: addressCheck,
+                        amount: amountMomoInInventory,
+                        tokenId: 0,
+                        quality: 1,
+                        category: 1,
+                        level: 1,
+                        specialty: 1,
+                        hashrate: Math.floor(idsAll[o] / 10000),
+                        lvHashrate: Math.floor(idsAll[o] / 10000)
+                    };
+                    await databaseService.insertNewInventory(db, newInventory);
                 }
                 break;
             }
+        }
+        if (countHashrate >= totalHash) {
+            break;
         }
     }
     console.log("Total Momo in Inventory:", totalMomoInInventory);
@@ -89,8 +105,23 @@ const syncInventory = async (addressCheck: string) => {
     if (!addressCheck) {
         throw new Error("Please check your address!");
     }
-    await syncInventoryNormal(addressCheck);
+    const totalHashrate = await stakingUtils.userHashrate(addressCheck);
+    if (totalHashrate <= 0) {
+        console.log(`User ${addressCheck} has no hashrate`);
+        return;
+    }
+    console.log(`Syncing inventory for address: ${addressCheck}`);
+    console.log(`Total hashrate: ${totalHashrate}`);
+    const suggestIndex = await mpUtils.getNewIndex(addressCheck);
+    if (suggestIndex >= 128) {
+        console.log("Required index < 128, please check your address:", addressCheck);
+        return;
+    } else {
+        console.log(`Deleting inventory for address: ${addressCheck}`);
+        await deleteInventory(addressCheck);
+    }
+    await syncInventoryNormal(addressCheck, totalHashrate, suggestIndex);
     // await syncInventoryPro(addressCheck);
 };
 
-syncInventory("0xE4534fA363016b1BD1E95C20144361cFB7c2d3aC");
+syncInventory("0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F");

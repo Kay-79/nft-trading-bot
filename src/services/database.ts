@@ -165,6 +165,28 @@ const deleteInventoryUser = async (db: Db, address: string): Promise<void> => {
     }
 };
 
+const insertNewInventory = async (db: Db, inventory: InventoryDto): Promise<void> => {
+    try {
+        const existingInventory = await db.collection("inventories").findOne({
+            id: inventory.id,
+            prototype: inventory.prototype,
+            owner: inventory.owner,
+            type: inventory.type
+        });
+        if (existingInventory) {
+            await db
+                .collection("inventories")
+                .updateOne({ ...inventory }, { $set: { ...inventory } });
+            console.log(`Inventory updated`);
+        } else {
+            await db.collection("inventories").insertOne({ ...inventory });
+            console.log(`Inventory created`);
+        }
+    } catch (error) {
+        throw new Error(`Error: ${error}`);
+    }
+};
+
 const createListings = async (
     db: Db,
     listings: AuctionDto[],
@@ -301,6 +323,7 @@ export const databaseService = {
     createOrIncreaseInventories,
     deleteOrDecreaseInventories,
     deleteInventoryUser,
+    insertNewInventory,
     //Listing
     createListings,
     updateListing,
