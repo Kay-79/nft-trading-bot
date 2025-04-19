@@ -1,19 +1,10 @@
-import {
-    API_AI_PRICE_PREDICT,
-    API_MOBOX
-    // CACHE_MBOX_PRICE,
-    // CACHE_REWARD_PER_1000_HASH
-} from "../constants/constants";
+import { API_AI_PRICE_PREDICT, API_MOBOX } from "../constants/constants";
 import axios from "axios";
 import { newbieAuctors, newbieBidders, proBidders } from "@/config/config";
 import { ethers } from "ethers";
 import { TrainingData } from "@/types/AI/TrainingData";
 import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
-// import { getPriceMboxOnChain } from "@/utilsV2/pancakeSwap/router";
-// import { stakingUtils } from "@/utilsV2/staking/utils";
-// import fs from "fs";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
-// import { CachePriceReward } from "@/types/AI/CachePriceReward";
 import { momo721 } from "@/utilsV2/momo721/utils";
 
 export const getTrainingData = async (): Promise<TrainingData[]> => {
@@ -74,6 +65,8 @@ export const preprocessRawData = (rawDatasets: RecentSoldDto[]): TrainingData[] 
 };
 
 export const predictModelOne = async (inputOne: number[]) => {
+    console.log(`test build next`);
+    if (!inputOne || inputOne.length === 0) return [];
     try {
         const response = await axios.post(API_AI_PRICE_PREDICT, {
             input: inputOne
@@ -201,8 +194,6 @@ export async function buildInputVector({
 }): Promise<number[]> {
     const momoInfo = [hashrate, lvHashrate, Math.floor(prototype / 10 ** 4), level];
     const momoEquipment = await momo721.getEquipmentMomo(tokenId.toString());
-    // const mboxPrice = cache.mboxPrice;
-    // const reward = cache.reward;
     const timestamp = Math.floor(Date.now() / 1000);
     return [...momoInfo, ...momoEquipment, timestamp];
 }

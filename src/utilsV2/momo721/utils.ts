@@ -192,20 +192,28 @@ const ownerOf = async (id: string) => {
 };
 
 const getEquipmentMomo = async (tokenId: string): Promise<number[]> => {
-    const abiCoder = new AbiCoder();
-    const encodedData = abiCoder.encode(["uint256"], [tokenId]);
-    const data = Momo721Selector.GET_EQUIPMENT_MOMO + encodedData.slice(2);
-    const result = await ethersProvider.call({
-        to: "0x5Fb3035d07E5d0E1D8Efbc5aE5b7546C15173035",
-        data: data
-    });
-    const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
-    return [
-        Number(decodedResult[0]) > 0 ? Number(decodedResult[0]) - 100 : 0,
-        Number(decodedResult[1]) > 0 ? Number(decodedResult[1]) - 200 : 0,
-        Number(decodedResult[2]) > 0 ? Number(decodedResult[2]) - 300 : 0,
-        Number(decodedResult[3]) > 0 ? Number(decodedResult[3]) - 400 : 0
-    ];
+    try {
+        if (!ethersProvider) {
+            return [0, 0, 0, 0]; // Return default values if ethersProvider is not initialized
+        }
+        const abiCoder = new AbiCoder();
+        const encodedData = abiCoder.encode(["uint256"], [tokenId]);
+        const data = Momo721Selector.GET_EQUIPMENT_MOMO + encodedData.slice(2);
+        const result = await ethersProvider.call({
+            to: "0x5Fb3035d07E5d0E1D8Efbc5aE5b7546C15173035",
+            data: data
+        });
+        const decodedResult = abiCoder.decode(["uint256", "uint256", "uint256", "uint256"], result);
+        return [
+            Number(decodedResult[0]) > 0 ? Number(decodedResult[0]) - 100 : 0,
+            Number(decodedResult[1]) > 0 ? Number(decodedResult[1]) - 200 : 0,
+            Number(decodedResult[2]) > 0 ? Number(decodedResult[2]) - 300 : 0,
+            Number(decodedResult[3]) > 0 ? Number(decodedResult[3]) - 400 : 0
+        ];
+    } catch (error) {
+        console.error("Error in getEquipmentMomo:", error);
+        return [0, 0, 0, 0]; // Return default values in case of error
+    }
 };
 
 const getEquipmentMomoHistory = async (tokenId: string, block: number): Promise<number[]> => {
