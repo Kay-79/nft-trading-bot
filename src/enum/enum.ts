@@ -75,7 +75,9 @@ export enum MpSelector {
     GET_SUGGEST_INDEX = "0xd28cc5f0",
     GET_LISTED_MOMOS = "0xcbbac767",
     GET_ORDER = "0xedb25841",
-    CREATE_AUCTION_BATCH = "0x4213cec7"
+    CREATE_AUCTION_BATCH = "0x4213cec7",
+    CREATE_AUCTION = "0xd87ccd58",
+    EXECUTE = "0xb61d27f6",
 }
 
 export enum MpBlockSelector {

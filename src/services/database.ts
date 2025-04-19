@@ -156,6 +156,15 @@ const deleteOrDecreaseInventories = async (
     }
 };
 
+const deleteInventoryUser = async (db: Db, address: string): Promise<void> => {
+    try {
+        await db.collection("inventories").deleteMany({ owner: address });
+        console.log(`Inventory deleted`);
+    } catch (error) {
+        throw new Error(`Error deleting inventory: ${error}`);
+    }
+};
+
 const createListings = async (
     db: Db,
     listings: AuctionDto[],
@@ -291,6 +300,7 @@ export const databaseService = {
     //Inventory
     createOrIncreaseInventories,
     deleteOrDecreaseInventories,
+    deleteInventoryUser,
     //Listing
     createListings,
     updateListing,
