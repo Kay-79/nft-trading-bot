@@ -67,7 +67,8 @@
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
-        "lint": "next lint"
+        "lint": "next lint",
+        "fe": "concurrently \"npm run dev\" \"make apiMomoWin\" \"bun worker\""
     },
     "keywords": [],
     "author": "",
