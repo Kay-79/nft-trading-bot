@@ -112,3 +112,10 @@ export enum BulkAction {
     UPDATE = "UPDATE",
     CLEAR = "CLEAR"
 }
+
+export enum CartAction {
+    ADD = "ADD",
+    REMOVE = "REMOVE",
+    UPDATE = "UPDATE",
+    CLEAR = "CLEAR"
+}

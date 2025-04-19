@@ -208,9 +208,15 @@ const bidAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) 
     if (!wagmiConfig) {
         throw new Error("Please connect your wallet first!");
     }
-    if (from?.toLocaleLowerCase() !== PRO_BUYER.toLocaleLowerCase()) {
+    if (
+        !(
+            from?.toLocaleLowerCase() !== PRO_BUYER.toLocaleLowerCase() ||
+            from?.toLocaleLowerCase() !== NORMAL_BUYER.toLocaleLowerCase()
+        )
+    ) {
         throw new Error("Failed to bid the auction");
     }
+
     return await writeContract(wagmiConfig, {
         abi: abiMp,
         address: bidContract as `0x${string}`,

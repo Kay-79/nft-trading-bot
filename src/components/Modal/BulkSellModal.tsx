@@ -174,7 +174,11 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
                     {bulkSellItems?.map((item, index) => (
                         <div
                             key={index}
-                            style={{ display: "flex", justifyContent: "space-between" }}
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                marginTop: "15px"
+                            }}
                         >
                             <BulkSellRow bulkSellItem={item} />
                         </div>

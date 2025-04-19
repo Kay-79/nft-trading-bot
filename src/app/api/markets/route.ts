@@ -12,7 +12,6 @@ export async function GET(request: Request) {
         const sort = searchParams.get("sort") || "-time";
         const pType = searchParams.get("pType") || "";
         const params = { page, limit, category, vType, sort, pType };
-        console.log("params", params);
         const markets = await axios.get(`${API_MOBOX}/auction/search_v2/BNB`, { params });
         const data = markets.data.list;
         return NextResponse.json(data);
