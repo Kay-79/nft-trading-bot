@@ -49,7 +49,7 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
                 bulkSellItems[i].quantity === 0 ||
                 bulkSellItems[i].quantity > (bulkSellItems[i].inventory?.amount ?? 0)
             ) {
-                toast.error("Invalid quantity!");
+                toast.error("Required quantity is 0 or more than your inventory!");
                 setLoadingBulkSell(false);
                 return false;
             }

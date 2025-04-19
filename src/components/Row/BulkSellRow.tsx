@@ -197,7 +197,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
     };
 
     return (
-        <div className="flex items-center justify-between border-b border-gray-200">
+        <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
                 <div style={{ display: "flex", gap: "1px", flex: 3, flexWrap: "wrap" }}>
                     {renderImages()}
