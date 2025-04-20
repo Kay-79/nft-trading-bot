@@ -40,7 +40,12 @@ const nextConfig: NextConfig = {
         MORALIST_RPC_ARCHIVE_NODE: process.env.MORALIST_RPC_ARCHIVE_NODE || ""
     },
     images: {
-        domains: ["www.mobox.io"]
+        remotePatterns: [
+            {
+                protocol: "https",
+                hostname: "www.mobox.io"
+            }
+        ]
     }
 };
 

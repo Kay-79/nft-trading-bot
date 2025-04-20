@@ -26,11 +26,7 @@ export async function POST(request: Request) {
             level: level || 0,
             tokenId: tokenId || 0
         });
-        console.log("Input vector:", input);
-
         const prediction = await predictModelOne(input);
-        console.log("Prediction result:", prediction);
-
         if (prediction.length === 0) {
             return NextResponse.json({ prediction: 0 });
         }
