@@ -194,7 +194,7 @@ const ownerOf = async (id: string) => {
 const getEquipmentMomo = async (tokenId: string): Promise<number[]> => {
     try {
         if (!ethersProvider) {
-            return [0, 0, 0, 0]; // Return default values if ethersProvider is not initialized
+            return [0, 0, 0, 0];
         }
         const abiCoder = new AbiCoder();
         const encodedData = abiCoder.encode(["uint256"], [tokenId]);
@@ -212,7 +212,7 @@ const getEquipmentMomo = async (tokenId: string): Promise<number[]> => {
         ];
     } catch (error) {
         console.error("Error in getEquipmentMomo:", error);
-        return [0, 0, 0, 0]; // Return default values in case of error
+        return [0, 0, 0, 0];
     }
 };
 
