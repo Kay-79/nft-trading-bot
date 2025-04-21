@@ -2,9 +2,9 @@ import { Environment } from "../enum/enum";
 import { TierPrice } from "../types/common/TierPrice";
 import { GasPrices } from "../types/gas/GasPrices";
 
-export const ENV = process.env.ENV || Environment.TESTNET; // Default TESTNET
+export const ENV = process.env.ENV || Environment.TESTNET;
 
-console.log("Current ENV:", ENV); // Add this line to debug the value of ENV
+console.log("Current ENV:", ENV);
 
 export const TOPIC_BID = process.env.TOPIC_BID || "default_topic";
 

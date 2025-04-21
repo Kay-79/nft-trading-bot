@@ -8,8 +8,6 @@ import { updateWaitBid } from "../utilsV2/find/utils";
 import {
     CACHE_BNB_PRICE,
     CACHE_TIER_PRICE,
-    // CACHE_MBOX_PRICE,
-    // CACHE_REWARD_PER_1000_HASH,
     ENV,
     TIME_DELAY_NOTICE_STATUS_BOT,
     TIME_DELAY_SETUP_FIND

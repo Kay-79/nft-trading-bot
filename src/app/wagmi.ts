@@ -22,7 +22,21 @@ if (typeof window !== "undefined") {
         chains: [bscConfig]
     }) as RainbowKitConfig;
 } else {
-    wagmiConfig = null;
+    const bscConfig = {
+        ...bsc,
+        rpcUrls: {
+            ...bsc.rpcUrls,
+            default: {
+                ...bsc.rpcUrls.default,
+                http: [RPC_URL]
+            }
+        }
+    };
+    wagmiConfig = getDefaultConfig({
+        appName: "NFT Trading",
+        projectId: "e97ae58b9c8f8f7811ba85f2f0f9f3f9",
+        chains: [bscConfig]
+    }) as RainbowKitConfig;
 }
 
 export { wagmiConfig };

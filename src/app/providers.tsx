@@ -7,7 +7,7 @@ import { RainbowKitProvider, darkTheme, lightTheme, Theme } from "@rainbow-me/ra
 import { Provider as ReduxProvider } from "react-redux";
 import { wagmiConfig } from "./wagmi";
 import { ThemeContext, customDarkTheme, customLightTheme, ThemeConfig } from "@/config/theme";
-import store from "@/store"; // Import the Redux store
+import store from "@/store";
 
 const queryClient = new QueryClient();
 
