@@ -6,6 +6,9 @@ import { shortenAddress } from "@/utils/shorten";
 import Link from "next/link";
 import axios from "axios";
 import { AccountConsoleDto } from "@/types/dtos/AccountConsole.dto";
+import { allContracts } from "@/config/config";
+import { useAccount } from "wagmi";
+import { ethers } from "ethers";
 
 /**
  * @description
@@ -54,7 +57,8 @@ const Console = () => {
         };
         fetchContracts();
     }, []);
-
+    const { address } = useAccount();
+    console.log("Address:", address);
     if (loading) {
         return (
             <div
@@ -69,6 +73,24 @@ const Console = () => {
                 }}
             >
                 <h2>Loading...</h2>
+            </div>
+        );
+    }
+
+    if (address === undefined || !allContracts.includes(ethers.getAddress(address as string))) {
+        return (
+            <div
+                style={{
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
+                    padding: "20px",
+                    minHeight: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}
+            >
+                <h2>Welcome to the console!</h2>
             </div>
         );
     }

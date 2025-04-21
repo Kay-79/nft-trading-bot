@@ -10,7 +10,7 @@ interface ListingsProps {
 
 const Markets: React.FC<ListingsProps> = ({ markets }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = Math.ceil(markets.length / 6) + 10;
+    const totalPages = Math.ceil(markets.length / 6) + 1000;
     const [paginatedMarkets, setPaginatedMarkets] = useState<AuctionDto[]>([]);
 
     useEffect(() => {
