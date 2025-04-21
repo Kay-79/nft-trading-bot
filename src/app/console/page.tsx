@@ -6,9 +6,10 @@ import { shortenAddress } from "@/utils/shorten";
 import Link from "next/link";
 import axios from "axios";
 import { AccountConsoleDto } from "@/types/dtos/AccountConsole.dto";
-import { allContracts } from "@/config/config";
+import { addressTester, allContracts } from "@/config/config";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
+import { ConnectWallet } from "@/components/ConnectWallet";
 
 /**
  * @description
@@ -24,7 +25,7 @@ const Console = () => {
         totalPriceSell: 0
     });
     const [loading, setLoading] = useState(true);
-
+    const { address } = useAccount();
     useEffect(() => {
         const fetchContracts = async () => {
             try {
@@ -55,10 +56,35 @@ const Console = () => {
                 setLoading(false); // Set loading to false after fetching
             }
         };
-        fetchContracts();
-    }, []);
-    const { address } = useAccount();
-    console.log("Address:", address);
+        if (
+            allContracts.includes(ethers.getAddress(address as string)) ||
+            ethers.getAddress(address as string) === addressTester
+        ) {
+            fetchContracts();
+        }
+    }, [address]);
+    if (
+        address === undefined ||
+        (!allContracts.includes(ethers.getAddress(address as string)) &&
+            ethers.getAddress(address as string) !== addressTester)
+    ) {
+        return (
+            <div
+                style={{
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
+                    padding: "20px",
+                    minHeight: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}
+            >
+                <ConnectWallet />
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div
@@ -73,24 +99,6 @@ const Console = () => {
                 }}
             >
                 <h2>Loading...</h2>
-            </div>
-        );
-    }
-
-    if (address === undefined || !allContracts.includes(ethers.getAddress(address as string))) {
-        return (
-            <div
-                style={{
-                    backgroundColor: theme.backgroundColor,
-                    color: theme.textColor,
-                    padding: "20px",
-                    minHeight: "100vh",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}
-            >
-                <h2>Welcome to the console!</h2>
             </div>
         );
     }

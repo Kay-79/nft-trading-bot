@@ -84,6 +84,8 @@ export const allContracts: string[] = [
     ethers.getAddress("0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000")
 ];
 
+export const addressTester = ethers.getAddress("0x1111c16591c4ECe1c313f46A63330D8BCf461111");
+
 export const proBidders: string[] = [
     ...allContracts,
     // pro traders
