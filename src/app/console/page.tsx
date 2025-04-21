@@ -57,14 +57,15 @@ const Console = () => {
             }
         };
         if (
-            allContracts.includes(ethers.getAddress(address as string)) ||
-            ethers.getAddress(address as string) === addressTester
+            address &&
+            (allContracts.includes(ethers.getAddress(address as string)) ||
+                ethers.getAddress(address as string) === addressTester)
         ) {
             fetchContracts();
         }
     }, [address]);
     if (
-        address === undefined ||
+        !address ||
         (!allContracts.includes(ethers.getAddress(address as string)) &&
             ethers.getAddress(address as string) !== addressTester)
     ) {
