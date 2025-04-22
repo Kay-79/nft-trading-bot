@@ -25,6 +25,7 @@ import { allContracts } from "@/config/config";
 import { ethers } from "ethers";
 import { getImgUrl } from "@/utils/image/getImgUrl";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import { CHANGER } from "@/constants/constants";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -44,12 +45,19 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [loadingDelist, setLoadingDelist] = useState<boolean>(false);
     const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
     const [loadingPurchase, setLoadingPurchase] = useState<boolean>(false);
+    
     const isMyListing = useMemo(() => {
-        if (allContracts.includes(ethers.getAddress(listingData.auctor || ""))) {
+        if (
+            allContracts.includes(ethers.getAddress(listingData.auctor || "")) &&
+            address?.toLocaleLowerCase() === CHANGER.toLocaleLowerCase()
+        ) {
+            return true;
+        }
+        if (listingData.auctor?.toLocaleLowerCase() === address?.toLocaleLowerCase()) {
             return true;
         }
         return false;
-    }, [listingData]);
+    }, [listingData, address]);
 
     const resetError = useCallback(() => {
         handleError(null);

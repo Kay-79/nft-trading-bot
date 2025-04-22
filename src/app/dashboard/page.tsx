@@ -15,8 +15,11 @@ import { FaArrowUp } from "react-icons/fa";
 import { MdSell } from "react-icons/md";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import BulkSellModal from "@/components/Modal/BulkSellModal";
+import { useAccount } from "wagmi";
+import axios from "axios";
 
 const DashboardPage = () => {
+    const { address } = useAccount();
     const [listings, setListings] = useState<AuctionDto[]>([]);
     const [activities, setActivities] = useState<RecentSoldDto[]>([]);
     const [inventory, setInventory] = useState<InventoryDto[]>([]);
@@ -41,13 +44,15 @@ const DashboardPage = () => {
         setLoading(false);
     };
 
-    const fetchActivities = async () => {
+    const fetchActivities = React.useCallback(async () => {
         setLoading(true);
-        const activitiesData = await fetch("/api/activities").then(response => response.json());
-        setActivities(activitiesData);
-        setFilteredActivities(activitiesData);
+        const activitiesData = await axios.post("/api/activities", {
+            address: address
+        });
+        setActivities(activitiesData.data);
+        setFilteredActivities(activitiesData.data);
         setLoading(false);
-    };
+    }, [address]);
 
     const fetchInventory = async () => {
         setLoading(true);
@@ -75,7 +80,14 @@ const DashboardPage = () => {
         } else if (selectedSection === "markets" && markets.length === 0) {
             fetchMarkets();
         }
-    }, [selectedSection, activities.length, inventory.length, listings.length, markets.length]);
+    }, [
+        selectedSection,
+        activities.length,
+        inventory.length,
+        listings.length,
+        markets.length,
+        fetchActivities
+    ]);
 
     useEffect(() => {
         const handleScroll = () => {

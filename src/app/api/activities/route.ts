@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
-import { PRO_BUYER } from "@/constants/constants";
 
-export async function GET() {
+export async function POST(request: Request) {
+    const { address } = await request.json();
     const activities: RecentSoldDto[] = [];
     const fetchPromises = [0].map(() =>
-        fetch(`https://nftapi.mobox.io/auction/logs_new/${PRO_BUYER}?&page=1&limit=50`)
+        fetch(`https://nftapi.mobox.io/auction/logs_new/${address}?&page=1&limit=50`)
             .then(response => response.json())
             .then(data => {
                 activities.push(...data.list);
