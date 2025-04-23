@@ -4,6 +4,7 @@ import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { useAccount } from "wagmi";
 import { CHANGER } from "@/constants/constants";
+import { addressTester } from "@/config/config";
 
 interface InventoryProps {
     inventories: InventoryDto[];
@@ -14,7 +15,8 @@ const Inventory: React.FC<InventoryProps> = ({ inventories, listings }) => {
     const { address } = useAccount();
     if (
         !Array.isArray(inventories) ||
-        address?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()
+        (address?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase() &&
+            address?.toLocaleLowerCase() !== addressTester.toLocaleLowerCase())
     ) {
         return <div>No inventories available</div>;
     }
