@@ -10,6 +10,7 @@ import { addressTester, allContracts } from "@/config/config";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
 import { ConnectWallet } from "@/components/ConnectWallet";
+import { NORMAL_BUYER } from "@/constants/constants";
 
 /**
  * @description
@@ -59,16 +60,13 @@ const Console = () => {
         if (
             address &&
             (allContracts.includes(ethers.getAddress(address as string)) ||
-                ethers.getAddress(address as string) === addressTester)
+                ethers.getAddress(address as string) === addressTester ||
+                ethers.getAddress(address as string) === NORMAL_BUYER)
         ) {
             fetchContracts();
         }
     }, [address]);
-    if (
-        !address ||
-        (!allContracts.includes(ethers.getAddress(address as string)) &&
-            ethers.getAddress(address as string) !== addressTester)
-    ) {
+    if (!address) {
         return (
             <div
                 style={{
@@ -82,6 +80,29 @@ const Console = () => {
                 }}
             >
                 <ConnectWallet />
+            </div>
+        );
+    }
+
+    if (ethers.getAddress(address as string) !== NORMAL_BUYER) {
+        return (
+            <div
+                style={{
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
+                    padding: "20px",
+                    minHeight: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}
+            >
+                <h2 style={{ color: theme.primaryColor }}>
+                    Address {shortenAddress(address)} is not in the list of contracts.
+                </h2>
+                <p style={{ color: theme.textColor }}>
+                    Please check your address or contact support.
+                </p>
             </div>
         );
     }
