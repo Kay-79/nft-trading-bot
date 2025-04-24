@@ -21,7 +21,7 @@ const Console = () => {
     const [contractsData, setContracts] = useState<AccountConsoleDto[]>([]);
     const [totals, setTotals] = useState({
         listingsCount: 0,
-        balance: 0,
+        totalBalance: 0,
         hash: 0,
         totalPriceSell: 0
     });
@@ -47,7 +47,7 @@ const Console = () => {
 
                 setTotals({
                     listingsCount: totalListingsCount,
-                    balance: totalBalance,
+                    totalBalance: totalBalance,
                     hash: totalHash,
                     totalPriceSell: totalPriceSell
                 });
@@ -57,6 +57,7 @@ const Console = () => {
                 setLoading(false); // Set loading to false after fetching
             }
         };
+
         if (
             address &&
             (allContracts.includes(ethers.getAddress(address as string)) ||
@@ -84,7 +85,13 @@ const Console = () => {
         );
     }
 
-    if (ethers.getAddress(address as string) !== NORMAL_BUYER) {
+    if (
+        !(
+            allContracts.includes(ethers.getAddress(address as string)) ||
+            ethers.getAddress(address as string) === addressTester ||
+            ethers.getAddress(address as string) === NORMAL_BUYER
+        )
+    ) {
         return (
             <div
                 style={{
@@ -135,7 +142,9 @@ const Console = () => {
                 minHeight: "100vh"
             }}
         >
-            <h1 style={{ color: theme.primaryColor }}>USDT Balance Tracker</h1>
+            <h1 style={{ color: theme.primaryColor }}>
+                USDT Balance Tracker (${totals.totalBalance + totals.totalPriceSell})
+            </h1>
             <table
                 style={{
                     width: "100%",
@@ -174,7 +183,7 @@ const Console = () => {
                                 textAlign: "left"
                             }}
                         >
-                            USDT Balance (${totals.balance.toFixed(2)})
+                            USDT Balance (${totals.totalBalance.toFixed(2)})
                         </th>
                         <th
                             style={{
