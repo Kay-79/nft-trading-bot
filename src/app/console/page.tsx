@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@/config/theme";
-import { shortenAddress } from "@/utils/shorten";
+import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import Link from "next/link";
 import axios from "axios";
 import { AccountConsoleDto } from "@/types/dtos/AccountConsole.dto";
@@ -143,7 +143,8 @@ const Console = () => {
             }}
         >
             <h1 style={{ color: theme.primaryColor }}>
-                USDT Balance Tracker (${totals.totalBalance + totals.totalPriceSell})
+                USDT Balance Tracker ($
+                {shortenNumber(totals.totalBalance + totals.totalPriceSell, 0, 2)})
             </h1>
             <table
                 style={{

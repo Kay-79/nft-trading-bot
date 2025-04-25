@@ -38,12 +38,12 @@ export const minPriceAIChange: TierPrice = {
 };
 
 export const profitBlock: ProfitConfig = {
-    min: 15,
+    min: 5,
     percent: 0.65
 };
 
 export const profitProAI: ProfitConfig = {
-    min: 10,
+    min: 5,
     percent: 0.65
 };
 
