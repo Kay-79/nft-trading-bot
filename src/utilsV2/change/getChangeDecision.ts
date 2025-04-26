@@ -30,8 +30,10 @@ export const getChangeDecisionPro = async (
     ) {
         return { shouldChange: false, newPrice: 0 };
     }
-    if (Date.now() / 1000 - myAuction.uptime < minTimeListedMyAuctionToChange.pro) {
-        console.log("Require minTimeListedMyAuctionToChange.pro");
+    if (
+        Date.now() / 1000 - myAuction.uptime <
+        Math.max(minTimeListedMyAuctionToChange.pro.up, minTimeListedMyAuctionToChange.pro.down)
+    ) {
         return { shouldChange: false, newPrice: 0 };
     }
     if (!contracts.includes(ethers.getAddress(myAuction.auctor))) {
@@ -41,7 +43,10 @@ export const getChangeDecisionPro = async (
     const floorPrice = floorPrices[Math.floor(myAuction.prototype / 10 ** 4)];
     try {
         const prediction = shortenNumber(await predictAuctionPro(myAuction), 0, 3);
-        if (shortenNumber(myAuction.nowPrice, 9, 3) > prediction) {
+        if (
+            shortenNumber(myAuction.nowPrice, 9, 3) > prediction &&
+            Date.now() / 1000 - myAuction.uptime > minTimeListedMyAuctionToChange.pro.up
+        ) {
             const minPriceRequire = minPriceAIChange[myAuction.prototype / 10 ** 4];
             if (minPriceRequire && prediction < minPriceRequire) {
                 console.log("Prediction is too low, not changing");
@@ -52,7 +57,7 @@ export const getChangeDecisionPro = async (
                 newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
             };
         } else {
-            if (Date.now() / 1000 - myAuction.uptime > 2 * minTimeListedMyAuctionToChange.pro) {
+            if (Date.now() / 1000 - myAuction.uptime > minTimeListedMyAuctionToChange.pro.down) {
                 return {
                     shouldChange: true,
                     newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)

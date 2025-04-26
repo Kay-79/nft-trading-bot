@@ -39,12 +39,12 @@ export const minPriceAIChange: TierPrice = {
 
 export const profitBlock: ProfitConfig = {
     min: 5,
-    percent: 0.65
+    percent: 0.6
 };
 
 export const profitProAI: ProfitConfig = {
     min: 5,
-    percent: 0.65
+    percent: 0.6
 };
 
 export const delayTimeGet: LatestGet = {

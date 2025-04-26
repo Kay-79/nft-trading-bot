@@ -46,8 +46,10 @@ const DashboardPage = () => {
 
     const fetchActivities = React.useCallback(async () => {
         setLoading(true);
-        const activitiesData = await axios.post("/api/activities", {
-            address: address
+        const activitiesData = await axios.get("/api/activities", {
+            params: {
+                address: address
+            }
         });
         setActivities(activitiesData.data);
         setFilteredActivities(activitiesData.data);
