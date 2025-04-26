@@ -78,3 +78,17 @@ export const checkMyIp = async () => {
     const data = await res.json();
     return data.ip;
 };
+
+export const getTierMomo = (prototype: number) => {
+    return prototype >= 10000 && prototype <= 19999
+        ? "Common"
+        : prototype <= 29999
+        ? "Uncommon"
+        : prototype <= 39999
+        ? "Unique"
+        : prototype <= 49999
+        ? "Rare"
+        : prototype <= 59999
+        ? "Epic"
+        : "Legendary";
+};

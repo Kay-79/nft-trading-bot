@@ -12,12 +12,13 @@ import {
 import { BidAuction } from "../../types/bid/BidAuction";
 import { BidStatus, BidType, BlockType, Environment, ModeBotStatus } from "../../enum/enum";
 import { bidContract, modeBot } from "../../config/config";
-import { shortenAddress, shortenNumber } from "../common/utils";
+import { getTierMomo, shortenAddress, shortenNumber } from "../common/utils";
 import { TierPrice } from "../../types/common/TierPrice";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { erc20Provider } from "../../providers/erc20Provider";
 import packageJson from "../../../package.json";
 import { exit } from "process";
+import { AuctionDto } from "@/types/dtos/Auction.dto";
 
 const noticeBot = async (message: string) => {
     try {
@@ -253,7 +254,7 @@ export const noticeBotCancel = async (bidAuction: BidAuction) => {
     await noticeBot(message);
 };
 
-export const noticeBotChange = async () => {
+export const noticeBotChangeStatus = async () => {
     if (ENV === Environment.TESTNET) {
         console.log("Notice bot change testnet");
         return 0;
@@ -268,4 +269,20 @@ export const noticeBotChange = async () => {
     const now = new Date();
     const currentHour = now.getHours();
     return currentHour - (currentHour % 4);
+};
+
+export const noticeBotChangeAuction = async (auction: AuctionDto, newPrice: number) => {
+    const status = "Change auction: 🔄";
+    const tier = getTierMomo(auction.prototype ?? 0);
+    const auctionInfo = `\nTier: ${tier}`;
+    const hashRate = `\nHash rate: ${auction.hashrate ?? 0}`;
+    const lvHash = `\nLv hash: ${auction.lvHashrate ?? 0}`;
+    const lv = `\nLv: ${auction.level ?? 0}`;
+    const change = `\nChange $${shortenNumber(auction.nowPrice ?? 0, 9, 3)} to $${shortenNumber(
+        newPrice,
+        0,
+        3
+    )}`;
+    const message = `${status}${auctionInfo}${hashRate}${lvHash}${lv}${change}`;
+    await noticeBot(message);
 };

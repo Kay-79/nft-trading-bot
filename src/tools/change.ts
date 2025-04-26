@@ -1,7 +1,7 @@
 process.on("unhandledRejection", (reason, promise) => {
     console.error("Custom Unhandled Rejection at:", promise, "reason:", reason);
 });
-import { noticeBotChange } from "@/utilsV2/bid/handleNoticeBot";
+import { noticeBotChangeStatus } from "@/utilsV2/bid/handleNoticeBot";
 import {
     CACHE_BNB_PRICE,
     CACHE_TIER_PRICE,
@@ -48,7 +48,7 @@ const change = async () => {
             const now = new Date();
             const currentHour = now.getHours();
             if (currentHour === 17 && !hasNotified) {
-                latestNotice = await noticeBotChange();
+                latestNotice = await noticeBotChangeStatus();
                 hasNotified = true;
                 console.log("Notice bot change", latestNotice);
             } else if (currentHour !== 17) {
