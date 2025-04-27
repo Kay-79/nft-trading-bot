@@ -271,8 +271,12 @@ export const noticeBotChangeStatus = async () => {
     return currentHour - (currentHour % 4);
 };
 
-export const noticeBotChangeAuction = async (auction: AuctionDto, newPrice: number) => {
-    const status = "Change auction: 🔄";
+export const noticeBotChangeAuction = async (
+    auction: AuctionDto,
+    newPrice: number,
+    isSuccess: boolean
+) => {
+    const status = `Change auction: ${isSuccess ? "✅" : "❌"}`;
     const tier = getTierMomo(auction.prototype ?? 0);
     const auctionInfo = `\nTier: ${tier}`;
     const hashRate = `\nHash rate: ${auction.hashrate ?? 0}`;
