@@ -276,7 +276,7 @@ export const noticeBotChangeAuction = async (
     newPrice: number,
     isSuccess: boolean
 ) => {
-    const status = `Change auction: ${isSuccess ? "✅" : "❌"}`;
+    const status = `Change status: ${isSuccess ? "✅" : "❌"}`;
     const tier = getTierMomo(auction.prototype ?? 0);
     const auctionInfo = `\nTier: ${tier}`;
     const hashRate = `\nHash rate: ${auction.hashrate ?? 0}`;

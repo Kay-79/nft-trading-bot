@@ -2,7 +2,7 @@ import { ModeChange } from "@/types/common/ModeChange";
 
 export const modeChange: ModeChange = {
     normal: true,
-    pro: false,
+    pro: true,
     bundle: false,
     block: false
 };
