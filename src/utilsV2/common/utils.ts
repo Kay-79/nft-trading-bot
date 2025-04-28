@@ -1,4 +1,4 @@
-import { FunctionFragment } from "@/enum/enum";
+import { FunctionFragment, TierColor } from "@/enum/enum";
 import { bidProvider } from "@/providers/bidProvider";
 import { ethersProvider } from "@/providers/ethersProvider";
 import { getBlockByTimestamp } from "../bid/utils";
@@ -81,14 +81,14 @@ export const checkMyIp = async () => {
 
 export const getTierMomo = (prototype: number) => {
     return prototype >= 10000 && prototype <= 19999
-        ? "Common"
+        ? TierColor.COMMON
         : prototype <= 29999
-        ? "Uncommon"
+        ? TierColor.UNCOMMON
         : prototype <= 39999
-        ? "Unique"
+        ? TierColor.UNIQUE
         : prototype <= 49999
-        ? "Rare"
+        ? TierColor.RARE
         : prototype <= 59999
-        ? "Epic"
-        : "Legendary";
+        ? TierColor.EPIC
+        : TierColor.LEGENDARY;
 };

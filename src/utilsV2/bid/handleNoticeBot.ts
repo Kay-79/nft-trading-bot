@@ -279,14 +279,13 @@ export const noticeBotChangeAuction = async (
     const status = `Change status: ${isSuccess ? "✅" : "❌"}`;
     const tier = getTierMomo(auction.prototype ?? 0);
     const auctionInfo = `\nTier: ${tier}`;
-    const hashRate = `\nHash rate: ${auction.hashrate ?? 0}`;
-    const lvHash = `\nLv hash: ${auction.lvHashrate ?? 0}`;
+    const hash = `\nHash: ${auction.hashrate ?? 0}/${auction.lvHashrate ?? 0}`;
     const lv = `\nLv: ${auction.level ?? 0}`;
     const change = `\nChange $${shortenNumber(auction.nowPrice ?? 0, 9, 3)} to $${shortenNumber(
         newPrice,
         0,
         3
     )}`;
-    const message = `${status}${auctionInfo}${hashRate}${lvHash}${lv}${change}`;
+    const message = `${status}${auctionInfo}${hash}${lv}${change}`;
     await noticeBot(message);
 };
