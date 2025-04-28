@@ -54,13 +54,13 @@ export const getChangeDecisionPro = async (
             }
             return {
                 shouldChange: true,
-                newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
+                newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 2)
             };
         } else {
             if (Date.now() / 1000 - myAuction.uptime > minTimeListedMyAuctionToChange.pro.down) {
                 return {
                     shouldChange: true,
-                    newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 3)
+                    newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 2)
                 };
             }
         }

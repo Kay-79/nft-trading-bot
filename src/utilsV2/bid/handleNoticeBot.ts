@@ -281,7 +281,7 @@ export const noticeBotChangeAuction = async (
     const auctionInfo = `\nTier: ${tier}`;
     const hash = `\nHash: ${auction.hashrate ?? 0}/${auction.lvHashrate ?? 0}`;
     const lv = `\nLv: ${auction.level ?? 0}`;
-    const change = `\nChange $${shortenNumber(auction.nowPrice ?? 0, 9, 3)} to $${shortenNumber(
+    const change = `\nChange $${shortenNumber(auction.nowPrice ?? 0, 9, 2)} to $${shortenNumber(
         newPrice,
         0,
         3
