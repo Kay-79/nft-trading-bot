@@ -17,6 +17,7 @@ import {
 import { sleep } from "@/utilsV2/common/sleep";
 import { SyncedDto } from "@/types/dtos/Synced.dto";
 import { databaseService } from "@/services/database";
+import { ethersProvider } from "@/providers/ethersProvider";
 const step = 2000;
 
 const worker = async () => {
@@ -30,7 +31,7 @@ const worker = async () => {
             await db.collection("synced").insertOne(newSynced);
         }
         const startBlock = synced ? synced.blockBot + 1 : 0;
-        const endBlock = await fullNodeProvider.getBlockNumber();
+        const endBlock = await ethersProvider.getBlockNumber();
         console.log(`Last synced blockBot: ${startBlock}`);
         console.log(`Now Block: ${endBlock}`);
         for (let currentBlock = startBlock; currentBlock <= endBlock; currentBlock += step) {

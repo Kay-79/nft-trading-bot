@@ -7,6 +7,7 @@ import { getAuctionsByPrototype } from "./utils";
 import { ethers } from "ethers";
 import { shortenNumber } from "@/utils/shorten";
 import {
+    boostPrice,
     minTimeListedMyAuctionToChange,
     minTimeListedOtherAuctionToChange,
     modeChange,
@@ -41,6 +42,10 @@ export const getChangeDecisionPro = async (
         return { shouldChange: false, newPrice: 0 };
     }
     const floorPrice = floorPrices[Math.floor(myAuction.prototype / 10 ** 4)];
+    if (!floorPrice) {
+        console.log("No floor price for prototype", myAuction.prototype);
+        return { shouldChange: false, newPrice: 0 };
+    }
     try {
         const prediction = shortenNumber(await predictAuctionPro(myAuction), 0, 3);
         if (
@@ -54,13 +59,21 @@ export const getChangeDecisionPro = async (
             }
             return {
                 shouldChange: true,
-                newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 2)
+                newPrice: shortenNumber(
+                    Math.max(prediction * boostPrice - priceDelta, floorPrice),
+                    0,
+                    2
+                )
             };
         } else {
             if (Date.now() / 1000 - myAuction.uptime > minTimeListedMyAuctionToChange.pro.down) {
                 return {
                     shouldChange: true,
-                    newPrice: shortenNumber(Math.max(prediction - priceDelta, floorPrice), 0, 2)
+                    newPrice: shortenNumber(
+                        Math.max(prediction * boostPrice - priceDelta, floorPrice),
+                        0,
+                        2
+                    )
                 };
             }
         }
