@@ -206,6 +206,36 @@ export const getNowBlock = async (): Promise<number> => {
     return latestBlockNumber;
 };
 
+const checkExistBidAuction = async (bidAuctions: BidAuction[]): Promise<boolean> => {
+    switch (bidAuctions[0].type) {
+        case BidType.NORMAL:
+        case BidType.BUNDLE:
+        case BidType.PRO:
+            if (
+                !bidAuctions[0].auctions ||
+                !bidAuctions[0].auctions[0] ||
+                !(await isExistAuction(bidAuctions[0].auctions[0]))
+            ) {
+                return false;
+            }
+            return true;
+        case BidType.GROUP:
+            if (
+                !bidAuctions[0].auctionGroup ||
+                !(await isExistAuctionGroup(bidAuctions[0].auctionGroup))
+            ) {
+                return false;
+            }
+            return true;
+        case BidType.BOX:
+        case BidType.MECBOX:
+        case BidType.GEM:
+            return true;
+        default:
+            return false;
+    }
+};
+
 export const delay40Blocks = async (bidAuctions: BidAuction[]): Promise<boolean> => {
     if (!bidAuctions[0].uptime) return false;
     const uptime = bidAuctions[0].uptime;
@@ -226,35 +256,9 @@ export const delay40Blocks = async (bidAuctions: BidAuction[]): Promise<boolean>
         }
         await sleep(checkInterval);
     }
-    switch (bidAuctions[0].type) {
-        case BidType.NORMAL:
-        case BidType.BUNDLE:
-        case BidType.PRO:
-            if (
-                !bidAuctions[0].auctions ||
-                !bidAuctions[0].auctions[0] ||
-                !(await isExistAuction(bidAuctions[0].auctions[0]))
-            ) {
-                await noticeBotCancel(bidAuctions[0]);
-                return false;
-            }
-            break;
-        case BidType.GROUP:
-            if (
-                !bidAuctions[0].auctionGroup ||
-                !(await isExistAuctionGroup(bidAuctions[0].auctionGroup))
-            ) {
-                await noticeBotCancel(bidAuctions[0]);
-                return false;
-            }
-            break;
-        case BidType.BOX:
-        case BidType.MECBOX:
-        case BidType.GEM:
-            break;
-        default:
-            await noticeBotCancel(bidAuctions[0]);
-            return false;
+    if (!(await checkExistBidAuction(bidAuctions))) {
+        await noticeBotCancel(bidAuctions[0]);
+        return false;
     }
     // Wait for bid
     while (true) {
@@ -269,6 +273,11 @@ export const delay40Blocks = async (bidAuctions: BidAuction[]): Promise<boolean>
             checkInterval = checkInterval * 1.5;
         }
         await sleep(checkInterval);
+    }
+    const nowTime = Math.round(Date.now() / 1000);
+    if (nowTime < bidAuctions[0].uptime + TIME_ENABLE_BID_AUCTION) {
+        console.log("Bid auction is not open yet");
+        await sleep(bidAuctions[0].uptime + TIME_ENABLE_BID_AUCTION - nowTime + 0.5);
     }
     return true;
 };

@@ -14,7 +14,7 @@ export const priceDeltaMin = 0.001;
 export const priceThreshold = 0.15;
 
 export const minTimeListedMyAuctionToChange = {
-    normal: 2 * 60 * 60,
+    normal: 12 * 60 * 60,
     pro: { up: 16 * 60 * 60, down: 16 * 60 * 60 },
     bundle: 24 * 60 * 60
 };
