@@ -14,7 +14,8 @@ const PrimaryLoadingIcon: React.FC<PrimaryLoadingButtonIconProps> = ({
     onClick,
     loading,
     children,
-    disabled
+    disabled,
+    style
 }) => {
     return (
         <button
@@ -25,7 +26,7 @@ const PrimaryLoadingIcon: React.FC<PrimaryLoadingButtonIconProps> = ({
                 alignItems: "center",
                 justifyContent: "center",
                 padding: "10px 20px",
-                color: customDarkTheme.textColor,
+                color: style?.color || customDarkTheme.textColor,
                 cursor: loading ? "not-allowed" : "pointer",
                 position: "relative"
             }}

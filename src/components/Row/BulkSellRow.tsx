@@ -32,7 +32,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
         dispatch(updateItemInBulk({ ...bulkSellItem, quantity: newAmount, price: newPrice }));
     };
 
-    const fetchMarketPrice = async () => {
+    const fetchPredictPrice = async () => {
         setLoadingPredict(true);
         try {
             const apiEndpoint = bulkSellItem.inventory.tokenId
@@ -255,7 +255,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                     }}
                 />
                 {!price && (
-                    <PrimaryLoadingIcon onClick={fetchMarketPrice} loading={loadingPredict}>
+                    <PrimaryLoadingIcon onClick={fetchPredictPrice} loading={loadingPredict}>
                         <FaDollarSign
                             className="text-green-500 cursor-pointer"
                             style={{ fontSize: "15px" }}

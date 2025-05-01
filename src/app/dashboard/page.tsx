@@ -15,11 +15,9 @@ import { FaArrowUp } from "react-icons/fa";
 import { MdSell } from "react-icons/md";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import BulkSellModal from "@/components/Modal/BulkSellModal";
-import { useAccount } from "wagmi";
 import axios from "axios";
 
 const DashboardPage = () => {
-    const { address } = useAccount();
     const [listings, setListings] = useState<AuctionDto[]>([]);
     const [activities, setActivities] = useState<RecentSoldDto[]>([]);
     const [inventory, setInventory] = useState<InventoryDto[]>([]);
@@ -46,15 +44,11 @@ const DashboardPage = () => {
 
     const fetchActivities = React.useCallback(async () => {
         setLoading(true);
-        const activitiesData = await axios.get("/api/activities", {
-            params: {
-                address: address
-            }
-        });
+        const activitiesData = await axios.get("/api/activities");
         setActivities(activitiesData.data);
         setFilteredActivities(activitiesData.data);
         setLoading(false);
-    }, [address]);
+    }, []);
 
     const fetchInventory = async () => {
         setLoading(true);
