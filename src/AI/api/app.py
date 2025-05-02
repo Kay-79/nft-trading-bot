@@ -1,17 +1,17 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
-import joblib
+import tensorflow as tf
+import joblib  # Added import for joblib
 
-model_path = "./src/AI/model/model.pkl"
-scaler_path = "./src/AI/model/scaler.pkl"
+model_path = "./src/AI/model/model.keras"
+scaler_path = "./src/AI/model/scaler.pkl"  # Updated file extension to .pkl for consistency
 
-model = joblib.load(model_path)
-scaler = joblib.load(scaler_path)
+model = tf.keras.models.load_model(model_path)
+scaler = joblib.load(scaler_path)  # Updated to use joblib.load
 
 app = Flask(__name__)
 CORS(app)
-
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -30,7 +30,6 @@ def predict():
         return jsonify({"prediction": prediction.tolist()})
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)

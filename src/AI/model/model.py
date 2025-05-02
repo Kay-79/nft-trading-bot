@@ -1,14 +1,12 @@
+import joblib
 import numpy as np
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import RobustScaler
 import os
 import json
-import joblib
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.optimizers import Adam
-import joblib
-
 
 def load_data(file_path):
     if not os.path.exists(file_path):
@@ -90,10 +88,11 @@ loss, mae, mape = model.evaluate(X_test, y_test)
 print(
     f"Test Loss: {loss}, Test MAE: {mae}, Test MAPE: {mape}")
 
-model_path = "./src/AI/model/model.pkl"
-scaler_path = "./src/AI/model/scaler.pkl"
-joblib.dump(model, model_path)
-joblib.dump(scaler, scaler_path)
+model_path = "./src/AI/model/model.keras"
+scaler_path = "./src/AI/model/scaler.pkl"  # Updated file extension to .pkl for consistency
+model.save(model_path)
+joblib.dump(scaler, scaler_path)  # Ensure the scaler is saved correctly
+
 print(f"Model saved to {model_path}")
 print(f"Scaler saved to {scaler_path}")
 print("Model training completed with datasets length: ", len(X_train))
