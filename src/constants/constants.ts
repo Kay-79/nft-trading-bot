@@ -203,6 +203,6 @@ export const IS_FRONT_RUNNING = false;
 
 export const WAIT_BID_PATH = "./src/data/waitBid.json";
 
-export const API_AI_PRICE_PREDICT = "http://localhost:5000/predict";
+export const API_AI_PRICE_PREDICT = "http://localhost:5555/predict";
 
 export const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017";
