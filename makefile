@@ -69,8 +69,7 @@ apiMomo:
 	bash -c "source venv/bin/activate && nohup python ./src/AI/api/app.py > /dev/null 2>&1 &"
 
 apiMomoWin:
-	.\venv\Scripts\activate
-	python ./src/AI/api/app.py
+	.\venv\Scripts\activate && python ./src/AI/api/app.py
 #######################################
 ############### PLA-PLA ###############
 temp:
