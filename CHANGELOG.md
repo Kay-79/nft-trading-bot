@@ -1,5 +1,11 @@
 # mobox-profit-bot
 
+## 6.3.28
+
+### Patch Changes
+
+-   Pump patch version
+
 ## 6.3.27
 
 ### Patch Changes
