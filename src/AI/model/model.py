@@ -55,8 +55,7 @@ X_train = scaler.fit_transform(X_train)
 X_test = scaler.transform(X_test)
 
 model = tf.keras.Sequential([
-    tf.keras.layers.Dense(64, activation='relu',
-                          input_shape=(X_train.shape[1],)),
+    tf.keras.layers.Input(shape=(X_train.shape[1],)),
     tf.keras.layers.Dense(64, activation='relu'),
     tf.keras.layers.Dense(1)
 ])
