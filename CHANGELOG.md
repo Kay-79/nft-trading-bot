@@ -1,5 +1,11 @@
 # mobox-profit-bot
 
+## 6.11.0
+
+### Minor Changes
+
+-   Pump minor version
+
 ## 6.10.0
 
 ### Minor Changes
