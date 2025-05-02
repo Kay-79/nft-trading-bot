@@ -2,7 +2,7 @@ export enum BidType {
     NORMAL = "NORMAL", //✅
     BUNDLE = "BUNDLE", //✅
     PRO = "PRO", //✅
-    GROUP = "GROUP", // 🧑‍💻
+    GROUP = "GROUP", //✅
     BOX = "BOX", // 🔜
     MECBOX = "MECBOX", // 🔜
     GEM = "GEM" // 🔜
@@ -45,6 +45,15 @@ export enum ModeBotStatus {
     DISABLE = "🚫"
 }
 
+export enum TierColor {
+    COMMON = "⚪",
+    UNCOMMON = "🟢",
+    UNIQUE = "🔵",
+    RARE = "🟣",
+    EPIC = "🟡",
+    LEGENDARY = "🔴"
+}
+
 export enum FunctionFragment {
     BID = "bid(address,uint256,uint256,uint256)",
     BID_BLOCK = "bidBlock(address,uint256,uint256,uint256)",
@@ -77,7 +86,7 @@ export enum MpSelector {
     GET_ORDER = "0xedb25841",
     CREATE_AUCTION_BATCH = "0x4213cec7",
     CREATE_AUCTION = "0xd87ccd58",
-    EXECUTE = "0xb61d27f6",
+    EXECUTE = "0xb61d27f6"
 }
 
 export enum MpBlockSelector {

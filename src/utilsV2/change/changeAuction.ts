@@ -2,6 +2,7 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { shortenNumber } from "@/utils/shorten";
 import { getSerializedChangeTx } from "./utils";
 import { ethersProvider } from "@/providers/ethersProvider";
+import { noticeBotChangeAuction } from "../bid/handleNoticeBot";
 
 export const changeAuction = async (auction: AuctionDto, newPrice: number) => {
     const serializedChangeTx: Buffer = await getSerializedChangeTx(auction, newPrice);
@@ -23,10 +24,13 @@ export const changeAuction = async (auction: AuctionDto, newPrice: number) => {
         }
         if (receipt.status === 0) {
             console.log("Error change auction, status: 0");
+            await noticeBotChangeAuction(auction, newPrice, false);
             return;
         }
         console.log(`Change auction ${auction.prototype} success`);
+        await noticeBotChangeAuction(auction, newPrice, true);
     } catch (error) {
         console.error("Error send transaction", error);
+        await noticeBotChangeAuction(auction, newPrice, false);
     }
 };

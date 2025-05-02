@@ -8,6 +8,10 @@ import { getBackgroundColor } from "@/utils/colorUtils";
 import HoverOnShowActivitiesDetail from "@/components/Hover/HoverOnShowActivitiesDetail";
 import { formatDistanceToNow } from "date-fns";
 import { getImgUrl } from "@/utils/image/getImgUrl";
+import { RiAiGenerate2 } from "react-icons/ri";
+import PrimaryLoadingIcon from "../Button/PrimaryLoadingIcon";
+import { useTheme } from "@/config/theme";
+import { toast } from "react-toastify";
 
 interface ActivityRowProps {
     activity: RecentSoldDto;
@@ -24,6 +28,29 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
         setHoveredItem(null);
     };
 
+    const [loadingPredict, setLoadingPredict] = useState(false);
+    const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
+    const { theme } = useTheme();
+
+    const handlePredict = async () => {
+        setLoadingPredict(true);
+        try {
+            const response = await fetch("/api/activities/predictActivity", {
+                method: "POST",
+                body: JSON.stringify({
+                    activity: activity
+                })
+            });
+            console.log("response", response);
+            const data = await response.json();
+            setPredictedPrice(data.prediction);
+        } catch (error) {
+            console.error("Error fetching predicted price:", error);
+            toast.error("Error fetching predicted price. Please try again later.");
+        } finally {
+            setLoadingPredict(false);
+        }
+    };
     const renderImages = () => {
         const images: JSX.Element[] = [];
         const renderIcon = () => {
@@ -176,7 +203,28 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
             </div>
             <span style={{ flex: 2 }}>{shortenAddress(activity.bidder || "")}</span>
             <span style={{ flex: 2 }}>{shortenAddress(activity.auctor || "")}</span>
-            <span style={{ flex: 2 }}>{shortenNumber(activity.bidPrice || 0, 9, 3)} USDT</span>
+            <span
+                style={{
+                    flex: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    gap: "5px"
+                }}
+            >
+                <span>{shortenNumber(activity.bidPrice || 0, 9, 3)} USDT</span>
+                {predictedPrice !== null ? (
+                    <span>{shortenNumber(predictedPrice || 0, 0, 2)} USDT</span>
+                ) : (
+                    <PrimaryLoadingIcon
+                        onClick={handlePredict}
+                        loading={loadingPredict}
+                        style={{ color: theme.textColor }}
+                    >
+                        <RiAiGenerate2 size={20} />
+                    </PrimaryLoadingIcon>
+                )}
+            </span>
             <span style={{ display: "flex", flex: 2 }}>
                 {formatDistanceToNow(new Date((activity.crtime || 0) * 1000), { addSuffix: true })}
                 <a

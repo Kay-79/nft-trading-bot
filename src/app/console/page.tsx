@@ -2,13 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import { useTheme } from "@/config/theme";
-import { shortenAddress } from "@/utils/shorten";
+import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import Link from "next/link";
 import axios from "axios";
 import { AccountConsoleDto } from "@/types/dtos/AccountConsole.dto";
-import { allContracts } from "@/config/config";
+import { addressTester, allContracts } from "@/config/config";
 import { useAccount } from "wagmi";
 import { ethers } from "ethers";
+import { ConnectWallet } from "@/components/ConnectWallet";
+import { NORMAL_BUYER } from "@/constants/constants";
 
 /**
  * @description
@@ -19,12 +21,12 @@ const Console = () => {
     const [contractsData, setContracts] = useState<AccountConsoleDto[]>([]);
     const [totals, setTotals] = useState({
         listingsCount: 0,
-        balance: 0,
+        totalBalance: 0,
         hash: 0,
         totalPriceSell: 0
     });
     const [loading, setLoading] = useState(true);
-
+    const { address } = useAccount();
     useEffect(() => {
         const fetchContracts = async () => {
             try {
@@ -45,7 +47,7 @@ const Console = () => {
 
                 setTotals({
                     listingsCount: totalListingsCount,
-                    balance: totalBalance,
+                    totalBalance: totalBalance,
                     hash: totalHash,
                     totalPriceSell: totalPriceSell
                 });
@@ -55,10 +57,63 @@ const Console = () => {
                 setLoading(false); // Set loading to false after fetching
             }
         };
-        fetchContracts();
-    }, []);
-    const { address } = useAccount();
-    console.log("Address:", address);
+
+        if (
+            address &&
+            (allContracts.includes(ethers.getAddress(address as string)) ||
+                ethers.getAddress(address as string) === addressTester ||
+                ethers.getAddress(address as string) === NORMAL_BUYER)
+        ) {
+            fetchContracts();
+        }
+    }, [address]);
+    if (!address) {
+        return (
+            <div
+                style={{
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
+                    padding: "20px",
+                    minHeight: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}
+            >
+                <ConnectWallet />
+            </div>
+        );
+    }
+
+    if (
+        !(
+            allContracts.includes(ethers.getAddress(address as string)) ||
+            ethers.getAddress(address as string) === addressTester ||
+            ethers.getAddress(address as string) === NORMAL_BUYER
+        )
+    ) {
+        return (
+            <div
+                style={{
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
+                    padding: "20px",
+                    minHeight: "100vh",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center"
+                }}
+            >
+                <h2 style={{ color: theme.primaryColor }}>
+                    Address {shortenAddress(address)} is not in the list of contracts.
+                </h2>
+                <p style={{ color: theme.textColor }}>
+                    Please check your address or contact support.
+                </p>
+            </div>
+        );
+    }
+
     if (loading) {
         return (
             <div
@@ -77,24 +132,6 @@ const Console = () => {
         );
     }
 
-    if (address === undefined || !allContracts.includes(ethers.getAddress(address as string))) {
-        return (
-            <div
-                style={{
-                    backgroundColor: theme.backgroundColor,
-                    color: theme.textColor,
-                    padding: "20px",
-                    minHeight: "100vh",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center"
-                }}
-            >
-                <h2>Welcome to the console!</h2>
-            </div>
-        );
-    }
-
     return (
         <div
             style={{
@@ -105,7 +142,10 @@ const Console = () => {
                 minHeight: "100vh"
             }}
         >
-            <h1 style={{ color: theme.primaryColor }}>USDT Balance Tracker</h1>
+            <h1 style={{ color: theme.primaryColor }}>
+                USDT Balance Tracker ($
+                {shortenNumber(totals.totalBalance + totals.totalPriceSell, 0, 2)})
+            </h1>
             <table
                 style={{
                     width: "100%",
@@ -144,7 +184,7 @@ const Console = () => {
                                 textAlign: "left"
                             }}
                         >
-                            USDT Balance (${totals.balance.toFixed(2)})
+                            USDT Balance (${totals.totalBalance.toFixed(2)})
                         </th>
                         <th
                             style={{

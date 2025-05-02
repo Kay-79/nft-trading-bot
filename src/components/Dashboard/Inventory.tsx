@@ -2,6 +2,9 @@ import React from "react";
 import InventoryCard from "@/components/Card/InventoryCard";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
+import { useAccount } from "wagmi";
+import { CHANGER } from "@/constants/constants";
+import { addressTester } from "@/config/config";
 
 interface InventoryProps {
     inventories: InventoryDto[];
@@ -9,7 +12,12 @@ interface InventoryProps {
 }
 
 const Inventory: React.FC<InventoryProps> = ({ inventories, listings }) => {
-    if (!Array.isArray(inventories)) {
+    const { address } = useAccount();
+    if (
+        !Array.isArray(inventories) ||
+        (address?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase() &&
+            address?.toLocaleLowerCase() !== addressTester.toLocaleLowerCase())
+    ) {
         return <div>No inventories available</div>;
     }
 

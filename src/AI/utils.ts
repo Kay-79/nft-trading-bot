@@ -65,7 +65,6 @@ export const preprocessRawData = (rawDatasets: RecentSoldDto[]): TrainingData[] 
 };
 
 export const predictModelOne = async (inputOne: number[]) => {
-    console.log(`test build next`);
     if (!inputOne || inputOne.length === 0) return [];
     try {
         const response = await axios.post(API_AI_PRICE_PREDICT, {
@@ -77,31 +76,6 @@ export const predictModelOne = async (inputOne: number[]) => {
         throw error;
     }
 };
-
-// export const getMboxPriceAndRewardDelay1Hour = async (): Promise<{
-//     mboxPrice: number;
-//     reward: number;
-// }> => {
-//     let cache;
-//     if (fs.existsSync("./src/AI/predict/cache.json")) {
-//         cache = fs.readFileSync("./src/AI/predict/cache.json", "utf-8");
-//     } else {
-//         const newCache: CachePriceReward = { mboxPrice: 0, reward: 0, timestamp: 0 };
-//         cache = JSON.stringify(newCache);
-//     }
-//     const cacheJson = JSON.parse(cache);
-//     const timestamp = cacheJson.timestamp;
-//     if (Date.now() / 1000 - timestamp > 60 * 60) {
-//         const mboxPrice = await getPriceMboxOnChain(-1, CACHE_MBOX_PRICE);
-//         const reward = await stakingUtils.getRewardPer1000Hashrate(-1, CACHE_REWARD_PER_1000_HASH);
-//         fs.writeFileSync(
-//             "./src/AI/predict/cache.json",
-//             JSON.stringify({ mboxPrice, reward, timestamp: Date.now() / 1000 })
-//         );
-//         return { mboxPrice, reward };
-//     }
-//     return { mboxPrice: cacheJson.mboxPrice, reward: cacheJson.reward };
-// };
 
 export const preprocessListingsData = (listingsPro: AuctionDto[]): TrainingData[] => {
     if (!listingsPro || listingsPro.length === 0) return [];

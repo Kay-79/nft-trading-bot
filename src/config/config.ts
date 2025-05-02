@@ -7,12 +7,12 @@ import { ethers } from "ethers";
 export const modeBot: ModeBot = {
     auction: {
         normal: true,
-        pro: false,
+        pro: true,
         bundle: true
     },
     auctionGroup: {
-        bep721: false,
-        crew: false
+        bep721: true,
+        crew: true
     },
     box: false,
     mecBox: false,
@@ -38,13 +38,13 @@ export const minPriceAIChange: TierPrice = {
 };
 
 export const profitBlock: ProfitConfig = {
-    min: 10,
-    percent: 0.5
+    min: 5,
+    percent: 0.6
 };
 
 export const profitProAI: ProfitConfig = {
-    min: 10,
-    percent: 0.5
+    min: 5,
+    percent: 0.6
 };
 
 export const delayTimeGet: LatestGet = {
@@ -83,6 +83,8 @@ export const allContracts: string[] = [
     ethers.getAddress("0x0e9bc747335a4b01a6194a6c1bb1de54a0a5355c"),
     ethers.getAddress("0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000")
 ];
+
+export const addressTester = ethers.getAddress("0x1111c16591c4ECe1c313f46A63330D8BCf461111");
 
 export const proBidders: string[] = [
     ...allContracts,

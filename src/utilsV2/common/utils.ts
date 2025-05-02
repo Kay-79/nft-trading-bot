@@ -1,4 +1,4 @@
-import { FunctionFragment } from "@/enum/enum";
+import { FunctionFragment, TierColor } from "@/enum/enum";
 import { bidProvider } from "@/providers/bidProvider";
 import { ethersProvider } from "@/providers/ethersProvider";
 import { getBlockByTimestamp } from "../bid/utils";
@@ -77,4 +77,18 @@ export const checkMyIp = async () => {
     const res = await fetch("https://api.ipify.org?format=json");
     const data = await res.json();
     return data.ip;
+};
+
+export const getTierMomo = (prototype: number) => {
+    return prototype >= 10000 && prototype <= 19999
+        ? TierColor.COMMON
+        : prototype <= 29999
+        ? TierColor.UNCOMMON
+        : prototype <= 39999
+        ? TierColor.UNIQUE
+        : prototype <= 49999
+        ? TierColor.RARE
+        : prototype <= 59999
+        ? TierColor.EPIC
+        : TierColor.LEGENDARY;
 };
