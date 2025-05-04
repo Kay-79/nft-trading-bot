@@ -32,19 +32,19 @@ export const minPriceAIChange: TierPrice = {
     1: NaN,
     2: NaN,
     3: NaN,
-    4: 10,
-    5: 90,
+    4: 70,
+    5: 60,
     6: 500
 };
 
 export const profitBlock: ProfitConfig = {
     min: 5,
-    percent: 0.6
+    percent: 0.7
 };
 
 export const profitProAI: ProfitConfig = {
     min: 5,
-    percent: 0.6
+    percent: 0.7
 };
 
 export const delayTimeGet: LatestGet = {
