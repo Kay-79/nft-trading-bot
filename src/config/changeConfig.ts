@@ -19,6 +19,6 @@ export const minTimeListedMyAuctionToChange = {
     bundle: 24 * 60 * 60
 };
 
-export const boostPrice = 1.1;
+export const boostPrice = 1; // require > 1 to boost
 
 export const minTimeListedOtherAuctionToChange = 1 * 60 * 60;
