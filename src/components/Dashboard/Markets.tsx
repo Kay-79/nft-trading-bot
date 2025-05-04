@@ -3,9 +3,11 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 import ListingCard from "@/components/Card/ListingCard";
 import Pagination from "@/components/Pagination/Pagination";
 import axios from "axios";
+import { FilterParams } from "./FilterPanel";
 
 interface ListingsProps {
     markets: AuctionDto[];
+    filterParams: FilterParams;
 }
 
 const Markets: React.FC<ListingsProps> = ({ markets }) => {
@@ -34,6 +36,7 @@ const Markets: React.FC<ListingsProps> = ({ markets }) => {
 
         fetchMarkets();
     }, [currentPage]);
+
     return (
         <div>
             <div

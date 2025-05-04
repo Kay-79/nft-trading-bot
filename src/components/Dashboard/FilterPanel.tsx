@@ -1,45 +1,49 @@
 import React, { useState } from "react";
 import { useTheme } from "@/config/theme";
 
-interface FilterPanelProps {
-    applyFilter: (filter: {
-        minPrice: number;
-        minHashrate: number;
-        search: string;
-        sort: string;
-        sortOrder: string;
-        rarity: string;
-    }) => void;
+export interface FilterParams {
+    minPrice: number;
+    minHashrate: number;
+    search: string;
+    sort: string;
+    sortOrder: string;
+    rarity: string; // Added rarity filter
 }
 
-const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
+export const filterParams: FilterParams = {
+    minPrice: 0,
+    minHashrate: 0,
+    search: "",
+    sort: "uptime",
+    sortOrder: "desc",
+    rarity: ""
+};
+
+const FilterPanel: React.FC = () => {
     const { theme } = useTheme();
     const [minPrice, setMinPrice] = useState<number>(0);
     const [minHashrate, setMinHashrate] = useState<number>(0);
     const [search, setSearch] = useState<string>("");
-    const [sort, setSort] = useState<string>("");
-    const [sortOrder, setSortOrder] = useState<string>("asc");
+    const [sort, setSort] = useState<string>("uptime");
+    const [sortOrder, setSortOrder] = useState<string>("desc");
     const [rarity, setRarity] = useState<string>(""); // Added state for rarity
 
     const handleApplyFilter = () => {
-        applyFilter({ minPrice, minHashrate, search, sort, sortOrder, rarity }); // Pass rarity
+        filterParams.minPrice = minPrice;
+        filterParams.minHashrate = minHashrate;
+        filterParams.search = search;
+        filterParams.sort = sort;
+        filterParams.sortOrder = sortOrder;
+        filterParams.rarity = rarity;
     };
 
     const handleResetAll = () => {
         setMinPrice(0);
         setMinHashrate(0);
         setSearch("");
-        setSort("");
-        setSortOrder("asc");
+        setSort("uptime");
+        setSortOrder("desc");
         setRarity(""); // Reset rarity
-        applyFilter({
-            minPrice: 0,
-            minHashrate: 0,
-            search: "",
-            sort: "",
-            sortOrder: "asc",
-            rarity: ""
-        });
     };
 
     return (
@@ -179,8 +183,8 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ applyFilter }) => {
                             color: theme.textColor
                         }}
                     >
-                        <option value="asc">Asc</option>
                         <option value="desc">Desc</option>
+                        <option value="asc">Asc</option>
                     </select>
                 </div>
             </div>

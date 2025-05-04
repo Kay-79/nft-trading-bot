@@ -3,12 +3,14 @@ import { AuctionDto } from "@/types/dtos/Auction.dto";
 import ListingCard from "@/components/Card/ListingCard";
 import { shortenNumber } from "@/utils/shorten";
 import Pagination from "../Pagination/Pagination";
+import { FilterParams } from "./FilterPanel";
 
 interface ListingsProps {
     listings: AuctionDto[];
+    filterParams: FilterParams;
 }
 
-const Listings: React.FC<ListingsProps> = ({ listings }) => {
+const Listings: React.FC<ListingsProps> = ({ listings, filterParams }) => {
     const validListings = Array.isArray(listings) ? listings : [];
     const totalPrice = shortenNumber(
         validListings.reduce((sum, listing) => sum + (listing.nowPrice || 0), 0),
@@ -23,6 +25,8 @@ const Listings: React.FC<ListingsProps> = ({ listings }) => {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+    console.log(filterParams);
 
     return (
         <div>
