@@ -13,7 +13,7 @@ export async function GET(request: Request) {
         const pType = searchParams.get("pType") || "";
         const params = { page, limit, category, vType, sort, pType };
         const markets = await axios.get(`${API_MOBOX}/auction/search_v2/BNB`, { params });
-        const data = markets.data.list;
+        const data = markets.data;
         return NextResponse.json(data);
     } catch (error) {
         console.error("Error fetching markets:", error);

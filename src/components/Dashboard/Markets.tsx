@@ -10,9 +10,11 @@ interface ListingsProps {
     filterParams: FilterParams;
 }
 
-const Markets: React.FC<ListingsProps> = ({ markets }) => {
+const Markets: React.FC<ListingsProps> = ({ filterParams }) => {
     const [currentPage, setCurrentPage] = useState(1);
-    const totalPages = Math.ceil(markets.length / 6) + 1000;
+    const [totalMarkets, setTotalMarkets] = useState(0);
+    const itemsPerPage = 12;
+    const totalPages = Math.ceil(totalMarkets / itemsPerPage);
     const [paginatedMarkets, setPaginatedMarkets] = useState<AuctionDto[]>([]);
 
     useEffect(() => {
@@ -21,21 +23,22 @@ const Markets: React.FC<ListingsProps> = ({ markets }) => {
                 const response = await axios.get(`/api/markets`, {
                     params: {
                         page: currentPage,
-                        limit: 12,
+                        limit: itemsPerPage,
                         category: "",
-                        vType: "",
+                        vType: filterParams.vType,
                         sort: "",
                         pType: ""
                     }
                 });
-                setPaginatedMarkets(response.data);
+                setPaginatedMarkets(response.data.list);
+                setTotalMarkets(response.data.total);
             } catch (error) {
                 console.error("Error fetching markets:", error);
             }
         };
 
         fetchMarkets();
-    }, [currentPage]);
+    }, [currentPage, filterParams.vType]);
 
     return (
         <div>
@@ -48,7 +51,7 @@ const Markets: React.FC<ListingsProps> = ({ markets }) => {
                     justifyContent: "center"
                 }}
             >
-                {paginatedMarkets.map(listing => (
+                {(paginatedMarkets || []).map(listing => (
                     <ListingCard key={listing.id} listing={listing} />
                 ))}
                 <style jsx>{`

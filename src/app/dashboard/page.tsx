@@ -8,7 +8,7 @@ import Markets from "@/components/Dashboard/Markets";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
 import { useTheme } from "@/config/theme";
-import FilterPanel, { filterParams } from "@/components/Dashboard/FilterPanel";
+import FilterPanel, { FilterParams } from "@/components/Dashboard/FilterPanel";
 import Loading from "@/components/Loading/Loading";
 import { FaArrowUp } from "react-icons/fa";
 import { MdSell } from "react-icons/md";
@@ -30,8 +30,18 @@ const DashboardPage = () => {
     >("listings");
     const [loading, setLoading] = useState<boolean>(false);
     const { theme } = useTheme();
-    const [showScrollTop, setShowScrollTop] = useState<boolean>(false); // Added state for scroll top button
+    const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
     const [isBulkSellModalOpen, setIsBulkSellModalOpen] = useState<boolean>(false);
+
+    // Manage filterParams as state
+    const [filterParams, setFilterParams] = useState<FilterParams>({
+        minPrice: 0,
+        minHashrate: 0,
+        search: "",
+        sort: "uptime",
+        sortOrder: "desc",
+        vType: ""
+    });
 
     const fetchListings = async () => {
         setLoading(true);
@@ -116,7 +126,7 @@ const DashboardPage = () => {
                 flexDirection: "column"
             }}
         >
-            <FilterPanel />
+            <FilterPanel filterParams={filterParams} setFilterParams={setFilterParams} />
             <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
                 <div style={{ textAlign: "center", marginBottom: "20px" }}>
                     <label

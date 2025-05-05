@@ -8,6 +8,7 @@ import json
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
 from tensorflow.keras.optimizers import Adam
 
+
 def load_data(file_path):
     if not os.path.exists(file_path):
         return None
@@ -88,7 +89,8 @@ print(
     f"Test Loss: {loss}, Test MAE: {mae}, Test MAPE: {mape}")
 
 model_path = "./src/AI/model/model.keras"
-scaler_path = "./src/AI/model/scaler.pkl"  # Updated file extension to .pkl for consistency
+# Updated file extension to .pkl for consistency
+scaler_path = "./src/AI/model/scaler.pkl"
 model.save(model_path)
 joblib.dump(scaler, scaler_path)  # Ensure the scaler is saved correctly
 

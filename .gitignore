@@ -15,7 +15,9 @@ nohup.out
 dist
 src/env/.env
 src/AI/data/*.json
-# src/AI/model/*.pkl
+src/AI/model/*.pkl
+src/AI/model/*.keras
+src/AI/model/*.h5
 src/airdrop/*.json
 src/AI/predict/cache.json
 public/images/MOMO

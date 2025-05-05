@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useTheme } from "@/config/theme";
 
 export interface FilterParams {
@@ -7,52 +7,35 @@ export interface FilterParams {
     search: string;
     sort: string;
     sortOrder: string;
-    rarity: string; // Added rarity filter
+    vType: string; // rarity
 }
 
-export const filterParams: FilterParams = {
-    minPrice: 0,
-    minHashrate: 0,
-    search: "",
-    sort: "uptime",
-    sortOrder: "desc",
-    rarity: ""
-};
+interface FilterPanelProps {
+    filterParams: FilterParams;
+    setFilterParams: React.Dispatch<React.SetStateAction<FilterParams>>;
+}
 
-const FilterPanel: React.FC = () => {
+const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams }) => {
     const { theme } = useTheme();
-    const [minPrice, setMinPrice] = useState<number>(0);
-    const [minHashrate, setMinHashrate] = useState<number>(0);
-    const [search, setSearch] = useState<string>("");
-    const [sort, setSort] = useState<string>("uptime");
-    const [sortOrder, setSortOrder] = useState<string>("desc");
-    const [rarity, setRarity] = useState<string>(""); // Added state for rarity
-
-    const handleApplyFilter = () => {
-        filterParams.minPrice = minPrice;
-        filterParams.minHashrate = minHashrate;
-        filterParams.search = search;
-        filterParams.sort = sort;
-        filterParams.sortOrder = sortOrder;
-        filterParams.rarity = rarity;
-    };
 
     const handleResetAll = () => {
-        setMinPrice(0);
-        setMinHashrate(0);
-        setSearch("");
-        setSort("uptime");
-        setSortOrder("desc");
-        setRarity(""); // Reset rarity
+        setFilterParams({
+            minPrice: 0,
+            minHashrate: 0,
+            search: "",
+            sort: "uptime",
+            sortOrder: "desc",
+            vType: ""
+        });
     };
 
     return (
         <div
             style={{
-                position: "fixed", // Make the panel fixed
-                top: "20px", // Adjust the top position as needed
-                left: "20px", // Adjust the left position as needed
-                width: "250px", // Set a fixed width
+                position: "fixed",
+                top: "20px",
+                left: "20px",
+                width: "250px",
                 backgroundColor: theme.backgroundColor,
                 color: theme.textColor,
                 padding: "20px",
@@ -65,11 +48,11 @@ const FilterPanel: React.FC = () => {
                 <label style={{ display: "block", marginBottom: "10px" }}>Minimum Price</label>
                 <input
                     type="text"
-                    value={minPrice || ""}
+                    value={filterParams.minPrice || ""}
                     onChange={e => {
                         const value = e.target.value;
                         if (!isNaN(Number(value)) || value === "") {
-                            setMinPrice(Number(value));
+                            setFilterParams({ ...filterParams, minPrice: Number(value) });
                         }
                     }}
                     onWheel={e => e.currentTarget.blur()} // Disable scroll wheel input change
@@ -88,11 +71,11 @@ const FilterPanel: React.FC = () => {
                 <label style={{ display: "block", marginBottom: "10px" }}>Minimum Hashrate</label>
                 <input
                     type="text"
-                    value={minHashrate || ""}
+                    value={filterParams.minHashrate || ""}
                     onChange={e => {
                         const value = e.target.value;
                         if (!isNaN(Number(value)) || value === "") {
-                            setMinHashrate(Number(value));
+                            setFilterParams({ ...filterParams, minHashrate: Number(value) });
                         }
                     }}
                     placeholder="0"
@@ -110,8 +93,8 @@ const FilterPanel: React.FC = () => {
                 <label style={{ display: "block", marginBottom: "10px" }}>Search</label>
                 <input
                     type="text"
-                    value={search}
-                    onChange={e => setSearch(e.target.value)}
+                    value={filterParams.search}
+                    onChange={e => setFilterParams({ ...filterParams, search: e.target.value })}
                     style={{
                         width: "100%",
                         padding: "10px",
@@ -125,8 +108,8 @@ const FilterPanel: React.FC = () => {
             <div style={{ marginBottom: "20px" }}>
                 <label style={{ display: "block", marginBottom: "10px" }}>Rarity</label>
                 <select
-                    value={rarity}
-                    onChange={e => setRarity(e.target.value)}
+                    value={filterParams.vType}
+                    onChange={e => setFilterParams({ ...filterParams, vType: e.target.value })}
                     style={{
                         width: "100%",
                         padding: "10px",
@@ -137,20 +120,20 @@ const FilterPanel: React.FC = () => {
                     }}
                 >
                     <option value="">All</option>
-                    <option value="common">Common</option>
-                    <option value="uncommon">Uncommon</option>
-                    <option value="unique">Unique</option>
-                    <option value="rare">Rare</option>
-                    <option value="epic">Epic</option>
-                    <option value="legendary">Legendary</option>
+                    <option value="1">Common</option>
+                    <option value="2">Uncommon</option>
+                    <option value="3">Unique</option>
+                    <option value="4">Rare</option>
+                    <option value="5">Epic</option>
+                    <option value="6">Legendary</option>
                 </select>
             </div>
             <div style={{ marginBottom: "20px", display: "flex", gap: "10px" }}>
                 <div style={{ flex: 1 }}>
                     <label style={{ display: "block", marginBottom: "10px" }}>Sort By</label>
                     <select
-                        value={sort}
-                        onChange={e => setSort(e.target.value)}
+                        value={filterParams.sort}
+                        onChange={e => setFilterParams({ ...filterParams, sort: e.target.value })}
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -172,8 +155,10 @@ const FilterPanel: React.FC = () => {
                 <div style={{ flex: 1 }}>
                     <label style={{ display: "block", marginBottom: "10px" }}>Sort Order</label>
                     <select
-                        value={sortOrder}
-                        onChange={e => setSortOrder(e.target.value)}
+                        value={filterParams.sortOrder}
+                        onChange={e =>
+                            setFilterParams({ ...filterParams, sortOrder: e.target.value })
+                        }
                         style={{
                             width: "100%",
                             padding: "10px",
@@ -189,21 +174,6 @@ const FilterPanel: React.FC = () => {
                 </div>
             </div>
             <div style={{ display: "flex", justifyContent: "space-between", gap: "10px" }}>
-                <button
-                    onClick={handleApplyFilter}
-                    style={{
-                        flex: 1,
-                        padding: "10px 20px",
-                        backgroundColor: theme.buttonBackgroundColor,
-                        color: theme.buttonTextColor,
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
-                        textAlign: "center"
-                    }}
-                >
-                    Apply
-                </button>
                 <button
                     onClick={handleResetAll}
                     style={{
