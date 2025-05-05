@@ -24,7 +24,7 @@ const DashboardPage = () => {
     const [filteredListings, setFilteredListings] = useState<AuctionDto[]>([]);
     const [filteredActivities, setFilteredActivities] = useState<RecentSoldDto[]>([]);
     const [filteredInventory, setFilteredInventory] = useState<InventoryDto[]>([]);
-    const [filteredMarkets, setFilteredMarkets] = useState<AuctionDto[]>([]);
+    // const [filteredMarkets, setFilteredMarkets] = useState<AuctionDto[]>([]);
     const [selectedSection, setSelectedSection] = useState<
         "listings" | "activities" | "inventory" | "markets"
     >("listings");
@@ -36,7 +36,9 @@ const DashboardPage = () => {
     // Manage filterParams as state
     const [filterParams, setFilterParams] = useState<FilterParams>({
         minPrice: 0,
+        maxPrice: 0, // Added maxPrice
         minHashrate: 0,
+        maxHashrate: 0, // Added maxHashrate
         search: "",
         sort: "uptime",
         sortOrder: "desc",
@@ -71,7 +73,7 @@ const DashboardPage = () => {
         setLoading(true);
         const marketsData = await fetch("/api/markets").then(response => response.json());
         setMarkets(marketsData);
-        setFilteredMarkets(marketsData);
+        // setFilteredMarkets(marketsData);
         setLoading(false);
     };
 
@@ -233,10 +235,7 @@ const DashboardPage = () => {
                             )}
                             {selectedSection === "markets" && (
                                 <div style={{ marginBottom: "40px" }}>
-                                    <Markets
-                                        markets={filteredMarkets}
-                                        filterParams={filterParams}
-                                    />
+                                    <Markets filterParams={filterParams} />
                                 </div>
                             )}
                         </>

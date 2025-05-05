@@ -1,3 +1,4 @@
+import { customDarkTheme, useTheme } from "@/config/theme";
 import React from "react";
 
 interface PaginationProps {
@@ -7,6 +8,8 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+    const { theme } = useTheme();
+
     const handleNextPage = () => {
         if (currentPage < totalPages) onPageChange(currentPage + 1);
     };
@@ -32,39 +35,39 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         >
             <button
                 onClick={handlePreviousPage}
-                disabled={currentPage === 1}
+                disabled={currentPage === totalPages}
                 style={{
-                    backgroundColor: "#333",
-                    color: "#fff",
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
                     border: "none",
                     borderRadius: "5px",
                     padding: "5px 10px",
-                    cursor: currentPage === 1 ? "not-allowed" : "pointer"
+                    cursor: currentPage === totalPages ? "not-allowed" : "pointer"
                 }}
             >
                 &#9664;
             </button>
-            <span style={{ color: "#fff" }}>Current</span>
+            <span style={{ color: theme.textColor }}>Current</span>
             <input
                 type="number"
                 value={currentPage}
                 onChange={handlePageInput}
                 style={{
-                    width: "50px",
+                    width: "55px",
                     textAlign: "center",
-                    backgroundColor: "#222",
-                    color: "#fff",
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
                     border: "1px solid #555",
                     borderRadius: "5px"
                 }}
             />
-            <span style={{ color: "#fff" }}>/ {totalPages}</span>
+            <span style={{ color: theme.textColor }}>/ {totalPages}</span>
             <button
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
                 style={{
-                    backgroundColor: "#333",
-                    color: "#fff",
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
                     border: "none",
                     borderRadius: "5px",
                     padding: "5px 10px",

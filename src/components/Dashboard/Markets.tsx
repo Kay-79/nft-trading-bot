@@ -5,17 +5,15 @@ import Pagination from "@/components/Pagination/Pagination";
 import axios from "axios";
 import { FilterParams } from "./FilterPanel";
 
-interface ListingsProps {
-    markets: AuctionDto[];
+interface MarketsProps {
     filterParams: FilterParams;
 }
 
-const Markets: React.FC<ListingsProps> = ({ filterParams }) => {
+const Markets: React.FC<MarketsProps> = ({ filterParams }) => {
+    const [markets, setMarkets] = useState<AuctionDto[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalMarkets, setTotalMarkets] = useState(0);
     const itemsPerPage = 12;
-    const totalPages = Math.ceil(totalMarkets / itemsPerPage);
-    const [paginatedMarkets, setPaginatedMarkets] = useState<AuctionDto[]>([]);
 
     useEffect(() => {
         const fetchMarkets = async () => {
@@ -24,13 +22,10 @@ const Markets: React.FC<ListingsProps> = ({ filterParams }) => {
                     params: {
                         page: currentPage,
                         limit: itemsPerPage,
-                        category: "",
-                        vType: filterParams.vType,
-                        sort: "",
-                        pType: ""
+                        vType: filterParams.vType
                     }
                 });
-                setPaginatedMarkets(response.data.list);
+                setMarkets(response.data.list);
                 setTotalMarkets(response.data.total);
             } catch (error) {
                 console.error("Error fetching markets:", error);
@@ -38,7 +33,7 @@ const Markets: React.FC<ListingsProps> = ({ filterParams }) => {
         };
 
         fetchMarkets();
-    }, [currentPage, filterParams.vType]);
+    }, [currentPage, filterParams]);
 
     return (
         <div>
@@ -51,21 +46,13 @@ const Markets: React.FC<ListingsProps> = ({ filterParams }) => {
                     justifyContent: "center"
                 }}
             >
-                {(paginatedMarkets || []).map(listing => (
+                {markets.map(listing => (
                     <ListingCard key={listing.id} listing={listing} />
                 ))}
-                <style jsx>{`
-                    @media (max-width: 768px) {
-                        div {
-                            flex-direction: column;
-                            align-items: center;
-                        }
-                    }
-                `}</style>
             </div>
             <Pagination
                 currentPage={currentPage}
-                totalPages={totalPages}
+                totalPages={Math.ceil(totalMarkets / itemsPerPage)}
                 onPageChange={setCurrentPage}
             />
         </div>
