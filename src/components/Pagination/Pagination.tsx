@@ -1,4 +1,4 @@
-import { customDarkTheme, useTheme } from "@/config/theme";
+import { useTheme } from "@/config/theme";
 import React from "react";
 
 interface PaginationProps {
