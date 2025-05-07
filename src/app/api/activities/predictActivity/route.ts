@@ -54,7 +54,6 @@ export async function POST(request: Request) {
                 tokenId: activity.tokens[0].tokenId || 0
             });
             const prediction = await predictModelOne(input);
-            console.log("prediction", prediction);
             return NextResponse.json({ prediction: prediction[0] });
         }
         if (activity.ids && activity.ids.length > 0) {

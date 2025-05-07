@@ -35,14 +35,14 @@ const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPage
         >
             <button
                 onClick={handlePreviousPage}
-                disabled={currentPage === totalPages}
+                disabled={currentPage === 1}
                 style={{
                     backgroundColor: theme.backgroundColor,
                     color: theme.textColor,
                     border: "none",
                     borderRadius: "5px",
                     padding: "5px 10px",
-                    cursor: currentPage === totalPages ? "not-allowed" : "pointer"
+                    cursor: currentPage === 1 ? "not-allowed" : "pointer"
                 }}
             >
                 &#9664;

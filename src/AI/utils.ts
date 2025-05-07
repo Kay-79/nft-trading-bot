@@ -65,14 +65,13 @@ export const preprocessRawData = (rawDatasets: RecentSoldDto[]): TrainingData[] 
 };
 
 export const predictModelOne = async (inputOne: number[]) => {
-    if (!inputOne || inputOne.length === 0) return [];
+    if (!inputOne || inputOne.length === 0) throw new Error("Invalid input data");
     try {
         const response = await axios.post(API_AI_PRICE_PREDICT, {
             input: inputOne
         });
         return response.data.prediction[0];
     } catch (error) {
-        console.error("Error predicting model:", error);
         throw error;
     }
 };

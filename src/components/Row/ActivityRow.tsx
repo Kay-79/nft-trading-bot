@@ -1,4 +1,4 @@
-import React, { JSX, useState } from "react";
+import React, { JSX, useCallback, useState } from "react";
 import Image from "next/image";
 import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
@@ -12,6 +12,7 @@ import { RiAiGenerate2 } from "react-icons/ri";
 import PrimaryLoadingIcon from "../Button/PrimaryLoadingIcon";
 import { useTheme } from "@/config/theme";
 import { toast } from "react-toastify";
+import { getErrorMessage } from "@/utils/getErrorMessage";
 
 interface ActivityRowProps {
     activity: RecentSoldDto;
@@ -32,7 +33,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
     const { theme } = useTheme();
 
-    const handlePredict = async () => {
+    const handlePredict = useCallback(async () => {
         setLoadingPredict(true);
         try {
             const response = await fetch("/api/activities/predictActivity", {
@@ -41,16 +42,17 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                     activity: activity
                 })
             });
-            console.log("response", response);
+            if (!response.ok) {
+                throw new Error(`Server error: ${response.status}`);
+            }
             const data = await response.json();
             setPredictedPrice(data.prediction);
         } catch (error) {
-            console.error("Error fetching predicted price:", error);
-            toast.error("Error fetching predicted price. Please try again later.");
+            toast.error(getErrorMessage(error));
         } finally {
             setLoadingPredict(false);
         }
-    };
+    }, [activity]);
     const renderImages = () => {
         const images: JSX.Element[] = [];
         const renderIcon = () => {
