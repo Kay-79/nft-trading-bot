@@ -10,7 +10,7 @@ interface ListingsProps {
     filterParams: FilterParams;
 }
 
-const Listings: React.FC<ListingsProps> = ({ listings, filterParams }) => {
+const Listings: React.FC<ListingsProps> = ({ listings }) => {
     const validListings = Array.isArray(listings) ? listings : [];
     const totalPrice = shortenNumber(
         validListings.reduce((sum, listing) => sum + (listing.nowPrice || 0), 0),
@@ -25,8 +25,6 @@ const Listings: React.FC<ListingsProps> = ({ listings, filterParams }) => {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
-
-    console.log(filterParams);
 
     return (
         <div>

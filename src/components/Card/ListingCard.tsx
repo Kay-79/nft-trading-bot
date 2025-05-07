@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Image from "next/image";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import ListingDetailModal from "@/components/Modal/ListingDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import { getImgUrl } from "@/utils/image/getImgUrl";
+import axios from "axios";
 
 interface ListingCardProps {
     listing: AuctionDto;
@@ -13,7 +14,23 @@ interface ListingCardProps {
 const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const backgroundColor = getBackgroundColor(listing.prototype || 0);
+    const [gems, setGems] = useState<number[]>([]);
 
+    useEffect(() => {
+        async function fetchGems() {
+            if ((listing.tokenId ?? 0) > 0) {
+                const response = await axios.get("/api/gem/gemEquipment", {
+                    params: {
+                        tokenId: listing.tokenId
+                    }
+                });
+                setGems(response.data);
+            } else {
+                setGems([]);
+            }
+        }
+        fetchGems();
+    }, [listing]);
     const handleClick = useCallback(() => {
         setIsModalOpen(true);
     }, []);
@@ -92,7 +109,9 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
                     </div>
                 )}
             </div>
-            {isModalOpen && <ListingDetailModal listing={listing} onClose={handleCloseModal} />}
+            {isModalOpen && (
+                <ListingDetailModal listing={listing} gems={gems} onClose={handleCloseModal} />
+            )}
         </>
     );
 };

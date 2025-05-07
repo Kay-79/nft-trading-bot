@@ -26,13 +26,15 @@ import { ethers } from "ethers";
 import { getImgUrl } from "@/utils/image/getImgUrl";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { CHANGER } from "@/constants/constants";
+import GemSlots from "@/components/Gem/GemSlots";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
+    gems: number[];
     onClose: () => void;
 }
 
-const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClose }) => {
+const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, gems, onClose }) => {
     const { theme } = useTheme();
     const [price, setPrice] = useState<number>(shortenNumber(listing.nowPrice || 0, 9, 3));
     const [predictedPrice, setPredictedPrice] = useState<number | null>(null);
@@ -45,7 +47,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
     const [loadingDelist, setLoadingDelist] = useState<boolean>(false);
     const [loadingPredict, setLoadingPredict] = useState<boolean>(false);
     const [loadingPurchase, setLoadingPurchase] = useState<boolean>(false);
-    
+
     const isMyListing = useMemo(() => {
         if (
             allContracts.includes(ethers.getAddress(listingData.auctor || "")) &&
@@ -276,9 +278,20 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, onClos
                         </button>
                     )}
                     <div
-                        style={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
-                        <Image src={imageSrc} alt="Avatar" width={100} height={100} priority />
+                        <div className="flex justify-center my-4" style={{ marginRight: "10px" }}>
+                            <GemSlots gems={gems} />
+                        </div>
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center"
+                            }}
+                        >
+                            <Image src={imageSrc} alt="Avatar" width={100} height={100} priority />
+                        </div>
                     </div>
                     {listingData.ids && listingData.ids.length > 1 && (
                         <button
