@@ -76,7 +76,7 @@ const worker = async () => {
             );
         }
         await databaseService.updateSyncedMp(db, endBlock, "");
-        const delay = 60;
+        const delay = 120;
         console.log(`Waiting for new blocks, sleeping for ${delay} seconds`);
         await sleep(delay);
     }
