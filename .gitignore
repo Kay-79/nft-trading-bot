@@ -24,6 +24,8 @@ public/images/MOMO
 /venv
 src/utilsV2/find/*.json
 /backupData
+/src/debugs/app.*.js
+/src/debugs/*.json
 
 # Hardhat files
 /cache

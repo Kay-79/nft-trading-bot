@@ -24,7 +24,7 @@ export const profitPerTier: TierPrice = {
     2: 0.15,
     3: 0.15,
     4: 2,
-    5: 6,
+    5: 10,
     6: 50000
 };
 
