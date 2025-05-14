@@ -101,6 +101,6 @@ export const proBidders: string[] = [
     ethers.getAddress("0x4114463f52401b22c8127bc76bc7ec129928ca97")
 ];
 
-export const bidContract = ethers.getAddress("0xE4534fA363016b1BD1E95C20144361cFB7c2d3aC");
+export const bidContract = ethers.getAddress("0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F");
 
 export const bidContractPro = bidContract;
