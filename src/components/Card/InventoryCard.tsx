@@ -72,7 +72,7 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item, isListing, amountLi
                 }`}
                 style={{
                     backgroundColor: backgroundColor,
-                    opacity: isListing ? 0.6 : 1, // Dim the card if it's already listed
+                    opacity: isListing ? 0.6 : 1,
                     position: "relative"
                 }}
                 onClick={handleClick}
@@ -170,6 +170,10 @@ const InventoryCard: React.FC<InventoryCardProps> = ({ item, isListing, amountLi
                                 onClick={e => {
                                     e.stopPropagation();
                                     if (canAddToBulk) handleAddToStorage();
+                                }}
+                                style={{
+                                    opacity: !canAddToBulk ? 0.5 : 1,
+                                    cursor: !canAddToBulk ? "not-allowed" : "pointer"
                                 }}
                             />
                             <Tooltip id="tooltip" place="top" />
