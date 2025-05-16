@@ -1,11 +1,10 @@
 import React, { useState, useCallback, useEffect } from "react";
-import Image from "next/image";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import ListingDetailModal from "@/components/Modal/ListingDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
-import { getImgUrl } from "@/utils/image/getImgUrl";
 import axios from "axios";
+import MomoImage from "@/components/Image/MomoImage";
 
 interface ListingCardProps {
     listing: AuctionDto;
@@ -63,13 +62,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
 
                 {/* Avatar */}
                 <div className="flex justify-center my-4">
-                    <Image
-                        src={getImgUrl(listing.prototype || 0)}
-                        alt="Avatar"
-                        width={100}
-                        height={100}
-                        priority
-                    />
+                    <MomoImage width={100} height={100} prototype={listing.prototype || 0} />
                 </div>
 
                 <p className="text-center text-lg font-semibold">{listing.prototype || 0}</p>

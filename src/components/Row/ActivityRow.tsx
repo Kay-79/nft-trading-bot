@@ -1,5 +1,4 @@
 import React, { JSX, useCallback, useState } from "react";
-import Image from "next/image";
 import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
 import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import { FaExternalLinkAlt, FaUsers } from "react-icons/fa";
@@ -7,12 +6,12 @@ import { EXPLORER_URL } from "@/constants/constants";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import HoverOnShowActivitiesDetail from "@/components/Hover/HoverOnShowActivitiesDetail";
 import { formatDistanceToNow } from "date-fns";
-import { getImgUrl } from "@/utils/image/getImgUrl";
 import { RiAiGenerate2 } from "react-icons/ri";
 import PrimaryLoadingIcon from "../Button/PrimaryLoadingIcon";
 import { useTheme } from "@/config/theme";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/utils/getErrorMessage";
+import MomoImage from "@/components/Image/MomoImage";
 
 interface ActivityRowProps {
     activity: RecentSoldDto;
@@ -123,13 +122,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                         >
                             {activity.amounts?.[index] ?? 0}
                         </span>
-                        <Image
-                            src={getImgUrl(Number(id))}
-                            alt={`MOMO ${id}`}
-                            width={40}
-                            height={40}
-                            priority
-                        />
+                        <MomoImage width={40} height={40} prototype={Number(id)} />
                         {hoveredItem === index && (
                             <div
                                 style={{ position: "absolute", top: "0", left: "100%", zIndex: 10 }}
@@ -168,13 +161,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                         onMouseLeave={handleMouseLeave}
                     >
                         {renderIcon()}
-                        <Image
-                            src={getImgUrl(token.prototype || 0)}
-                            alt={`MOMO ${token.prototype}`}
-                            width={40}
-                            height={40}
-                            priority
-                        />
+                        <MomoImage width={40} height={40} prototype={Number(token.prototype)} />
                         {hoveredItem === index && (
                             <div
                                 style={{ position: "absolute", top: "0", left: "100%", zIndex: 10 }}

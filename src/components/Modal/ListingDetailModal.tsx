@@ -1,7 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { customDarkTheme, useTheme } from "@/config/theme";
-import Image from "next/image";
 import { shortenNumber, shortenAddress } from "@/utils/shorten";
 import axios from "axios";
 import { useErrorHandler } from "@/hooks/useErrorHandler";
@@ -23,10 +22,10 @@ import PrimaryLoadingButton from "../Button/PrimaryLoadingButton";
 import SecondaryLoadingButton from "../Button/SecondaryLoadingButton";
 import { allContracts } from "@/config/config";
 import { ethers } from "ethers";
-import { getImgUrl } from "@/utils/image/getImgUrl";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { CHANGER } from "@/constants/constants";
 import GemSlots from "@/components/Gem/GemSlots";
+import MomoImage from "../Image/MomoImage";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -167,11 +166,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, gems, 
         }
     };
 
-    const imageSrc =
-        listingData.ids && listingData.ids.length > 1
-            ? getImgUrl(Number((listingData.ids ?? [])[currentImageIndex]))
-            : getImgUrl(listingData.prototype || 0);
-
     const backgroundColor =
         listingData.ids && listingData.ids.length > 1
             ? getBackgroundColor(Number((listingData.ids ?? [])[currentImageIndex]))
@@ -179,7 +173,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, gems, 
 
     const prototype =
         listingData.ids && listingData.ids.length > 1
-            ? (listingData.ids ?? [])[currentImageIndex]
+            ? Number((listingData.ids ?? [])[currentImageIndex])
             : listingData.prototype || 0;
 
     return (
@@ -290,7 +284,7 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, gems, 
                                 alignItems: "center"
                             }}
                         >
-                            <Image src={imageSrc} alt="Avatar" width={100} height={100} priority />
+                            <MomoImage width={100} height={100} prototype={prototype} />
                         </div>
                     </div>
                     {listingData.ids && listingData.ids.length > 1 && (
