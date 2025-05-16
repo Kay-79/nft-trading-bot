@@ -25,7 +25,7 @@ import { ethers } from "ethers";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import { CHANGER } from "@/constants/constants";
 import GemSlots from "@/components/Gem/GemSlots";
-import MomoImage from "../Image/MomoImage";
+import PrototypeImage from "../Image/PrototypeImage";
 
 interface ListingDetailModalProps {
     listing: AuctionDto;
@@ -274,9 +274,6 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, gems, 
                     <div
                         style={{ display: "flex", alignItems: "center", justifyContent: "center" }}
                     >
-                        <div className="flex justify-center my-4" style={{ marginRight: "10px" }}>
-                            <GemSlots gems={gems} />
-                        </div>
                         <div
                             style={{
                                 display: "flex",
@@ -284,9 +281,10 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, gems, 
                                 alignItems: "center"
                             }}
                         >
-                            <MomoImage width={100} height={100} prototype={prototype} />
+                            <PrototypeImage width={100} height={100} prototype={prototype} />
                         </div>
                     </div>
+                    <GemSlots gems={gems} />
                     {listingData.ids && listingData.ids.length > 1 && (
                         <button
                             onClick={handleNextImage}

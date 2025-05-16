@@ -12,7 +12,7 @@ import { mpContractService } from "@/services/mpContract";
 import { useAccount } from "wagmi";
 import { ConnectWallet } from "@/components/ConnectWallet";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import MomoImage from "../Image/MomoImage";
+import PrototypeImage from "../Image/PrototypeImage";
 
 interface InventoryDetailModalProps {
     item: InventoryDto;
@@ -182,7 +182,11 @@ const InventoryDetailModal: React.FC<InventoryDetailModalProps> = ({ item, onClo
                             marginBottom: "50px"
                         }}
                     >
-                        <MomoImage width={100} height={100} prototype={itemData.prototype || 0} />
+                        <PrototypeImage
+                            width={100}
+                            height={100}
+                            prototype={itemData.prototype || 0}
+                        />
                     </div>
                     <div
                         style={{

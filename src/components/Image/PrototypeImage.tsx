@@ -1,13 +1,13 @@
 import { getImgUrl } from "@/utils/image/getImgUrl";
 import Image from "next/image";
 
-interface MomoImageProps {
+interface PrototypeImageProps {
     width: number;
     height: number;
     prototype: number;
 }
 
-const MomoImage: React.FC<MomoImageProps> = ({ width, height, prototype }) => {
+const PrototypeImage: React.FC<PrototypeImageProps> = ({ width, height, prototype }) => {
     return (
         <div>
             <a rel="noopener noreferrer" style={{ display: "inline-block" }}>
@@ -24,4 +24,4 @@ const MomoImage: React.FC<MomoImageProps> = ({ width, height, prototype }) => {
     );
 };
 
-export default MomoImage;
+export default PrototypeImage;

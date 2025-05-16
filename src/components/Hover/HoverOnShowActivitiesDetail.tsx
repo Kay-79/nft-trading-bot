@@ -2,7 +2,7 @@ import React from "react";
 import { Momo721 } from "@/types/dtos/Momo721";
 import { shortenAddress } from "@/utils/shorten";
 import { getBackgroundColor } from "@/utils/colorUtils";
-import MomoImage from "@/components/Image/MomoImage";
+import PrototypeImage from "@/components/Image/PrototypeImage";
 
 interface HoverOnShowActivitiesDetailProps {
     item: Momo721;
@@ -45,7 +45,7 @@ const HoverOnShowActivitiesDetail: React.FC<HoverOnShowActivitiesDetailProps> = 
             </div>
 
             <div style={{ marginBottom: "10px", display: "flex", justifyContent: "center" }}>
-                <MomoImage width={60} height={60} prototype={item.prototype || 0} />
+                <PrototypeImage width={60} height={60} prototype={item.prototype || 0} />
             </div>
             <p style={{ fontSize: "12px", fontWeight: "bold" }}>{item.prototype}</p>
             <p style={{ fontSize: "10px", color: "#fff" }}>

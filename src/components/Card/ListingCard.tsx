@@ -4,7 +4,7 @@ import { shortenAddress, shortenNumber } from "@/utils/shorten";
 import ListingDetailModal from "@/components/Modal/ListingDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import axios from "axios";
-import MomoImage from "@/components/Image/MomoImage";
+import PrototypeImage from "@/components/Image/PrototypeImage";
 
 interface ListingCardProps {
     listing: AuctionDto;
@@ -62,7 +62,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
 
                 {/* Avatar */}
                 <div className="flex justify-center my-4">
-                    <MomoImage width={100} height={100} prototype={listing.prototype || 0} />
+                    <PrototypeImage width={100} height={100} prototype={listing.prototype || 0} />
                 </div>
 
                 <p className="text-center text-lg font-semibold">{listing.prototype || 0}</p>

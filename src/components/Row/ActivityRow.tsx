@@ -11,7 +11,7 @@ import PrimaryLoadingIcon from "../Button/PrimaryLoadingIcon";
 import { useTheme } from "@/config/theme";
 import { toast } from "react-toastify";
 import { getErrorMessage } from "@/utils/getErrorMessage";
-import MomoImage from "@/components/Image/MomoImage";
+import PrototypeImage from "@/components/Image/PrototypeImage";
 
 interface ActivityRowProps {
     activity: RecentSoldDto;
@@ -122,7 +122,7 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                         >
                             {activity.amounts?.[index] ?? 0}
                         </span>
-                        <MomoImage width={40} height={40} prototype={Number(id)} />
+                        <PrototypeImage width={40} height={40} prototype={Number(id)} />
                         {hoveredItem === index && (
                             <div
                                 style={{ position: "absolute", top: "0", left: "100%", zIndex: 10 }}
@@ -161,7 +161,11 @@ const ActivityRow: React.FC<ActivityRowProps> = ({ activity }) => {
                         onMouseLeave={handleMouseLeave}
                     >
                         {renderIcon()}
-                        <MomoImage width={40} height={40} prototype={Number(token.prototype)} />
+                        <PrototypeImage
+                            width={40}
+                            height={40}
+                            prototype={Number(token.prototype)}
+                        />
                         {hoveredItem === index && (
                             <div
                                 style={{ position: "absolute", top: "0", left: "100%", zIndex: 10 }}
