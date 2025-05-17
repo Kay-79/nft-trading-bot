@@ -13,6 +13,7 @@ import { getImgUrl } from "@/utils/image/getImgUrl";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import HoverOnShowActivitiesDetail from "../Hover/HoverOnShowActivitiesDetail";
 import { getBackgroundColor } from "@/utils/colorUtils";
+import { Momo721 } from "@/types/dtos/Momo721";
 
 interface BulkSellRowProps {
     bulkSellItem: BulkItemListStorage;
@@ -55,11 +56,17 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
         }
     };
 
-    const token = {
-        prototype: bulkSellItem.inventory.prototype,
+    const token: Momo721 = {
+        tokenId: bulkSellItem.inventory.tokenId,
+        quality: bulkSellItem.inventory.quality,
+        category: bulkSellItem.inventory.category,
         level: bulkSellItem.inventory.level,
-        tokenId: bulkSellItem.inventory.tokenId
+        specialty: bulkSellItem.inventory.specialty,
+        hashrate: bulkSellItem.inventory.hashrate,
+        lvHashrate: bulkSellItem.inventory.lvHashrate,
+        prototype: bulkSellItem.inventory.prototype
     };
+    console.log("bulkSellItem", token);
     const [hoveredItem, setHoveredItem] = useState<number | null>(null);
 
     const handleMouseEnter = (index: number) => {
@@ -150,13 +157,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                             <div
                                 style={{ position: "absolute", top: "0", left: "100%", zIndex: 10 }}
                             >
-                                <HoverOnShowActivitiesDetail
-                                    item={{
-                                        prototype: Number(id),
-                                        level: 1,
-                                        tokenId: Number(id)
-                                    }}
-                                />
+                                <HoverOnShowActivitiesDetail item={token} />
                             </div>
                         )}
                     </div>

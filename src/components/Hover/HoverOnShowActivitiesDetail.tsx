@@ -49,7 +49,7 @@ const HoverOnShowActivitiesDetail: React.FC<HoverOnShowActivitiesDetailProps> = 
             </div>
             <p style={{ fontSize: "12px", fontWeight: "bold" }}>{item.prototype}</p>
             <p style={{ fontSize: "10px", color: "#fff" }}>
-                {shortenAddress(item.tokenId?.toString() || "")}
+                {item.tokenId ? shortenAddress(item.tokenId?.toString() || "") : ""}
             </p>
         </div>
     );

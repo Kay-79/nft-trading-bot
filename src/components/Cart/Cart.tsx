@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { FaMoon, FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 
-const CartToggle = () => {
+const Cart = () => {
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -26,4 +26,4 @@ const CartToggle = () => {
     );
 };
 
-export default CartToggle;
+export default Cart;

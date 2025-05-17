@@ -367,14 +367,14 @@ const ListingDetailModal: React.FC<ListingDetailModalProps> = ({ listing, gems, 
                             placeholder="Enter price"
                             value={price || ""}
                             onChange={e => setPrice(Number(e.target.value))}
-                            onWheel={e => e.currentTarget.blur()} // Disable scroll wheel input change
+                            onWheel={e => e.currentTarget.blur()}
                             style={{
                                 padding: "10px",
                                 borderRadius: "5px",
                                 border: "1px solid #ccc",
                                 width: "60%",
-                                backgroundColor: "#fff", // Màu nền trắng
-                                color: "#000" // Màu chữ đen
+                                backgroundColor: "#fff",
+                                color: "#000"
                             }}
                         />
                         <PrimaryLoadingButton onClick={handleAdjustPrice} loading={loadingAdjust}>

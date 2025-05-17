@@ -4,7 +4,7 @@ import Link from "next/link"; // Import Link component from Next.js
 import ThemeToggle from "./Theme/ThemeToggle";
 import { useTheme } from "@/config/theme";
 import { ConnectWallet } from "./ConnectWallet";
-import CartToggle from "./Cart/CartToggle";
+import Cart from "@/components/Cart/Cart";
 
 /**
  * @description Header component for the application.
@@ -70,7 +70,7 @@ const Header = () => {
             </div>
             <div style={{ display: "flex", alignItems: "center" }}>
                 <ThemeToggle />
-                <CartToggle />
+                <Cart />
                 <ConnectWallet />
             </div>
             <style jsx>{`
