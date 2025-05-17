@@ -9,7 +9,6 @@ export async function GET(request: Request) {
         const limit = searchParams.get("limit") || "12";
         const vType = searchParams.get("vType") || "";
         const sort = searchParams.get("sort") || "-time";
-        const sortOrder = searchParams.get("sortOrder") || "desc";
         const minPrice = searchParams.get("minPrice") || "";
         const maxPrice = searchParams.get("maxPrice") || "";
         const minHashrate = searchParams.get("minHashrate") || "";
@@ -20,7 +19,7 @@ export async function GET(request: Request) {
             page,
             limit,
             vType,
-            sort: `${sortOrder === "asc" ? "" : "-"}${sort}`,
+            sort,
             minPrice,
             maxPrice,
             minHashrate,

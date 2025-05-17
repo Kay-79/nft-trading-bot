@@ -20,10 +20,10 @@ export const modeBot: ModeBot = {
 };
 
 export const profitPerTier: TierPrice = {
-    1: 0,
-    2: 0,
-    3: 0,
-    4: 2,
+    1: 0.1,
+    2: 0.1,
+    3: 0.05,
+    4: 2.5,
     5: 10,
     6: 50000
 };
@@ -101,6 +101,6 @@ export const proBidders: string[] = [
     ethers.getAddress("0x4114463f52401b22c8127bc76bc7ec129928ca97")
 ];
 
-export const bidContract = ethers.getAddress("0x19De8F7bB60032b212d8Ed570fF97d60Fe52298F");
+export const bidContract = ethers.getAddress("0x4cAefa2AB16075B3527fE3757BC7987845796d5E");
 
 export const bidContractPro = bidContract;

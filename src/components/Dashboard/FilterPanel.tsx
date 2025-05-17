@@ -1,15 +1,22 @@
 import React from "react";
 import { useTheme } from "@/config/theme";
 
+export enum SortOptions {
+    Time = "-time",
+    HighToLow = "-price",
+    LowToHigh = "price",
+    HashrateDesc = "-hashrate",
+    HashrateAsc = "hashrate"
+}
+
 export interface FilterParams {
     minPrice: number;
     maxPrice: number;
     minHashrate: number;
     maxHashrate: number;
     search: string;
-    sort: string;
-    sortOrder: string;
-    vType: string; // rarity
+    sort: SortOptions;
+    vType: string;
 }
 
 interface FilterPanelProps {
@@ -27,8 +34,7 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams
             minHashrate: 0,
             maxHashrate: 0,
             search: "",
-            sort: "uptime",
-            sortOrder: "desc",
+            sort: SortOptions.Time,
             vType: ""
         });
     };
@@ -104,24 +110,19 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams
                 <div className="filter-range">
                     <select
                         value={filterParams.sort}
-                        onChange={e => setFilterParams({ ...filterParams, sort: e.target.value })}
-                    >
-                        <option value="">Select</option>
-                        <option value="price">Price</option>
-                        <option value="hashrate">Hashrate</option>
-                        <option value="level">Level</option>
-                        <option value="uptime">Uptime</option>
-                        <option value="prototype">Prototype</option>
-                        <option value="amount">Amount</option>
-                    </select>
-                    <select
-                        value={filterParams.sortOrder}
                         onChange={e =>
-                            setFilterParams({ ...filterParams, sortOrder: e.target.value })
+                            setFilterParams({
+                                ...filterParams,
+                                sort: e.target.value as SortOptions
+                            })
                         }
                     >
-                        <option value="desc">Desc</option>
-                        <option value="asc">Asc</option>
+                        <option value="">Select</option>
+                        <option value={SortOptions.Time}>Time</option>
+                        <option value={SortOptions.HighToLow}>Price↓</option>
+                        <option value={SortOptions.LowToHigh}>Price↑</option>
+                        <option value={SortOptions.HashrateDesc}>Hashrate↓</option>
+                        <option value={SortOptions.HashrateAsc}>Hashrate↑</option>
                     </select>
                 </div>
             </div>

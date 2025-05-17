@@ -22,7 +22,8 @@ const Markets: React.FC<MarketsProps> = ({ filterParams }) => {
                     params: {
                         page: currentPage,
                         limit: itemsPerPage,
-                        vType: filterParams.vType
+                        vType: filterParams.vType,
+                        sort: filterParams.sort
                     }
                 });
                 setMarkets(response.data.list);

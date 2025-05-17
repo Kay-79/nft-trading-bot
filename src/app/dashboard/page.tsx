@@ -8,7 +8,7 @@ import Markets from "@/components/Dashboard/Markets";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { RecentSoldDto } from "@/types/dtos/RecentSold.dto";
 import { useTheme } from "@/config/theme";
-import FilterPanel, { FilterParams } from "@/components/Dashboard/FilterPanel";
+import FilterPanel, { FilterParams, SortOptions } from "@/components/Dashboard/FilterPanel";
 import Loading from "@/components/Loading/Loading";
 import { FaArrowUp } from "react-icons/fa";
 import { MdSell } from "react-icons/md";
@@ -40,8 +40,7 @@ const DashboardPage = () => {
         minHashrate: 0,
         maxHashrate: 0, // Added maxHashrate
         search: "",
-        sort: "uptime",
-        sortOrder: "desc",
+        sort: SortOptions.Time,
         vType: ""
     });
 
@@ -73,7 +72,6 @@ const DashboardPage = () => {
         setLoading(true);
         const marketsData = await fetch("/api/markets").then(response => response.json());
         setMarkets(marketsData);
-        // setFilteredMarkets(marketsData);
         setLoading(false);
     };
 
