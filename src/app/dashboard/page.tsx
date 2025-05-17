@@ -24,7 +24,6 @@ const DashboardPage = () => {
     const [filteredListings, setFilteredListings] = useState<AuctionDto[]>([]);
     const [filteredActivities, setFilteredActivities] = useState<RecentSoldDto[]>([]);
     const [filteredInventory, setFilteredInventory] = useState<InventoryDto[]>([]);
-    // const [filteredMarkets, setFilteredMarkets] = useState<AuctionDto[]>([]);
     const [selectedSection, setSelectedSection] = useState<
         "listings" | "activities" | "inventory" | "markets"
     >("listings");

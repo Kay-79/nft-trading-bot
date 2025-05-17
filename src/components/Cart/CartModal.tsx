@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useTheme } from "@/config/theme";
 import { RiCloseLine } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import { CartItemListStorage } from "@/store/reducers/cartStorageReducer";
 import { CartAction } from "@/enum/enum";
 import ListingCard from "@/components/Card/ListingCard";
+import PrimaryLoadingButton from "@/components/Button/PrimaryLoadingButton";
+import { toast } from "react-toastify";
 
-interface CartModelProps {
+interface CartModalProps {
     onClose: () => void;
 }
 
-const CartModel: React.FC<CartModelProps> = ({ onClose }) => {
+const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
     const { theme } = useTheme();
     const dispatch = useDispatch();
+    const [loadingBuy, setLoadingBuy] = useState(false);
     const cartItems: CartItemListStorage[] = useSelector(
         (state: { cartStorage: { cartItems: CartItemListStorage[] } }) =>
             state.cartStorage.cartItems
@@ -30,6 +33,25 @@ const CartModel: React.FC<CartModelProps> = ({ onClose }) => {
 
     const handleRemove = (id: string) => {
         dispatch({ type: CartAction.REMOVE, payload: { id } });
+    };
+
+    const handleBuyAll = async () => {
+        setLoadingBuy(true);
+        try {
+            if (cartItems.length === 0) {
+                toast.error("Cart is empty!");
+                setLoadingBuy(false);
+                return;
+            }
+            await new Promise(res => setTimeout(res, 1000));
+            dispatch({ type: CartAction.CLEAR });
+            toast.success("Buy all successfully!");
+            onClose();
+        } catch {
+            toast.error("Buy failed!");
+        } finally {
+            setLoadingBuy(false);
+        }
     };
 
     return (
@@ -56,7 +78,8 @@ const CartModel: React.FC<CartModelProps> = ({ onClose }) => {
                     borderRadius: "10px",
                     width: "80%",
                     maxWidth: "500px",
-                    position: "relative"
+                    position: "relative",
+                    fontSize: "16px"
                 }}
             >
                 <button
@@ -74,7 +97,14 @@ const CartModel: React.FC<CartModelProps> = ({ onClose }) => {
                 >
                     <RiCloseLine />
                 </button>
-                <h1 style={{ textAlign: "center" }}>Cart</h1>
+                <h1
+                    style={{
+                        textAlign: "center",
+                        fontSize: "20px" /* đồng bộ với BulkSellModal */
+                    }}
+                >
+                    Cart
+                </h1>
                 <button
                     onClick={handleClearAll}
                     style={{
@@ -93,7 +123,9 @@ const CartModel: React.FC<CartModelProps> = ({ onClose }) => {
                 </button>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     {cartItems.length === 0 && (
-                        <div style={{ textAlign: "center", marginTop: 20 }}>Cart is empty.</div>
+                        <div style={{ textAlign: "center", marginTop: 20, fontSize: "16px" }}>
+                            Cart is empty.
+                        </div>
                     )}
                     {cartItems.map((item, index) => (
                         <div
@@ -125,9 +157,34 @@ const CartModel: React.FC<CartModelProps> = ({ onClose }) => {
                         </div>
                     ))}
                 </div>
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginTop: "20px"
+                    }}
+                >
+                    <PrimaryLoadingButton
+                        onClick={handleBuyAll}
+                        loading={loadingBuy}
+                        style={{
+                            width: "100%",
+                            padding: "10px 20px",
+                            backgroundColor: theme.buttonBackgroundColor,
+                            color: theme.buttonTextColor,
+                            border: "none",
+                            borderRadius: "5px",
+                            cursor: "pointer",
+                            textAlign: "center",
+                            fontSize: "16px"
+                        }}
+                    >
+                        Buy All
+                    </PrimaryLoadingButton>
+                </div>
             </div>
         </div>
     );
 };
 
-export default CartModel;
+export default CartModal;

@@ -48,15 +48,15 @@ export const getChangeDecisionPro = async (
     }
     try {
         const prediction = shortenNumber(await predictAuctionPro(myAuction), 0, 3);
+        const minPriceRequire = minPriceAIChange[myAuction.prototype / 10 ** 4];
+        if (minPriceRequire && prediction < minPriceRequire) {
+            console.log("Prediction is too low, not changing");
+            return { shouldChange: false, newPrice: 0 };
+        }
         if (
             shortenNumber(myAuction.nowPrice, 9, 3) > prediction &&
             Date.now() / 1000 - myAuction.uptime > minTimeListedMyAuctionToChange.pro.up
         ) {
-            const minPriceRequire = minPriceAIChange[myAuction.prototype / 10 ** 4];
-            if (minPriceRequire && prediction < minPriceRequire) {
-                console.log("Prediction is too low, not changing");
-                return { shouldChange: false, newPrice: 0 };
-            }
             return {
                 shouldChange: true,
                 newPrice: shortenNumber(

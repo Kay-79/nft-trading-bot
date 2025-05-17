@@ -4,9 +4,10 @@ import { CartItemListStorage } from "@/store/reducers/cartStorageReducer";
 import React, { useEffect, useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import CartModal from "./CartModal";
 
 const Cart = () => {
-    // const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const cartItems: CartItemListStorage[] = useSelector(
         (state: { cartStorage: { cartItems: CartItemListStorage[] } }) =>
             state.cartStorage.cartItems
@@ -22,9 +23,11 @@ const Cart = () => {
     }
 
     const toggleCart = () => {
-        // open cart modal
-        console.log("Cart clicked");
-        // console.log(cartItems);
+        setIsModalOpen(!isModalOpen);
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
     };
 
     return (
@@ -35,7 +38,7 @@ const Cart = () => {
                 marginLeft: "6px",
                 marginRight: "12px",
                 position: "relative",
-                fontSize: "20px",
+                fontSize: "20px"
             }}
         >
             <FaShoppingCart />
@@ -56,6 +59,7 @@ const Cart = () => {
                     {cartItems.length}
                 </span>
             )}
+            {isModalOpen && <CartModal onClose={handleCloseModal} />}
         </div>
     );
 };
