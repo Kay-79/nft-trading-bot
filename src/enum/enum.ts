@@ -118,15 +118,15 @@ export enum Momo1155Selector {
 }
 
 export enum BulkAction {
-    ADD = "ADD",
-    REMOVE = "REMOVE",
-    UPDATE = "UPDATE",
-    CLEAR = "CLEAR"
+    ADD = "ADD_BULK",
+    REMOVE = "REMOVE_BULK",
+    UPDATE = "UPDATE_BULK",
+    CLEAR = "CLEAR_BULK"
 }
 
 export enum CartAction {
-    ADD = "ADD",
-    REMOVE = "REMOVE",
-    UPDATE = "UPDATE",
-    CLEAR = "CLEAR"
+    ADD = "ADD_CART",
+    REMOVE = "REMOVE_CART",
+    UPDATE = "UPDATE_CART",
+    CLEAR = "CLEAR_CART"
 }

@@ -6,6 +6,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
 const Cart = () => {
+    // const [isModalOpen, setIsModalOpen] = useState(false);
     const cartItems: CartItemListStorage[] = useSelector(
         (state: { cartStorage: { cartItems: CartItemListStorage[] } }) =>
             state.cartStorage.cartItems
@@ -23,7 +24,7 @@ const Cart = () => {
     const toggleCart = () => {
         // open cart modal
         console.log("Cart clicked");
-        console.log(cartItems);
+        // console.log(cartItems);
     };
 
     return (

@@ -1,34 +1,44 @@
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { FaCartPlus } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { CartAction } from "@/enum/enum";
+import { IoBagCheckOutline } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
+import { customDarkTheme } from "@/config/theme";
+import { CartItemListStorage } from "@/store/reducers/cartStorageReducer";
+import { addItemToCart, removeItemFromCart } from "@/store/actions/storageCart";
 
 interface AddToCartIconProps {
     listing: AuctionDto;
-    onAddToCart: (listing: AuctionDto, e?: React.MouseEvent) => void;
 }
 
-const AddToCartIcon: React.FC<AddToCartIconProps> = ({ listing, onAddToCart }) => {
+const AddToCartIcon: React.FC<AddToCartIconProps> = ({ listing }) => {
+    const cartItems: CartItemListStorage[] = useSelector(
+        (state: { cartStorage: { cartItems: CartItemListStorage[] } }) =>
+            state.cartStorage.cartItems
+    );
+    const isInCart = cartItems.some(item => item.id === listing.id);
     const dispatch = useDispatch();
+    const cartItem: CartItemListStorage = {
+        id: listing.id || "",
+        listing: listing
+    };
 
-    const handleClick = (e: React.MouseEvent) => {
+    const handleAddToCart = (e: React.MouseEvent) => {
         e.stopPropagation();
-        dispatch({
-            type: CartAction.ADD,
-            payload: {
-                id: listing.id,
-                listing
-            }
-        });
-        onAddToCart(listing, e);
+        if (isInCart) {
+            dispatch(removeItemFromCart(cartItem));
+        } else {
+            dispatch(addItemToCart(cartItem));
+        }
     };
 
     return (
         <div
-            className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-lg cursor-pointer"
-            onClick={handleClick}
+            onClick={handleAddToCart}
+            style={{
+                color: isInCart ? customDarkTheme.successColor : customDarkTheme.textColor
+            }}
         >
-            <FaCartPlus className="text-gray-800" size={24} />
+            {isInCart ? <IoBagCheckOutline size={20} /> : <FaCartPlus size={20} />}
         </div>
     );
 };

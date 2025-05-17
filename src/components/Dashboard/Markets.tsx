@@ -35,6 +35,8 @@ const Markets: React.FC<MarketsProps> = ({ filterParams }) => {
         fetchMarkets();
     }, [currentPage, filterParams]);
 
+    const canAddToCart = true;
+
     return (
         <div>
             <div
@@ -47,7 +49,7 @@ const Markets: React.FC<MarketsProps> = ({ filterParams }) => {
                 }}
             >
                 {markets.map(listing => (
-                    <ListingCard key={listing.id} listing={listing} />
+                    <ListingCard key={listing.id} listing={listing} canAddToCart={canAddToCart} />
                 ))}
             </div>
             <Pagination

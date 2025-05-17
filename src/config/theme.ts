@@ -7,6 +7,7 @@ export interface ThemeConfig {
     secondaryColor: string;
     backgroundColor: string;
     textColor: string;
+    successColor: string;
     buttonBackgroundColor: string;
     buttonTextColor: string;
     primaryButtonBackgroundColor: string; // New property for primary button background color
@@ -25,6 +26,7 @@ export const customLightTheme: ThemeConfig = {
     secondaryColor: "#2ecc71", // Green
     backgroundColor: "#ecf0f1", // Light Grey
     textColor: "#2c3e50", // Dark Grey
+    successColor: "#2ecc71", // Green
     buttonBackgroundColor: "#1abc9c", // New Button Background Color (Turquoise)
     buttonTextColor: "#ffffff", // White
     primaryButtonBackgroundColor: "#007bff", // Slightly Blue
@@ -43,6 +45,7 @@ export const customDarkTheme: ThemeConfig = {
     secondaryColor: "#27ae60", // Dark Green
     backgroundColor: "#2c3e50", // Dark Grey
     textColor: "#ecf0f1", // Light Grey
+    successColor: "#2ecc71", // Green
     buttonBackgroundColor: "#66a085", // New Button Background Color (Dark Turquoise)
     buttonTextColor: "#ffffff", // White
     primaryButtonBackgroundColor: "#0056b3", // Slightly Dark Blue

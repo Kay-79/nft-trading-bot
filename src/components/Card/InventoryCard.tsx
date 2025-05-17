@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaTimes, FaPlusCircle, FaMinusCircle } from "react-icons/fa"; // Import FaMinusCircle
+import { FaTimes, FaPlusCircle, FaMinusCircle } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import InventoryDetailModal from "@/components/Modal/InventoryDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
@@ -8,7 +8,7 @@ import { MomoType } from "@/enum/enum";
 import { shortenAddress } from "@/utils/shorten";
 import { addItemToBulk, removeItemFromBulk } from "@/store/actions/storageBulk";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
-import { Tooltip } from "react-tooltip"; // Update import to use Tooltip
+import { Tooltip } from "react-tooltip";
 import PrototypeImage from "../Image/PrototypeImage";
 
 interface InventoryCardProps {
