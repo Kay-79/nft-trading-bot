@@ -23,7 +23,7 @@ const ThemeToggle = () => {
     return (
         <div
             onClick={toggleTheme}
-            style={{ cursor: "pointer", marginLeft: "6px", marginRight: "12px" }}
+            style={{ cursor: "pointer", marginLeft: "6px", marginRight: "12px", fontSize: "20px" }}
         >
             {theme.mode === "light" ? <FaMoon /> : <FaSun />}
         </div>

@@ -5,6 +5,7 @@ import ListingDetailModal from "@/components/Modal/ListingDetailModal";
 import { getBackgroundColor } from "@/utils/colorUtils";
 import axios from "axios";
 import PrototypeImage from "@/components/Image/PrototypeImage";
+import AddToCartIcon from "@/components/Cart/AddToCartIcon";
 
 interface ListingCardProps {
     listing: AuctionDto;
@@ -38,6 +39,11 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
         setIsModalOpen(false);
     }, []);
 
+    const handleAddToCart = (listing: AuctionDto, e?: React.MouseEvent) => {
+        if (e) e.stopPropagation();
+        // Có thể thêm logic thông báo hoặc xử lý khác nếu cần
+    };
+
     return (
         <>
             <div
@@ -45,7 +51,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ listing }) => {
                 style={{ backgroundColor: backgroundColor }}
                 onClick={handleClick}
             >
-                {/* Level and Stats */}
+                <AddToCartIcon listing={listing} onAddToCart={handleAddToCart} />
                 <div className="flex justify-between items-center">
                     <span className="text-sm flex items-center gap-1">
                         <span className="bg-yellow-500 text-black px-2 py-1 rounded-full text-xs">
