@@ -48,7 +48,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                 amounts: []
             });
             setPrice(shortenNumber(response.data.prediction, 0, 3));
-            handleUpdateBulkItem(amount, response.data.prediction);
+            handleUpdateBulkItem(amount, shortenNumber(response.data.prediction, 0, 3));
         } catch (error) {
             toast.error(getErrorMessage(error));
         } finally {
@@ -66,7 +66,6 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
         lvHashrate: bulkSellItem.inventory.lvHashrate,
         prototype: bulkSellItem.inventory.prototype
     };
-    console.log("bulkSellItem", token);
     const [hoveredItem, setHoveredItem] = useState<number | null>(null);
 
     const handleMouseEnter = (index: number) => {
@@ -235,13 +234,13 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                 />
                 <input
                     type="text"
-                    value={price || ""}
+                    value={shortenNumber(price, 0, 3) || ""}
                     onChange={e => {
                         const value = e.target.value;
                         if (!isNaN(Number(value)) || value === "" || /^\d*\.?\d*$/.test(value)) {
                             const newPrice = Number(value);
-                            setPrice(newPrice);
-                            handleUpdateBulkItem(amount, newPrice);
+                            setPrice(shortenNumber(newPrice, 0, 3));
+                            handleUpdateBulkItem(amount, shortenNumber(newPrice, 0, 3));
                         }
                     }}
                     onWheel={e => e.currentTarget.blur()}

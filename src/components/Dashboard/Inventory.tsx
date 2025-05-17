@@ -27,7 +27,7 @@ const Inventory: React.FC<InventoryProps> = ({ inventories, listings }) => {
     );
 
     const totalHashes = inventories.reduce(
-        (sum, inventory) => sum + Math.floor(inventory.prototype / 10000) * (inventory.amount || 0),
+        (sum, inventory) => sum + Math.floor(inventory.lvHashrate) * (inventory.amount || 0),
         0
     );
 
