@@ -3,7 +3,7 @@ import { useTheme } from "@/config/theme";
 import { RiCloseLine } from "react-icons/ri";
 import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import { useSelector } from "react-redux";
-import BulkSellRow from "../Row/BulkSellRow";
+import BulkSellRow from "@/components/Bulk/BulkSellRow";
 import { useDispatch } from "react-redux";
 import { addItemToBulk, clearBulk } from "@/store/actions/storageBulk";
 import { useAccount } from "wagmi";

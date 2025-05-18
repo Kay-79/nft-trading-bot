@@ -1,20 +1,19 @@
-"use client";
-
-import { CartItemListStorage } from "@/store/reducers/cartStorageReducer";
-import React, { useEffect, useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
+import React, { useState } from "react";
+import { MdSell } from "react-icons/md";
+import BulkSellModal from "@/components/Bulk/BulkSellModal";
+import { BulkItemListStorage } from "@/store/reducers/bulkStorageReducer";
 import { useSelector } from "react-redux";
-import CartModal from "./CartModal";
 
-const Cart = () => {
+const Bulk: React.FC = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const cartItems: CartItemListStorage[] = useSelector(
-        (state: { cartStorage: { cartItems: CartItemListStorage[] } }) =>
-            state.cartStorage.cartItems
+    const bulkSellItems: BulkItemListStorage[] = useSelector(
+        (state: { bulkStorage: { bulkSellItems: BulkItemListStorage[] } }) =>
+            state.bulkStorage.bulkSellItems
     );
+
     const [mounted, setMounted] = useState(false);
 
-    useEffect(() => {
+    React.useEffect(() => {
         setMounted(true);
     }, []);
 
@@ -22,17 +21,17 @@ const Cart = () => {
         return null;
     }
 
-    const toggleCart = () => {
+    const toggleBulk = () => {
         setIsModalOpen(!isModalOpen);
     };
 
-    const handleCloseModal = () => {
+    const handleClose = () => {
         setIsModalOpen(false);
     };
 
     return (
         <div
-            onClick={toggleCart}
+            onClick={toggleBulk}
             style={{
                 cursor: "pointer",
                 marginLeft: "6px",
@@ -40,9 +39,10 @@ const Cart = () => {
                 position: "relative",
                 fontSize: "18px"
             }}
+            title="Bulk Sell"
         >
-            <FaShoppingCart />
-            {cartItems.length > 0 && (
+            <MdSell />
+            {bulkSellItems.length > 0 && (
                 <span
                     style={{
                         position: "absolute",
@@ -56,12 +56,17 @@ const Cart = () => {
                         fontWeight: "bold"
                     }}
                 >
-                    {cartItems.length}
+                    {bulkSellItems.length}
                 </span>
             )}
-            {isModalOpen && <CartModal onClose={handleCloseModal} />}
+            {isModalOpen && (
+                <BulkSellModal
+                    onClose={handleClose}
+                    // Không cần truyền handleOutsideClick, BulkSellModal tự xử lý
+                />
+            )}
         </div>
     );
 };
 
-export default Cart;
+export default Bulk;

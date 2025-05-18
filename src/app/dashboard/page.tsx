@@ -11,9 +11,7 @@ import { useTheme } from "@/config/theme";
 import FilterPanel, { FilterParams, SortOptions } from "@/components/Dashboard/FilterPanel";
 import Loading from "@/components/Loading/Loading";
 import { FaArrowUp } from "react-icons/fa";
-import { MdSell } from "react-icons/md";
 import { InventoryDto } from "@/types/dtos/Inventory.dto";
-import BulkSellModal from "@/components/Modal/BulkSellModal";
 import axios from "axios";
 
 const DashboardPage = () => {
@@ -30,7 +28,6 @@ const DashboardPage = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const { theme } = useTheme();
     const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
-    const [isBulkSellModalOpen, setIsBulkSellModalOpen] = useState<boolean>(false);
 
     // Manage filterParams as state
     const [filterParams, setFilterParams] = useState<FilterParams>({
@@ -109,15 +106,11 @@ const DashboardPage = () => {
         setSelectedSection(section);
     };
 
-    const handleCloseModal = () => {
-        setIsBulkSellModalOpen(false);
-    };
-
     return (
         <div
             style={{
                 padding: "20px",
-                paddingLeft: "290px", // Adjust padding to accommodate the fixed FilterPanel
+                paddingLeft: "290px",
                 backgroundColor: theme.backgroundColor,
                 color: theme.textColor,
                 minHeight: "100vh",
@@ -195,14 +188,6 @@ const DashboardPage = () => {
                     >
                         Markets
                     </label>
-                    {selectedSection === "inventory" ? (
-                        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-                            <MdSell
-                                style={{ cursor: "pointer" }}
-                                onClick={() => setIsBulkSellModalOpen(true)}
-                            />
-                        </div>
-                    ) : null}
                 </div>
                 <div style={{ flex: 1 }}>
                     {loading ? (
@@ -261,9 +246,6 @@ const DashboardPage = () => {
                 >
                     <FaArrowUp />
                 </button>
-            )}
-            {isBulkSellModalOpen && selectedSection === "inventory" && (
-                <BulkSellModal onClose={handleCloseModal} />
             )}
         </div>
     );

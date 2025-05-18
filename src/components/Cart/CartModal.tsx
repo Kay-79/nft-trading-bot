@@ -81,6 +81,7 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                     position: "relative",
                     fontSize: "16px"
                 }}
+                onClick={e => e.stopPropagation()}
             >
                 <button
                     onClick={onClose}

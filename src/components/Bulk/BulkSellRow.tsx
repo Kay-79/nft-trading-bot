@@ -220,7 +220,7 @@ const BulkSellRow: React.FC<BulkSellRowProps> = ({ bulkSellItem }) => {
                         }
                     }}
                     onWheel={e => e.currentTarget.blur()}
-                    placeholder={`Amount: x${bulkSellItem.inventory.amount}`}
+                    placeholder={`Max: x${bulkSellItem.inventory.amount}`}
                     style={{
                         width: "100%",
                         padding: "10px",
