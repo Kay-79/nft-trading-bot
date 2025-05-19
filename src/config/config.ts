@@ -81,7 +81,8 @@ export const contracts: string[] = [
 export const allContracts: string[] = [
     ...contracts,
     ethers.getAddress("0x0e9bc747335a4b01a6194a6c1bb1de54a0a5355c"),
-    ethers.getAddress("0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000")
+    ethers.getAddress("0x11119D51e2Ff85D5353ABf499Fe63bE3344c0000"),
+    ethers.getAddress("0x0837fFdFc01c8ccE606D4E797D38f7A8694b2D02")
 ];
 
 export const addressTester = ethers.getAddress("0x1111c16591c4ECe1c313f46A63330D8BCf461111");
