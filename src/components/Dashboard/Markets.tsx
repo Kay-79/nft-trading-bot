@@ -49,9 +49,20 @@ const Markets: React.FC<MarketsProps> = ({ filterParams }) => {
                     justifyContent: "center"
                 }}
             >
-                {markets.map(listing => (
-                    <ListingCard key={listing.id} listing={listing} canAddToCart={canAddToCart} />
-                ))}
+                {markets.length === 0 ? (
+                    <div style={{ textAlign: "center", width: "100%" }}>
+                        <h2>No Listings Found</h2>
+                        <p>Please adjust your filters or try again later.</p>
+                    </div>
+                ) : (
+                    markets.map(listing => (
+                        <ListingCard
+                            key={listing.id}
+                            listing={listing}
+                            canAddToCart={canAddToCart}
+                        />
+                    ))
+                )}
             </div>
             <Pagination
                 currentPage={currentPage}
