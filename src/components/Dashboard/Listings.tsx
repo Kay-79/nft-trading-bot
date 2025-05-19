@@ -18,15 +18,35 @@ const Listings: React.FC<ListingsProps> = ({ filterParams }) => {
     useEffect(() => {
         const fetchListings = async () => {
             try {
+                const params: Record<string, unknown> = {
+                    page: currentPage,
+                    limit: itemsPerPage,
+                    vType: filterParams.vType,
+                    sort: filterParams.sort,
+                    search: filterParams.search,
+                };
+
+                if (
+                    filterParams.minPrice !== undefined &&
+                    filterParams.maxPrice !== undefined &&
+                    filterParams.maxPrice > filterParams.minPrice
+                ) {
+                    params.minPrice = filterParams.minPrice;
+                    params.maxPrice = filterParams.maxPrice;
+                }
+
+                if (
+                    filterParams.minHashrate !== undefined &&
+                    filterParams.maxHashrate !== undefined &&
+                    filterParams.maxHashrate > filterParams.minHashrate
+                ) {
+                    params.minHashrate = filterParams.minHashrate;
+                    params.maxHashrate = filterParams.maxHashrate;
+                }
+
                 const response = await axios.get(`/api/listings`, {
-                    params: {
-                        page: currentPage,
-                        limit: itemsPerPage,
-                        vType: filterParams.vType,
-                        sort: filterParams.sort
-                    }
+                    params
                 });
-                console.log("Listings response:", response);
                 setListings(response.data.list);
                 setTotalListings(response.data.total);
             } catch (error) {
@@ -37,7 +57,7 @@ const Listings: React.FC<ListingsProps> = ({ filterParams }) => {
         fetchListings();
     }, [currentPage, filterParams]);
 
-    const canAddToCart = true;
+    const canAddToCart = false;
 
     return (
         <div>

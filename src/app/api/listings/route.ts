@@ -19,12 +19,18 @@ export async function GET(request: Request) {
         const query: any = {};
 
         if (vType) {
-            query.vType = vType;
+            const vTypeNum = Number(vType);
+            if (!isNaN(vTypeNum)) {
+                query.prototype = {
+                    $gte: vTypeNum * 10000,
+                    $lt: (vTypeNum + 1) * 10000
+                };
+            }
         }
         if (minPrice || maxPrice) {
-            query.price = {};
-            if (minPrice) query.price.$gte = Number(minPrice);
-            if (maxPrice) query.price.$lte = Number(maxPrice);
+            query.nowPrice = {};
+            if (minPrice) query.nowPrice.$gte = Number(minPrice) * 10 ** 9;
+            if (maxPrice) query.nowPrice.$lte = Number(maxPrice) * 10 ** 9;
         }
         if (minHashrate || maxHashrate) {
             query.hashrate = {};
@@ -43,7 +49,9 @@ export async function GET(request: Request) {
         const sortObj: any = {};
         if (sort) {
             const direction = sort.startsWith("-") ? -1 : 1;
-            const field = sort.replace(/^-/, "");
+            let field = sort.replace(/^-/, "");
+            if (field === "price") field = "nowPrice";
+            else if (field === "time") field = "upTime";
             sortObj[field] = direction;
         }
 
