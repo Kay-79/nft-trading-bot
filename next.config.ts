@@ -43,7 +43,8 @@ const nextConfig: NextConfig = {
         CHANGER_MAINNET:
             process.env.CHANGER_MAINNET || "0x11119d51e2ff85d5353abf499fe63be3344c0000",
         MONGO_URI: process.env.MONGO_URI || "mongodb://localhost:27017",
-        MORALIST_RPC_ARCHIVE_NODE: process.env.MORALIST_RPC_ARCHIVE_NODE || ""
+        MORALIST_RPC_ARCHIVE_NODE: process.env.MORALIST_RPC_ARCHIVE_NODE || "",
+        JWT_SECRET: process.env.JWT_SECRET || "your-secret-key"
     },
     images: {
         remotePatterns: [
