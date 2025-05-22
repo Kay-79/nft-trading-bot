@@ -30,15 +30,15 @@ function RootLayout({ children }: { children: React.ReactNode }) {
                                 minHeight: "100vh",
                                 display: "flex",
                                 flexDirection: "column",
-                                paddingTop: "60px", // Ensure content doesn't overlap with Header
-                                boxSizing: "border-box" // Ensure padding is included in the element's total width and height
+                                paddingTop: "60px",
+                                boxSizing: "border-box"
                             }}
                         >
                             <main style={{ flex: 1 }}>{children}</main>
                             <Footer />
                         </div>
                     </ErrorBoundary>
-                    <ToastContainer style={{top:"75px"}} />
+                    <ToastContainer style={{ top: "75px" }} />
                 </Providers>
             </body>
         </html>

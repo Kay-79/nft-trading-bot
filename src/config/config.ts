@@ -20,11 +20,11 @@ export const modeBot: ModeBot = {
 };
 
 export const profitPerTier: TierPrice = {
-    1: 0.1,
-    2: 0.1,
-    3: 0.05,
-    4: 2.5,
-    5: 10,
+    1: 0.12,
+    2: 0.12,
+    3: 0.1,
+    4: 3,
+    5: 20,
     6: 50000
 };
 

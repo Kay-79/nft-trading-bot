@@ -1,13 +1,22 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiProvider } from "wagmi";
-import { RainbowKitProvider, darkTheme, lightTheme, Theme } from "@rainbow-me/rainbowkit";
+import {
+    RainbowKitProvider,
+    darkTheme,
+    lightTheme,
+    Theme,
+    AuthenticationStatus,
+    RainbowKitAuthenticationProvider,
+    createAuthenticationAdapter
+} from "@rainbow-me/rainbowkit";
 import { Provider as ReduxProvider } from "react-redux";
 import { wagmiConfig } from "./wagmi";
 import { ThemeContext, customDarkTheme, customLightTheme, ThemeConfig } from "@/config/theme";
 import store from "@/store";
+import { createSiweMessage } from "viem/siwe";
 
 const queryClient = new QueryClient();
 
@@ -37,7 +46,91 @@ export function Providers({ children }: { children: React.ReactNode }) {
         document.body.style.color = theme.textColor;
     }, [theme]);
 
-    if (!mounted) {
+    const fetchingStatusRef = useRef(false);
+    const verifyingRef = useRef(false);
+    const [authStatus, setAuthStatus] = useState<AuthenticationStatus>("loading");
+
+    useEffect(() => {
+        const fetchStatus = async () => {
+            if (fetchingStatusRef.current || verifyingRef.current) {
+                return;
+            }
+
+            fetchingStatusRef.current = true;
+
+            try {
+                const response = await fetch("/api/auth/me");
+                if (!response.ok) {
+                    setAuthStatus("unauthenticated");
+                } else {
+                    const json = await response.json();
+                    setAuthStatus(json.address ? "authenticated" : "unauthenticated");
+                }
+            } catch {
+                setAuthStatus("unauthenticated");
+            } finally {
+                fetchingStatusRef.current = false;
+            }
+        };
+
+        fetchStatus();
+
+        window.addEventListener("focus", fetchStatus);
+        return () => window.removeEventListener("focus", fetchStatus);
+    }, []);
+
+    const authAdapter = useMemo(() => {
+        return createAuthenticationAdapter({
+            getNonce: async () => {
+                const response = await fetch("/api/auth/nonce");
+                return await response.text();
+            },
+
+            createMessage: ({ nonce, address, chainId }) => {
+                return createSiweMessage({
+                    domain: window.location.host,
+                    address,
+                    statement: "Sign in with Ethereum to the app.",
+                    uri: window.location.origin,
+                    version: "1",
+                    chainId,
+                    nonce
+                });
+            },
+
+            verify: async ({ message, signature }) => {
+                verifyingRef.current = true;
+
+                try {
+                    const response = await fetch("/api/auth/verify", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ message, signature })
+                    });
+
+                    const authenticated = Boolean(response.ok);
+
+                    if (authenticated) {
+                        setAuthStatus(authenticated ? "authenticated" : "unauthenticated");
+                    }
+
+                    return authenticated;
+                } catch (error) {
+                    console.error("Error verifying signature", error);
+                    return false;
+                } finally {
+                    verifyingRef.current = false;
+                }
+            },
+
+            signOut: async () => {
+                setAuthStatus("unauthenticated");
+                await fetch("/api/auth/logout");
+            }
+        });
+    }, []);
+
+    if (!mounted || authStatus === "loading") {
         return null;
     }
 
@@ -47,10 +140,19 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 <ReduxProvider store={store}>
                     {wagmiConfig ? (
                         <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
-                            <RainbowKitProvider theme={themeRainbow}>{children}</RainbowKitProvider>
+                            <RainbowKitAuthenticationProvider
+                                adapter={authAdapter}
+                                status={authStatus}
+                            >
+                                <RainbowKitProvider theme={themeRainbow}>
+                                    {children}
+                                </RainbowKitProvider>
+                            </RainbowKitAuthenticationProvider>
                         </WagmiProvider>
                     ) : (
-                        <RainbowKitProvider theme={themeRainbow}>{children}</RainbowKitProvider>
+                        <RainbowKitAuthenticationProvider adapter={authAdapter} status={authStatus}>
+                            <RainbowKitProvider theme={themeRainbow}>{children}</RainbowKitProvider>
+                        </RainbowKitAuthenticationProvider>
                     )}
                 </ReduxProvider>
             </QueryClientProvider>
