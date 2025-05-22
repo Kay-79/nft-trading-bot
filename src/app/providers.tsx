@@ -13,21 +13,33 @@ const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
     const [theme, setTheme] = useState<ThemeConfig>(customDarkTheme || customLightTheme);
+    const [themeRainbow, setThemeRainbow] = useState<Theme>(darkTheme() || lightTheme());
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme");
         if (savedTheme) {
-            setTheme(JSON.parse(savedTheme));
+            const parsedTheme = JSON.parse(savedTheme);
+            setTheme(parsedTheme === "light" ? customLightTheme : customDarkTheme);
+            setThemeRainbow(parsedTheme === "light" ? lightTheme() : darkTheme());
+        } else {
+            setTheme(customDarkTheme);
         }
     }, []);
 
-    const rainbowKitTheme: Theme = theme.mode === "light" ? lightTheme() : darkTheme();
-
     useEffect(() => {
-        localStorage.setItem("theme", JSON.stringify(theme));
+        localStorage.setItem("theme", JSON.stringify(theme.mode));
         document.body.style.backgroundColor = theme.backgroundColor;
         document.body.style.color = theme.textColor;
     }, [theme]);
+
+    if (!mounted) {
+        return null;
+    }
 
     return (
         <ThemeContext.Provider value={{ theme, setTheme }}>
@@ -35,12 +47,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
                 <ReduxProvider store={store}>
                     {wagmiConfig ? (
                         <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
-                            <RainbowKitProvider theme={rainbowKitTheme}>
-                                {children}
-                            </RainbowKitProvider>
+                            <RainbowKitProvider theme={themeRainbow}>{children}</RainbowKitProvider>
                         </WagmiProvider>
                     ) : (
-                        <RainbowKitProvider theme={rainbowKitTheme}>{children}</RainbowKitProvider>
+                        <RainbowKitProvider theme={themeRainbow}>{children}</RainbowKitProvider>
                     )}
                 </ReduxProvider>
             </QueryClientProvider>
