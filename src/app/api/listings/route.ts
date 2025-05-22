@@ -43,15 +43,13 @@ export async function GET(request: Request) {
                 { description: { $regex: search, $options: "i" } }
             ];
         }
-
-        // Build sort object
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const sortObj: any = {};
         if (sort) {
             const direction = sort.startsWith("-") ? -1 : 1;
             let field = sort.replace(/^-/, "");
             if (field === "price") field = "nowPrice";
-            else if (field === "time") field = "upTime";
+            else if (field === "time") field = "uptime";
             sortObj[field] = direction;
         }
 

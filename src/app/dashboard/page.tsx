@@ -18,7 +18,6 @@ const DashboardPage = () => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
     const [activities, setActivities] = useState<RecentSoldDto[]>([]);
     const [inventory, setInventory] = useState<InventoryDto[]>([]);
-    // const [markets, setMarkets] = useState<AuctionDto[]>([]);
     const [filteredActivities, setFilteredActivities] = useState<RecentSoldDto[]>([]);
     const [filteredInventory, setFilteredInventory] = useState<InventoryDto[]>([]);
     const [selectedSection, setSelectedSection] = useState<
@@ -98,7 +97,6 @@ const DashboardPage = () => {
         activities.length,
         inventory.length,
         listings.length,
-        // markets.length,
         fetchActivities,
         fetchListings
     ]);
