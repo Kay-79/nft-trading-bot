@@ -1,6 +1,5 @@
 "use client";
 
-// src/config/theme.ts
 export interface ThemeConfig {
     mode: string;
     primaryColor: string;

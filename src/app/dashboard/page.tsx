@@ -40,7 +40,6 @@ const DashboardPage = () => {
 
     const fetchListings = React.useCallback(async () => {
         setLoading(true);
-        // const listingsData = await fetch("/api/listings").then(response => response.json());
         const listingsData = await axios.get("/api/listings", {
             params: {
                 page: 1,
@@ -207,9 +206,7 @@ const DashboardPage = () => {
                         <>
                             {selectedSection === "listings" && (
                                 <div style={{ marginBottom: "40px" }}>
-                                    <Listings
-                                        filterParams={filterParams}
-                                    />
+                                    <Listings filterParams={filterParams} />
                                 </div>
                             )}
                             {selectedSection === "activities" && (
