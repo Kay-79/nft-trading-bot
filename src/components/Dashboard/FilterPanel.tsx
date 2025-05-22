@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useTheme } from "@/config/theme";
 
 export enum SortOptions {
@@ -26,9 +26,23 @@ interface FilterPanelProps {
 
 const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams }) => {
     const { theme } = useTheme();
+    const [localParams, setLocalParams] = React.useState(filterParams);
+    const debounceTimeout = useRef<NodeJS.Timeout | null>(null);
+
+    React.useEffect(() => {
+        setLocalParams(filterParams);
+    }, [filterParams]);
+
+    const updateParams = (nextParams: FilterParams) => {
+        setLocalParams(nextParams);
+        if (debounceTimeout.current) clearTimeout(debounceTimeout.current);
+        debounceTimeout.current = setTimeout(() => {
+            setFilterParams(nextParams);
+        }, 1000);
+    };
 
     const handleResetAll = () => {
-        setFilterParams({
+        const resetParams = {
             minPrice: 0,
             maxPrice: 0,
             minHashrate: 0,
@@ -36,12 +50,15 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams
             search: "",
             sort: SortOptions.Time,
             vType: ""
-        });
+        };
+        setLocalParams(resetParams);
+        setFilterParams(resetParams);
     };
 
     const handleInputChange = (key: keyof FilterParams, value: string) => {
         if (!isNaN(Number(value)) || value === "") {
-            setFilterParams({ ...filterParams, [key]: Number(value) });
+            const nextParams = { ...localParams, [key]: Number(value) };
+            updateParams(nextParams);
         }
     };
 
@@ -53,13 +70,13 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams
                 <div className="filter-range">
                     <input
                         type="text"
-                        value={filterParams.minPrice || ""}
+                        value={localParams.minPrice || ""}
                         onChange={e => handleInputChange("minPrice", e.target.value)}
                         placeholder="Min"
                     />
                     <input
                         type="text"
-                        value={filterParams.maxPrice || ""}
+                        value={localParams.maxPrice || ""}
                         onChange={e => handleInputChange("maxPrice", e.target.value)}
                         placeholder="Max"
                     />
@@ -70,13 +87,13 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams
                 <div className="filter-range">
                     <input
                         type="text"
-                        value={filterParams.minHashrate || ""}
+                        value={localParams.minHashrate || ""}
                         onChange={e => handleInputChange("minHashrate", e.target.value)}
                         placeholder="Min"
                     />
                     <input
                         type="text"
-                        value={filterParams.maxHashrate || ""}
+                        value={localParams.maxHashrate || ""}
                         onChange={e => handleInputChange("maxHashrate", e.target.value)}
                         placeholder="Max"
                     />
@@ -86,15 +103,21 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams
                 <label>Search</label>
                 <input
                     type="text"
-                    value={filterParams.search}
-                    onChange={e => setFilterParams({ ...filterParams, search: e.target.value })}
+                    value={localParams.search}
+                    onChange={e => {
+                        const nextParams = { ...localParams, search: e.target.value };
+                        updateParams(nextParams);
+                    }}
                 />
             </div>
             <div className="filter-group">
                 <label>Rarity</label>
                 <select
-                    value={filterParams.vType}
-                    onChange={e => setFilterParams({ ...filterParams, vType: e.target.value })}
+                    value={localParams.vType}
+                    onChange={e => {
+                        const nextParams = { ...localParams, vType: e.target.value };
+                        updateParams(nextParams);
+                    }}
                 >
                     <option value="">All</option>
                     <option value="1">Common</option>
@@ -109,13 +132,14 @@ const FilterPanel: React.FC<FilterPanelProps> = ({ filterParams, setFilterParams
                 <label>Sort</label>
                 <div className="filter-range">
                     <select
-                        value={filterParams.sort}
-                        onChange={e =>
-                            setFilterParams({
-                                ...filterParams,
+                        value={localParams.sort}
+                        onChange={e => {
+                            const nextParams = {
+                                ...localParams,
                                 sort: e.target.value as SortOptions
-                            })
-                        }
+                            };
+                            updateParams(nextParams);
+                        }}
                     >
                         <option value="">Select</option>
                         <option value={SortOptions.Time}>Time</option>

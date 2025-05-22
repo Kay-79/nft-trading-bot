@@ -34,7 +34,7 @@ export async function GET() {
                 listingsCount,
                 balance,
                 hash,
-                totalPriceSell: shortenNumber(totalPriceSell, 9, 2)
+                totalPriceSell: shortenNumber(totalPriceSell * 0.95, 9, 2)
             });
         }
         return NextResponse.json(accounts);

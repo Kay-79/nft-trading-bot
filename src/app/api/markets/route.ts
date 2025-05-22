@@ -9,22 +9,16 @@ export async function GET(request: Request) {
         const limit = searchParams.get("limit") || "12";
         const vType = searchParams.get("vType") || "";
         const sort = searchParams.get("sort") || "-time";
-        const minPrice = searchParams.get("minPrice") || "";
-        const maxPrice = searchParams.get("maxPrice") || "";
         const minHashrate = searchParams.get("minHashrate") || "";
         const maxHashrate = searchParams.get("maxHashrate") || "";
-        const search = searchParams.get("search") || "";
 
         const params = {
             page,
             limit,
             vType,
             sort,
-            minPrice,
-            maxPrice,
             minHashrate,
-            maxHashrate,
-            search
+            maxHashrate
         };
 
         const markets = await axios.get(`${API_MOBOX}/auction/search_v2/BNB`, { params });

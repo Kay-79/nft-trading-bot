@@ -39,7 +39,6 @@ const Header = () => {
                 zIndex: 1000
             }}
         >
-            {/* Logo and title */}
             <Link href="/" passHref>
                 <div style={{ display: "flex", alignItems: "center" }}>
                     <Image
@@ -52,7 +51,6 @@ const Header = () => {
                     <div style={{ fontSize: "2rem", fontWeight: "bolder" }}>NFT Trading</div>
                 </div>
             </Link>
-            {/* Navigation links */}
             <div
                 style={{
                     display: "flex",
@@ -60,7 +58,7 @@ const Header = () => {
                     flex: 1,
                     justifyContent: "center",
                     fontSize: "1.2rem",
-                    flexWrap: "wrap" // Allow wrapping for smaller screens
+                    flexWrap: "wrap"
                 }}
             >
                 {NAVS.map((link, index) => (

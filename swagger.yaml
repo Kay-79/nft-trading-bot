@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+    title: API Docs
+    version: 1.0.0
+servers:
+    - url: http://localhost:3000/api
+paths:
+    /listings:
+        get:
+            summary: Get listings
+            parameters:
+                - in: query
+                  name: page
+                  schema: { type: integer, default: 1 }
+                - in: query
+                  name: limit
+                  schema: { type: integer, default: 12 }
+                - in: query
+                  name: vType
+                  schema: { type: string }
+                - in: query
+                  name: sort
+                  schema: { type: string }
+                - in: query
+                  name: minPrice
+                  schema: { type: number }
+                - in: query
+                  name: maxPrice
+                  schema: { type: number }
+                - in: query
+                  name: minHashrate
+                  schema: { type: number }
+                - in: query
+                  name: maxHashrate
+                  schema: { type: number }
+                - in: query
+                  name: search
+                  schema: { type: string }
+            responses:
+                "200":
+                    description: List of listings
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    list:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/AuctionDto"
+                                    page:
+                                        type: integer
+                                    limit:
+                                        type: integer
+                                    total:
+                                        type: integer
+components:
+    schemas:
+        AuctionDto:
+            type: object
+            properties:
+                id: { type: string }
+                chain: { type: string }
+                auctor: { type: string }
+                startPrice: { type: number }
+                endPrice: { type: number }
+                durationDays: { type: number }
+                index: { type: number }
+                ids: { type: array, items: { type: string } }
+                amounts: { type: array, items: { type: string } }
+                tokenId: { type: number }
+                uptime: { type: number }
+                prototype: { type: number }
+                hashrate: { type: number }
+                lvHashrate: { type: number }
+                level: { type: number }
+                specialty: { type: number }
+                category: { type: number }
+                quality: { type: number }
+                tx: { type: string }
+                deleted: { type: boolean }
+                nowPrice: { type: number }

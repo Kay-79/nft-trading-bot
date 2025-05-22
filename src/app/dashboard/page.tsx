@@ -18,8 +18,6 @@ const DashboardPage = () => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
     const [activities, setActivities] = useState<RecentSoldDto[]>([]);
     const [inventory, setInventory] = useState<InventoryDto[]>([]);
-    const [markets, setMarkets] = useState<AuctionDto[]>([]);
-    const [filteredListings, setFilteredListings] = useState<AuctionDto[]>([]);
     const [filteredActivities, setFilteredActivities] = useState<RecentSoldDto[]>([]);
     const [filteredInventory, setFilteredInventory] = useState<InventoryDto[]>([]);
     const [selectedSection, setSelectedSection] = useState<
@@ -40,13 +38,25 @@ const DashboardPage = () => {
         vType: ""
     });
 
-    const fetchListings = async () => {
+    const fetchListings = React.useCallback(async () => {
         setLoading(true);
-        const listingsData = await fetch("/api/listings").then(response => response.json());
-        setListings(listingsData);
-        setFilteredListings(listingsData);
+        // const listingsData = await fetch("/api/listings").then(response => response.json());
+        const listingsData = await axios.get("/api/listings", {
+            params: {
+                page: 1,
+                limit: 12,
+                vType: filterParams.vType,
+                sort: filterParams.sort,
+                minPrice: filterParams.minPrice,
+                maxPrice: filterParams.maxPrice,
+                minHashrate: filterParams.minHashrate,
+                maxHashrate: filterParams.maxHashrate,
+                search: filterParams.search
+            }
+        });
+        setListings(listingsData.data);
         setLoading(false);
-    };
+    }, [filterParams]);
 
     const fetchActivities = React.useCallback(async () => {
         setLoading(true);
@@ -64,12 +74,12 @@ const DashboardPage = () => {
         setLoading(false);
     };
 
-    const fetchMarkets = async () => {
-        setLoading(true);
-        const marketsData = await fetch("/api/markets").then(response => response.json());
-        setMarkets(marketsData);
-        setLoading(false);
-    };
+    // const fetchMarkets = async () => {
+    //     setLoading(true);
+    //     const marketsData = await fetch("/api/markets").then(response => response.json());
+    //     setMarkets(marketsData);
+    //     setLoading(false);
+    // };
 
     useEffect(() => {
         if (selectedSection === "listings" && listings.length === 0) {
@@ -78,16 +88,17 @@ const DashboardPage = () => {
             fetchActivities();
         } else if (selectedSection === "inventory" && inventory.length === 0) {
             fetchInventory();
-        } else if (selectedSection === "markets" && markets.length === 0) {
-            fetchMarkets();
         }
+        //  else if (selectedSection === "markets" && markets.length === 0) {
+        //     fetchMarkets();
+        // }
     }, [
         selectedSection,
         activities.length,
         inventory.length,
         listings.length,
-        markets.length,
-        fetchActivities
+        fetchActivities,
+        fetchListings
     ]);
 
     useEffect(() => {
@@ -197,7 +208,6 @@ const DashboardPage = () => {
                             {selectedSection === "listings" && (
                                 <div style={{ marginBottom: "40px" }}>
                                     <Listings
-                                        listings={filteredListings}
                                         filterParams={filterParams}
                                     />
                                 </div>

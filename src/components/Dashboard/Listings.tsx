@@ -1,37 +1,66 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import ListingCard from "@/components/Card/ListingCard";
-import { shortenNumber } from "@/utils/shorten";
-import Pagination from "../Pagination/Pagination";
+import Pagination from "@/components/Pagination/Pagination";
+import axios from "axios";
 import { FilterParams } from "./FilterPanel";
 
 interface ListingsProps {
-    listings: AuctionDto[];
     filterParams: FilterParams;
 }
 
-const Listings: React.FC<ListingsProps> = ({ listings }) => {
-    const validListings = Array.isArray(listings) ? listings : [];
-    const totalPrice = shortenNumber(
-        validListings.reduce((sum, listing) => sum + (listing.nowPrice || 0), 0),
-        9,
-        3
-    );
-    const totalListings = validListings.length;
+const Listings: React.FC<ListingsProps> = ({ filterParams }) => {
+    const [listings, setListings] = useState<AuctionDto[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [totalListings, setTotalListings] = useState(0);
     const itemsPerPage = 12;
-    const totalPages = Math.ceil(validListings.length / itemsPerPage);
-    const paginatedListings = validListings.slice(
-        (currentPage - 1) * itemsPerPage,
-        currentPage * itemsPerPage
-    );
+
+    useEffect(() => {
+        const fetchListings = async () => {
+            try {
+                const params: Record<string, unknown> = {
+                    page: currentPage,
+                    limit: itemsPerPage,
+                    vType: filterParams.vType,
+                    sort: filterParams.sort,
+                    search: filterParams.search,
+                };
+
+                if (
+                    filterParams.minPrice !== undefined &&
+                    filterParams.maxPrice !== undefined &&
+                    filterParams.maxPrice > filterParams.minPrice
+                ) {
+                    params.minPrice = filterParams.minPrice;
+                    params.maxPrice = filterParams.maxPrice;
+                }
+
+                if (
+                    filterParams.minHashrate !== undefined &&
+                    filterParams.maxHashrate !== undefined &&
+                    filterParams.maxHashrate > filterParams.minHashrate
+                ) {
+                    params.minHashrate = filterParams.minHashrate;
+                    params.maxHashrate = filterParams.maxHashrate;
+                }
+
+                const response = await axios.get(`/api/listings`, {
+                    params
+                });
+                setListings(response.data.list);
+                setTotalListings(response.data.total);
+            } catch (error) {
+                console.error("Error fetching Listings:", error);
+            }
+        };
+
+        fetchListings();
+    }, [currentPage, filterParams]);
+
+    const canAddToCart = false;
 
     return (
         <div>
-            <div style={{ textAlign: "right", marginBottom: "20px" }}>
-                <p style={{ margin: 0 }}>Total Price: {totalPrice.toFixed(2)} USDT</p>
-                <p style={{ margin: 0 }}>Total Listings: {totalListings}</p>
-            </div>
             <div
                 style={{
                     display: "flex",
@@ -41,21 +70,24 @@ const Listings: React.FC<ListingsProps> = ({ listings }) => {
                     justifyContent: "center"
                 }}
             >
-                {paginatedListings.map(listing => (
-                    <ListingCard key={listing.id} listing={listing} />
-                ))}
-                <style jsx>{`
-                    @media (max-width: 768px) {
-                        div {
-                            flex-direction: column;
-                            align-items: center;
-                        }
-                    }
-                `}</style>
+                {listings.length === 0 ? (
+                    <div style={{ textAlign: "center", width: "100%" }}>
+                        <h2>No Listings Found</h2>
+                        <p>Please adjust your filters or try again later.</p>
+                    </div>
+                ) : (
+                    listings.map(listing => (
+                        <ListingCard
+                            key={listing.id}
+                            listing={listing}
+                            canAddToCart={canAddToCart}
+                        />
+                    ))
+                )}
             </div>
             <Pagination
                 currentPage={currentPage}
-                totalPages={totalPages}
+                totalPages={Math.ceil(totalListings / itemsPerPage)}
                 onPageChange={setCurrentPage}
             />
         </div>

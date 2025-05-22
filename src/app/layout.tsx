@@ -38,7 +38,7 @@ function RootLayout({ children }: { children: React.ReactNode }) {
                             <Footer />
                         </div>
                     </ErrorBoundary>
-                    <ToastContainer />
+                    <ToastContainer style={{top:"75px"}} />
                 </Providers>
             </body>
         </html>

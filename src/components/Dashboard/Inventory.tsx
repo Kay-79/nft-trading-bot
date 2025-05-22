@@ -11,7 +11,7 @@ interface InventoryProps {
     listings: AuctionDto[];
 }
 
-const Inventory: React.FC<InventoryProps> = ({ inventories, listings }) => {
+const Inventories: React.FC<InventoryProps> = ({ inventories, listings }) => {
     const { address } = useAccount();
     if (
         !Array.isArray(inventories) ||
@@ -32,16 +32,21 @@ const Inventory: React.FC<InventoryProps> = ({ inventories, listings }) => {
     );
 
     const isListingOfItem = (item: InventoryDto): boolean => {
-        return listings.some(listing => listing.prototype === item.prototype);
+        return (
+            Array.isArray(listings) &&
+            listings.some(listing => listing.prototype === item.prototype)
+        );
     };
 
     const amountListingOfItem = (item: InventoryDto): number => {
         let amount = 0;
-        listings.forEach(listing => {
-            if (listing.prototype === item.prototype) {
-                amount += 1;
-            }
-        });
+        if (Array.isArray(listings)) {
+            listings.forEach(listing => {
+                if (listing.prototype === item.prototype) {
+                    amount += 1;
+                }
+            });
+        }
         return amount;
     };
 
@@ -80,4 +85,4 @@ const Inventory: React.FC<InventoryProps> = ({ inventories, listings }) => {
     );
 };
 
-export default Inventory;
+export default Inventories;

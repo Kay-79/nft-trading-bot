@@ -125,6 +125,7 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
                     maxWidth: "500px",
                     position: "relative"
                 }}
+                onClick={e => e.stopPropagation()}
             >
                 <button
                     onClick={onClose}
@@ -177,9 +178,14 @@ const BulkSellModal: React.FC<BulkSellModalProps> = ({ onClose }) => {
                     Clear All
                 </button>
                 <div style={{ display: "flex", flexDirection: "column" }}>
+                    {bulkSellItems.length === 0 && (
+                        <div style={{ textAlign: "center", marginTop: 20, fontSize: "16px" }}>
+                            Bulk is empty.
+                        </div>
+                    )}
                     {bulkSellItems?.map((item, index) => (
                         <div
-                            key={index}
+                            key={item.id + index}
                             style={{
                                 display: "flex",
                                 justifyContent: "space-between",
