@@ -10,11 +10,15 @@ const Footer = () => {
             style={{
                 backgroundColor: theme.footerBackgroundColor,
                 color: theme.footerTextColor,
-                padding: "10px 20px",
                 textAlign: "center",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
                 width: "100%",
                 boxSizing: "border-box",
-                zIndex: 1000
+                zIndex: 1000,
+                maxHeight: "5vh",
+                minHeight: "5vh"
             }}
         >
             <p style={{ margin: 0 }}>

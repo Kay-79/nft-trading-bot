@@ -1,8 +1,4 @@
-import {
-    ENV,
-    MP_ADDRESS,
-    TOPIC_BID
-} from "@/constants/constants";
+import { ENV, MP_ADDRESS, TOPIC_BID } from "@/constants/constants";
 import { fullNodeProvider } from "@/providers/fullNodeProvider";
 import { byte32ToAddress } from "@/utilsV2/common/utils";
 import { AbiCoder } from "ethers";

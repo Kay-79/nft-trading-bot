@@ -26,8 +26,6 @@ const Header = () => {
             style={{
                 backgroundColor: theme.headerBackgroundColor,
                 color: theme.headerTextColor,
-                padding: "10px 20px",
-                margin: "0px 0",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -36,7 +34,9 @@ const Header = () => {
                 top: 0,
                 boxSizing: "border-box",
                 flexWrap: "wrap",
-                zIndex: 1000
+                zIndex: 1001,
+                maxHeight: "10vh",
+                minHeight: "10vh"
             }}
         >
             <Link href="/" passHref>

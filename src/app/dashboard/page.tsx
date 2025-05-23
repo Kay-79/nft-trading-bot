@@ -123,7 +123,6 @@ const DashboardPage = () => {
                 paddingLeft: "290px",
                 backgroundColor: theme.backgroundColor,
                 color: theme.textColor,
-                minHeight: "100vh",
                 display: "flex",
                 flexDirection: "column"
             }}

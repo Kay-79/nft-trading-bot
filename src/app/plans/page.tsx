@@ -39,8 +39,7 @@ const PlansPage = () => {
                 padding: "20px",
                 fontFamily: "Arial, sans-serif",
                 display: "flex",
-                flexDirection: "column",
-                minHeight: "100vh"
+                flexDirection: "column"
             }}
         >
             {/* Header section */}

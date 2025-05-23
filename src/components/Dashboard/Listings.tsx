@@ -23,7 +23,7 @@ const Listings: React.FC<ListingsProps> = ({ filterParams }) => {
                     limit: itemsPerPage,
                     vType: filterParams.vType,
                     sort: filterParams.sort,
-                    search: filterParams.search,
+                    search: filterParams.search
                 };
 
                 if (

@@ -15,28 +15,45 @@ function RootLayout({ children }: { children: React.ReactNode }) {
     const { theme } = useTheme();
 
     return (
-        <html lang="en" style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }}>
+        <html
+            lang="en"
+            style={{
+                backgroundColor: theme.backgroundColor,
+                color: theme.textColor,
+                minHeight: "100vh" // Ensure html takes full viewport height
+            }}
+        >
             <head>
                 <title>NFT Trading</title>
             </head>
-            <body style={{ backgroundColor: theme.backgroundColor, color: theme.textColor }}>
+            <body
+                style={{
+                    backgroundColor: theme.backgroundColor,
+                    color: theme.textColor,
+                    minHeight: "100vh", // Ensure body takes full viewport height
+                    margin: 0,
+                    display: "flex",
+                    flexDirection: "column"
+                }}
+            >
                 <Providers>
-                    <Header />
                     <ErrorBoundary>
+                        <Header />
                         <div
                             style={{
                                 backgroundColor: theme.backgroundColor,
                                 color: theme.textColor,
-                                minHeight: "100vh",
+                                flex: 1,
                                 display: "flex",
                                 flexDirection: "column",
-                                paddingTop: "60px",
-                                boxSizing: "border-box"
+                                paddingTop: "10vh",
+                                boxSizing: "border-box",
+                                minHeight: "85vh"
                             }}
                         >
                             <main style={{ flex: 1 }}>{children}</main>
-                            <Footer />
                         </div>
+                        <Footer />
                     </ErrorBoundary>
                     <ToastContainer style={{ top: "75px" }} />
                 </Providers>

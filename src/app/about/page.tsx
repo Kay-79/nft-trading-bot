@@ -17,8 +17,7 @@ const AboutPage = () => {
                 color: theme.textColor,
                 padding: "20px",
                 fontFamily: "Arial, sans-serif",
-                textAlign: "center",
-                minHeight: "90vh"
+                textAlign: "center"
             }}
         >
             <h1 style={{ color: theme.primaryColor, fontSize: "3rem" }}>Coming Soon</h1>

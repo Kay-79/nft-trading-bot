@@ -1,7 +1,7 @@
-import { NextResponse } from 'next/server'
-import crypto from 'crypto'
+import { NextResponse } from "next/server";
+import crypto from "crypto";
 
 export async function GET() {
-  const nonce = crypto.randomBytes(16).toString('hex')
-  return new NextResponse(nonce)
+    const nonce = crypto.randomBytes(16).toString("hex");
+    return new NextResponse(nonce);
 }

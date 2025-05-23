@@ -74,7 +74,6 @@ const Console = () => {
                     backgroundColor: theme.backgroundColor,
                     color: theme.textColor,
                     padding: "20px",
-                    minHeight: "100vh",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center"
@@ -98,7 +97,6 @@ const Console = () => {
                     backgroundColor: theme.backgroundColor,
                     color: theme.textColor,
                     padding: "20px",
-                    minHeight: "100vh",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center"
@@ -121,7 +119,6 @@ const Console = () => {
                     backgroundColor: theme.backgroundColor,
                     color: theme.textColor,
                     padding: "20px",
-                    minHeight: "100vh",
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center"
@@ -138,8 +135,7 @@ const Console = () => {
                 backgroundColor: theme.backgroundColor,
                 color: theme.textColor,
                 padding: "20px",
-                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-                minHeight: "100vh"
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
             }}
         >
             <h1 style={{ color: theme.primaryColor }}>
