@@ -26,6 +26,7 @@ const Header = () => {
             style={{
                 backgroundColor: theme.headerBackgroundColor,
                 color: theme.headerTextColor,
+                padding: "0px 20px",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
