@@ -7,7 +7,9 @@ import {
     EXPLORER_URL,
     NORMAL_BUYER,
     PRO_BUYER,
-    TIME_ENABLE_BID_AUCTION
+    TIME_ENABLE_BID_AUCTION,
+    CHANNEL_ID_DISCORD,
+    DISCORD_BOT_TOKEN
 } from "../../constants/constants";
 import { BidAuction } from "../../types/bid/BidAuction";
 import { BidStatus, BidType, BlockType, Environment, ModeBotStatus } from "../../enum/enum";
@@ -17,10 +19,10 @@ import { TierPrice } from "../../types/common/TierPrice";
 import { ethersProvider } from "../../providers/ethersProvider";
 import { erc20Provider } from "../../providers/erc20Provider";
 import packageJson from "../../../package.json";
-import { exit } from "process";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 
-const noticeBot = async (message: string) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const noticeBotTelegram = async (message: string) => {
     try {
         const version = `\n_${ENV}-v${packageJson.version}_`;
         message = `${message}${version}`;
@@ -30,10 +32,31 @@ const noticeBot = async (message: string) => {
             parse_mode: "Markdown"
         });
     } catch (error) {
-        console.error("Error noticeBot", error);
+        console.error("Error noticeBotDiscord", error);
         if (!API_TELEGRAM || !CHATID_MOBOX) {
             console.error("API_TELEGRAM or CHATID_MOBOX is not defined");
-            exit(1);
+        }
+    }
+};
+
+const noticeBotDiscord = async (message: string) => {
+    try {
+        const version = `\n_${ENV}-v${packageJson.version}_`;
+        message = `${message}${version}`;
+        await axios.post(
+            `https://discord.com/api/v10/channels/${CHANNEL_ID_DISCORD}/messages`,
+            { content: message },
+            {
+                headers: {
+                    Authorization: `Bot ${DISCORD_BOT_TOKEN}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+    } catch (error) {
+        console.error("Error noticeBotDiscord", error);
+        if (!DISCORD_BOT_TOKEN || !CHANNEL_ID_DISCORD) {
+            console.error("DISCORD_BOT_TOKEN or CHANNEL_ID_DISCORD is not defined");
         }
     }
 };
@@ -70,7 +93,7 @@ export const noticeProfitAuction = async (
         bidAuction.type === BidType.PRO ? `\nTokenId: ${bidAuction.auctions[0].tokenId}` : "";
     const txInfo = txHash ? `\nTx info: [here](${EXPLORER_URL}/tx/${txHash})` : "";
     const message = `${status}${profit}${bidType}${totalPrice}${amounts}${amount}${ids}${tokenId}${txInfo}`;
-    await noticeBot(message);
+    await noticeBotDiscord(message);
 };
 
 export const noticeBotBid = async (latestNotice: number): Promise<number> => {
@@ -92,7 +115,7 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
 
     const message = `${status}${mode}${contract}`;
     try {
-        await noticeBot(message);
+        await noticeBotDiscord(message);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return latestNotice;
@@ -129,7 +152,7 @@ export const noticeBotFind = async (
     const feeChangeMess = `\nFee change: ${shortenNumber(Number(feeChange), 18, 4)} BNB`;
     const message = `${status}${floorPrices}${bnbNow}${budgetNormalMess}${feeBidderMess}${feeProMess}${feeChangeMess}`;
     try {
-        await noticeBot(message);
+        await noticeBotDiscord(message);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return latestNotice;
@@ -184,7 +207,7 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
               .join(", $")}`
         : "";
     const message = `${status}${profits}${types}${amounts}${prices}${pricePredictions}${floorPrices}`;
-    await noticeBot(message);
+    await noticeBotDiscord(message);
 };
 
 export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
@@ -225,7 +248,7 @@ export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
         .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 0, 2))
         .join(", $")}`;
     const message = `${status}${profits}${types}${prices}${pricePredictions}`;
-    await noticeBot(message);
+    await noticeBotDiscord(message);
 };
 
 export const noticeErrorBid = async (errBidAuction: BidAuction) => {
@@ -237,7 +260,7 @@ export const noticeErrorBid = async (errBidAuction: BidAuction) => {
         Math.round(Date.now() / 1000) - (errBidAuction.uptime ?? 0 + TIME_ENABLE_BID_AUCTION)
     }s`;
     const message = `${status}${profit}${time}${nowTime}${overTime}`;
-    await noticeBot(message);
+    await noticeBotDiscord(message);
 };
 
 export const noticeBotCancel = async (bidAuction: BidAuction) => {
@@ -251,7 +274,7 @@ export const noticeBotCancel = async (bidAuction: BidAuction) => {
         ? `\nAuctor: ${shortenAddress(bidAuction.auctionGroup.auctor ?? "")}`
         : "";
     const message = `${status}${profit}${auctor}${auctorGroup}`;
-    await noticeBot(message);
+    await noticeBotDiscord(message);
 };
 
 export const noticeBotChangeStatus = async () => {
@@ -262,7 +285,7 @@ export const noticeBotChangeStatus = async () => {
     const status = "Change: 🔄";
     const message = `${status}`;
     try {
-        await noticeBot(message);
+        await noticeBotDiscord(message);
     } catch {
         return 0;
     }
@@ -287,5 +310,5 @@ export const noticeBotChangeAuction = async (
         3
     )}`;
     const message = `${status}${auctionInfo}${hash}${lv}${change}`;
-    await noticeBot(message);
+    await noticeBotDiscord(message);
 };

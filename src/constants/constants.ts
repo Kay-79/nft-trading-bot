@@ -27,6 +27,10 @@ export const API_TELEGRAM = process.env.API_TELEGRAM || "default_api";
 
 export const CHATID_MOBOX = process.env.CHATID_MOBOX || "default_chatid";
 
+export const CHANNEL_ID_DISCORD = process.env.CHANNEL_ID_DISCORD || "default_chatid";
+
+export const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN || "default_token";
+
 export const GAS_ESTIMATE_PRICES_BID: GasPrices = {
     proAuction: 250000,
     bundleAuction: 350000,
