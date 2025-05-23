@@ -18,7 +18,9 @@ const Footer = () => {
                 boxSizing: "border-box",
                 zIndex: 1000,
                 maxHeight: "5vh",
-                minHeight: "5vh"
+                minHeight: "5vh",
+                bottom: 0,
+                overflow: "hidden"
             }}
         >
             <p style={{ margin: 0 }}>

@@ -39,19 +39,18 @@ function RootLayout({ children }: { children: React.ReactNode }) {
                 <Providers>
                     <ErrorBoundary>
                         <Header />
-                        <div
-                            style={{
-                                backgroundColor: theme.backgroundColor,
-                                color: theme.textColor,
-                                flex: 1,
-                                display: "flex",
-                                flexDirection: "column",
-                                paddingTop: "10vh",
-                                boxSizing: "border-box",
-                                minHeight: "85vh"
-                            }}
-                        >
-                            <main style={{ flex: 1 }}>{children}</main>
+                        <div style={{ minHeight: "95vh", paddingTop: "10vh" }}>
+                            <main
+                                style={{
+                                    backgroundColor: theme.backgroundColor,
+                                    color: theme.textColor,
+                                    flex: 1,
+                                    display: "flex",
+                                    flexDirection: "column"
+                                }}
+                            >
+                                {children}
+                            </main>
                         </div>
                         <Footer />
                     </ErrorBoundary>
