@@ -138,22 +138,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <ThemeContext.Provider value={{ theme, setTheme }}>
             <QueryClientProvider client={queryClient}>
                 <ReduxProvider store={store}>
-                    {wagmiConfig ? (
-                        <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
-                            <RainbowKitAuthenticationProvider
-                                adapter={authAdapter}
-                                status={authStatus}
-                            >
-                                <RainbowKitProvider theme={themeRainbow}>
-                                    {children}
-                                </RainbowKitProvider>
-                            </RainbowKitAuthenticationProvider>
-                        </WagmiProvider>
-                    ) : (
+                    <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
                         <RainbowKitAuthenticationProvider adapter={authAdapter} status={authStatus}>
                             <RainbowKitProvider theme={themeRainbow}>{children}</RainbowKitProvider>
                         </RainbowKitAuthenticationProvider>
-                    )}
+                    </WagmiProvider>
                 </ReduxProvider>
             </QueryClientProvider>
         </ThemeContext.Provider>
