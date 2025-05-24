@@ -11,11 +11,18 @@ interface ListingsProps {
 
 const Listings: React.FC<ListingsProps> = ({ filterParams }) => {
     const [listings, setListings] = useState<AuctionDto[]>([]);
+    const [loading, setLoading] = useState<boolean>(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalListings, setTotalListings] = useState(0);
     const itemsPerPage = 12;
+    const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    useEffect(() => {
+        setLoading(true);
         const fetchListings = async () => {
             try {
                 const params: Record<string, unknown> = {
@@ -52,12 +59,17 @@ const Listings: React.FC<ListingsProps> = ({ filterParams }) => {
             } catch (error) {
                 console.error("Error fetching Listings:", error);
             }
+            setLoading(false);
         };
 
         fetchListings();
     }, [currentPage, filterParams]);
 
     const canAddToCart = false;
+
+    if (!mounted) {
+        return null;
+    }
 
     return (
         <div>
@@ -70,7 +82,7 @@ const Listings: React.FC<ListingsProps> = ({ filterParams }) => {
                     justifyContent: "center"
                 }}
             >
-                {listings.length === 0 ? (
+                {listings.length === 0 && !loading ? (
                     <div style={{ textAlign: "center", width: "100%" }}>
                         <h2>No Listings Found</h2>
                         <p>Please adjust your filters or try again later.</p>
