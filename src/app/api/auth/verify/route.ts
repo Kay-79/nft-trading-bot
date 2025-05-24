@@ -12,15 +12,18 @@ export async function POST(req: Request) {
 
         const token = await signJwt({ address });
 
-        const res = new NextResponse(JSON.stringify({ ok: true }));
-        res.cookies.set("jwt", token, {
+        const response = NextResponse.json({ ok: true }); // ✅ JSON Response OK
+
+        // ✅ Set cookie đúng context App Router
+        response.cookies.set("jwt", token, {
+            path: "/",
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
-            path: "/",
-            maxAge: 3600 * 72
+            maxAge: 60 * 60 * 24 * 7,
+            sameSite: "lax"
         });
 
-        return res;
+        return response;
     } catch {
         return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }

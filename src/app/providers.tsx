@@ -13,7 +13,7 @@ import {
     createAuthenticationAdapter
 } from "@rainbow-me/rainbowkit";
 import { Provider as ReduxProvider } from "react-redux";
-import { wagmiConfig } from "./wagmi";
+import { getWagmiConfig } from "./wagmi";
 import { ThemeContext, customDarkTheme, customLightTheme, ThemeConfig } from "@/config/theme";
 import store from "@/store";
 import { createSiweMessage } from "viem/siwe";
@@ -59,7 +59,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             fetchingStatusRef.current = true;
 
             try {
-                const response = await fetch("/api/auth/me");
+                const response = await fetch("/api/auth/me", { credentials: "include" });
                 if (!response.ok) {
                     setAuthStatus("unauthenticated");
                 } else {
@@ -87,6 +87,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
             },
 
             createMessage: ({ nonce, address, chainId }) => {
+                if (!address || !chainId) throw new Error("Wallet not connected");
                 return createSiweMessage({
                     domain: window.location.host,
                     address,
@@ -105,7 +106,8 @@ export function Providers({ children }: { children: React.ReactNode }) {
                     const response = await fetch("/api/auth/verify", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ message, signature })
+                        body: JSON.stringify({ message, signature }),
+                        credentials: "include"
                     });
 
                     const authenticated = Boolean(response.ok);
@@ -138,7 +140,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         <ThemeContext.Provider value={{ theme, setTheme }}>
             <QueryClientProvider client={queryClient}>
                 <ReduxProvider store={store}>
-                    <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
+                    <WagmiProvider config={getWagmiConfig()} reconnectOnMount={true}>
                         <RainbowKitAuthenticationProvider adapter={authAdapter} status={authStatus}>
                             <RainbowKitProvider theme={themeRainbow}>{children}</RainbowKitProvider>
                         </RainbowKitAuthenticationProvider>

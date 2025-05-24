@@ -3,7 +3,9 @@ import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { bsc } from "wagmi/chains";
 import { createPublicClient, http } from "viem";
 
-type RainbowKitConfig = ReturnType<typeof getDefaultConfig>;
+// type RainbowKitConfig = ReturnType<typeof getDefaultConfig>;
+
+let wagmiConfigSingleton: ReturnType<typeof getDefaultConfig> | null = null;
 
 const bscConfig = {
     ...bsc,
@@ -16,15 +18,20 @@ const bscConfig = {
     }
 };
 
-const wagmiConfig: RainbowKitConfig = getDefaultConfig({
-    appName: "NFT Trading",
-    projectId: process.env.PROJECT_ID || "",
-    chains: [bscConfig]
-}) as RainbowKitConfig;
+export function getWagmiConfig() {
+    if (!wagmiConfigSingleton) {
+        wagmiConfigSingleton = getDefaultConfig({
+            appName: "NFT Trading",
+            projectId: process.env.PROJECT_ID || "",
+            chains: [bscConfig],
+            ssr: true
+        });
+    }
+
+    return wagmiConfigSingleton;
+}
 
 export const publicClient = createPublicClient({
     chain: bsc,
     transport: http(RPC_URL)
 });
-
-export { wagmiConfig };

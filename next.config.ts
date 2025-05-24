@@ -16,12 +16,8 @@ const nextConfig: NextConfig = {
                 source: "/(.*)",
                 headers: [
                     {
-                        key: "Cross-Origin-Opener-Policy",
-                        value: "same-origin" // or "same-origin-allow-popups"
-                    },
-                    {
-                        key: "Cross-Origin-Embedder-Policy",
-                        value: "require-corp"
+                        key: "Cross-Origin-Resource-Policy",
+                        value: "cross-origin"
                     }
                 ]
             }

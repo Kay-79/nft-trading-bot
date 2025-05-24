@@ -1,5 +1,5 @@
 import { readContract, writeContract } from "@wagmi/core";
-import { wagmiConfig } from "@/app/wagmi";
+import { getWagmiConfig } from "@/app/wagmi";
 import { abiMp } from "@/abi/abiMp";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 import { AbiCoder, ethers } from "ethers";
@@ -21,8 +21,8 @@ import { abiERC20 } from "@/abi/abiERC20";
 import { ethersProvider } from "@/providers/ethersProvider";
 
 const transferERC20 = async (userAddress: string, from: string, to: string, amount: number) => {
-    if (!wagmiConfig) {
-        throw new Error("wagmiConfig is null");
+    if (!getWagmiConfig()) {
+        throw new Error("getWagmiConfig() is null");
     }
     if (userAddress?.toLocaleLowerCase() !== NORMAL_BUYER.toLocaleLowerCase()) {
         throw new Error("You are not the owner of this contract!");
@@ -39,7 +39,7 @@ const transferERC20 = async (userAddress: string, from: string, to: string, amou
     if (!allContracts.includes(ethers.getAddress(to))) {
         throw new Error("Invalid contract address");
     }
-    const balance = await readContract(wagmiConfig, {
+    const balance = await readContract(getWagmiConfig(), {
         abi: abiERC20,
         address: USDT_ADDRESS,
         functionName: "balanceOf",
@@ -50,13 +50,13 @@ const transferERC20 = async (userAddress: string, from: string, to: string, amou
     if (balanceAsNumber < amount) {
         throw new Error("Insufficient balance");
     }
-    const decimals = (await readContract(wagmiConfig, {
+    const decimals = (await readContract(getWagmiConfig(), {
         abi: abiERC20,
         address: USDT_ADDRESS,
         functionName: "decimals"
     })) as number;
     const amountInWei = ethers.parseUnits(amount.toFixed(3), decimals);
-    return await writeContract(wagmiConfig, {
+    return await writeContract(getWagmiConfig(), {
         abi: abiBid,
         address: from as `0x${string}`,
         functionName: "transferERC20",
@@ -65,8 +65,8 @@ const transferERC20 = async (userAddress: string, from: string, to: string, amou
 };
 
 const getUserHash = async (address: string) => {
-    if (!wagmiConfig) {
-        throw new Error("wagmiConfig is null");
+    if (!getWagmiConfig()) {
+        throw new Error("getWagmiConfig() is null");
     }
     const abiCoder = new AbiCoder();
     const encodedData = abiCoder.encode(["address"], [address]);
@@ -83,7 +83,7 @@ const changePrice = async (
     from: `0x${string}` | undefined,
     newPrice: number
 ) => {
-    if (!wagmiConfig) {
+    if (!getWagmiConfig()) {
         throw new Error("Please connect your wallet first!");
     }
     if (from?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()) {
@@ -91,7 +91,7 @@ const changePrice = async (
     }
     const price = ethers.parseUnits(newPrice.toString(), 18);
     const to = listing.auctor?.toLocaleLowerCase() === PRO_BUYER ? MP_ADDRESS : listing.auctor;
-    return await writeContract(wagmiConfig, {
+    return await writeContract(getWagmiConfig(), {
         abi: abiMp,
         address: to as `0x${string}`,
         functionName: "changePrice",
@@ -100,13 +100,13 @@ const changePrice = async (
 };
 
 const cancelAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) => {
-    if (!wagmiConfig) {
+    if (!getWagmiConfig()) {
         throw new Error("Please connect your wallet first!");
     }
     if (from?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()) {
         throw new Error("You are not the changer of the listing! ");
     }
-    return await writeContract(wagmiConfig, {
+    return await writeContract(getWagmiConfig(), {
         abi: abiMp,
         address: listing.auctor as `0x${string}`,
         functionName: "cancelAuction",
@@ -119,7 +119,7 @@ const createAuction = async (
     from: `0x${string}` | undefined,
     listPrice: number
 ) => {
-    if (!wagmiConfig) {
+    if (!getWagmiConfig()) {
         throw new Error("Please connect your wallet first!");
     }
     if (from?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()) {
@@ -142,7 +142,7 @@ const createAuction = async (
     if (tokenIds.length === 0 && ids.length === 0) {
         throw new Error(`No items to create auction`);
     }
-    return await writeContract(wagmiConfig, {
+    return await writeContract(getWagmiConfig(), {
         abi: abiMp,
         address: inventoryItem.owner as `0x${string}`,
         functionName: "createAuctionBatch",
@@ -154,7 +154,7 @@ const createAuctionBatch = async (
     bulkSellItems: BulkItemListStorage[],
     from: `0x${string}` | undefined
 ) => {
-    if (!wagmiConfig) {
+    if (!getWagmiConfig()) {
         throw new Error("Please connect your wallet first!");
     }
     if (from?.toLocaleLowerCase() !== CHANGER.toLocaleLowerCase()) {
@@ -200,7 +200,7 @@ const createAuctionBatch = async (
     if (tokenIds.length > 6 && ids.length > 6 && prices1155.length > 6 && prices721.length > 6) {
         throw new Error("You can't sell more than 5 items at once");
     }
-    return await writeContract(wagmiConfig, {
+    return await writeContract(getWagmiConfig(), {
         abi: abiMp,
         address: owner as `0x${string}`,
         functionName: "createAuctionBatch",
@@ -209,7 +209,7 @@ const createAuctionBatch = async (
 };
 
 const bidAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) => {
-    if (!wagmiConfig) {
+    if (!getWagmiConfig()) {
         throw new Error("Please connect your wallet first!");
     }
 
@@ -217,7 +217,7 @@ const bidAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) 
         from?.toLocaleLowerCase() === PRO_BUYER.toLocaleLowerCase() ||
         from?.toLocaleLowerCase() === NORMAL_BUYER.toLocaleLowerCase()
     ) {
-        return await writeContract(wagmiConfig, {
+        return await writeContract(getWagmiConfig(), {
             abi: abiMp,
             address: bidContract as `0x${string}`,
             functionName: "bid",
@@ -230,7 +230,7 @@ const bidAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) 
         });
     }
 
-    return await writeContract(wagmiConfig, {
+    return await writeContract(getWagmiConfig(), {
         abi: abiMp,
         address: MP_ADDRESS as `0x${string}`,
         functionName: "bid",
