@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import Link from "next/link"; // Import Link component from Next.js
+import Link from "next/link";
 import ThemeToggle from "./Theme/ThemeToggle";
 import { useTheme } from "@/config/theme";
 import { ConnectWallet } from "./ConnectWallet";
@@ -74,17 +74,6 @@ const Header = () => {
                 <Cart />
                 <ConnectWallet />
             </div>
-            <style jsx>{`
-                @media (max-width: 768px) {
-                    nav {
-                        flex-direction: column;
-                        align-items: flex-start;
-                    }
-                    div {
-                        justify-content: flex-start;
-                    }
-                }
-            `}</style>
         </nav>
     );
 };
