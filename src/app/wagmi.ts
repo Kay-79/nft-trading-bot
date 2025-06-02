@@ -3,11 +3,9 @@ import { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import { bsc } from "wagmi/chains";
 import { createPublicClient, http } from "viem";
 
-// type RainbowKitConfig = ReturnType<typeof getDefaultConfig>;
-
 let wagmiConfigSingleton: ReturnType<typeof getDefaultConfig> | null = null;
 
-const bscConfig = {
+const bscCustom = {
     ...bsc,
     rpcUrls: {
         ...bsc.rpcUrls,
@@ -23,7 +21,7 @@ export function getWagmiConfig() {
         wagmiConfigSingleton = getDefaultConfig({
             appName: "NFT Trading",
             projectId: process.env.PROJECT_ID || "",
-            chains: [bscConfig],
+            chains: [bscCustom],
             ssr: true
         });
     }
