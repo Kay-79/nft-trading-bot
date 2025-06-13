@@ -57,11 +57,6 @@ export const customDarkTheme: ThemeConfig = {
     footerTextColor: "#ffffff" // White
 };
 
-export const themes = {
-    light: customLightTheme,
-    dark: customDarkTheme
-};
-
 import { createContext, useContext } from "react";
 
 export interface ThemeContextProps {
