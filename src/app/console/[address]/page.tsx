@@ -121,7 +121,7 @@ const AddressDetail: React.FC = () => {
                 <input
                     type="number"
                     placeholder="Amount"
-                    value={transferAmount || (balance ?? 0) - 0.1}
+                    value={transferAmount || (balance ?? 0)}
                     onChange={e => setTransferAmount(Number(e.target.value))}
                     style={{
                         padding: "10px",
