@@ -21,6 +21,14 @@ import { ethersProvider } from "@/providers/ethersProvider";
 const step = 2000;
 
 const worker = async () => {
+    if (
+        TOPIC_BID.length !== 66 ||
+        TOPIC_CANCEL.length !== 66 ||
+        TOPIC_CHANGE.length !== 66 ||
+        TOPIC_CREATE.length !== 66
+    ) {
+        throw new Error("Invalid topic length");
+    }
     const db = await connectMongo();
     console.log("Worker started");
     while (true) {
