@@ -21,7 +21,6 @@ import { erc20Provider } from "../../providers/erc20Provider";
 import packageJson from "../../../package.json";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const noticeBotTelegram = async (message: string) => {
     try {
         const version = `\n_${ENV}-v${packageJson.version}_`;
@@ -32,7 +31,7 @@ const noticeBotTelegram = async (message: string) => {
             parse_mode: "Markdown"
         });
     } catch (error) {
-        console.error("Error noticeBotDiscord", error);
+        console.error("Error noticeBot", error);
         if (!API_TELEGRAM || !CHATID_MOBOX) {
             console.error("API_TELEGRAM or CHATID_MOBOX is not defined");
         }
@@ -54,10 +53,22 @@ const noticeBotDiscord = async (message: string) => {
             }
         );
     } catch (error) {
-        console.error("Error noticeBotDiscord", error);
+        console.error("Error noticeBot", error);
         if (!DISCORD_BOT_TOKEN || !CHANNEL_ID_DISCORD) {
             console.error("DISCORD_BOT_TOKEN or CHANNEL_ID_DISCORD is not defined");
         }
+    }
+};
+
+const noticeBot = async (message: string) => {
+    if (ENV === Environment.TESTNET) {
+        console.log("Notice bot testnet");
+        return;
+    }
+    try {
+        await noticeBotTelegram(message);
+    } catch {
+        await noticeBotDiscord(message);
     }
 };
 
@@ -93,7 +104,7 @@ export const noticeProfitAuction = async (
         bidAuction.type === BidType.PRO ? `\nTokenId: ${bidAuction.auctions[0].tokenId}` : "";
     const txInfo = txHash ? `\nTx info: [here](${EXPLORER_URL}/tx/${txHash})` : "";
     const message = `${status}${profit}${bidType}${totalPrice}${amounts}${amount}${ids}${tokenId}${txInfo}`;
-    await noticeBotDiscord(message);
+    await noticeBot(message);
 };
 
 export const noticeBotBid = async (latestNotice: number): Promise<number> => {
@@ -115,7 +126,7 @@ export const noticeBotBid = async (latestNotice: number): Promise<number> => {
 
     const message = `${status}${mode}${contract}`;
     try {
-        await noticeBotDiscord(message);
+        await noticeBot(message);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return latestNotice;
@@ -152,7 +163,7 @@ export const noticeBotFind = async (
     const feeChangeMess = `\nFee change: ${shortenNumber(Number(feeChange), 18, 4)} BNB`;
     const message = `${status}${floorPrices}${bnbNow}${budgetNormalMess}${feeBidderMess}${feeProMess}${feeChangeMess}`;
     try {
-        await noticeBotDiscord(message);
+        await noticeBot(message);
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
         return latestNotice;
@@ -207,7 +218,7 @@ export const noticeBotDetectProfit = async (bidAuctions: BidAuction[]) => {
               .join(", $")}`
         : "";
     const message = `${status}${profits}${types}${amounts}${prices}${pricePredictions}${floorPrices}`;
-    await noticeBotDiscord(message);
+    await noticeBot(message);
 };
 
 export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
@@ -248,7 +259,7 @@ export const noticeBotInsufficient = async (bidAuctions: BidAuction[]) => {
         .map(bidAuction => shortenNumber(bidAuction.pricePrediction ?? 0, 0, 2))
         .join(", $")}`;
     const message = `${status}${profits}${types}${prices}${pricePredictions}`;
-    await noticeBotDiscord(message);
+    await noticeBot(message);
 };
 
 export const noticeErrorBid = async (errBidAuction: BidAuction) => {
@@ -260,7 +271,7 @@ export const noticeErrorBid = async (errBidAuction: BidAuction) => {
         Math.round(Date.now() / 1000) - (errBidAuction.uptime ?? 0 + TIME_ENABLE_BID_AUCTION)
     }s`;
     const message = `${status}${profit}${time}${nowTime}${overTime}`;
-    await noticeBotDiscord(message);
+    await noticeBot(message);
 };
 
 export const noticeBotCancel = async (bidAuction: BidAuction) => {
@@ -274,7 +285,7 @@ export const noticeBotCancel = async (bidAuction: BidAuction) => {
         ? `\nAuctor: ${shortenAddress(bidAuction.auctionGroup.auctor ?? "")}`
         : "";
     const message = `${status}${profit}${auctor}${auctorGroup}`;
-    await noticeBotDiscord(message);
+    await noticeBot(message);
 };
 
 export const noticeBotChangeStatus = async () => {
@@ -285,7 +296,7 @@ export const noticeBotChangeStatus = async () => {
     const status = "Change: 🔄";
     const message = `${status}`;
     try {
-        await noticeBotDiscord(message);
+        await noticeBot(message);
     } catch {
         return 0;
     }
@@ -310,5 +321,5 @@ export const noticeBotChangeAuction = async (
         3
     )}`;
     const message = `${status}${auctionInfo}${hash}${lv}${change}`;
-    await noticeBotDiscord(message);
+    await noticeBot(message);
 };
