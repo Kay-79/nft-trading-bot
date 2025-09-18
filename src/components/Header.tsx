@@ -18,7 +18,8 @@ const Header = () => {
         { href: "#contact", label: "Contact" },
         { href: "/plans", label: "Pricing" },
         { href: "/about", label: "About" },
-        { href: "/console", label: "Console" }
+        { href: "/console", label: "Console" },
+        { href: "/swagger", label: "API Docs" }
     ];
 
     return (
