@@ -4,9 +4,12 @@ import { RiCloseLine } from "react-icons/ri";
 import { useSelector, useDispatch } from "react-redux";
 import { CartItemListStorage } from "@/store/reducers/cartStorageReducer";
 import { CartAction } from "@/enum/enum";
-import ListingCard from "@/components/Card/ListingCard";
 import PrimaryLoadingButton from "@/components/Button/PrimaryLoadingButton";
 import { toast } from "react-toastify";
+import CartRow from "./CartRow";
+import { AuctionDto } from "@/types/dtos/Auction.dto";
+import { mpContractService } from "@/services/mpContract";
+import { useAccount } from "wagmi";
 
 interface CartModalProps {
     onClose: () => void;
@@ -15,7 +18,9 @@ interface CartModalProps {
 const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
     const { theme } = useTheme();
     const dispatch = useDispatch();
+    const { address } = useAccount();
     const [loadingBuy, setLoadingBuy] = useState(false);
+    const [ignoreSold, setIgnoreSold] = useState(false);
     const cartItems: CartItemListStorage[] = useSelector(
         (state: { cartStorage: { cartItems: CartItemListStorage[] } }) =>
             state.cartStorage.cartItems
@@ -31,8 +36,8 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
         dispatch({ type: CartAction.CLEAR });
     };
 
-    const handleRemove = (id: string) => {
-        dispatch({ type: CartAction.REMOVE, payload: { id } });
+    const handleRemove = (listing: AuctionDto) => {
+        dispatch({ type: CartAction.REMOVE, payload: { id: listing.id } });
     };
 
     const handleBuyAll = async () => {
@@ -43,11 +48,17 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                 setLoadingBuy(false);
                 return;
             }
-            await new Promise(res => setTimeout(res, 1000));
+            await mpContractService.bidAuctions(
+                cartItems.map(item => item.listing),
+                address,
+                ignoreSold
+            );
+            toast.success("Buy successful!");
             dispatch({ type: CartAction.CLEAR });
-            toast.success("Buy all successfully!");
             onClose();
-        } catch {
+        } catch (error) {
+            const errorMessage = (error as Error).message || "Buy failed!";
+            console.error("Buy failed:", errorMessage);
             toast.error("Buy failed!");
         } finally {
             setLoadingBuy(false);
@@ -135,36 +146,39 @@ const CartModal: React.FC<CartModalProps> = ({ onClose }) => {
                                 display: "flex",
                                 justifyContent: "space-between",
                                 alignItems: "center",
-                                marginTop: "15px"
+                                marginTop: "0px"
                             }}
                         >
                             <div style={{ flex: 1 }}>
-                                <ListingCard listing={item.listing} canAddToCart={false} />
+                                <CartRow
+                                    key={item.id}
+                                    listing={item?.listing}
+                                    onRemove={handleRemove}
+                                />
                             </div>
-                            <button
-                                onClick={() => handleRemove(item.id)}
-                                style={{
-                                    marginLeft: 10,
-                                    backgroundColor: "transparent",
-                                    border: "none",
-                                    color: theme.textColor,
-                                    cursor: "pointer",
-                                    fontSize: "18px"
-                                }}
-                                title="Remove"
-                            >
-                                <RiCloseLine />
-                            </button>
                         </div>
                     ))}
                 </div>
                 <div
                     style={{
                         display: "flex",
-                        justifyContent: "space-between",
+                        flexDirection: "column",
+                        gap: "10px",
                         marginTop: "20px"
                     }}
                 >
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <input
+                            type="checkbox"
+                            id="ignoreSold"
+                            checked={ignoreSold}
+                            onChange={e => setIgnoreSold(e.target.checked)}
+                            style={{ cursor: "pointer" }}
+                        />
+                        <label htmlFor="ignoreSold" style={{ cursor: "pointer" }}>
+                            Ignore sold items and continue buying
+                        </label>
+                    </div>
                     <PrimaryLoadingButton
                         onClick={handleBuyAll}
                         loading={loadingBuy}

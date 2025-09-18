@@ -2,6 +2,7 @@ import { CartAction } from "@/enum/enum";
 import { AuctionDto } from "@/types/dtos/Auction.dto";
 
 export interface CartItemListStorage {
+    tokenId: Key | null | undefined;
     id: string;
     listing: AuctionDto;
 }

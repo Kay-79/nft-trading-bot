@@ -243,6 +243,103 @@ const bidAuction = async (listing: AuctionDto, from: `0x${string}` | undefined) 
     });
 };
 
+const bidAuctions = async (
+    listings: AuctionDto[],
+    from: `0x${string}` | undefined,
+    ignoreSold: boolean
+) => {
+    if (!getWagmiConfig()) {
+        throw new Error("Please connect your wallet first!");
+    }
+    if (listings.length === 0) {
+        throw new Error("No listings to bid");
+    }
+
+    const contractAddress =
+        from?.toLowerCase() === PRO_BUYER.toLowerCase() ||
+        from?.toLowerCase() === NORMAL_BUYER.toLowerCase()
+            ? (bidContract as `0x${string}`)
+            : (MP_ADDRESS as `0x${string}`);
+
+    // Single item bid uses different function signature
+    if (listings.length === 1) {
+        return await writeContract(getWagmiConfig(), {
+            abi: abiMp,
+            address: contractAddress,
+            functionName: "bid",
+            args: [
+                listings[0].auctor,
+                listings[0].index,
+                listings[0].uptime,
+                ((listings[0]?.nowPrice ?? 0) + 10 ** 5).toString() + "000000000"
+            ]
+        });
+    }
+
+    // Multiple items bid
+    const auctors = listings.map(listing =>
+        ethers.getAddress(listing.auctor ?? "")
+    ) as `0x${string}`[];
+    const indexes = listings.map(listing => {
+        if (listing.index === undefined) throw new Error("Listing index is undefined");
+        return BigInt(listing.index);
+    });
+    const uptimes = listings.map(listing => {
+        if (listing.uptime === undefined) throw new Error("Listing uptime is undefined");
+        return BigInt(listing.uptime);
+    });
+    const prices = listings.map(listing =>
+        BigInt(((listing?.nowPrice ?? 0) + 10 ** 5).toString() + "000000000")
+    );
+
+    // Use function overload with array parameters
+    try {
+        return await writeContract(getWagmiConfig(), {
+            abi: [
+                {
+                    inputs: [
+                        {
+                            internalType: "address[]",
+                            name: "auctors_",
+                            type: "address[]"
+                        },
+                        {
+                            internalType: "uint256[]",
+                            name: "indexs_",
+                            type: "uint256[]"
+                        },
+                        {
+                            internalType: "uint256[]",
+                            name: "startTimes_",
+                            type: "uint256[]"
+                        },
+                        {
+                            internalType: "uint256[]",
+                            name: "prices_",
+                            type: "uint256[]"
+                        },
+                        {
+                            internalType: "bool",
+                            name: "ignoreSold",
+                            type: "bool"
+                        }
+                    ],
+                    name: "bid",
+                    outputs: [],
+                    stateMutability: "payable",
+                    type: "function"
+                }
+            ],
+            address: contractAddress,
+            functionName: "bid",
+            args: [auctors, indexes, uptimes, prices, ignoreSold]
+        });
+    } catch (error) {
+        console.error("Bulk bid failed:", error);
+        throw error;
+    }
+};
+
 export const mpContractService = {
     transferERC20,
     getUserHash,
@@ -250,5 +347,6 @@ export const mpContractService = {
     cancelAuction,
     createAuction,
     createAuctionBatch,
-    bidAuction
+    bidAuction,
+    bidAuctions
 };
