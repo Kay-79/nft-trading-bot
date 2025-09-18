@@ -1,9 +1,13 @@
 openapi: 3.0.0
 info:
-    title: API Docs
+    title: NFT Trading API
+    description: API documentation for NFT trading system
     version: 1.0.0
 servers:
+    - url: https://nft-trading-prod.vercel.app/api
+      description: Production server
     - url: http://localhost:3000/api
+      description: Local development server
 paths:
     /listings:
         get:
@@ -54,29 +58,363 @@ paths:
                                         type: integer
                                     total:
                                         type: integer
+    /markets:
+        get:
+            summary: Get market listings
+            parameters:
+                - in: query
+                  name: page
+                  schema: { type: integer, default: 1 }
+                - in: query
+                  name: limit
+                  schema: { type: integer, default: 12 }
+                - in: query
+                  name: vType
+                  schema: { type: string }
+                - in: query
+                  name: sort
+                  schema: { type: string }
+                - in: query
+                  name: minPrice
+                  schema: { type: number }
+                - in: query
+                  name: maxPrice
+                  schema: { type: number }
+                - in: query
+                  name: minHashrate
+                  schema: { type: number }
+                - in: query
+                  name: maxHashrate
+                  schema: { type: number }
+                - in: query
+                  name: search
+                  schema: { type: string }
+            responses:
+                "200":
+                    description: List of markets
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    list:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/AuctionDto"
+                                    page:
+                                        type: integer
+                                    limit:
+                                        type: integer
+                                    total:
+                                        type: integer
+    /inventory:
+        get:
+            summary: Get all inventories
+            responses:
+                "200":
+                    description: List of inventories
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/InventoryDto"
+    /activities:
+        get:
+            summary: Get recent activities
+            responses:
+                "200":
+                    description: List of recent sold activities
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/RecentSoldDto"
+    /accounts:
+        get:
+            summary: Get accounts information
+            responses:
+                "200":
+                    description: List of accounts with their details
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: "#/components/schemas/AccountConsoleDto"
+                "500":
+                    description: Server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: "Failed to fetch accounts"
+    /gem/gemEquipment:
+        get:
+            summary: Get gem equipment information
+            parameters:
+                - in: query
+                  name: tokenId
+                  required: true
+                  schema:
+                      type: string
+                  description: The token ID of the equipment
+                  example: "16"
+            responses:
+                "200":
+                    description: Gem equipment details
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        tokenId:
+                                            type: string
+                                            description: Token ID of the gem
+                "500":
+                    description: Server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                                        example: "Failed to fetch accounts"
+    /predict721:
+        post:
+            summary: Predict NFT price for 721 tokens
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                hashrate: { type: number, example: 100 }
+                                lvHashrate: { type: number, example: 21000 }
+                                prototype: { type: number, example: 50001 }
+                                level: { type: number, example: 40 }
+                                tokenId: { type: number, example: 12345 }
+            responses:
+                "200":
+                    description: Price prediction
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    prediction: { type: number }
+    /predict1155:
+        post:
+            summary: Predict NFT price for 1155 tokens
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                ids: { type: array, items: { type: string }, example: ["11011"] }
+                                amounts: { type: array, items: { type: string }, example: ["1"] }
+                                prototype: { type: string, example: "11011" }
+            responses:
+                "200":
+                    description: Price prediction
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    prediction: { type: number }
 components:
     schemas:
         AuctionDto:
             type: object
             properties:
-                id: { type: string }
-                chain: { type: string }
-                auctor: { type: string }
-                startPrice: { type: number }
-                endPrice: { type: number }
-                durationDays: { type: number }
-                index: { type: number }
+                id:
+                    type: string
+                    description: Unique identifier for the auction
+                    example: "0x123abc..."
+                chain:
+                    type: string
+                    description: Blockchain network
+                    example: "BSC"
+                auctor:
+                    type: string
+                    description: Seller's address
+                    example: "0xabc123..."
+                startPrice:
+                    type: number
+                    description: Initial listing price
+                    example: 1000
+                endPrice:
+                    type: number
+                    description: Final price
+                    example: 900
+                durationDays:
+                    type: number
+                    description: Auction duration in days
+                    example: 7
+                index:
+                    type: number
+                    description: Item index
+                    example: 1
+                ids:
+                    type: array
+                    items: { type: string }
+                    description: Array of token IDs
+                    example: ["1", "2", "3"]
+                amounts:
+                    type: array
+                    items: { type: string }
+                    description: Array of token amounts
+                    example: ["1", "1", "1"]
+                tokenId:
+                    type: number
+                    description: NFT token ID
+                    example: 12345
+                uptime:
+                    type: number
+                    description: Time since listing
+                    example: 86400
+                prototype:
+                    type: number
+                    description: NFT prototype number
+                    example: 10001
+                hashrate:
+                    type: number
+                    description: Base hashrate
+                    example: 100
+                lvHashrate:
+                    type: number
+                    description: Level bonus hashrate
+                    example: 20
+                level:
+                    type: number
+                    description: NFT level
+                    example: 5
+                specialty:
+                    type: number
+                    description: Special attribute
+                    example: 1
+                category:
+                    type: number
+                    description: NFT category
+                    example: 2
+                quality:
+                    type: number
+                    description: NFT quality tier
+                    example: 3
+                tx:
+                    type: string
+                    description: Transaction hash
+                    example: "0xtx123..."
+                deleted:
+                    type: boolean
+                    description: Whether the listing is deleted
+                    example: false
+                nowPrice:
+                    type: number
+                    description: Current price
+                    example: 950
+        RecentSoldDto:
+            type: object
+            properties:
+                type: { type: number }
+                tokens:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            tokenId: { type: number }
+                            prototype: { type: number }
+                            hashrate: { type: number }
+                            lvHashrate: { type: number }
+                            level: { type: number }
                 ids: { type: array, items: { type: string } }
                 amounts: { type: array, items: { type: string } }
-                tokenId: { type: number }
-                uptime: { type: number }
-                prototype: { type: number }
-                hashrate: { type: number }
-                lvHashrate: { type: number }
-                level: { type: number }
-                specialty: { type: number }
-                category: { type: number }
-                quality: { type: number }
-                tx: { type: string }
-                deleted: { type: boolean }
-                nowPrice: { type: number }
+        InventoryDto:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: Unique identifier for the inventory item
+                    example: "0xabc123..."
+                prototype:
+                    type: number
+                    description: NFT prototype number
+                    example: 10001
+                owner:
+                    type: string
+                    description: Owner's address
+                    example: "0xowner123..."
+                type:
+                    type: string
+                    description: type
+                    example: "PRO"
+                amount:
+                    type: number
+                    description: Amount of tokens
+                    example: 1
+                tokenId:
+                    type: number
+                    description: NFT token ID
+                    example: 12345
+                quality:
+                    type: number
+                    description: NFT quality tier
+                    example: 3
+                category:
+                    type: number
+                    description: NFT category
+                    example: 2
+                level:
+                    type: number
+                    description: NFT level
+                    example: 5
+                specialty:
+                    type: number
+                    description: Special attribute
+                    example: 1
+                hashrate:
+                    type: number
+                    description: Base hashrate
+                    example: 100
+                lvHashrate:
+                    type: number
+                    description: Level bonus hashrate
+                    example: 200
+        AccountConsoleDto:
+            type: object
+            properties:
+                id:
+                    type: string
+                    description: Account identifier
+                    example: "0xabc123..."
+                address:
+                    type: string
+                    description: Wallet address
+                    example: "0xabc123..."
+                listingsCount:
+                    type: number
+                    description: Number of active listings
+                    example: 5
+                balance:
+                    type: number
+                    description: Account balance
+                    example: 1000.50
+                hash:
+                    type: number
+                    description: Account hashrate
+                    example: 5000
+                totalPriceSell:
+                    type: number
+                    description: Total selling price after fees
+                    example: 2500.75
