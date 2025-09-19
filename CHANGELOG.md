@@ -6,6 +6,12 @@
 
 -   Pump minor version
 
+## 6.28.0
+
+### Minor Changes
+
+-   Pump minor version
+
 ## 6.27.0
 
 ### Minor Changes
