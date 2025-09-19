@@ -1,4 +1,4 @@
-# mobox-profit-bot
+# nft-trading-bot
 
 ## 6.28.0
 

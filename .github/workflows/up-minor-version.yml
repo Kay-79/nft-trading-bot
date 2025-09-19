@@ -25,7 +25,7 @@ jobs:
 
             - name: Force create minor changeset
               run: |
-                  printf -- "---\n\"mobox-profit-bot\": minor\n---\n\nPump minor version\n" > .changeset/auto-minor-changeset.md
+                  printf -- "---\n\"nft-trading-bot\": minor\n---\n\nPump minor version\n" > .changeset/auto-minor-changeset.md
 
             - name: Create changeset
               run: npx changeset version
