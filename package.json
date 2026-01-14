@@ -1,7 +1,7 @@
 {
     "name": "nft-trading-bot",
     "description": "nft trading bot",
-    "version": "6.28.0",
+    "version": "6.29.0",
     "private": true,
     "main": "",
     "dependencies": {

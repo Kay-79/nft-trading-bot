@@ -1,5 +1,11 @@
 # nft-trading-bot
 
+## 6.29.0
+
+### Minor Changes
+
+-   Pump minor version
+
 ## 6.28.0
 
 ### Minor Changes
