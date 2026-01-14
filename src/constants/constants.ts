@@ -176,9 +176,9 @@ export const TIME_DELAY_SETUP_FIND = 1800; //30mins
 
 export const TIME_DELAY_SETUP_CHANGE = 1800; //30mins
 
-export const MIN_TIME_GET_PRICE = 600; //10mins
+export const MIN_TIME_GET_PRICE = 900; //15mins
 
-export const CACHE_BNB_PRICE = 999;
+export const CACHE_BNB_PRICE = 934;
 
 export const CACHE_MBOX_PRICE = 0.1;
 

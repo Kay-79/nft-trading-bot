@@ -7,12 +7,12 @@ import { ethers } from "ethers";
 export const modeBot: ModeBot = {
     auction: {
         normal: true,
-        pro: true,
+        pro: false,
         bundle: true
     },
     auctionGroup: {
-        bep721: true,
-        crew: true
+        bep721: false,
+        crew: false
     },
     box: false,
     mecBox: false,
@@ -20,10 +20,10 @@ export const modeBot: ModeBot = {
 };
 
 export const profitPerTier: TierPrice = {
-    1: 0.2,
-    2: 0.2,
-    3: 0.15,
-    4: 3,
+    1: 0,
+    2: 0,
+    3: 0,
+    4: 2.5,
     5: 20,
     6: 50000
 };
